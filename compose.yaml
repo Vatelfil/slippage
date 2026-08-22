@@ -1,0 +1,15 @@
+services:
+  slippage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: slippage-rl
+
+    volumes:
+      - .:/workspace
+
+    working_dir: /workspace
+
+    stdin_open: true
+    tty: true
