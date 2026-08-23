@@ -1,0 +1,57 @@
+{
+  "$schema_name": "SE_schema",
+  "$version": "1.0.0",
+  "$owner": "Paolo Sepúlveda (PS)",
+  "$sprint": "Sprint 1 - Tarea 1.1.4",
+  "$date": "2026-08-22",
+  "description": "Esquema formal del vector de estado de los Agentes Ejecutores (S_E) del proyecto 'Coordinación de Agentes para la Mitigación del Slippage (IPSA)'. Define las 26 variables observadas por cada Ejecutor cada 30 segundos, sus tipos, rangos normalizados y fuente de datos. Los 3 Ejecutores (Apertura, Media jornada, Cierre) comparten este mismo esquema.",
+  "agent": "Agentes Ejecutores (3 instancias: Apertura 09:30-11:30, Media jornada 11:30-14:00, Cierre 14:00-16:00)",
+  "decision_frequency": "cada 30 segundos",
+  "horizon": "T_E = ventana asignada por el Maestro (1, 5, 10 o 15 minutos)",
+  "gymnasium_space": {
+    "type": "Box",
+    "shape": [26],
+    "dtype": "float32",
+    "low_by_group": {
+      "privado (q_slice, q_pendiente, tau_slice)": [0.0, 0.0, 0.0],
+      "bid_precios (5)": [0.0, 0.0, 0.0, 0.0, 0.0],
+      "bid_volumenes (5)": [0.0, 0.0, 0.0, 0.0, 0.0],
+      "ask_precios (5)": [0.0, 0.0, 0.0, 0.0, 0.0],
+      "ask_volumenes (5)": [0.0, 0.0, 0.0, 0.0, 0.0],
+      "spread_t, OBI_t, tasa_ordenes, P_mid": [0.0, -1.0, 0.0, 0.0]
+    },
+    "high": "vector de unos (26,), salvo OBI_t cuyo límite superior es 1.0 sobre rango [-1,1]",
+    "total_dims_breakdown": "3 (privado) + 10 (bid precio+volumen) + 10 (ask precio+volumen) + 4 (spread, OBI, tasa_ordenes, P_mid) = 26"
+  },
+  "variables": [
+    { "index": 0, "name": "q_slice", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "Agente Maestro", "description": "Cantidad de acciones asignadas por el Maestro para este tramo, normalizada." },
+    { "index": 1, "name": "q_pendiente", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "Interno", "description": "Fracción del slice aún no ejecutada dentro de la ventana asignada." },
+    { "index": 2, "name": "tau_slice", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "Interno", "description": "Fracción de tiempo transcurrido dentro de la ventana del slice (1/5/10/15 min)." },
+    { "index": "3-7", "name": "bid_precios", "type": "float32", "range": [0.0, 1.0], "dim": 5, "source": "ABIDES-Gym (LOB Nivel 2)", "description": "Precios de los 5 mejores niveles del lado comprador (bid), normalizados." },
+    { "index": "8-12", "name": "bid_volumenes", "type": "float32", "range": [0.0, 1.0], "dim": 5, "source": "ABIDES-Gym (LOB Nivel 2)", "description": "Volúmenes disponibles en los 5 mejores niveles bid, normalizados." },
+    { "index": "13-17", "name": "ask_precios", "type": "float32", "range": [0.0, 1.0], "dim": 5, "source": "ABIDES-Gym (LOB Nivel 2)", "description": "Precios de los 5 mejores niveles del lado vendedor (ask), normalizados." },
+    { "index": "18-22", "name": "ask_volumenes", "type": "float32", "range": [0.0, 1.0], "dim": 5, "source": "ABIDES-Gym (LOB Nivel 2)", "description": "Volúmenes disponibles en los 5 mejores niveles ask, normalizados." },
+    { "index": 23, "name": "spread_t", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "ABIDES-Gym", "description": "Spread bid-ask instantáneo (mejor ask - mejor bid), normalizado." },
+    { "index": 24, "name": "OBI_t", "type": "float32", "range": [-1.0, 1.0], "dim": 1, "source": "ABIDES-Gym", "description": "Order Book Imbalance instantáneo del tramo." },
+    { "index": 25, "name": "tasa_ordenes", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "ABIDES-Gym", "description": "Tasa de llegada de órdenes en los últimos 30 segundos, normalizada." },
+    { "index": 26, "name": "P_mid", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "ABIDES-Gym", "description": "Precio mid actual: P_mid = (P_ask^1 + P_bid^1) / 2, normalizado." }
+  ],
+  "action_space": {
+    "type": "Dict (híbrido: discreto + continuo)",
+    "fields": [
+      { "name": "tipo_orden", "space": "Discrete(3)", "values": ["0 = mercado", "1 = límite", "2 = esperar"] },
+      { "name": "volumen_frac", "space": "Box(0.0, 1.0, shape=(1,), dtype=float32)", "description": "Fracción del slice a ejecutar en este paso." },
+      { "name": "nivel_precio", "space": "Discrete(4)", "values": ["0 = mejor_bid", "1 = bid-1", "2 = bid-2", "3 = P_mid"] }
+    ]
+  },
+  "reward": {
+    "type": "densa, cada 30 segundos",
+    "formula": "R_E = (P_mid_t - P_ejec_t) * q_ejec - beta * sigma^2_precio * q_ejec",
+    "pending_calibration": ["beta (coeficiente de aversión al riesgo, Sprint 4)"]
+  },
+  "consumers": [
+    { "role": "MR", "task": "2.1.2 / 2.1.4", "use": "Redes Actor-Crítico de los 3 Ejecutores; formalización de gym.spaces.Dict en código" },
+    { "role": "BF", "task": "1.2.3 / 1.2.4 / 2.2.4", "use": "Prueba de concepto e integración de ABIDES-Gym; calibración RMSC04 que alimenta estas 26 variables" }
+  ],
+  "references": ["Contexto_Agente_Programacion.md, sección 5"]
+}
