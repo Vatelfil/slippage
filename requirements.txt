@@ -1,1 +1,5 @@
 # requirements.txt
+
+yfinance==1.2.0
+pandas
+pyarrow
