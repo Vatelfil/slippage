@@ -1,0 +1,30 @@
+graph TD
+    A["env.reset()"] --> B["Cargar datos yfinance"]
+    B --> C["Inicializar ABIDES-Gym"]
+    C --> D["Calcular S_M inicial"]
+    D --> E{"done == False?"}
+
+    E -->|Si| F["Maestro observa S_M"]
+    F --> G["maestro_policy(S_M)"]
+    G --> H["Decodificar alpha_t, ventana_min"]
+    H --> I["Mensaje ASIGNAR al Ejecutor activo"]
+
+    I --> J["Ejecutor: loop ventana_min x 2 pasos"]
+    J --> K["Ejecutor observa S_E"]
+    K --> L["executor_policy(S_E)"]
+    L --> M["Actuar sobre ABIDES-Gym"]
+    M --> N["ABIDES-Gym retorna nuevo LOB"]
+    N --> O{"Ventana completada?"}
+
+    O -->|No| K
+    O -->|Si| P["Mensaje REPORTE al Maestro"]
+
+    P --> Q["Actualizar Q_executed"]
+    Q --> R["current_time += 30 min"]
+    R --> S{"current_time >= 16:00?"}
+
+    S -->|No| E
+    S -->|Si| T["done = True"]
+    T --> U["Calcular R_M terminal"]
+    U --> V["Guardar logs del episodio"]
+    V --> W["env.close()"]
