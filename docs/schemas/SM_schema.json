@@ -1,0 +1,115 @@
+{
+  "$schema_name": "SM_schema",
+  "$version": "1.0.0",
+  "$owner": "Paolo Sepúlveda (PS)",
+  "$sprint": "Sprint 1 - Tarea 1.1.4",
+  "$date": "2026-08-22",
+  "description": "Esquema formal del vector de estado del Agente Maestro (S_M) del proyecto 'Coordinación de Agentes para la Mitigación del Slippage (IPSA)'. Define las 7 variables observadas por el Agente Maestro cada 30 minutos, sus tipos, rangos normalizados, fuente de datos y forma de cálculo.",
+  "agent": "Agente Maestro",
+  "decision_frequency": "cada 30 minutos",
+  "horizon": {
+    "start": "09:30",
+    "end": "16:00",
+    "duration_minutes": 390
+  },
+  "gymnasium_space": {
+    "type": "Box",
+    "shape": [7],
+    "dtype": "float32",
+    "low":  [0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0],
+    "high": [1.0, 1.0, 1.0, 1.0, 1.0,  1.0, 1.0]
+  },
+  "variables": [
+    {
+      "index": 0,
+      "name": "q_t",
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "source": "Interno (cálculo del entorno)",
+      "formula": "(Q_total - Q_ejecutado) / Q_total",
+      "description": "Fracción de inventario aún no ejecutado sobre la meta-orden total."
+    },
+    {
+      "index": 1,
+      "name": "tau_t",
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "source": "Timestamp (yfinance)",
+      "formula": "(t - 09:30) / 390 min",
+      "description": "Fracción de tiempo transcurrido de la jornada bursátil (09:30-16:00)."
+    },
+    {
+      "index": 2,
+      "name": "n_slices",
+      "type": "int32 -> float32",
+      "range": [0.0, 1.0],
+      "source": "Interno (cálculo del entorno)",
+      "formula": "slices_enviados / 13",
+      "description": "Fracción de decisiones (slices) ya emitidas por el Maestro respecto del máximo esperado en la jornada (390 min / 30 min = 13 decisiones)."
+    },
+    {
+      "index": 3,
+      "name": "volatilidad",
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "source": "yfinance (columna Close)",
+      "formula": "rolling(6).std() normalizado con MinMaxScaler",
+      "description": "Volatilidad reciente del precio de cierre, ventana móvil de 6 periodos."
+    },
+    {
+      "index": 4,
+      "name": "vol_promedio",
+      "type": "float32",
+      "range": [0.0, 1.0],
+      "source": "yfinance (columna Volume)",
+      "formula": "rolling(6).mean() normalizado con MinMaxScaler",
+      "description": "Volumen promedio reciente, ventana móvil de 6 periodos."
+    },
+    {
+      "index": 5,
+      "name": "OBI_agregado",
+      "type": "float32",
+      "range": [-1.0, 1.0],
+      "source": "ABIDES-Gym",
+      "formula": "(V_bid - V_ask) / (V_bid + V_ask)",
+      "description": "Order Book Imbalance agregado: desequilibrio entre volumen comprador y vendedor. NOTA (Sprint 1): no proviene de yfinance; mientras ABIDES-Gym no esté integrado (pendiente tarea 1.2.3/1.2.4), usar 0.0 como placeholder explícito."
+    },
+    {
+      "index": 6,
+      "name": "sesion",
+      "type": "int32 -> float32",
+      "range": [0.0, 1.0],
+      "source": "Timestamp",
+      "formula": "0 -> Apertura, 0.5 -> Media jornada, 1 -> Cierre",
+      "description": "Codifica el tramo horario de la sesión bursátil en curso."
+    }
+  ],
+  "action_space": {
+    "type": "MultiDiscrete",
+    "dims": [10, 4],
+    "total_combinations": 40,
+    "dimensions": [
+      {
+        "name": "alpha_t",
+        "values": [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50],
+        "description": "Fracción del inventario restante a asignar en el siguiente slice."
+      },
+      {
+        "name": "ventana_min",
+        "values": [1, 5, 10, 15],
+        "description": "Ventana temporal (minutos) asignada al Ejecutor activo para ejecutar el slice."
+      }
+    ]
+  },
+  "reward": {
+    "type": "terminal / sparse",
+    "formula": "R_M = -IS_total - lambda * max(0, Q_pendiente) * P_mid_cierre",
+    "IS_total_formula": "IS_total = (P_ejec_prom - P_referencia) * Q_total",
+    "pending_calibration": ["lambda (Sprint 4)"]
+  },
+  "consumers": [
+    { "role": "MR", "task": "2.1.1 / 2.1.4", "use": "Red Actor-Crítico del Maestro; formalización de gym.spaces.Box en código" },
+    { "role": "BF", "task": "1.2.2", "use": "Pipeline que calcula volatilidad, vol_promedio, sesion, tau_t" }
+  ],
+  "references": ["Contexto_Agente_Programacion.md, sección 4"]
+}
