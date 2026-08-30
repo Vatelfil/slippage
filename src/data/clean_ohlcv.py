@@ -47,6 +47,15 @@ Pasos, en este orden (informe de Titulo I, seccion 7):
        normalizadas, para poder calcular el implementation shortfall en CLP
        reales mas adelante.
 
+Columna `is_imputed` (auditoria de relleno): cada fila del output trae un
+booleano que marca si esa vela NO tenia observacion real en el grid original
+(o sea, si su precio vino de ffill o de bfill de borde, en vez de una
+transaccion real). Requisito para poder auditar en la tarea 1.2.2 cuanta de
+la `volatilidad`/`vol_promedio` calculadas es real vs. artefacto del
+relleno -- ver `build_sm_features.py`, que usa esta columna para calcular una
+version diagnostica de la volatilidad de FALABELLA exigiendo un minimo de
+velas realmente observadas por ventana.
+
 Verificacion de DST: se comprobo con `ZoneInfo("America/Santiago")` que la
 ventana de descarga (2026-05-28 a 2026-08-21) no cruza ningun cambio de
 horario -- el offset se mantiene constante en UTC-04:00 durante todo el
@@ -56,19 +65,32 @@ puntual, pero el codigo sigue siendo tz-aware en todo momento (nunca se resta
 un offset fijo a mano) por si el pipeline se vuelve a correr en otra ventana
 que si cruce un cambio de huso.
 
-Metrica de cobertura y checkpoint de 60%: el pipeline calcula DOS metricas
-de cobertura por ticker:
+Metrica de cobertura y "tier" (NO es un filtro): el pipeline calcula DOS
+metricas de cobertura por ticker:
   - coverage_pct: filas_finales / (dias_conservados x 78), calculada
     DESPUES de reindexado+ffill+bfill. Por construccion del propio relleno,
     este valor es ~100% para cualquier ticker que conserve al menos un dia
-    (cada dia conservado aporta exactamente 78 filas garantizadas) -- no
-    discrimina liquidez, se reporta solo por completitud/transparencia.
+    (cada dia conservado aporta exactamente 78 filas garantizadas) -- es
+    TAUTOLOGICO, no discrimina liquidez. Se reporta solo por completitud,
+    porque asi se definio literalmente en el briefing original.
   - coverage_pre_fill_pct: filas REALMENTE observadas (antes de rellenar) /
-    (dias_conservados x 78). Esta es la metrica que si varia segun la
-    liquidez real del ticker, y es la que se usa como gate practico de 60%
-    que el equipo debe revisar manualmente antes de avanzar a la tarea 1.2.2
-    (el script NO aborta solo con un sys.exit; deja la lista de tickers bajo
-    el umbral bien visible en cleaning_report.json y en stdout).
+    (dias_conservados x 78). Esta es la metrica valida: si varia segun la
+    liquidez real del ticker (19.9% en SALFACORP vs. 95.3% en SQM-B, en la
+    corrida de referencia 2026-08-23).
+
+Con esa metrica se corrio el checkpoint de la tarea 1.2.1 con el equipo:
+15 de los 30 tickers del IPSA quedaron bajo 60% de cobertura pre-fill. Se
+decidio EXPLICITAMENTE que esto NO filtra tickers del pipeline (los 30 se
+procesan siempre): en cambio, cada ticker recibe un campo `tier` en
+cleaning_report.json ("A" si coverage_pre_fill_pct >= 60%, "B" si no). El
+universo real de entrenamiento del Agente Maestro es un solo activo
+(FALABELLA, tier A con ~92%); los tickers tier B siguen siendo utiles para
+caracterizacion agregada del mercado y calibracion de ABIDES-Gym/RMSC04
+(tarea 2.2.4 de MR), un uso mucho mas tolerante a huecos. Que la mitad del
+IPSA caiga en tier B no es un defecto de este pipeline: es evidencia
+empirica que respalda la premisa del proyecto (mercado chileno de liquidez
+fina fuera de las acciones mas transadas) y queda documentada como tal para
+el Sprint Review, no como una limitacion a corregir.
 
 Uso (dentro del contenedor Docker):
     python src/data/clean_ohlcv.py                              # autodetecta el ultimo ohlcv_5m_<fecha>
@@ -220,6 +242,14 @@ def fill_ticker_day(df_grid: pd.DataFrame, edge_policy: str) -> tuple[pd.DataFra
              completo para descarte (no se rellena nada mas).
       3. volume = volume.fillna(0.0) SIEMPRE, nunca ffill/bfill (una vela
          sin transacciones tiene volumen real 0).
+      4. agrega la columna booleana 'is_imputed': True si la fila NO tenia
+         una observacion real en el grid original (o sea, si 'close' fue
+         reindexado a NaN y por lo tanto vino de ffill o de bfill de borde).
+         Se marca por CUALQUIER imputacion, no solo ffill, porque el
+         proposito es auditar cuanta de la volatilidad/vol_promedio
+         calculados en 1.2.2 es real vs. artefacto del relleno -- una vela
+         rellenada por bfill de borde es igual de "no observada" que una
+         rellenada por ffill.
 
     Devuelve (df_relleno_o_original, stats_del_dia, dropped).
     stats_del_dia = {'ffill_count': {col:int}, 'bfill_edge_count': {col:int}}
@@ -231,6 +261,8 @@ def fill_ticker_day(df_grid: pd.DataFrame, edge_policy: str) -> tuple[pd.DataFra
     ohlc_cols = [c for c in ("open", "high", "low", "close") if c in df.columns]
 
     before = df[ohlc_cols].isna()
+    is_imputed = (before["close"] if "close" in ohlc_cols else before.any(axis=1)).to_numpy()
+
     df[ohlc_cols] = df[ohlc_cols].ffill()
     after_ffill = df[ohlc_cols].isna()
 
@@ -251,6 +283,8 @@ def fill_ticker_day(df_grid: pd.DataFrame, edge_policy: str) -> tuple[pd.DataFra
 
     if "volume" in df.columns:
         df["volume"] = df["volume"].fillna(0.0)
+
+    df["is_imputed"] = is_imputed
 
     stats = {"ffill_count": ffill_count, "bfill_edge_count": bfill_edge_count}
     return df, stats, dropped
@@ -379,13 +413,28 @@ def compute_pre_fill_coverage(rows_raw_session_filtered: int, trading_days_kept:
                                bars_per_day: int = BARS_PER_DAY) -> float:
     """Metrica diagnostica real: filas REALMENTE observadas (antes de
     reindexar/rellenar) sobre el total teorico de barras de los dias
-    conservados. Esta es la que varia segun la liquidez del ticker y la
-    que se usa como gate practico de 60%.
+    conservados. Esta es la que varia segun la liquidez del ticker.
     """
     theoretical = trading_days_kept * bars_per_day
     if theoretical == 0:
         return 0.0
     return round(100.0 * rows_raw_session_filtered / theoretical, 2)
+
+
+def compute_tier(coverage_pre_fill_pct: float, threshold: float = COVERAGE_THRESHOLD) -> str:
+    """Clasifica el ticker segun su cobertura pre-fill, SIN filtrar nada del
+    pipeline (decision del equipo tras revisar el checkpoint de la tarea
+    1.2.1): el 60% deja de ser un filtro que descarta tickers y pasa a ser
+    una ETIQUETA de uso.
+      - "A": coverage_pre_fill_pct >= 60% -> apto para entrenamiento del
+        Agente Maestro (el universo de entrenamiento real es un solo activo,
+        FALABELLA, que queda comodamente en tier A con ~92%).
+      - "B": coverage_pre_fill_pct < 60% -> demasiado ralo para usarse como
+        activo de entrenamiento individual, pero sigue siendo valido para
+        caracterizacion agregada del mercado y calibracion de ABIDES-Gym /
+        RMSC04 (tarea 2.2.4 de MR), uso mucho mas tolerante a huecos.
+    """
+    return "A" if coverage_pre_fill_pct >= threshold * 100 else "B"
 
 
 # ---------------------------------------------------------------------------
@@ -414,6 +463,7 @@ def clean_all(input_dir: Path, edge_policy: str
         )
         stats["under_threshold_post_fill"] = stats["coverage_pct"] < COVERAGE_THRESHOLD * 100
         stats["under_threshold_pre_fill"] = stats["coverage_pre_fill_pct"] < COVERAGE_THRESHOLD * 100
+        stats["tier"] = compute_tier(stats["coverage_pre_fill_pct"])
 
         cleaned[ticker] = df_normalized
         scaler_params[ticker] = params
@@ -424,10 +474,22 @@ def clean_all(input_dir: Path, edge_policy: str
 
 def build_cleaning_report(per_ticker_stats: dict, edge_policy: str,
                            input_dir: Path, output_dir: Path) -> dict:
-    """Arma el dict final de cleaning_report.json."""
+    """Arma el dict final de cleaning_report.json.
+
+    Decision del equipo (checkpoint de la tarea 1.2.1, revisado con BF):
+    el 60% de cobertura pre-fill NO filtra tickers del pipeline -- los 30
+    se procesan siempre. Se usa solo para clasificar cada ticker en un
+    'tier' (A/B, ver compute_tier), porque el universo real de
+    entrenamiento del Agente Maestro es un solo activo (FALABELLA, ~92%
+    de cobertura pre-fill), y los tickers de baja cobertura igual aportan
+    valor para caracterizacion agregada del mercado / calibracion de
+    ABIDES-Gym (tarea 2.2.4 de MR).
+    """
     tickers_bajo_umbral_pre_fill = sorted(
         t for t, s in per_ticker_stats.items() if s["under_threshold_pre_fill"]
     )
+    tickers_tier_a = sorted(t for t, s in per_ticker_stats.items() if s["tier"] == "A")
+    tickers_tier_b = sorted(t for t, s in per_ticker_stats.items() if s["tier"] == "B")
     total_rows_final = sum(s["rows_final"] for s in per_ticker_stats.values())
 
     return {
@@ -448,15 +510,23 @@ def build_cleaning_report(per_ticker_stats: dict, edge_policy: str,
             "n_tickers": len(per_ticker_stats),
             "total_rows_final": total_rows_final,
             "tickers_bajo_umbral_60pct_pre_fill": tickers_bajo_umbral_pre_fill,
+            "tickers_tier_A": tickers_tier_a,
+            "tickers_tier_B": tickers_tier_b,
             "coverage_metric_note": (
                 "coverage_pct se calcula tal como fue definido en el briefing "
                 "(filas_finales / (dias_conservados x 78), post reindex+ffill+"
                 "bfill), pero por construccion del propio relleno es ~100% para "
                 "cualquier ticker que conserve al menos un dia -- no discrimina "
-                "liquidez. coverage_pre_fill_pct (filas realmente observadas "
-                "antes de rellenar / velas teoricas de los dias conservados) es "
-                "la metrica que si varia y la que debe usarse como gate manual "
-                "de 60% antes de avanzar a la tarea 1.2.2."
+                "liquidez, se reporta solo por completitud/transparencia. "
+                "coverage_pre_fill_pct (filas realmente observadas antes de "
+                "rellenar / velas teoricas de los dias conservados) es la "
+                "metrica valida, y define el campo 'tier' de cada ticker (A si "
+                ">=60%, B si no). Que la mitad del IPSA (tier B) tenga cobertura "
+                "pre-fill baja no es un defecto del pipeline: es evidencia "
+                "empirica que respalda la premisa del proyecto (mercado "
+                "chileno de liquidez fina fuera de las acciones mas liquidas). "
+                "El pipeline NO descarta ningun ticker por esto; 'tier' es una "
+                "etiqueta de uso, no un filtro."
             ),
         },
     }
@@ -516,14 +586,13 @@ def main(input_dir: Path | None = None, output_dir: Path | None = None,
 
     n_tickers = len(per_ticker_stats)
     total_rows = cleaning_report["summary"]["total_rows_final"]
-    bajo_umbral = cleaning_report["summary"]["tickers_bajo_umbral_60pct_pre_fill"]
+    tier_a = cleaning_report["summary"]["tickers_tier_A"]
+    tier_b = cleaning_report["summary"]["tickers_tier_B"]
 
     print(f"Tickers procesados: {n_tickers} | filas finales totales: {total_rows}")
-    if bajo_umbral:
-        print(f"ATENCION: {len(bajo_umbral)} ticker(s) bajo el 60% de cobertura pre-fill: {bajo_umbral}")
-        print("  Revisar antes de avanzar a la tarea 1.2.2 (gate manual, no se detiene el pipeline).")
-    else:
-        print("Ningun ticker bajo el umbral de cobertura pre-fill del 60%.")
+    print(f"Tier A (cobertura pre-fill >= 60%, apto entrenamiento): {len(tier_a)} tickers -> {tier_a}")
+    print(f"Tier B (cobertura pre-fill < 60%, solo calibracion agregada): {len(tier_b)} tickers -> {tier_b}")
+    print("  El pipeline NO descarta ningun ticker por esto -- 'tier' es una etiqueta en cleaning_report.json, no un filtro.")
 
     if dry_run:
         print(f"[dry-run] No se escribieron archivos. Output hubiera sido: {output_dir}")

@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.data.clean_ohlcv import filter_session_hours
+from src.data.clean_ohlcv import compute_tier, filter_session_hours, process_ticker
 
 SANTIAGO_TZ = ZoneInfo("America/Santiago")
 
@@ -95,3 +95,40 @@ def test_filter_session_hours_excludes_outside_window(raw_two_days_with_gaps):
     assert times.between(time(9, 30), time(15, 55)).all()
     # la fixture incluye 2 filas fuera de horario (08:00 y 17:00) que deben caer
     assert len(result) == len(raw_two_days_with_gaps) - 2
+
+
+# ---------------------------------------------------------------------------
+# is_imputed: debe marcar exactamente las velas rellenadas (ffill o bfill de
+# borde), nunca las que ya venian con una observacion real.
+# ---------------------------------------------------------------------------
+
+def test_is_imputed_flags_only_filled_rows(raw_two_days_with_gaps):
+    df_clean, stats = process_ticker("TEST", raw_two_days_with_gaps, edge_policy="bfill")
+
+    # dia 1: dos velas intermedias rellenadas por ffill (12:00, 12:05)
+    day1 = df_clean[df_clean["datetime_santiago"].dt.date == pd.Timestamp("2026-06-01").date()]
+    imputed_day1 = day1.loc[day1["datetime_santiago"].dt.strftime("%H:%M").isin(["12:00", "12:05"]), "is_imputed"]
+    assert imputed_day1.all()
+    assert not day1.loc[~day1["datetime_santiago"].dt.strftime("%H:%M").isin(["12:00", "12:05"]), "is_imputed"].any()
+
+    # dia 2: las 2 primeras velas (09:30, 09:35) rellenadas por bfill de borde
+    day2 = df_clean[df_clean["datetime_santiago"].dt.date == pd.Timestamp("2026-06-02").date()]
+    imputed_day2 = day2.loc[day2["datetime_santiago"].dt.strftime("%H:%M").isin(["09:30", "09:35"]), "is_imputed"]
+    assert imputed_day2.all()
+    assert not day2.loc[~day2["datetime_santiago"].dt.strftime("%H:%M").isin(["09:30", "09:35"]), "is_imputed"].any()
+
+    # ambos dias completan la grilla (edge_policy="bfill" no descarta ninguno)
+    assert stats["n_days_discarded"] == 0
+    assert stats["ffill_imputed_count"]["close"] == 2   # solo el hueco de media jornada del dia 1
+    assert stats["bfill_edge_imputed_count"]["close"] == 2  # solo el borde inicial del dia 2
+
+
+# ---------------------------------------------------------------------------
+# tier: etiqueta, no filtro
+# ---------------------------------------------------------------------------
+
+def test_compute_tier_labels_without_filtering():
+    assert compute_tier(92.05) == "A"
+    assert compute_tier(60.0) == "A"       # limite inclusive
+    assert compute_tier(59.99) == "B"
+    assert compute_tier(19.91) == "B"

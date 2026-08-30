@@ -106,14 +106,46 @@ docker compose run --rm slippage python src/data/clean_ohlcv.py --edge-policy di
 
 Genera `<TICKER>.parquet` + `_combined.parquet` + `scaler_params.json` +
 `cleaning_report.json` en `data/processed/clean_5m_<fecha>/` (gitignored,
-igual que `data/raw/` — se comparte por Drive).
+igual que `data/raw/` — se comparte por Drive). Cada `<TICKER>.parquet`
+incluye la columna booleana `is_imputed` (por fila: `True` si esa vela no
+tenía observación real y vino de ffill o de bfill de borde) — es el insumo
+que usa la tarea 1.2.2 para auditar cuánta volatilidad es real.
 
-**Ojo con la métrica de cobertura**: `cleaning_report.json` reporta
-`coverage_pct` (post reindex+ffill+bfill, ~100% siempre por construcción del
-propio relleno) y `coverage_pre_fill_pct` (filas realmente observadas antes
-de rellenar / velas teóricas — esta sí varía por liquidez del ticker y es la
-que hay que mirar para el gate de 60% acordado con el equipo). Ver
-`cleaning_report.json["summary"]["coverage_metric_note"]`.
+### Por qué hay dos métricas de cobertura, y qué es `tier`
+
+`cleaning_report.json` reporta, por ticker:
+
+- `coverage_pct` — filas finales / (días conservados × 78), calculada
+  **después** de reindexar+ffill+bfill. Es **tautológica**: por construcción
+  del propio relleno, cualquier ticker que conserve al menos un día queda en
+  ~100%, sin importar su liquidez real. Se reporta solo porque así se
+  definió literalmente en el briefing original de la tarea, no porque sea
+  útil para decidir nada.
+- `coverage_pre_fill_pct` — filas **realmente observadas** (antes de
+  rellenar) / velas teóricas de los días conservados. Esta sí varía con la
+  liquidez real (19.9% en SALFACORP vs. 95.3% en SQM-B, corrida de
+  referencia `2026-08-23`) y es la métrica válida.
+
+Con `coverage_pre_fill_pct` se corrió el checkpoint de esta tarea con el
+equipo: **15 de los 30 tickers del IPSA quedaron bajo 60%**. Decisión
+tomada: esto **no filtra nada** — el pipeline procesa siempre los 30
+tickers. En su lugar, cada ticker recibe un campo `tier` en
+`cleaning_report.json`:
+
+- **Tier A** (`coverage_pre_fill_pct >= 60%`): apto para entrenamiento
+  individual del Agente Maestro. El universo real de entrenamiento del MVP
+  es un solo activo, **FALABELLA** (tier A, ~92%).
+- **Tier B** (`< 60%`): demasiado ralo para entrenar sobre él
+  individualmente, pero sigue siendo válido para caracterización agregada
+  del mercado y calibración de ABIDES-Gym/RMSC04 (tarea 2.2.4 de MR), un uso
+  mucho más tolerante a huecos.
+
+Que la mitad del IPSA caiga en tier B **no es un defecto de este pipeline**:
+es evidencia empírica que respalda la premisa del proyecto (mercado chileno
+de liquidez fina fuera de las acciones más transadas), y queda documentada
+así para el Sprint Review. Ver
+`cleaning_report.json["summary"]["coverage_metric_note"]` y
+`compute_tier()` en el código para el detalle.
 
 ## 9. Handoff a Sprint 2.2
 
