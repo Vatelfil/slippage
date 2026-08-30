@@ -18,10 +18,17 @@ aplicar ffill directo sobre filas no contiguas simplemente no tiene huecos
 que rellenar.
 
 Pasos, en este orden (informe de Titulo I, seccion 7):
-    1. Filtro de horario: conservar solo 09:30-16:00 hora Santiago (velas
-       de 09:30 a 15:55, tz-aware).
+    1. Filtro de horario: conservar 09:30-16:00 hora Santiago, tz-aware
+       (FILTER_SESSION_END="16:00", no "15:55" -- ver CLOSING_AUCTION_NOTE:
+       yfinance a veces timestampea el cierre real a las 16:00, y filtrar en
+       15:55 lo descartaba por completo).
+    1.5. Fusion de la vela tardia de cierre (fold_closing_auction): cualquier
+       fila en (15:55, 16:00] se fusiona, por dia, dentro de la ultima vela
+       de la grilla (15:55). Ver CLOSING_AUCTION_NOTE para la evidencia
+       completa (hallazgo del checkpoint de sanity-check de la tarea 1.2.2).
     2. Reindexado a grilla regular de 78 marcas de 5 min por (ticker, dia
-       habil). Dias sin NINGUNA observacion se descartan completos.
+       habil), 09:30 a 15:55 (SESSION_END, sin cambios -- la grilla sigue
+       en 78 velas). Dias sin NINGUNA observacion se descartan completos.
     3. Forward fill en open/high/low/close (ultimo precio conocido).
        volume se rellena con 0, NUNCA con ffill: una vela sin transacciones
        tuvo volumen real 0, no el volumen de la vela anterior -- propagarlo
@@ -117,8 +124,27 @@ RAW_DIR = Path("data/raw")
 PROCESSED_DIR = Path("data/processed")
 
 SESSION_START = "09:30"
-SESSION_END = "15:55"          # ultima vela de 5 min de la jornada (cubre el tramo hasta las 16:00)
+SESSION_END = "15:55"          # etiqueta de la ULTIMA vela de la grilla de 78 (cubre el tramo hasta las 16:00)
+FILTER_SESSION_END = "16:00"   # limite superior del FILTRO de horario (distinto de SESSION_END, ver fold_closing_auction)
 BARS_PER_DAY = 78              # (15:55 - 09:30) / 5 min + 1
+
+CLOSING_AUCTION_NOTE = (
+    "yfinance no timestampea de forma consistente el ultimo print de la "
+    "jornada para el IPSA: en la corrida de referencia (2026-08-23), ~35 de "
+    "60 dias no traen NINGUNA vela a las 15:55 -- el cierre real llega "
+    "timestampeado a las 16:00 (con volumen consistente con la subasta de "
+    "cierre, ej. varios millones de acciones). La vela 15:50 no existe NUNCA "
+    "en ningun dia ni ticker verificado. Sin correccion, el filtro de "
+    "horario y la grilla de 78 velas (fija en 09:30-15:55) descartaban ese "
+    "cierre por completo, y el perfil de volumen/volatilidad no mostraba el "
+    "salto esperado en la subasta de cierre (confirmado con "
+    "--plot-ticker FALABELLA). Fix (fold_closing_auction, decision "
+    "confirmada con BF): el filtro de horario acepta hasta las 16:00 "
+    "inclusive, y cualquier fila con timestamp en (15:55, 16:00] se fusiona "
+    "dentro de la ultima vela de la grilla (15:55): open=el mas temprano, "
+    "high=max, low=min, close=el mas tardio (precio de cierre final), "
+    "volume=suma. La grilla se mantiene en 78 velas, sin agregar una vela 79."
+)
 
 CONTINUOUS_COLS: list[str] = ["open", "high", "low", "close", "volume"]
 
@@ -192,17 +218,61 @@ def load_raw_ticker_files(input_dir: Path) -> dict[str, pd.DataFrame]:
 # ---------------------------------------------------------------------------
 
 def filter_session_hours(df: pd.DataFrame, session_start: str = SESSION_START,
-                          session_end: str = SESSION_END) -> pd.DataFrame:
+                          session_end: str = FILTER_SESSION_END) -> pd.DataFrame:
     """Conserva solo las filas cuyo 'datetime_santiago' cae dentro de
     [session_start, session_end] (ambos limites inclusive), descartando
     pre/post-mercado. Trabaja siempre sobre la columna tz-aware
     'datetime_santiago', nunca sobre una hora naive.
+
+    OJO: el limite superior por defecto es FILTER_SESSION_END ("16:00"), NO
+    SESSION_END ("15:55", la etiqueta de la ultima vela de la grilla). Son
+    distintos a proposito: yfinance a veces timestampea el cierre real a las
+    16:00 (ver CLOSING_AUCTION_NOTE). Ese remanente entre (15:55, 16:00] se
+    deja pasar aca y se fusiona despues, por dia, en fold_closing_auction()
+    -- antes de reindexar sobre la grilla fija de 78 velas.
     """
     start_t = pd.Timestamp(session_start).time()
     end_t = pd.Timestamp(session_end).time()
     times = df["datetime_santiago"].dt.time
     mask = (times >= start_t) & (times <= end_t)
     return df.loc[mask].copy()
+
+
+def fold_closing_auction(df_day: pd.DataFrame, day: date) -> pd.DataFrame:
+    """Fusiona cualquier fila con timestamp en (SESSION_END, FILTER_SESSION_END]
+    (tipicamente una unica fila a las 16:00, ocasionalmente tambien una
+    16:10 suelta) dentro de la ultima vela de la grilla (SESSION_END, 15:55).
+    Ver CLOSING_AUCTION_NOTE para la evidencia y motivacion completa.
+
+    Si el dia YA tiene una fila real a las 15:55 y ademas llega una tardia,
+    se agregan juntas: open=la mas temprana, high=max, low=min, close=la mas
+    tardia (el print mas reciente es el precio de cierre "final" de la
+    jornada), volume=suma. Si solo existe la fila tardia, simplemente se
+    reetiqueta su timestamp a las 15:55 (es la unica observacion real del
+    cierre ese dia, no hay nada que agregar).
+
+    No cambia el numero de velas de la grilla (sigue en 78): esta funcion
+    corre ANTES de reindex_ticker_day, sobre las filas ya filtradas por
+    filter_session_hours pero agrupadas por dia.
+    """
+    df = df_day.sort_values("datetime_santiago").reset_index(drop=True).copy()
+    session_end_t = pd.Timestamp(SESSION_END).time()
+    is_late = df["datetime_santiago"].dt.time > session_end_t
+
+    if not is_late.any():
+        return df
+
+    grid_close_ts = pd.Timestamp(f"{day} {SESSION_END}", tz=SANTIAGO_TZ)
+    df.loc[is_late, "datetime_santiago"] = grid_close_ts
+
+    agg_spec = {"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}
+    other_cols = [c for c in df.columns if c not in ("datetime_santiago", *agg_spec)]
+    agg_spec.update({c: "first" for c in other_cols})
+
+    # df ya esta ordenado cronologicamente (sort_values de mas arriba), asi
+    # que 'first'/'last' dentro del grupo fusionado respetan el orden real
+    # de llegada aunque ahora compartan el mismo datetime_santiago.
+    return df.groupby("datetime_santiago", as_index=False).agg(agg_spec)
 
 
 # ---------------------------------------------------------------------------
@@ -295,10 +365,12 @@ def fill_ticker_day(df_grid: pd.DataFrame, edge_policy: str) -> tuple[pd.DataFra
 # ---------------------------------------------------------------------------
 
 def process_ticker(ticker: str, df_raw: pd.DataFrame, edge_policy: str) -> tuple[pd.DataFrame, dict]:
-    """Orquesta la limpieza de UN ticker: filtro de horario -> agrupa por
-    dia habil (solo dias que YA tienen >=1 fila real; un dia sin ninguna
-    fila jamas se materializa, cumpliendo 'dias sin ninguna observacion se
-    descartan completos') -> reindexado + relleno por dia -> concatena.
+    """Orquesta la limpieza de UN ticker: filtro de horario (hasta las 16:00,
+    ver CLOSING_AUCTION_NOTE) -> agrupa por dia habil (solo dias que YA
+    tienen >=1 fila real; un dia sin ninguna fila jamas se materializa,
+    cumpliendo 'dias sin ninguna observacion se descartan completos') ->
+    fusion de la vela tardia de cierre (fold_closing_auction) -> reindexado
+    a la grilla de 78 + relleno por dia -> concatena.
 
     Devuelve (df_limpio_sin_normalizar, ticker_stats).
     """
@@ -313,8 +385,15 @@ def process_ticker(ticker: str, df_raw: pd.DataFrame, edge_policy: str) -> tuple
     ffill_totals: dict[str, int] = {c: 0 for c in ("open", "high", "low", "close")}
     bfill_totals: dict[str, int] = {c: 0 for c in ("open", "high", "low", "close")}
     volume_zero_filled_count = 0
+    days_with_late_close_folded = 0
 
+    session_end_t = pd.Timestamp(SESSION_END).time()
     for day, df_day in grouped:
+        had_late_close = bool((df_day["datetime_santiago"].dt.time > session_end_t).any())
+        df_day = fold_closing_auction(df_day, day)
+        if had_late_close:
+            days_with_late_close_folded += 1
+
         df_grid = reindex_ticker_day(df_day, day)
         # volumen real observado antes de rellenar (para el conteo de ceros agregados)
         volume_missing_before = int(df_grid["volume"].isna().sum()) if "volume" in df_grid else 0
@@ -345,6 +424,7 @@ def process_ticker(ticker: str, df_raw: pd.DataFrame, edge_policy: str) -> tuple
         "trading_days_kept": trading_days_raw - len(trading_days_discarded),
         "trading_days_discarded": trading_days_discarded,
         "n_days_discarded": len(trading_days_discarded),
+        "days_with_late_close_folded": days_with_late_close_folded,
         "ffill_imputed_count": ffill_totals,
         "bfill_edge_imputed_count": bfill_totals,
         "volume_zero_filled_count": volume_zero_filled_count,
@@ -379,7 +459,10 @@ def normalize_ticker(df_ticker: pd.DataFrame, columns: list[str] = CONTINUOUS_CO
         values = df[[raw_col]].to_numpy(dtype=float)
         scaler = MinMaxScaler()
         scaler.fit(values)
-        df[col] = scaler.transform(values).ravel()
+        # np.clip: scale_*x + min_ puede desbordar [0,1] por redondeo de
+        # float64 justo en el punto que definio data_min_/data_max_ (ej.
+        # 1.0000000000000002). Preserva NaN si los hubiera.
+        df[col] = np.clip(scaler.transform(values).ravel(), 0.0, 1.0)
 
         params[col] = {
             "data_min_": float(scaler.data_min_[0]),
@@ -505,6 +588,7 @@ def build_cleaning_report(per_ticker_stats: dict, edge_policy: str,
             "bars_per_day": BARS_PER_DAY,
         },
         "dst_note": DST_NOTE,
+        "closing_auction_note": CLOSING_AUCTION_NOTE,
         "per_ticker": per_ticker_stats,
         "summary": {
             "n_tickers": len(per_ticker_stats),

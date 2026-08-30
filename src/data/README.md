@@ -84,12 +84,33 @@ parte directo desde los `.parquet` de `ohlcv_5m_<fecha>/`, usando
 ## 8. `src/data/clean_ohlcv.py` (tarea 1.2.1 — limpieza)
 
 Toma el output de `download_ohlcv.py` y produce
-`data/processed/clean_5m_<fecha>/`. Pasos: filtro de horario 09:30–15:55,
-reindexado a grilla regular de 78 velas de 5 min por (ticker, día hábil),
-forward fill en `open/high/low/close` (`volume` se rellena con 0, nunca con
-ffill — ver docstring del script), backfill acotado del borde inicial del
-día, y `MinMaxScaler` por ticker sobre las 5 columnas continuas (parámetros
-en `scaler_params.json`, columnas crudas conservadas con sufijo `_raw`).
+`data/processed/clean_5m_<fecha>/`. Pasos: filtro de horario 09:30–16:00,
+fusión de la vela tardía de cierre (ver más abajo), reindexado a grilla
+regular de 78 velas de 5 min (09:30–15:55) por (ticker, día hábil), forward
+fill en `open/high/low/close` (`volume` se rellena con 0, nunca con ffill —
+ver docstring del script), backfill acotado del borde inicial del día, y
+`MinMaxScaler` por ticker sobre las 5 columnas continuas (parámetros en
+`scaler_params.json`, columnas crudas conservadas con sufijo `_raw`).
+
+### Por qué el filtro llega hasta las 16:00 y no se queda en 15:55
+
+Hallazgo del checkpoint de sanidad de la tarea 1.2.2 (al graficar el perfil
+intradiario de FALABELLA, el salto de volumen esperado en la subasta de
+cierre no aparecía). Al revisar `data/raw/`: **yfinance no timestampea de
+forma consistente el último print de la jornada** — en ~35 de 60 días
+(verificado en varios tickers) no hay NINGUNA vela a las 15:55; el cierre
+real llega timestampeado a las **16:00** (con volumen de varios millones de
+acciones, propio de la subasta de cierre). La vela `15:50` no existe NUNCA,
+en ningún día ni ticker verificado.
+
+Filtrar en 15:55 (como se hacía antes) descartaba ese cierre por completo.
+Fix (`fold_closing_auction`, ver `CLOSING_AUCTION_NOTE` en el código): el
+filtro de horario ahora acepta hasta las 16:00 inclusive, y cualquier fila
+en `(15:55, 16:00]` se fusiona, por día, dentro de la última vela de la
+grilla (`open`=la más temprana, `high`=máx, `low`=mín, `close`=la más
+tardía, `volume`=suma). La grilla se mantiene en **78 velas** (no se agrega
+una vela 79). `cleaning_report.json["per_ticker"][<T>]["days_with_late_close_folded"]`
+cuenta cuántos días necesitaron esta fusión.
 
 ```bash
 docker compose run --rm slippage python src/data/clean_ohlcv.py                 # autodetecta el ultimo ohlcv_5m_<fecha>
