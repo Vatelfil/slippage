@@ -80,3 +80,44 @@ La tarea 1.2.1 (forward fill, filtro horario 09:30–16:00, MinMaxScaler)
 parte directo desde los `.parquet` de `ohlcv_5m_<fecha>/`, usando
 `manifest.json` para saber con qué parámetros se generaron y
 `quality_report.json` para decidir cómo tratar los huecos detectados.
+
+## 8. `src/data/clean_ohlcv.py` (tarea 1.2.1 — limpieza)
+
+Toma el output de `download_ohlcv.py` y produce
+`data/processed/clean_5m_<fecha>/`. Pasos: filtro de horario 09:30–15:55,
+reindexado a grilla regular de 78 velas de 5 min por (ticker, día hábil),
+forward fill en `open/high/low/close` (`volume` se rellena con 0, nunca con
+ffill — ver docstring del script), backfill acotado del borde inicial del
+día, y `MinMaxScaler` por ticker sobre las 5 columnas continuas (parámetros
+en `scaler_params.json`, columnas crudas conservadas con sufijo `_raw`).
+
+```bash
+docker compose run --rm slippage python src/data/clean_ohlcv.py                 # autodetecta el ultimo ohlcv_5m_<fecha>
+docker compose run --rm slippage python src/data/clean_ohlcv.py --dry-run       # solo calcula e imprime el resumen
+docker compose run --rm slippage python src/data/clean_ohlcv.py --edge-policy discard
+```
+
+| Flag | Qué hace |
+|---|---|
+| `--input-dir` | Directorio `ohlcv_5m_<fecha>` a limpiar (default: el más reciente) |
+| `--output-dir` | Default: `data/processed/clean_5m_<fecha>` (misma fecha del input) |
+| `--edge-policy {bfill,discard}` | Qué hacer si un día empieza sin dato a las 09:30 (default `bfill`, ver justificación en el docstring del script) |
+| `--dry-run` | Corre todo el cálculo, no escribe archivos |
+
+Genera `<TICKER>.parquet` + `_combined.parquet` + `scaler_params.json` +
+`cleaning_report.json` en `data/processed/clean_5m_<fecha>/` (gitignored,
+igual que `data/raw/` — se comparte por Drive).
+
+**Ojo con la métrica de cobertura**: `cleaning_report.json` reporta
+`coverage_pct` (post reindex+ffill+bfill, ~100% siempre por construcción del
+propio relleno) y `coverage_pre_fill_pct` (filas realmente observadas antes
+de rellenar / velas teóricas — esta sí varía por liquidez del ticker y es la
+que hay que mirar para el gate de 60% acordado con el equipo). Ver
+`cleaning_report.json["summary"]["coverage_metric_note"]`.
+
+## 9. Handoff a Sprint 2.2
+
+La tarea 1.2.2 (`src/features/build_sm_features.py`, ver
+[`src/features/README.md`](../features/README.md)) parte directo desde
+`data/processed/clean_5m_<fecha>/`, reutilizando y extendiendo su
+`scaler_params.json`.
