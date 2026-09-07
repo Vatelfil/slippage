@@ -13,9 +13,12 @@ RUN apt-get update \
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
-
+RUN pip install pip==23.3.2 setuptools==65.5.0 wheel==0.38.4
+RUN pip install gym==0.21.0 --no-build-isolation
 RUN pip install -r requirements.txt
+RUN pip install git+https://github.com/jpmorganchase/abides-jpmc.git#subdirectory=abides-core
+RUN pip install git+https://github.com/jpmorganchase/abides-jpmc.git#subdirectory=abides-markets
+RUN pip install git+https://github.com/jpmorganchase/abides-jpmc.git#subdirectory=abides-gym
 
 COPY . .
 
