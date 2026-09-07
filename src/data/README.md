@@ -80,3 +80,97 @@ La tarea 1.2.1 (forward fill, filtro horario 09:30–16:00, MinMaxScaler)
 parte directo desde los `.parquet` de `ohlcv_5m_<fecha>/`, usando
 `manifest.json` para saber con qué parámetros se generaron y
 `quality_report.json` para decidir cómo tratar los huecos detectados.
+
+## 8. `src/data/clean_ohlcv.py` (tarea 1.2.1 — limpieza)
+
+Toma el output de `download_ohlcv.py` y produce
+`data/processed/clean_5m_<fecha>/`. Pasos: filtro de horario 09:30–16:00,
+fusión de la vela tardía de cierre (ver más abajo), reindexado a grilla
+regular de 78 velas de 5 min (09:30–15:55) por (ticker, día hábil), forward
+fill en `open/high/low/close` (`volume` se rellena con 0, nunca con ffill —
+ver docstring del script), backfill acotado del borde inicial del día, y
+`MinMaxScaler` por ticker sobre las 5 columnas continuas (parámetros en
+`scaler_params.json`, columnas crudas conservadas con sufijo `_raw`).
+
+### Por qué el filtro llega hasta las 16:00 y no se queda en 15:55
+
+Hallazgo del checkpoint de sanidad de la tarea 1.2.2 (al graficar el perfil
+intradiario de FALABELLA, el salto de volumen esperado en la subasta de
+cierre no aparecía). Al revisar `data/raw/`: **yfinance no timestampea de
+forma consistente el último print de la jornada** — en ~35 de 60 días
+(verificado en varios tickers) no hay NINGUNA vela a las 15:55; el cierre
+real llega timestampeado a las **16:00** (con volumen de varios millones de
+acciones, propio de la subasta de cierre). La vela `15:50` no existe NUNCA,
+en ningún día ni ticker verificado.
+
+Filtrar en 15:55 (como se hacía antes) descartaba ese cierre por completo.
+Fix (`fold_closing_auction`, ver `CLOSING_AUCTION_NOTE` en el código): el
+filtro de horario ahora acepta hasta las 16:00 inclusive, y cualquier fila
+en `(15:55, 16:00]` se fusiona, por día, dentro de la última vela de la
+grilla (`open`=la más temprana, `high`=máx, `low`=mín, `close`=la más
+tardía, `volume`=suma). La grilla se mantiene en **78 velas** (no se agrega
+una vela 79). `cleaning_report.json["per_ticker"][<T>]["days_with_late_close_folded"]`
+cuenta cuántos días necesitaron esta fusión.
+
+```bash
+docker compose run --rm slippage python src/data/clean_ohlcv.py                 # autodetecta el ultimo ohlcv_5m_<fecha>
+docker compose run --rm slippage python src/data/clean_ohlcv.py --dry-run       # solo calcula e imprime el resumen
+docker compose run --rm slippage python src/data/clean_ohlcv.py --edge-policy discard
+```
+
+| Flag | Qué hace |
+|---|---|
+| `--input-dir` | Directorio `ohlcv_5m_<fecha>` a limpiar (default: el más reciente) |
+| `--output-dir` | Default: `data/processed/clean_5m_<fecha>` (misma fecha del input) |
+| `--edge-policy {bfill,discard}` | Qué hacer si un día empieza sin dato a las 09:30 (default `bfill`, ver justificación en el docstring del script) |
+| `--dry-run` | Corre todo el cálculo, no escribe archivos |
+
+Genera `<TICKER>.parquet` + `_combined.parquet` + `scaler_params.json` +
+`cleaning_report.json` en `data/processed/clean_5m_<fecha>/` (gitignored,
+igual que `data/raw/` — se comparte por Drive). Cada `<TICKER>.parquet`
+incluye la columna booleana `is_imputed` (por fila: `True` si esa vela no
+tenía observación real y vino de ffill o de bfill de borde) — es el insumo
+que usa la tarea 1.2.2 para auditar cuánta volatilidad es real.
+
+### Por qué hay dos métricas de cobertura, y qué es `tier`
+
+`cleaning_report.json` reporta, por ticker:
+
+- `coverage_pct` — filas finales / (días conservados × 78), calculada
+  **después** de reindexar+ffill+bfill. Es **tautológica**: por construcción
+  del propio relleno, cualquier ticker que conserve al menos un día queda en
+  ~100%, sin importar su liquidez real. Se reporta solo porque así se
+  definió literalmente en el briefing original de la tarea, no porque sea
+  útil para decidir nada.
+- `coverage_pre_fill_pct` — filas **realmente observadas** (antes de
+  rellenar) / velas teóricas de los días conservados. Esta sí varía con la
+  liquidez real (19.9% en SALFACORP vs. 95.3% en SQM-B, corrida de
+  referencia `2026-08-23`) y es la métrica válida.
+
+Con `coverage_pre_fill_pct` se corrió el checkpoint de esta tarea con el
+equipo: **15 de los 30 tickers del IPSA quedaron bajo 60%**. Decisión
+tomada: esto **no filtra nada** — el pipeline procesa siempre los 30
+tickers. En su lugar, cada ticker recibe un campo `tier` en
+`cleaning_report.json`:
+
+- **Tier A** (`coverage_pre_fill_pct >= 60%`): apto para entrenamiento
+  individual del Agente Maestro. El universo real de entrenamiento del MVP
+  es un solo activo, **FALABELLA** (tier A, ~92%).
+- **Tier B** (`< 60%`): demasiado ralo para entrenar sobre él
+  individualmente, pero sigue siendo válido para caracterización agregada
+  del mercado y calibración de ABIDES-Gym/RMSC04 (tarea 2.2.4 de MR), un uso
+  mucho más tolerante a huecos.
+
+Que la mitad del IPSA caiga en tier B **no es un defecto de este pipeline**:
+es evidencia empírica que respalda la premisa del proyecto (mercado chileno
+de liquidez fina fuera de las acciones más transadas), y queda documentada
+así para el Sprint Review. Ver
+`cleaning_report.json["summary"]["coverage_metric_note"]` y
+`compute_tier()` en el código para el detalle.
+
+## 9. Handoff a Sprint 2.2
+
+La tarea 1.2.2 (`src/features/build_sm_features.py`, ver
+[`src/features/README.md`](../features/README.md)) parte directo desde
+`data/processed/clean_5m_<fecha>/`, reutilizando y extendiendo su
+`scaler_params.json`.
