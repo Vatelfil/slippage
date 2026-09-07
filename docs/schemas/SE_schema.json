@@ -10,7 +10,7 @@
   "horizon": "T_E = ventana asignada por el Maestro (1, 5, 10 o 15 minutos)",
   "gymnasium_space": {
     "type": "Box",
-    "shape": [26],
+    "shape": [27],
     "dtype": "float32",
     "low_by_group": {
       "privado (q_slice, q_pendiente, tau_slice)": [0.0, 0.0, 0.0],
@@ -21,7 +21,7 @@
       "spread_t, OBI_t, tasa_ordenes, P_mid": [0.0, -1.0, 0.0, 0.0]
     },
     "high": "vector de unos (26,), salvo OBI_t cuyo límite superior es 1.0 sobre rango [-1,1]",
-    "total_dims_breakdown": "3 (privado) + 10 (bid precio+volumen) + 10 (ask precio+volumen) + 4 (spread, OBI, tasa_ordenes, P_mid) = 26"
+    "total_dims_breakdown": "3 (privado) + 5 (bid_precios) + 5 (bid_volumenes) + 5 (ask_precios) + 5 (ask_volumenes) + 1 (spread_t) + 1 (OBI_t) + 1 (tasa_ordenes) + 1 (P_mid) = 27"
   },
   "variables": [
     { "index": 0, "name": "q_slice", "type": "float32", "range": [0.0, 1.0], "dim": 1, "source": "Agente Maestro", "description": "Cantidad de acciones asignadas por el Maestro para este tramo, normalizada." },
