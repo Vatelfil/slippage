@@ -46,6 +46,9 @@ experiments/output/*
 
 # Logs
 *.log
+logs/
+checkpoints/
+report_sprint4*.pdf
 
 # Build artifacts
 build/
