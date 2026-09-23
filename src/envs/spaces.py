@@ -249,6 +249,59 @@ class MaestroActionSpace:
 
 
 # ---------------------------------------------------------------------------
+# 3-bis) MaestroDiscreteActionSpace: Discrete(40) -- contrato OFICIAL de A_M
+# ---------------------------------------------------------------------------
+
+class MaestroDiscreteActionSpace:
+    """Contrato OFICIAL de A_M (SM_schema.json / seccion 4.2 del contexto):
+    `MultiDiscrete([10, 4])` = alpha_t discretizado (10 valores) x ventana_min
+    (4 valores), aplanado aqui a `Discrete(40)` porque `MasterActorCritic`
+    (src/models/actor_critic.py, Mauricio) implementa un unico `actor_head`
+    de 40 logits -- no un `MultiDiscrete` real de dos cabezas.
+
+    Agregada 23 sept 2026 (PS) para resolver la discrepancia detectada al
+    conectar la red real del Maestro al notebook de training: `MaestroEnv`
+    solo exponia `MaestroActionSpace` (continua, Box), incompatible con una
+    red que produce un indice discreto 0-39. `MaestroEnv.action_space` ahora
+    usa esta clase; `MaestroActionSpace` (Box) se mantiene disponible para
+    quien quiera experimentar con una arquitectura de accion continua, pero
+    ya no es el espacio por defecto del entorno.
+
+    El orden de codificacion/decodificacion es el mismo que usa
+    `src/envs/maestro_ejecutor_protocol.py` (ALPHA_VALUES, VENTANA_MIN_VALUES):
+    `idx = alpha_idx * 4 + ventana_idx`.
+    """
+
+    ALPHA_VALUES = (0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50)
+    VENTANA_MIN_VALUES = (1, 5, 10, 15)
+    N = len(ALPHA_VALUES) * len(VENTANA_MIN_VALUES)  # 40
+
+    def __init__(self):
+        self.space = spaces.Discrete(self.N)
+
+    def decode(self, action_idx) -> "tuple[float, int]":
+        """`idx` (0..39) -> `(alpha_t, ventana_min)` reales."""
+        idx = int(np.asarray(action_idx).reshape(-1)[0])
+        alpha_idx, ventana_idx = divmod(idx, len(self.VENTANA_MIN_VALUES))
+        return self.ALPHA_VALUES[alpha_idx], self.VENTANA_MIN_VALUES[ventana_idx]
+
+    def encode(self, alpha_idx: int, ventana_idx: int) -> int:
+        return alpha_idx * len(self.VENTANA_MIN_VALUES) + ventana_idx
+
+    def sample(self):
+        return self.space.sample()
+
+    def contains(self, action) -> bool:
+        try:
+            return self.space.contains(int(np.asarray(action).reshape(-1)[0]))
+        except (TypeError, ValueError):
+            return False
+
+    def __repr__(self) -> str:  # pragma: no cover
+        return f"MaestroDiscreteActionSpace(Discrete({self.N}))"
+
+
+# ---------------------------------------------------------------------------
 # 4) EjecutorActionSpace: MultiDiscrete([3, 10, 8])
 # ---------------------------------------------------------------------------
 
@@ -272,6 +325,7 @@ class EjecutorActionSpace:
     N_ORDER_TYPES = 3
     N_VOLUME_BUCKETS = 10
     N_PRICE_LEVELS = 8
+    N_FLAT = N_ORDER_TYPES * N_VOLUME_BUCKETS * N_PRICE_LEVELS  # 240
 
     def __init__(self):
         self.space = spaces.MultiDiscrete(
@@ -291,6 +345,28 @@ class EjecutorActionSpace:
         except (TypeError, ValueError):
             return False
         return self.space.contains(action)
+
+    def decode_flat(self, flat_idx) -> np.ndarray:
+        """Convierte un indice plano (0..239, lo que produce `ExecutorActorCritic`,
+        un unico `actor_head` discreto) al array `[order_type, volume_bucket,
+        price_level]` que espera `EjecutorEnv.step()` / `self.space`.
+
+        Agregado 23 sept 2026 (PS) por el mismo motivo que
+        `MaestroDiscreteActionSpace`: la red real del Ejecutor produce una
+        Categorical de `N_FLAT` (240) logits, no un `MultiDiscrete` de 3
+        cabezas independientes.
+        """
+        idx = int(np.asarray(flat_idx).reshape(-1)[0])
+        order_type, volume_bucket, price_level = np.unravel_index(
+            idx, (self.N_ORDER_TYPES, self.N_VOLUME_BUCKETS, self.N_PRICE_LEVELS)
+        )
+        return np.array([order_type, volume_bucket, price_level], dtype=np.int64)
+
+    def encode_flat(self, order_type: int, volume_bucket: int, price_level: int) -> int:
+        return int(np.ravel_multi_index(
+            (order_type, volume_bucket, price_level),
+            (self.N_ORDER_TYPES, self.N_VOLUME_BUCKETS, self.N_PRICE_LEVELS),
+        ))
 
     def parse_action(self, action) -> Dict[str, Any]:
         """Traduce una accion `[order_type, volume_bucket, price_level]`

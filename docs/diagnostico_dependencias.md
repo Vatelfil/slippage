@@ -44,23 +44,32 @@ Las versiones recientes de `pandas` deprecación de `append()` (usado a menudo e
 Aislar la corrida experimental en el contenedor Docker asegura que cualquier parche necesario al código fuente de ABIDES (como reemplazar `append()` con `concat()`) se pueda probar sin destruir el entorno local base del usuario.
 
 ## Resumen del Entorno de Prueba (Docker)
-El `Dockerfile` generado para este PoC establece:
-*   `python:3.9-slim`
-*   `numpy==1.23.5` y `cython` (instalados primero)
-*   `gym==0.21.0`
-*   `ray[rllib]==2.2.0`
-*   `pomegranate==0.14.8`
-*   (Otras dependencias provistas en tu `requirements.txt`)
+
+**Corrección (23 sept 2026, PS):** las versiones listadas originalmente en esta sección (`gym==0.21.0`, `numpy==1.23.5`, `ray[rllib]==2.2.0`, `pomegranate==0.14.8`) no coincidían con las que el propio repositorio oficial de ABIDES-Gym fija en su `requirements.txt`. Verificado contra `https://github.com/jpmorganchase/abides-jpmc-public` (repo real — el `Dockerfile` anterior apuntaba además a una URL de repo inexistente, `abides-jpmc.git`):
+
+El `Dockerfile` actualizado establece:
+*   `python:3.9.18-slim`
+*   `numpy==1.22.0` y `cython` (instalados primero)
+*   `gym==0.18.0`
+*   `pandas==1.2.4`, `scipy==1.10.0`, `coloredlogs==15.0.1`, `psutil==5.8.0`, `tqdm==4.61.1`
+*   `pomegranate==0.14.5`
+*   `ray[rllib]==1.7.0`
+*   `setuptools==57.5.0` (no 65.5.0 — debe ser **menor a 58** para conservar soporte 2to3, tal como esta misma sección 5 recomienda; la versión anterior del Dockerfile se contradecía a sí misma en este punto)
+*   Instalación de ABIDES-Gym: `git clone` del repo completo + `python setup.py install` en `abides-core`, `abides-markets`, `abides-gym` (en ese orden) — el método real documentado en `install.sh` del repo oficial, no `pip install git+...#subdirectory=X` (que nunca fue una forma válida de instalar estos subpaquetes)
+
+⚠️ **Nota de alcance:** esta corrección se hizo sin Docker disponible en el entorno donde se aplicó, por lo que las versiones están verificadas contra la documentación oficial pero la construcción completa de la imagen (compilación de `pomegranate` con Cython, etc.) sigue sin confirmarse de punta a punta. Mauricio debe construir la imagen y reportar cualquier fallo.
+
+⚠️ **El repositorio `abides-jpmc-public` fue archivado (read-only) el 2 de junio de 2025** — no habrá más actualizaciones/parches upstream; cualquier bug futuro debe resolverse con forks o parches locales.
 
 Esto provee un *sandbox* estable y predecible donde los agentes CTDE y PPO podrán ejecutarse interactuando con el LOB sin fallos repentinos de infraestructura.
 
 ## 5. Conflicto Directo de ABIDES-Gym con Python 3.9+
 
-### Diagn�stico
-La instalaci�n base de abides-gym a veces requiere dependencias antiguas que entran en conflicto con setuptools >= 58.0.0 (ya que elimin� el soporte de 2to3). Adem�s, algunos paquetes subyacentes requieren CMake y compiladores en Linux para construir extensiones C++ en las que se basa la simulaci�n del Order Book.
+### Diagn�stico
+La instalaci�n base de abides-gym a veces requiere dependencias antiguas que entran en conflicto con setuptools >= 58.0.0 (ya que elimin� el soporte de 2to3). Adem�s, algunos paquetes subyacentes requieren CMake y compiladores en Linux para construir extensiones C++ en las que se basa la simulaci�n del Order Book.
 
-### Mitigaci�n Aplicada
-En el Dockerfile se introdujo la instalaci�n de uild-essential, cmake, y la degradaci�n (downgrade) o fijaci�n de setuptools y wheel, previo a instalar las bibliotecas requeridas. Esto permite que pip resuelva e instale los binarios correctos de ABIDES-Gym bajo Python 3.9.18 de manera fluida y sin arrojar errores de 'Failed building wheel'.
+### Mitigaci�n Aplicada
+En el Dockerfile se introdujo la instalaci�n de uild-essential, cmake, y la degradaci�n (downgrade) o fijaci�n de setuptools y wheel, previo a instalar las bibliotecas requeridas. Esto permite que pip resuelva e instale los binarios correctos de ABIDES-Gym bajo Python 3.9.18 de manera fluida y sin arrojar errores de 'Failed building wheel'.
 
 ### Ajuste Adicional de Pip
-Al construir el contenedor, la instalaci�n de gym==0.21.0 tambi�n falla si la versi�n de pip es >= 24.1 debido a metadatos mal formados en el setup original de gym (un par�ntesis faltante). La soluci�n implementada en el Dockerfile fue instalar pip==23.3.2 expl�citamente.
+Al construir el contenedor, la instalaci�n de gym==0.21.0 tambi�n falla si la versi�n de pip es >= 24.1 debido a metadatos mal formados en el setup original de gym (un par�ntesis faltante). La soluci�n implementada en el Dockerfile fue instalar pip==23.3.2 expl�citamente.
