@@ -1,0 +1,377 @@
+{
+  "ANDINA-B": {
+    "features": {
+      "spread": 6.626191489716881,
+      "volatility": 0.002101471625294737,
+      "skewness": -0.2876609375111564,
+      "kurtosis": 15.261503720573742
+    },
+    "calibrated_params": {
+      "lambda_plus": 3.3202961062719516,
+      "lambda_minus": 6.820672818195422,
+      "theta": 0.20019864215866995,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 15.123187703693356
+    },
+    "validation": {
+      "ks_statistic": 0.7537386193631118,
+      "p_value": 3.2e-322,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "BCI": {
+    "features": {
+      "spread": 123.30363247863248,
+      "volatility": 0.00231126680246744,
+      "skewness": 0.27734946592778664,
+      "kurtosis": 14.777326692122124
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5,
+      "lambda_minus": 0.5,
+      "theta": 0.3,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 12.092130009212225
+    },
+    "validation": {
+      "ks_statistic": 0.23670837785851678,
+      "p_value": 2.2445367622280773e-69,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "BSANTANDER": {
+    "features": {
+      "spread": 0.11857476030659472,
+      "volatility": 0.0017695697690529033,
+      "skewness": -0.15059061935563006,
+      "kurtosis": 18.99472152765698
+    },
+    "calibrated_params": {
+      "lambda_plus": 2.893431256048578,
+      "lambda_minus": 4.003470837809644,
+      "theta": 0.0002344753453233842,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 22.497080966499617
+    },
+    "validation": {
+      "ks_statistic": 0.5634300064116264,
+      "p_value": 3.24e-321,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "CENCOSUD": {
+    "features": {
+      "spread": 3.153973884256477,
+      "volatility": 0.001940028314424018,
+      "skewness": -0.3085469416425204,
+      "kurtosis": 11.775370891627686
+    },
+    "calibrated_params": {
+      "lambda_plus": 3.5218815171292617,
+      "lambda_minus": 6.40440207417798,
+      "theta": 0.12743456153850405,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 18.253507287015246
+    },
+    "validation": {
+      "ks_statistic": 0.727214896345373,
+      "p_value": 7.36e-322,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "CHILE": {
+    "features": {
+      "spread": 0.3222607082790799,
+      "volatility": 0.0016962791665502965,
+      "skewness": 0.0040434649529416744,
+      "kurtosis": 9.522046262311186
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.503615972282052,
+      "lambda_minus": 0.49581627122887906,
+      "theta": 0.2975435173666084,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 24.92370149330893
+    },
+    "validation": {
+      "ks_statistic": 0.24673744389826885,
+      "p_value": 2.0991704962762477e-75,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "CMPC": {
+    "features": {
+      "spread": 1.3450968815730169,
+      "volatility": 0.0019792259434722663,
+      "skewness": -0.543690828769021,
+      "kurtosis": 25.907764850172537
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.0001,
+      "lambda_minus": 7.24398156317831,
+      "theta": 0.0001,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 17.395038038725204
+    },
+    "validation": {
+      "ks_statistic": 0.9882374438982688,
+      "p_value": 0.0,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "COPEC": {
+    "features": {
+      "spread": 10.269628384581997,
+      "volatility": 0.001986977947886765,
+      "skewness": 1.0449569115076325,
+      "kurtosis": 74.2615543212872
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5,
+      "lambda_minus": 0.5,
+      "theta": 0.3,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 17.48818543895318
+    },
+    "validation": {
+      "ks_statistic": 0.24504349219918786,
+      "p_value": 2.284168194104133e-74,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "ENELAM": {
+    "features": {
+      "spread": 0.0938696559677776,
+      "volatility": 0.0015886226021391743,
+      "skewness": -1.252016817322844,
+      "kurtosis": 59.88253029313461
+    },
+    "calibrated_params": {
+      "lambda_plus": 6.101925414676651,
+      "lambda_minus": 9.776186431429023,
+      "theta": 0.9997763675950136,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 28.87166237404056
+    },
+    "validation": {
+      "ks_statistic": 0.6874272280401795,
+      "p_value": 1.354e-321,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "ENELCHILE": {
+    "features": {
+      "spread": 0.11987388643444094,
+      "volatility": 0.0019414612469987721,
+      "skewness": 0.6608361782240394,
+      "kurtosis": 56.89789479693564
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5,
+      "lambda_minus": 0.5,
+      "theta": 0.3,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 18.2494590135093
+    },
+    "validation": {
+      "ks_statistic": 0.24076907458858732,
+      "p_value": 8.738353724287591e-72,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "FALABELLA": {
+    "features": {
+      "spread": 11.719263112646901,
+      "volatility": 0.0021076332651798584,
+      "skewness": 0.013820569180434804,
+      "kurtosis": 7.997234225279087
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5022725849173405,
+      "lambda_minus": 0.4941074305990782,
+      "theta": 0.2983988437868694,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 15.021254845378122
+    },
+    "validation": {
+      "ks_statistic": 0.2332690745885873,
+      "p_value": 2.2840999928230133e-67,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "ITAUCL": {
+    "features": {
+      "spread": 29.14423076923077,
+      "volatility": 0.0019947854328603337,
+      "skewness": 0.20699415255385606,
+      "kurtosis": 11.23734264436354
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5,
+      "lambda_minus": 0.5,
+      "theta": 0.3,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 17.11664502546258
+    },
+    "validation": {
+      "ks_statistic": 0.24141023723017738,
+      "p_value": 3.6061710383268203e-72,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "LTM": {
+    "features": {
+      "spread": 0.047506405349470614,
+      "volatility": 0.0018779496466891053,
+      "skewness": -1.0506794851394123,
+      "kurtosis": 54.34813535002117
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.9716628492499272,
+      "lambda_minus": 10.0,
+      "theta": 0.0001,
+      "optimizer_success": true,
+      "optimizer_message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "neg_log_likelihood": 19.018942086364536
+    },
+    "validation": {
+      "ks_statistic": 0.9831002350929686,
+      "p_value": 0.0,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "MALLPLAZA": {
+    "features": {
+      "spread": 6.054035206330128,
+      "volatility": 0.002136809339282345,
+      "skewness": 0.2578934772430195,
+      "kurtosis": 16.434939170550606
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5,
+      "lambda_minus": 0.5,
+      "theta": 0.3,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 14.56106515367435
+    },
+    "validation": {
+      "ks_statistic": 0.23713581961957683,
+      "p_value": 1.2574317305562077e-69,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "PARAUCO": {
+    "features": {
+      "spread": 5.2434980343549675,
+      "volatility": 0.0019785512051784288,
+      "skewness": 0.20388454774353176,
+      "kurtosis": 22.9183676246724
+    },
+    "calibrated_params": {
+      "lambda_plus": 0.5,
+      "lambda_minus": 0.5,
+      "theta": 0.3,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 17.44594246102599
+    },
+    "validation": {
+      "ks_statistic": 0.24269256251335755,
+      "p_value": 6.096511641183301e-73,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  },
+  "SQM-B": {
+    "features": {
+      "spread": 145.14358974358976,
+      "volatility": 0.0022445268357443003,
+      "skewness": -1.0498275041429543,
+      "kurtosis": 63.75038161874447
+    },
+    "calibrated_params": {
+      "lambda_plus": 2.2342112044004234,
+      "lambda_minus": 4.060085708038153,
+      "theta": 1.0,
+      "optimizer_success": false,
+      "optimizer_message": "ABNORMAL: ",
+      "neg_log_likelihood": 12.946758492624515
+    },
+    "validation": {
+      "ks_statistic": 0.5715881598632186,
+      "p_value": 3.12e-321,
+      "valid": false,
+      "n_observed": 4679,
+      "n_simulated": 2000,
+      "alpha": 0.05
+    },
+    "n_rows": 4680
+  }
+}

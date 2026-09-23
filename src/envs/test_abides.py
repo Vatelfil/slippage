@@ -1,52 +1,60 @@
-import gymnasium as gym
-# Si abides_gym requiere gym antiguo, puede ser necesario usar un wrapper o importar abides_gym 
-# independientemente. Por ahora, asumimos que abides_gym se ha adaptado o se está adaptando.
-try:
-    import abides_gym
-except ImportError:
-    print("Advertencia: abides_gym no está instalado.")
+"""Prueba de concepto (PoC) de ABIDES-Gym.
+
+*** VERIFICADA CONTRA ABIDES-GYM REAL el 29 sept 2026 *** (en Colab, con
+Python 3.9 via condacolab, gym==0.18.0 -- ver DIAGNOSTICO_COLAB_MAURICIO_29SEP.md
+para la instalacion completa). Este script corrio con exito.
+
+Historial de correcciones (para que quede el porque, no solo el que):
+- Version original (Mauricio, config-entorno-abides-y-modelos): probaba
+  "markets-execution-v0" y, como respaldo, "rmc-v0". "markets-execution-v0"
+  SI existe; "rmc-v0" no.
+- 23 sept (PS): cambiada por error a "markets-daily_investor-v0", creyendo
+  que "markets-execution-v0" no existia. Fue un error mio.
+- 28 sept (Mauricio, fix/arreglos-dependencias): cambiada a `gymnasium` +
+  `shimmy` para compatibilizar con ABIDES-Gym. Esto NO funciona: ABIDES-Gym
+  importa `gym` (la libreria vieja) directamente en su propio codigo fuente
+  (abides_gym/__init__.py, markets_execution_environment_v0.py) -- shimmy
+  envuelve un entorno ya creado con gym viejo para usarlo desde fuera con la
+  API de gymnasium, no hace que el paquete abides_gym deje de necesitar gym
+  por dentro. Ver DIAGNOSTICO_COLAB_MAURICIO_29SEP.md para el detalle.
+- 29 sept (PS): confirmado en abides_gym/__init__.py del repo oficial
+  (jpmorganchase/abides-jpmc-public) que se registran exactamente dos
+  entornos: "markets-daily_investor-v0" y "markets-execution-v0". El de
+  ejecucion de ordenes (el que corresponde a este proyecto) es
+  "markets-execution-v0" -- la version ORIGINAL de Mauricio tenia el nombre
+  correcto. Probado con exito real en Colab (ver arriba).
+"""
+import gym
+import abides_gym  # noqa: F401  (el import registra los entornos "markets-*-v0")
+
 
 def test_abides_orderbook():
-    print("Iniciando prueba de concepto de ABIDES-Gym con Gymnasium...")
-    
-    # Crear un entorno básico de ABIDES (markets-v0 o smc-v0 dependiendo de la versión)
-    # markets-execution-v0 es común para problemas de ejecución de órdenes
-    try:
-        env = gym.make("markets-execution-v0")
-        print("Entorno 'markets-execution-v0' creado correctamente.")
-    except Exception as e:
-        print(f"Error al crear el entorno markets-execution-v0: {e}")
-        print("Intentando crear 'rmc-v0' (entorno base)...")
-        try:
-            env = gym.make("rmc-v0")
-        except Exception as e2:
-            print(f"Error al crear rmc-v0: {e2}. Asegúrate de que los entornos de abides_gym estén registrados en Gymnasium.")
-            return
-    
-    # Resetear el entorno para iniciar el día de simulación (Gymnasium devuelve obs, info)
-    obs, info = env.reset()
-    print("\nSimulación iniciada. Estado inicial del Order Book (Observación):")
-    
-    # La observación típica incluye LOB features (precios de bid/ask, volúmenes)
-    print(obs)
-    
-    # Tomar una acción aleatoria o dummy (esperar) para simular un paso en el tiempo
-    # En muchos entornos discretos, 0 puede ser 'do nothing' o similar
-    action = env.action_space.sample() 
-    print(f"\nEjecutando acción de prueba: {action}")
-    
-    # Step en el entorno (Gymnasium devuelve 5 valores)
-    obs, reward, terminated, truncated, step_info = env.step(action)
-    done = terminated or truncated
-    
-    print("\nEstado del Order Book después del primer Step:")
-    print(f"Observación: {obs}")
-    print(f"Recompensa: {reward}")
-    print(f"Terminated: {terminated}")
-    print(f"Truncated: {truncated}")
-    print(f"Info adicional: {step_info}")
-    
-    print("\nPrueba de concepto completada con éxito. ABIDES-Gym es funcional con Gymnasium.")
+    print("Iniciando prueba de concepto de ABIDES-Gym...")
 
-if __name__ == '__main__':
+    env_id = "markets-execution-v0"
+    print(f"Creando entorno '{env_id}' (background_config='rmsc04', direction='BUY')...")
+    env = gym.make(env_id, background_config="rmsc04", direction="BUY")
+
+    # gym==0.18.0 (version pineada por el repo oficial de ABIDES-Gym) usa la
+    # API vieja de 4 valores: reset() -> obs, step() -> (obs, reward, done, info).
+    obs = env.reset()
+    print("\nSimulacion iniciada. Estado inicial (observacion):")
+    print(obs)
+
+    action = env.action_space.sample()
+    print(f"\nEjecutando accion de prueba: {action}")
+
+    obs, reward, done, info = env.step(action)
+
+    print("\nEstado despues del primer step:")
+    print(f"Observacion: {obs}")
+    print(f"Recompensa: {reward}")
+    print(f"Terminado (done): {done}")
+    print(f"Info adicional: {info}")
+
+    print("\nPrueba de concepto completada con exito. ABIDES-Gym es funcional.")
+    return obs, reward, done, info
+
+
+if __name__ == "__main__":
     test_abides_orderbook()
