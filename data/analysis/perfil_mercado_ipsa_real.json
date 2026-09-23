@@ -1,0 +1,59 @@
+{
+  "spread_by_session": {
+    "Apertura (09:30-11:00)": {
+      "spread_abs_mean": 16.29699226574591,
+      "spread_rel_pct_mean": 0.13813104394136025,
+      "n_obs": 34200
+    },
+    "Media jornada (11:00-14:00)": {
+      "spread_abs_mean": 11.348442511117018,
+      "spread_rel_pct_mean": 0.11246925038008448,
+      "n_obs": 64800
+    },
+    "Cierre (14:00-16:00)": {
+      "spread_abs_mean": 12.7440699696656,
+      "spread_rel_pct_mean": 0.12754208449912766,
+      "n_obs": 41400
+    }
+  },
+  "volatility_by_session": {
+    "Apertura (09:30-11:00)": {
+      "volatility_mean": 0.0025137406216797836,
+      "volatility_std": 0.002686969889961484,
+      "n_obs": 34140
+    },
+    "Media jornada (11:00-14:00)": {
+      "volatility_mean": 0.0015585748789750116,
+      "volatility_std": 0.001729127826253234,
+      "n_obs": 64800
+    },
+    "Cierre (14:00-16:00)": {
+      "volatility_mean": 0.0015095931701474337,
+      "volatility_std": 0.0015822723330373987,
+      "n_obs": 41400
+    }
+  },
+  "volume_by_session": {
+    "Apertura (09:30-11:00)": {
+      "volume_mean": 396764.56660818716,
+      "volume_total": 13569348178.0,
+      "n_obs": 34200
+    },
+    "Media jornada (11:00-14:00)": {
+      "volume_mean": 456966.71941358026,
+      "volume_total": 29611443418.0,
+      "n_obs": 64800
+    },
+    "Cierre (14:00-16:00)": {
+      "volume_mean": 698419.4745410628,
+      "volume_total": 28914566246.0,
+      "n_obs": 41400
+    }
+  },
+  "n_tickers": 30,
+  "n_rows": 140400,
+  "date_range": [
+    "2026-06-30 09:30:00-04:00",
+    "2026-09-23 15:55:00-03:00"
+  ]
+}
