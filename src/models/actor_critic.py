@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.distributions import Categorical
 
 class BaseActorCritic(nn.Module):
     def __init__(self, obs_dim, action_dim, hidden_sizes=(256, 256)):
@@ -12,18 +13,41 @@ class BaseActorCritic(nn.Module):
             nn.Linear(hidden_sizes[0], hidden_sizes[1]),
             nn.ReLU()
         )
-        
+
         # Actor head (policy) - outputs logits for discrete actions
         self.actor_head = nn.Linear(hidden_sizes[1], action_dim)
-        
+
         # Critic head (value function) - outputs a single scalar value
         self.critic_head = nn.Linear(hidden_sizes[1], 1)
-        
+
     def forward(self, obs):
         features = self.shared_net(obs)
         logits = self.actor_head(features)
         value = self.critic_head(features)
         return logits, value
+
+    def get_action_and_value(self, obs, action=None):
+        """Helper para el rollout PPO (agregado por PS, 23 sept, tarea 3.1.1 en curso).
+
+        Ambas subclases (MasterActorCritic, ExecutorActorCritic) son de accion
+        discreta unica (un solo `actor_head` de `action_dim` logits: 40 para
+        el Maestro, `action_dim` flatten para el Ejecutor), asi que Categorical
+        alcanza para las dos - no hay una rama continua (Normal) porque este
+        modulo no la implementa.
+
+        Args:
+            obs: tensor (batch, obs_dim).
+            action: si se entrega, se evalua su log_prob en vez de samplear
+                una nueva (uso: recompute durante los epochs de PPO update).
+
+        Returns:
+            (action, log_prob, entropy, value)
+        """
+        logits, value = self.forward(obs)
+        dist = Categorical(logits=logits)
+        if action is None:
+            action = dist.sample()
+        return action, dist.log_prob(action), dist.entropy(), value
 
 class MasterActorCritic(BaseActorCritic):
     def __init__(self, obs_dim):
