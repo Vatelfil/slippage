@@ -12,20 +12,17 @@ No se hardcodean los limites numericos: si el equipo actualiza un schema
 (p. ej. al calibrar lambda/beta en Sprint 4), este modulo debe reflejar el
 cambio sin tocar codigo, solo el JSON.
 
-NOTA IMPORTANTE (discrepancia detectada en SE_schema.json v1.0.0):
-El campo `gymnasium_space.shape` declara [26], pero la suma real de las
-dimensiones listadas en `variables` (y en `low_by_group`) es 27:
-    privado(3) + bid_precios(5) + bid_volumenes(5) + ask_precios(5)
-    + ask_volumenes(5) + [spread_t, OBI_t, tasa_ordenes, P_mid](4) = 27
-El propio texto `total_dims_breakdown` del schema tiene un error aritmetico
-("... + 4 (...) = 26", que en realidad suma 27). Esto se debe reportar al
-equipo (PS) para corregir SE_schema.json en un proximo sprint (candidato a
-version 1.0.1). Mientras tanto, este modulo NO oculta el problema: construye
-el vector de low/high a partir de los datos REALES del schema (27
-componentes) y expone la dimension efectiva calculada en
-`EjecutorSpace.n_dims`, en vez de forzar un shape=(26,) que descartaria una
-variable real del contrato. Se deja constancia explicita via
-`EjecutorSpace.SCHEMA_DIM_WARNING`.
+NOTA HISTORICA (corregida, 23 sept 2026): SE_schema.json v1.0.0 declaraba
+`gymnasium_space.shape=[26]` mientras que la suma real de las dimensiones
+listadas en `variables` (y en `low_by_group`) era 27 (privado 3 + bid_precios
+5 + bid_volumenes 5 + ask_precios 5 + ask_volumenes 5 + [spread_t, OBI_t,
+tasa_ordenes, P_mid] 4 = 27). Esto ya fue corregido en el propio schema
+(shape=[27] y `total_dims_breakdown` recalculado). `EjecutorSpace` sigue
+calculando `n_dims` a partir de los datos REALES de `variables` en vez de
+confiar ciegamente en el campo `shape` declarado, y emite
+`EjecutorSpace.SCHEMA_DIM_WARNING` si alguna vez vuelven a divergir (defensa
+ante una futura edicion manual inconsistente del JSON), pero no hay
+discrepancia activa en la version actual del schema.
 """
 from __future__ import annotations
 
@@ -139,23 +136,20 @@ class EjecutorSpace:
     (grupos: privado(3) + bid_precios(5) + bid_volumenes(5) + ask_precios(5)
     + ask_volumenes(5) + [spread_t, OBI_t, tasa_ordenes, P_mid](4)).
 
-    Ver `SCHEMA_DIM_WARNING` / docstring de modulo: el schema v1.0.0 declara
-    shape=[26] pero la suma real de sus grupos es 27; este modulo usa la
-    dimension REAL (27) calculada a partir de los datos del schema para no
-    descartar informacion, y expone `n_dims` con el valor efectivo.
+    Nota historica: SE_schema.json v1.0.0 declaraba shape=[26] cuando la suma
+    real de sus grupos era 27; ya se corrigio en el schema (ver docstring de
+    modulo). `n_dims` se calcula igualmente a partir de los datos REALES de
+    `variables`, no del campo `shape`, como defensa ante una futura edicion
+    manual inconsistente del JSON.
     """
 
     SCHEMA_DIM_WARNING = (
-        "SE_schema.json v1.0.0 declara gymnasium_space.shape=[26], pero la "
-        "suma de sus grupos (privado=3, bid_precios=5, bid_volumenes=5, "
-        "ask_precios=5, ask_volumenes=5, [spread_t,OBI_t,tasa_ordenes,P_mid]=4) "
-        "es 27. Se detecto ademas un error aritmetico en el propio campo "
-        "'total_dims_breakdown' del schema (dice '=26' pero suma 27). "
-        "EjecutorSpace usa la dimension REAL (27) inferida de 'variables' / "
-        "'low_by_group' para no perder ninguna variable del contrato. "
-        "Se recomienda a PS corregir SE_schema.json (version 1.0.1) en "
-        "Sprint 4, ya sea ajustando shape a 27 o eliminando una variable "
-        "duplicada del ultimo grupo."
+        "El shape declarado en gymnasium_space.shape no coincide con la suma "
+        "real de las dimensiones listadas en 'variables' de SE_schema.json. "
+        "EjecutorSpace siempre usa la dimension REAL inferida de 'variables' "
+        "para no perder ninguna variable del contrato; corregir el campo "
+        "'shape' (y 'total_dims_breakdown') en el schema para que quede "
+        "consistente."
     )
 
     def __init__(self, schema_path: Path = SE_SCHEMA_PATH, warn: bool = True):
