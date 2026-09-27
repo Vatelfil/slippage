@@ -14,18 +14,19 @@ Tu propuesta (Docker local envuelto en FastAPI + túnel ngrok + Colab como clien
 2. **Ngrok gratis cambia de URL cada vez que se reinicia el túnel.** Cada vez que tu Docker se reinicie, hay que volver a copiar la URL nueva a la notebook de Colab.
 3. **Estás exponiendo un servidor a internet** desde tu red doméstica. No es necesariamente grave si le pones contraseña, pero es una superficie de riesgo que no necesitamos para este proyecto.
 
-## ¿Hace falta Colab para esto?
+## Aclaración importante: esto NO es "entrenemos todo en un PC débil"
 
-Creo que no, y por eso el túnel probablemente sea esfuerzo de más:
+Para que quede claro y no se preste a confusión: **no estoy proponiendo entrenar en un computador flojo en vez de usar Colab.** Docker en sí mismo no es "pesado" — es solo una caja aislada con las versiones viejas de librerías que ABIDES-Gym necesita; no consume más CPU/RAM que correr el mismo código sin Docker.
 
-- **Las redes son chicas.** `MasterActorCritic` y `ExecutorActorCritic` son MLPs de 2 capas × 128-256 neuronas — el tipo de red que entrena perfectamente rápido en CPU. El motivo típico para usar Colab (acceso a GPU) no aplica realmente acá; no vamos a estar cuellos de botella por cómputo de la red, sino por la velocidad del propio simulador ABIDES-Gym (que corre en CPU de todas formas, GPU no lo acelera).
-- Si el simulador ya corre bien en tu Docker local, **lo más simple es entrenar ahí mismo**, sin Colab en absoluto.
+Lo que sí es pesado es **el simulador ABIDES-Gym en sí** (simula muchos agentes de mercado interactuando) — y eso corre en CPU, tenga GPU disponible o no, esté en Docker o no, esté en tu PC o en Colab. La GPU acelera multiplicación de matrices (redes neuronales grandes); no acelera una simulación de eventos discretos como esta. Como nuestras redes (`MasterActorCritic`/`ExecutorActorCritic`) son chicas (2 capas × 128-256 neuronas), tampoco se benefician mucho de GPU.
 
-## Alternativas más simples, en orden de preferencia
+**Por eso Colab sigue siendo una buena idea — el problema no es Colab, es el túnel.** Un Colab gratis te da CPU/RAM bastante mejor que un laptop típico, sin depender de que tu PC esté prendido ni de tu conexión a internet durante horas. Lo que quiero evitar es la arquitectura específica de "tunelizar tu Docker local hacia Colab" — no reemplazarla por "entrenemos en un PC débil".
 
-1. **Entrenar directo en tu Docker local.** Sin túnel, sin Colab, sin depender de conexión a internet durante el entrenamiento. Es la opción con menos partes móviles.
-2. **Si de verdad quieres usar Colab** (por ejemplo, para que el resto del equipo pueda ver/correr el notebook sin tener tu Docker), instalar ABIDES-Gym **directamente dentro de una celda de Colab** (con el mismo `Dockerfile` que ya corregí — adaptando esos mismos comandos a `!pip install`/`!apt-get` en la notebook, en vez de un `Dockerfile`). Así Colab tiene todo local a su propia sesión, sin depender de tu máquina.
-3. Evitar el túnel/WebSocket salvo que las dos opciones anteriores realmente no sirvan por algún motivo que no estemos viendo — en ese caso, cuéntanos cuál es la limitación real y lo pensamos de nuevo.
+## Alternativas, en orden de preferencia
+
+1. **Instalar ABIDES-Gym directamente dentro de una celda de Colab** (recomendado): usando el mismo `Dockerfile` que ya corregí como referencia de qué versiones instalar, pero como comandos `!pip install`/`!apt-get` en la propia notebook, no como contenedor separado. Así entrenas con el hardware gratis de Google, sin túnel, sin depender de tu PC.
+2. **Entrenar directo en tu Docker local**, si por algún motivo ABIDES-Gym no logra instalarse en Colab (por ejemplo, si Colab bloquea alguna dependencia vieja que en tu Docker sí funciona). Es la opción con menos partes móviles, pero usa el hardware de tu propio PC.
+3. **Evitar el túnel/WebSocket** salvo que las dos opciones anteriores realmente no sirvan por algún motivo concreto que no estemos viendo — en ese caso, cuéntanos cuál es la limitación real y lo pensamos de nuevo.
 
 ## Antes de seguir con esto
 
