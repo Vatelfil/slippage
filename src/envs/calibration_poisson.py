@@ -81,6 +81,8 @@ import pandas as pd
 from scipy.optimize import minimize
 from scipy.stats import kurtosis, ks_2samp, skew
 
+from src.config import market_params as mp
+
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_DIR = _REPO_ROOT / "data" / "processed"
 DEFAULT_CALIBRATION_DIR = _REPO_ROOT / "data" / "calibration"
@@ -90,28 +92,25 @@ DEMO_OUTPUT_DIR = DEFAULT_CALIBRATION_DIR / "demo"
 DEFAULT_OUTPUT_JSON = DEMO_OUTPUT_DIR / "poisson_params_calibrated.json"
 DEFAULT_OUTPUT_PLOT = DEMO_OUTPUT_DIR / "poisson_params_visualization.png"
 
-SANTIAGO_TZ = "America/Santiago"
+SANTIAGO_TZ = mp.SANTIAGO_TZ
 
-# Tramos de los Agentes Ejecutores (docs/arquitectura_entorno_simulacion.md,
-# seccion 3.1; SE_schema.json). Intervalos [inicio, fin), salvo el ultimo,
-# que incluye las 16:00.
-TRAMOS: Tuple[Tuple[str, str, str], ...] = (
-    ("apertura", "09:30", "11:30"),
-    ("media_jornada", "11:30", "14:00"),
-    ("cierre", "14:00", "16:00"),
-)
+# Tramos de los Agentes Ejecutores, subasta de cierre y tamano de orden: ver
+# src/config/market_params.py (fuente unica compartida con 2.2.4/2.2.5/2.3.3).
+TRAMOS: Tuple[Tuple[str, str, str], ...] = mp.TRAMOS_EJECUTOR
 TRAMO_NAMES: Tuple[str, ...] = tuple(t[0] for t in TRAMOS)
 
-STEP_SECONDS = 30                                 # paso del Ejecutor
-BAR_MINUTES = 5                                   # resolucion yfinance
-STEPS_PER_BAR = BAR_MINUTES * 60 // STEP_SECONDS  # = 10
+STEP_SECONDS = mp.STEP_SECONDS                    # paso del Ejecutor
+BAR_MINUTES = mp.BAR_MINUTES                      # resolucion yfinance
+STEPS_PER_BAR = mp.STEPS_PER_BAR                  # = 10
 
 # Vela en la que 1.2.1 fusiona la subasta de cierre (CLOSING_AUCTION_NOTE
 # en src/data/clean_ohlcv.py). Su volumen no proviene del flujo continuo de
-# ordenes que modela el proceso de Poisson, por lo que se excluye por defecto.
-CLOSING_AUCTION_BAR = "15:55"
+# ordenes que modela el proceso de Poisson, por lo que se excluye por defecto
+# (mp.INCLUDE_CLOSING_AUCTION = False).
+CLOSING_AUCTION_BAR = mp.CLOSING_AUCTION_BAR
+DEFAULT_EXCLUDE_CLOSING_AUCTION = not mp.INCLUDE_CLOSING_AUCTION
 
-DEFAULT_ORDER_NOTIONAL_CLP = 1_000_000.0
+DEFAULT_ORDER_NOTIONAL_CLP = float(mp.AVG_ORDER_NOTIONAL_CLP)
 # Cuantil de winsorizacion del volumen por vela (sobre las velas observadas
 # del ticker, sin subasta). Operaciones en bloque aisladas (ej. una vela de
 # 25 M de acciones de FALABELLA el 2026-08-12) no son flujo de ordenes de
@@ -686,7 +685,7 @@ def check_stylized_facts(tramo_results: Dict[str, Dict],
 def calibrate_ticker(ticker: str, data_dir: "str | Path" = DEFAULT_DATA_DIR,
                      snapshot: Optional[str] = None, avg_order_size: Optional[float] = None,
                      order_notional_clp: float = DEFAULT_ORDER_NOTIONAL_CLP,
-                     exclude_closing_auction: bool = True, seed: int = DEFAULT_SEED,
+                     exclude_closing_auction: bool = DEFAULT_EXCLUDE_CLOSING_AUCTION, seed: int = DEFAULT_SEED,
                      run_mle: bool = True,
                      volume_winsor_q: float = DEFAULT_VOLUME_WINSOR_Q) -> Dict:
     """Calibra los 3 tramos de un ticker. Devuelve
@@ -696,7 +695,7 @@ def calibrate_ticker(ticker: str, data_dir: "str | Path" = DEFAULT_DATA_DIR,
     df = load_clean_data(name, data_dir=data_dir, snapshot=snapshot)
     if avg_order_size is None:
         median_price = float(df.loc[~df["is_imputed"], "close"].median())
-        avg_order_size = max(1.0, round(order_notional_clp / median_price))
+        avg_order_size = mp.avg_order_size_from_price(median_price, order_notional_clp)
     if exclude_closing_auction:
         df = df[~df["is_auction"]]
     df = df.copy()
@@ -1155,7 +1154,7 @@ def run_calibration(tickers: Optional[Sequence[str]] = None, snapshot: Optional[
                     data_dir: "str | Path" = DEFAULT_DATA_DIR,
                     avg_order_size: Optional[float] = None,
                     order_notional_clp: float = DEFAULT_ORDER_NOTIONAL_CLP,
-                    exclude_closing_auction: bool = True, seed: int = DEFAULT_SEED,
+                    exclude_closing_auction: bool = DEFAULT_EXCLUDE_CLOSING_AUCTION, seed: int = DEFAULT_SEED,
                     output_json: Optional["str | Path"] = None,
                     plot_ticker: Optional[str] = "FALABELLA",
                     plot_dir: "str | Path" = DEFAULT_RESULTS_DIR,
@@ -1219,6 +1218,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     parser.add_argument("--order-notional-clp", type=float, default=DEFAULT_ORDER_NOTIONAL_CLP,
                         help="Nocional medio por orden en CLP (default: %(default).0f).")
     parser.add_argument("--include-closing-auction", action="store_true",
+                        default=mp.INCLUDE_CLOSING_AUCTION,
                         help="Incluye la vela 15:55 (subasta de cierre) en las estimaciones.")
     parser.add_argument("--volume-winsor-q", type=float, default=DEFAULT_VOLUME_WINSOR_Q,
                         help="Cuantil de winsorizacion del volumen por vela (1.0 = sin winsorizar).")
