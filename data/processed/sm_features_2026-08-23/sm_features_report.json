@@ -1,0 +1,285 @@
+{
+  "generated_at": "2026-08-30T23:26:41.781930+00:00",
+  "input_dir": "data/processed/clean_5m_2026-08-23",
+  "output_dir": "data/processed/sm_features_2026-08-23",
+  "rolling_window_bars": 6,
+  "min_periods": 6,
+  "min_periods_justification": "Ventana completa exigida (min_periods=6, sin look-ahead parcial); los primeros 30 min de cada jornada (5 velas) quedan con NaN explicito en volatilidad/vol_promedio y se conservan en el output -- analogo a los placeholders de q_t/n_slices.",
+  "min_observed_for_diagnostic": 4,
+  "session_cutoffs_hour": {
+    "apertura": [
+      9,
+      11
+    ],
+    "media_jornada": [
+      11,
+      14
+    ],
+    "cierre": [
+      14,
+      16
+    ]
+  },
+  "variables": {
+    "q_t": {
+      "min": null,
+      "max": null,
+      "mean": null,
+      "std": null,
+      "pct_nan": 100.0,
+      "note": "Placeholder interno (runtime del entorno, tarea 2.1.1/2.1.4 MR). No calculado por este pipeline."
+    },
+    "tau_t": {
+      "min": 0.0,
+      "max": 0.9871794871794872,
+      "mean": 0.4935897435897435,
+      "std": 0.2886524374627395,
+      "pct_nan": 0.0
+    },
+    "n_slices": {
+      "min": null,
+      "max": null,
+      "mean": null,
+      "std": null,
+      "pct_nan": 100.0,
+      "note": "Placeholder interno (runtime del entorno, tarea 2.1.1/2.1.4 MR). No calculado por este pipeline."
+    },
+    "volatilidad": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.10217086019819824,
+      "std": 0.11401930174949806,
+      "pct_nan": 6.41
+    },
+    "vol_promedio": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.01643145805526514,
+      "std": 0.05024053259267782,
+      "pct_nan": 6.41
+    },
+    "OBI_agregado": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "pct_nan": 0.0,
+      "note": "Placeholder explicito 0.0, pendiente integracion ABIDES-Gym (tareas 1.2.3/1.2.4, MR)."
+    },
+    "sesion": {
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.5384615384615384,
+      "std": 0.36487949098859046,
+      "pct_nan": 0.0
+    }
+  },
+  "per_ticker": {
+    "AGUAS-A": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ANDINA-B": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "BCI": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "BSANTANDER": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CAP": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CCU": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CENCOMALLS": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CENCOSUD": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CHILE": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CMPC": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "COLBUN": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "CONCHATORO": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "COPEC": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ECL": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ENELAM": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ENELCHILE": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ENTEL": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "FALABELLA": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "IAM": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ILC": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "ITAUCL": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "LTM": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "MALLPLAZA": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "PARAUCO": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "QUINENCO": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "RIPLEY": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "SALFACORP": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "SMU": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "SQM-B": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    },
+    "VAPORES": {
+      "rows": 4680,
+      "days": 60,
+      "pct_nan_volatilidad": 6.41,
+      "pct_nan_vol_promedio": 6.41
+    }
+  },
+  "volatility_diagnostic_falabella": {
+    "methodology": "(a) volatilidad_raw = close_raw.rolling(6, min_periods=6).std() sobre la serie completa (incluye velas imputadas por ffill/bfill). (b) volatilidad_raw_min_obs = mismo rolling(6).std(), pero solo sobre velas con is_imputed=False, exigiendo al menos 4 de 6 observadas.",
+    "n_windows_total": 4680,
+    "n_windows_compared": 4275,
+    "pct_windows_diagnostic_nan": 7.18,
+    "mean_abs_diff": 0.24907399776196373,
+    "max_abs_diff": 33.275821840930256
+  },
+  "sanity_checks": {
+    "FALABELLA": {
+      "volume_profile": {
+        "pass": true,
+        "max_avg_volume_bucket": "15:55",
+        "warning": null
+      },
+      "volatility_profile": {
+        "pass": true,
+        "min_avg_volatility_bucket": "15:00",
+        "warning": null
+      },
+      "plots": [
+        "results/sprint2/FALABELLA_volumen_intradiario.png",
+        "results/sprint2/FALABELLA_volatilidad_intradiario.png"
+      ]
+    }
+  }
+}
