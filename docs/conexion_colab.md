@@ -1,42 +1,75 @@
-# Conexión entre ABIDES-Gym (Docker Local) y Google Colab (Entrenamiento)
+# Instalación y Ejecución de ABIDES-Gym en Google Colab
 
-Dado que el simulador ABIDES-Gym corre localmente en Docker, pero el entrenamiento del modelo se realizará en Google Colab para aprovechar sus recursos (ej. GPUs), necesitamos establecer una comunicación en red bidireccional entre el contenedor local y el entorno de Google Colab.
+Debido a restricciones de ciberseguridad y requisitos de estabilidad (evitar caídas de red que interrumpan los túneles locales), la arquitectura recomendada es **instalar y ejecutar el simulador ABIDES-Gym directamente dentro de Google Colab**, junto al entrenamiento del modelo.
 
-Debido a que Google Colab es un entorno en la nube y el Docker local está detrás de un firewall/NAT (tu red local), la mejor estrategia es utilizar un túnel inverso o exponer una API.
+Esta aproximación asegura baja latencia entre el agente de RL y el entorno simulado, además de evitar la necesidad de exponer puertos locales.
 
-## Arquitectura de Conexión Recomendada: WebSocket + Ngrok
+## Desafío de Versiones: Forzar Python 3.9 en Colab
+Google Colab suele actualizar su entorno base a versiones recientes de Python (3.10 o superior). Dado que ABIDES-Gym puede tener problemas de compatibilidad con versiones nuevas, el primer paso es forzar al entorno de Colab a utilizar **Python 3.9**.
 
-Los entornos tipo "Gym" se basan en llamadas secuenciales (`env.step()`, `env.reset()`). Para ejecutar esto remotamente:
-1. **Local (Docker)**: Envolveremos el entorno ABIDES-Gym en un servidor WebSocket (por ejemplo, usando `FastAPI`).
-2. **Túnel (Ngrok / Cloudflare)**: Expondremos el puerto de este servidor local a internet.
-3. **Google Colab (Cliente)**: Implementaremos un entorno "Proxy" de Gym (`gym.Env`) que redirija las llamadas `step` y `reset` a la URL pública del túnel WebSocket.
+### Paso 1: Configurar Python 3.9 como predeterminado
+Crea una celda de código al principio de tu Google Colab y ejecuta el siguiente bloque. Esto instalará Python 3.9 usando el gestor de paquetes de Ubuntu (`apt`), forzará al sistema a usarlo por defecto e instalará `pip` para esa versión.
 
----
+```bash
+# Instalar dependencias de Python 3.9
+!sudo apt-get update -y
+!sudo apt-get install python3.9 python3.9-dev python3.9-distutils libpython3.9-dev -y
 
-## Paso 1: Configuración del Túnel (Local)
+# Actualizar las alternativas del sistema para que python3 apunte a python3.9
+!sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
+!sudo update-alternatives --set python3 /usr/bin/python3.9
 
-Debes ejecutar un túnel para exponer el contenedor Docker al exterior. Recomendamos **Ngrok**:
+# Descargar e instalar pip específico para Python 3.9
+!curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+!python3.9 get-pip.py
 
-1. Descarga e instala Ngrok (https://ngrok.com/).
-2. Autentícate y corre el comando para exponer el puerto donde corre tu entorno envuelto en API (suponiendo que sea el 8000):
-   ```bash
-   ngrok http 8000
-   ```
-   *Esto generará una URL pública como `https://xyz.ngrok-free.app`.*
+# Verificar que la versión sea correcta (Debería imprimir Python 3.9.x)
+!python3 --version
+```
 
-## Paso 2: Ejecutar SSH en Colab (Alternativa de Conexión Directa)
+### Paso 2: Importar el código del proyecto
+Tienes dos opciones para llevar el código de tu proyecto (`slippage` / `ABIDES-Gym`) a Colab:
 
-Si en lugar de exponer el contenedor local a Colab, prefieres conectar tu entorno local a Colab como si fuera un servidor remoto (para sincronizar código o correr scripts remotos):
+**Opción A: Clonar desde un repositorio Git (Recomendado)**
+Si tu código está alojado en GitHub/GitLab:
+```bash
+!git clone <URL_DE_TU_REPOSITORIO>
+%cd <NOMBRE_DE_LA_CARPETA_CLONADA>
+```
 
-Puedes ejecutar el siguiente bloque en una celda de Colab para iniciar un servidor SSH mediante `colab-ssh`:
+**Opción B: Montar Google Drive**
+Si subes tu carpeta del proyecto a Google Drive para mantener los cambios sincronizados:
+```python
+from google.colab import drive
+drive.mount('/content/drive')
+# Reemplaza la ruta por la ubicación real en tu Drive
+%cd /content/drive/MyDrive/ruta_a_tu_proyecto/
+```
+
+### Paso 3: Instalar ABIDES-Gym y Dependencias
+Una vez posicionado en el directorio del proyecto donde se encuentre el archivo `setup.py` o `requirements.txt`, ejecuta:
+
+```bash
+# Si es un paquete instalable
+!pip install -e .
+
+# Opcionalmente, instalar requerimientos adicionales si los hay
+!pip install -r requirements.txt
+```
+
+### Paso 4: Comprobación del entorno
+Puedes validar que el entorno se carga correctamente con un simple script de prueba dentro de una celda:
 
 ```python
-!pip install colab_ssh --upgrade
-from colab_ssh import launch_ssh_cloudflared, init_git_cloudflared
-launch_ssh_cloudflared(password="tu_contraseña_segura")
+import gym
+import abides_gym
+
+# Crear una instancia del entorno de prueba
+env = gym.make("markets-v0")
+obs = env.reset()
+print("¡Entorno cargado exitosamente! Observación inicial:", obs)
 ```
-Colab te devolverá un comando SSH. ¡Deberás compartir esa información para que podamos conectarnos desde la máquina local!
 
-## Paso 3: Sincronización e Integración
-Una vez que el túnel o el acceso SSH estén levantados, el Agente en Colab solicitará las observaciones (states) de ABIDES-Gym a través de la red, tomará las decisiones con el modelo, y enviará las acciones de vuelta.
-
+## Solución de Problemas Comunes en Colab
+* **Celdas fallando con sintaxis inválida:** Asegúrate de que las celdas con comandos de terminal empiecen con `!` (ej. `!pip install...`) y las de cambio de directorio con `%` (ej. `%cd`).
+* **Error de paquetes de sistema en ABIDES:** Si ABIDES-gym requiere alguna biblioteca en C++ adicional para compilar, puedes agregar la instalación de dicho paquete en el primer bloque `apt-get` (por ejemplo, `build-essential`).
