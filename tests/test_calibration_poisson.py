@@ -248,3 +248,85 @@ def test_calibrate_poisson_params_api_original():
     out = cp.calibrate_poisson_params(feats)
     assert {"lambda_plus", "lambda_minus", "theta", "optimizer_success"} <= set(out)
     assert 1e-4 <= out["theta"] <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# 2.1.3b, Parte B: D_crit, Poisson compuesto y objetivos de validacion
+# ---------------------------------------------------------------------------
+
+def test_ks_valor_critico():
+    c = np.sqrt(-np.log(0.025) / 2.0)
+    assert c == pytest.approx(1.3581, abs=1e-4)
+    assert cp.ks_critical_value(1000, 1000) == pytest.approx(c * np.sqrt(2 / 1000))
+    # n ~ 1000-1700 observados vs 5000 simulados -> D_crit ~ 0.038-0.047
+    assert 0.038 < cp.ks_critical_value(1700, 5000) < cp.ks_critical_value(1000, 5000) < 0.048
+    assert np.isnan(cp.ks_critical_value(0, 5000))
+
+
+def test_validate_reporta_d_ratio():
+    obs = np.random.default_rng(0).normal(0, 0.002, 800)
+    val = cp.validate_calibration({"lambda_plus": 3.0, "lambda_minus": 3.0, "theta": 0.1}, obs,
+                                  n_events=2000, steps_per_event=10, target_std=0.002, center=True)
+    assert val["d_crit"] == pytest.approx(cp.ks_critical_value(800, 2000))
+    assert val["d_ratio"] == pytest.approx(val["ks_statistic"] / val["d_crit"])
+
+
+def test_compuesto_con_tamano_constante_igual_al_base():
+    base = cp.PoissonLOBModel(2.0, 1.5, 0.2).generate_events(
+        300, rng=np.random.default_rng(5), steps_per_event=10, target_std=0.003)
+    comp = cp.CompoundPoissonLOBModel(2.0, 1.5, 0.2, order_sizes=np.array([1.0])).generate_events(
+        300, rng=np.random.default_rng(5), steps_per_event=10, target_std=0.003)
+    np.testing.assert_allclose(comp, base)
+
+
+def test_compuesto_invariante_a_escala_de_tamanos():
+    sizes = np.array([1.0, 2.0, 7.0, 30.0])
+    a = cp.CompoundPoissonLOBModel(2.0, 2.0, 0.1, order_sizes=sizes).generate_events(
+        500, rng=np.random.default_rng(9), steps_per_event=10, target_std=0.002, center=True)
+    b = cp.CompoundPoissonLOBModel(2.0, 2.0, 0.1, order_sizes=sizes * 167).generate_events(
+        500, rng=np.random.default_rng(9), steps_per_event=10, target_std=0.002, center=True)
+    np.testing.assert_allclose(a, b)
+
+
+def test_compuesto_tiene_colas_mas_pesadas():
+    from scipy.stats import kurtosis
+    kw = dict(rng=None, steps_per_event=10, target_std=0.002)
+    base = cp.PoissonLOBModel(3.0, 3.0, 0.1).generate_events(20000, **{**kw, "rng": np.random.default_rng(1)})
+    sizes = np.random.default_rng(2).lognormal(0, 1.2, 2000)
+    comp = cp.CompoundPoissonLOBModel(3.0, 3.0, 0.1, order_sizes=sizes).generate_events(
+        20000, **{**kw, "rng": np.random.default_rng(1)})
+    assert kurtosis(comp) > kurtosis(base) + 0.5
+
+
+def test_objetivos_de_validacion_en_json(fake_data_dir, tmp_path):
+    out = tmp_path / "p.json"
+    cp.run_calibration(tickers=["FALABELLA", "SQM-B"], data_dir=fake_data_dir, output_json=out,
+                       plot_ticker=None, run_mle=False, verbose=False)
+    data = json.loads(out.read_text(encoding="utf-8"))
+    obj = data["objetivos_validacion"]["FALABELLA"]
+    for tramo in cp.TRAMO_NAMES:
+        r = obj["por_tramo"][tramo]
+        assert set(cp.OBJETIVO_METRICAS) <= set(r)
+        assert r["lambda_total"] == pytest.approx(
+            data["params"]["FALABELLA"][tramo]["lambda_plus"] + data["params"]["FALABELLA"][tramo]["lambda_minus"])
+        p = data["params"]["FALABELLA"][tramo]
+        assert p["ks_d_ratio"] == pytest.approx(p["ks_stat"] / p["ks_d_crit"])
+        assert "poisson_compuesto" in p
+    part = sum(obj["por_tramo"][t]["participacion_volumen_dia_agregada"] for t in cp.TRAMO_NAMES)
+    assert part == pytest.approx(1.0)
+    for k, rank in obj["ranking_observado"].items():
+        vals = [obj["por_tramo"][t][k] for t in rank]
+        assert vals == sorted(vals, reverse=True)
+    res = data["objetivos_validacion_resumen"]
+    assert res["todos"]["n_tickers"] == 2 and res["tier_A"]["n_tickers"] == 1
+    ks = data["metadata"]["validacion_ks_resumen"]
+    assert ks["n_pares"] == 6 and isinstance(ks["compuesto_adoptado"], bool)
+
+
+def test_participacion_del_volumen():
+    days = [pd.Timestamp("2026-06-01").date()] * 3 + [pd.Timestamp("2026-06-02").date()] * 3
+    df = pd.DataFrame({"day": days, "tramo": list(cp.TRAMO_NAMES) * 2,
+                       "volume": [10.0, 30.0, 60.0, 50.0, 50.0, 0.0]})
+    part = cp.volume_participation(df)
+    assert part["apertura"]["agregada"] == pytest.approx(60 / 200)
+    assert part["apertura"]["mediana_diaria"] == pytest.approx((0.1 + 0.5) / 2)

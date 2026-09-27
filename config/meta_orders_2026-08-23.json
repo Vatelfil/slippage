@@ -1,0 +1,1130 @@
+{
+  "metadata": {
+    "tarea": "Preparacion 2.3.3 - meta-ordenes como % del ADV (propuesta, no integrada al entorno)",
+    "autor": "Benjamin Farias (BF)",
+    "fecha_generacion": "2026-09-27T18:46:26.221211+00:00",
+    "snapshot": "2026-08-23",
+    "pct_adv": [
+      0.01,
+      0.05,
+      0.15
+    ],
+    "definicion_adv": "mediana sobre los dias del snapshot de la suma diaria de volume_raw (acciones)",
+    "base_adv": "sin_subasta (excluye la vela 15:55 con la subasta de cierre)",
+    "precio_referencia": "mediana(close_raw) de velas observadas del snapshot, subasta incluida",
+    "orden_actual": "Q_total = 10000 acciones (maestro_ejecutor_protocol.py)",
+    "nota": "La vela 15:55 incluye la subasta y los ultimos 5 min de negociacion continua; no se separan."
+  },
+  "tickers": {
+    "AGUAS-A": {
+      "precio_referencia_clp": 335.9649963378906,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 3528574.5,
+        "sin_subasta": 3312845.5
+      },
+      "adv_clp": {
+        "con_subasta": 1185477518.9704742,
+        "sin_subasta": 1113000126.2754974
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 33128,
+          "monto_clp": 11129848.39868164
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 165642,
+          "monto_clp": 55649913.92340088
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 496927,
+          "monto_clp": 166950077.73519897
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 3359649.9633789062,
+        "pct_adv_sin_subasta": 0.003018553083746284,
+        "pct_adv_con_subasta": 0.002834005630318986
+      },
+      "tier": "B"
+    },
+    "ANDINA-B": {
+      "precio_referencia_clp": 4610.800048828125,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 473734.0,
+        "sin_subasta": 384401.0
+      },
+      "adv_clp": {
+        "con_subasta": 2184292750.331543,
+        "sin_subasta": 1772396149.56958
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 3844,
+          "monto_clp": 17723915.387695312
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 19220,
+          "monto_clp": 88619576.93847656
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 57660,
+          "monto_clp": 265858730.8154297
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 46108000.48828125,
+        "pct_adv_sin_subasta": 0.026014500482568984,
+        "pct_adv_con_subasta": 0.02110889233198377
+      },
+      "tier": "A"
+    },
+    "BCI": {
+      "precio_referencia_clp": 63226.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 117482.0,
+        "sin_subasta": 102578.0
+      },
+      "adv_clp": {
+        "con_subasta": 7427916932.0,
+        "sin_subasta": 6485596628.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 1026,
+          "monto_clp": 64869876.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 5129,
+          "monto_clp": 324286154.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 15387,
+          "monto_clp": 972858462.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 632260000.0,
+        "pct_adv_sin_subasta": 0.09748679053988185,
+        "pct_adv_con_subasta": 0.08511942254983743
+      },
+      "tier": "A"
+    },
+    "BSANTANDER": {
+      "precio_referencia_clp": 77.5,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 92641752.5,
+        "sin_subasta": 80430486.0
+      },
+      "adv_clp": {
+        "con_subasta": 7179735818.75,
+        "sin_subasta": 6233362665.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 804305,
+          "monto_clp": 62333637.5
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 4021524,
+          "monto_clp": 311668110.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 12064573,
+          "monto_clp": 935004407.5
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 775000.0,
+        "pct_adv_sin_subasta": 0.00012433096574848498,
+        "pct_adv_con_subasta": 0.0001079426903112611
+      },
+      "tier": "A"
+    },
+    "CAP": {
+      "precio_referencia_clp": 6323.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 54685.5,
+        "sin_subasta": 48729.0
+      },
+      "adv_clp": {
+        "con_subasta": 345776416.5,
+        "sin_subasta": 308113467.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 487,
+          "monto_clp": 3079301.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 2436,
+          "monto_clp": 15402828.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 7309,
+          "monto_clp": 46214807.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 63230000.0,
+        "pct_adv_sin_subasta": 0.20521660612776785,
+        "pct_adv_con_subasta": 0.1828638304486564
+      },
+      "tier": "B"
+    },
+    "CCU": {
+      "precio_referencia_clp": 5279.949951171875,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 170096.0,
+        "sin_subasta": 135015.5
+      },
+      "adv_clp": {
+        "con_subasta": 898098366.8945312,
+        "sin_subasta": 712875082.6324463
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 1350,
+          "monto_clp": 7127932.434082031
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 6751,
+          "monto_clp": 35644942.12036133
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 20252,
+          "monto_clp": 106929546.41113281
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 52799499.51171875,
+        "pct_adv_sin_subasta": 0.07406557024934174,
+        "pct_adv_con_subasta": 0.058790330166494216
+      },
+      "tier": "B"
+    },
+    "CENCOMALLS": {
+      "precio_referencia_clp": 2355.1500244140625,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 312359.0,
+        "sin_subasta": 273405.5
+      },
+      "adv_clp": {
+        "con_subasta": 735652306.4759521,
+        "sin_subasta": 643910969.999939
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 2734,
+          "monto_clp": 6438980.166748047
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 13670,
+          "monto_clp": 32194900.833740234
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 41011,
+          "monto_clp": 96587057.65124512
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 23551500.244140625,
+        "pct_adv_sin_subasta": 0.03657570897439883,
+        "pct_adv_con_subasta": 0.0320144449175468
+      },
+      "tier": "B"
+    },
+    "CENCOSUD": {
+      "precio_referencia_clp": 2060.300048828125,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 2563319.5,
+        "sin_subasta": 2083689.5
+      },
+      "adv_clp": {
+        "con_subasta": 5281207291.012085,
+        "sin_subasta": 4293025578.5926514
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 20837,
+          "monto_clp": 42930472.11743164
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 104184,
+          "monto_clp": 214650300.28710938
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 312553,
+          "monto_clp": 643952961.161377
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 20603000.48828125,
+        "pct_adv_sin_subasta": 0.004799179532267163,
+        "pct_adv_con_subasta": 0.003901191404348931
+      },
+      "tier": "A"
+    },
+    "CHILE": {
+      "precio_referencia_clp": 185.69000244140625,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 53799527.0,
+        "sin_subasta": 42978679.5
+      },
+      "adv_clp": {
+        "con_subasta": 9990034299.976501,
+        "sin_subasta": 7980711101.283417
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 429787,
+          "monto_clp": 79807149.07928467
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 2148934,
+          "monto_clp": 399035559.7064209
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 6446802,
+          "monto_clp": 1197106679.1192627
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 1856900.0244140625,
+        "pct_adv_sin_subasta": 0.000232673505010781,
+        "pct_adv_con_subasta": 0.0001858752401298993
+      },
+      "tier": "A"
+    },
+    "CMPC": {
+      "precio_referencia_clp": 1044.9000244140625,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 2810459.0,
+        "sin_subasta": 2365724.0
+      },
+      "adv_clp": {
+        "con_subasta": 2936648677.7147217,
+        "sin_subasta": 2471945065.3569336
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 23657,
+          "monto_clp": 24719199.877563477
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 118286,
+          "monto_clp": 123597044.2878418
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 354859,
+          "monto_clp": 370792177.7635498
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 10449000.244140625,
+        "pct_adv_sin_subasta": 0.004227035782703308,
+        "pct_adv_con_subasta": 0.0035581376565180277
+      },
+      "tier": "A"
+    },
+    "COLBUN": {
+      "precio_referencia_clp": 134.60000610351562,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 9327891.5,
+        "sin_subasta": 8020989.5
+      },
+      "adv_clp": {
+        "con_subasta": 1255534252.8329315,
+        "sin_subasta": 1079625235.6562347
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 80210,
+          "monto_clp": 10796266.489562988
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 401049,
+          "monto_clp": 53981197.84780884
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 1203148,
+          "monto_clp": 161943728.14343262
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 1346000.0610351562,
+        "pct_adv_sin_subasta": 0.001246728972778234,
+        "pct_adv_con_subasta": 0.00107205363612988
+      },
+      "tier": "B"
+    },
+    "CONCHATORO": {
+      "precio_referencia_clp": 856.8899841308594,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 242211.5,
+        "sin_subasta": 240529.5
+      },
+      "adv_clp": {
+        "con_subasta": 207548608.39131165,
+        "sin_subasta": 206107319.43800354
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 2405,
+          "monto_clp": 2060820.4118347168
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 12026,
+          "monto_clp": 10304958.949157715
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 36079,
+          "monto_clp": 30915733.737457275
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 8568899.841308594,
+        "pct_adv_sin_subasta": 0.0415749419509873,
+        "pct_adv_con_subasta": 0.041286231248309845
+      },
+      "tier": "B"
+    },
+    "COPEC": {
+      "precio_referencia_clp": 6140.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 779277.5,
+        "sin_subasta": 697623.0
+      },
+      "adv_clp": {
+        "con_subasta": 4784763850.0,
+        "sin_subasta": 4283405220.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 6976,
+          "monto_clp": 42832640.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 34881,
+          "monto_clp": 214169340.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 104643,
+          "monto_clp": 642508020.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 61400000.0,
+        "pct_adv_sin_subasta": 0.014334389777859962,
+        "pct_adv_con_subasta": 0.012832399241605204
+      },
+      "tier": "A"
+    },
+    "ECL": {
+      "precio_referencia_clp": 1825.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 553675.5,
+        "sin_subasta": 461911.0
+      },
+      "adv_clp": {
+        "con_subasta": 1010457787.5,
+        "sin_subasta": 842987575.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 4619,
+          "monto_clp": 8429675.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 23096,
+          "monto_clp": 42150200.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 69287,
+          "monto_clp": 126448775.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 18250000.0,
+        "pct_adv_sin_subasta": 0.021649192160394536,
+        "pct_adv_con_subasta": 0.01806112063835225
+      },
+      "tier": "B"
+    },
+    "ENELAM": {
+      "precio_referencia_clp": 84.52999877929688,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 43329698.0,
+        "sin_subasta": 42815726.0
+      },
+      "adv_clp": {
+        "con_subasta": 3662659319.0473022,
+        "sin_subasta": 3619213266.5147095
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 428157,
+          "monto_clp": 36192110.68734741
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 2140786,
+          "monto_clp": 180960637.96673584
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 6422359,
+          "monto_clp": 542881998.4302063
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 845299.9877929688,
+        "pct_adv_sin_subasta": 0.00023355904323565599,
+        "pct_adv_con_subasta": 0.00023078859215681585
+      },
+      "tier": "A"
+    },
+    "ENELCHILE": {
+      "precio_referencia_clp": 81.18000030517578,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 43786774.5,
+        "sin_subasta": 38942636.5
+      },
+      "adv_clp": {
+        "con_subasta": 3554610367.272663,
+        "sin_subasta": 3161363242.9543495
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 389426,
+          "monto_clp": 31613602.798843384
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 1947132,
+          "monto_clp": 158068176.35421753
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 5841395,
+          "monto_clp": 474204447.8826523
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 811800.0030517578,
+        "pct_adv_sin_subasta": 0.0002567879552787855,
+        "pct_adv_con_subasta": 0.00022837946193090793
+      },
+      "tier": "A"
+    },
+    "ENTEL": {
+      "precio_referencia_clp": 3647.199951171875,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 146737.0,
+        "sin_subasta": 139928.5
+      },
+      "adv_clp": {
+        "con_subasta": 535179179.2351074,
+        "sin_subasta": 510347218.3675537
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 1399,
+          "monto_clp": 5102432.731689453
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 6996,
+          "monto_clp": 25515810.858398438
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 20989,
+          "monto_clp": 76551079.77514648
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 36471999.51171875,
+        "pct_adv_sin_subasta": 0.07146506966057665,
+        "pct_adv_con_subasta": 0.06814913757266401
+      },
+      "tier": "B"
+    },
+    "FALABELLA": {
+      "precio_referencia_clp": 5976.39990234375,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 1494765.0,
+        "sin_subasta": 1396099.5
+      },
+      "adv_clp": {
+        "con_subasta": 8933313400.026855,
+        "sin_subasta": 8343648915.462158
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 13961,
+          "monto_clp": 83436519.0366211
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 69805,
+          "monto_clp": 417182595.18310547
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 209415,
+          "monto_clp": 1251547785.5493164
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 59763999.0234375,
+        "pct_adv_sin_subasta": 0.00716281325220731,
+        "pct_adv_con_subasta": 0.006690014818382823
+      },
+      "tier": "A"
+    },
+    "IAM": {
+      "precio_referencia_clp": 924.0900268554688,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 181648.0,
+        "sin_subasta": 145011.0
+      },
+      "adv_clp": {
+        "con_subasta": 167859105.1982422,
+        "sin_subasta": 134003218.88433838
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 1450,
+          "monto_clp": 1339930.5389404297
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 7251,
+          "monto_clp": 6700576.784729004
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 21752,
+          "monto_clp": 20100806.264160156
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 9240900.268554688,
+        "pct_adv_sin_subasta": 0.06896028577142424,
+        "pct_adv_con_subasta": 0.055051528230423676
+      },
+      "tier": "B"
+    },
+    "ILC": {
+      "precio_referencia_clp": 22085.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 23200.0,
+        "sin_subasta": 21558.0
+      },
+      "adv_clp": {
+        "con_subasta": 512372000.0,
+        "sin_subasta": 476108430.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 216,
+          "monto_clp": 4770360.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 1078,
+          "monto_clp": 23807630.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 3234,
+          "monto_clp": 71422890.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 220850000.0,
+        "pct_adv_sin_subasta": 0.4638649225345579,
+        "pct_adv_con_subasta": 0.43103448275862066
+      },
+      "tier": "B"
+    },
+    "ITAUCL": {
+      "precio_referencia_clp": 20232.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 200894.5,
+        "sin_subasta": 174193.0
+      },
+      "adv_clp": {
+        "con_subasta": 4064497524.0,
+        "sin_subasta": 3524272776.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 1742,
+          "monto_clp": 35244144.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 8710,
+          "monto_clp": 176220720.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 26129,
+          "monto_clp": 528641928.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 202320000.0,
+        "pct_adv_sin_subasta": 0.05740758813499969,
+        "pct_adv_con_subasta": 0.04977737070950175
+      },
+      "tier": "A"
+    },
+    "LTM": {
+      "precio_referencia_clp": 24.600000381469727,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 784762733.5,
+        "sin_subasta": 672031702.0
+      },
+      "adv_clp": {
+        "con_subasta": 19305163543.463226,
+        "sin_subasta": 16531980125.55975
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 6720317,
+          "monto_clp": 165319800.7635975
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 33601585,
+          "monto_clp": 826599003.8179874
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 100804755,
+          "monto_clp": 2479797011.4539623
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 246000.00381469727,
+        "pct_adv_sin_subasta": 1.4880250396282644e-05,
+        "pct_adv_con_subasta": 1.2742704989826075e-05
+      },
+      "tier": "A"
+    },
+    "MALLPLAZA": {
+      "precio_referencia_clp": 3860.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 1216567.0,
+        "sin_subasta": 952468.5
+      },
+      "adv_clp": {
+        "con_subasta": 4695948620.0,
+        "sin_subasta": 3676528410.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 9525,
+          "monto_clp": 36766500.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 47623,
+          "monto_clp": 183824780.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 142870,
+          "monto_clp": 551478200.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 38600000.0,
+        "pct_adv_sin_subasta": 0.010499034876219003,
+        "pct_adv_con_subasta": 0.008219851434405175
+      },
+      "tier": "A"
+    },
+    "PARAUCO": {
+      "precio_referencia_clp": 3934.199951171875,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 784717.5,
+        "sin_subasta": 689145.0
+      },
+      "adv_clp": {
+        "con_subasta": 3087235550.183716,
+        "sin_subasta": 2711234225.350342
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 6891,
+          "monto_clp": 27110571.86352539
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 34457,
+          "monto_clp": 135560727.7175293
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 103372,
+          "monto_clp": 406686117.35253906
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 39341999.51171875,
+        "pct_adv_sin_subasta": 0.014510734315710046,
+        "pct_adv_con_subasta": 0.012743439518043118
+      },
+      "tier": "A"
+    },
+    "QUINENCO": {
+      "precio_referencia_clp": 4120.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 237854.5,
+        "sin_subasta": 228279.0
+      },
+      "adv_clp": {
+        "con_subasta": 979960540.0,
+        "sin_subasta": 940509480.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 2283,
+          "monto_clp": 9405960.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 11414,
+          "monto_clp": 47025680.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 34242,
+          "monto_clp": 141077040.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 41200000.0,
+        "pct_adv_sin_subasta": 0.043806044358000513,
+        "pct_adv_con_subasta": 0.042042509181032944
+      },
+      "tier": "B"
+    },
+    "RIPLEY": {
+      "precio_referencia_clp": 385.0199890136719,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 1681956.5,
+        "sin_subasta": 1344475.0
+      },
+      "adv_clp": {
+        "con_subasta": 647586873.151474,
+        "sin_subasta": 517649749.7291565
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 13445,
+          "monto_clp": 5176593.752288818
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 67224,
+          "monto_clp": 25882583.741455078
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 201671,
+          "monto_clp": 77647366.20437622
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 3850199.8901367188,
+        "pct_adv_sin_subasta": 0.0074378474869372805,
+        "pct_adv_con_subasta": 0.005945456972281982
+      },
+      "tier": "B"
+    },
+    "SALFACORP": {
+      "precio_referencia_clp": 1270.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 186186.5,
+        "sin_subasta": 161034.5
+      },
+      "adv_clp": {
+        "con_subasta": 236456855.0,
+        "sin_subasta": 204513815.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 1610,
+          "monto_clp": 2044700.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 8052,
+          "monto_clp": 10226040.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 24155,
+          "monto_clp": 30676850.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 12700000.0,
+        "pct_adv_sin_subasta": 0.062098494422002735,
+        "pct_adv_con_subasta": 0.053709586892712415
+      },
+      "tier": "B"
+    },
+    "SMU": {
+      "precio_referencia_clp": 130.60000610351562,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 5167375.5,
+        "sin_subasta": 4689710.0
+      },
+      "adv_clp": {
+        "con_subasta": 674859271.8391571,
+        "sin_subasta": 612476154.6237183
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 46897,
+          "monto_clp": 6124748.486236572
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 234486,
+          "monto_clp": 30623873.031188965
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 703456,
+          "monto_clp": 91871357.89355469
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 1306000.0610351562,
+        "pct_adv_sin_subasta": 0.002132328011753392,
+        "pct_adv_con_subasta": 0.001935218371492453
+      },
+      "tier": "B"
+    },
+    "SQM-B": {
+      "precio_referencia_clp": 67796.0,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 321197.0,
+        "sin_subasta": 300120.5
+      },
+      "adv_clp": {
+        "con_subasta": 21775871812.0,
+        "sin_subasta": 20346969418.0
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 3001,
+          "monto_clp": 203455796.0
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 15006,
+          "monto_clp": 1017346776.0
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 45018,
+          "monto_clp": 3052040328.0
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 677960000.0,
+        "pct_adv_sin_subasta": 0.03331994982015557,
+        "pct_adv_con_subasta": 0.031133541097830925
+      },
+      "tier": "A"
+    },
+    "VAPORES": {
+      "precio_referencia_clp": 45.849998474121094,
+      "n_dias": 60,
+      "adv_acciones": {
+        "con_subasta": 24523166.5,
+        "sin_subasta": 22027079.5
+      },
+      "adv_clp": {
+        "con_subasta": 1124387146.6056175,
+        "sin_subasta": 1009941561.464344
+      },
+      "base_adv": "sin_subasta",
+      "meta_ordenes": [
+        {
+          "pct_adv": 0.01,
+          "acciones": 220271,
+          "monto_clp": 10099425.013893127
+        },
+        {
+          "pct_adv": 0.05,
+          "acciones": 1101354,
+          "monto_clp": 50497079.21946716
+        },
+        {
+          "pct_adv": 0.15,
+          "acciones": 3304062,
+          "monto_clp": 151491237.6584015
+        }
+      ],
+      "orden_actual": {
+        "acciones": 10000,
+        "monto_clp": 458499.98474121094,
+        "pct_adv_sin_subasta": 0.0004539866485704562,
+        "pct_adv_con_subasta": 0.0004077776823804544
+      },
+      "tier": "B"
+    }
+  }
+}
