@@ -31,6 +31,8 @@ El **Título I (sección 4.1.1)** planteaba la hipótesis de que la media jornad
 
 **No fuerzo estos datos para que calcen con la hipótesis del Título I.** Puede deberse a: (a) que esta muestra son solo 60 días con datos de 5 minutos agregados (no tick-by-tick), (b) que el proxy de spread (high−low de la vela) es una aproximación gruesa, no el spread bid-ask real, o (c) que el IPSA en este período específico simplemente no siguiera el patrón típico de mercados más grandes. Esto es información real que el equipo debería anotar en el capítulo de resultados — si se mantiene con más datos o con el spread real de ABIDES-Gym, podría ser un hallazgo genuino de la tesis, no un error de cálculo.
 
+**Actualización 27 sept — confirmado independientemente por Benjamín.** Su calibración Poisson por tramo (`docs/calibracion_poisson_2.1.3_BF.md`, sección 5.3, con datos de un snapshot distinto y metodología mucho más rigurosa: proxy de Roll además de high-low, winsorización, 30 tickers) llega a la **misma conclusión**: el spread real del IPSA es mayor en apertura y decrece hacia el cierre ("forma de L"), no la "U" esperada por el Título I. Dos análisis independientes coincidiendo es una señal fuerte de que es un hallazgo real del IPSA en este período, no un artefacto de esta implementación. **Su documento es la referencia autoritativa** para este hallazgo (mucho más detallado); este documento queda como la primera detección, más simple.
+
 **OBI (Order Book Imbalance) no se pudo calcular** — requiere el libro de órdenes Nivel 2, que solo existe una vez que ABIDES-Gym esté integrado. No hay un proxy razonable desde datos OHLCV agregados, así que no se inventó uno.
 
 ---
@@ -60,3 +62,7 @@ Funciones disponibles:
 - `src/analysis/market_validation.py` — caracterización del mercado real
 - `src/analysis/execution_metrics.py` — Implementation Shortfall + comparación estadística
 - `data/analysis/perfil_mercado_ipsa_real.png` + `.json` — resultado de la validación (sí se versionan: son un resumen pequeño, no los datos crudos, que siguen fuera de git en `data/raw/`/`data/processed/`)
+
+## Nota de reconciliación (27 sept)
+
+Mi script `scripts/run_poisson_calibration_real.py` (calibración Poisson rápida sobre datos reales) quedó **retirado del repo**: Benjamín entregó una calibración muchísima más rigurosa (por ticker × tramo horario, con proxies de Roll y HL, winsorización, MLE-proxy, análisis de sensibilidad — ver `docs/calibracion_poisson_2.1.3_BF.md`). Su archivo, `data/calibration/poisson_params_2026-08-23.json`, es la fuente de verdad para los parámetros Poisson del proyecto, no el mío. Se retira para no dejar dos calibraciones distintas compitiendo en el repo.
