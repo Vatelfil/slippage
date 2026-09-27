@@ -55,6 +55,19 @@ por ffill/bfill en 1.2.1) se excluyen de todas las estimaciones.
    orden neta) se fija por momentos igualando la desviacion estandar
    observada, de modo que el test KS de 2 muestras evalua la FORMA de la
    distribucion (colas, discrecion, asimetria), no su escala.
+   Desde la 2.1.3b se reporta ademas D_crit (5 %) y D/D_crit por par
+   (`ks_critical_value`): con n ~ 1000-1700 retornos el KS rechaza
+   diferencias de 4-5 puntos entre CDF. La variante `CompoundPoissonLOBModel`
+   (tamanos de orden desde el volumen por vela) queda en el bloque
+   `poisson_compuesto`; su adopcion se resume en
+   metadata.validacion_ks_resumen.
+
+4. Objetivos de validacion (2.1.3b): el bloque `objetivos_validacion` del
+   JSON guarda, por ticker x tramo, los valores observados (spread Roll/HL/
+   Corwin-Schultz/Abdi-Ranaldo, volatilidad, participacion en el volumen del
+   dia, lambda total, volumen mediano por vela) y su ranking entre tramos.
+   Es lo que 2.2.4 (RMSC04) y 2.2.5 (PS) comparan contra el simulador; los
+   flags de `stylized_facts` se conservan solo por trazabilidad.
 
 Limitaciones: velas de 5 min de yfinance, sin Nivel 2 ni prints
 individuales; el signo del volumen y theta son proxies. Ver
@@ -81,6 +94,7 @@ import pandas as pd
 from scipy.optimize import minimize
 from scipy.stats import kurtosis, ks_2samp, skew
 
+from src.analysis import intraday_profile as ip
 from src.config import market_params as mp
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -420,6 +434,76 @@ class PoissonLOBModel:
         return {"lambda_plus": self.lambda_plus, "lambda_minus": self.lambda_minus, "theta": self.theta}
 
 
+class CompoundPoissonLOBModel(PoissonLOBModel):
+    """Variante de Poisson compuesto (2.1.3b, Parte B3): igual que
+    `PoissonLOBModel`, pero cada llegada trae un tamano q muestreado con
+    reemplazo de `order_sizes` (distribucion empirica). El impacto por paso
+    es (sum q+ - sum q-) / (1 + C). Con q = 1 se recupera el modelo base.
+
+    Como `generate_events` reescala a `target_std`, el resultado es
+    invariante a multiplicar `order_sizes` por una constante: solo importa
+    la FORMA de la distribucion de tamanos. Los conteos N+/N-/C se sortean
+    en el mismo orden que en el modelo base.
+    """
+
+    def __init__(self, lambda_plus: float = 0.5, lambda_minus: float = 0.5, theta: float = 0.3,
+                 order_sizes: Optional[np.ndarray] = None):
+        super().__init__(lambda_plus, lambda_minus, theta)
+        sizes = np.asarray(order_sizes if order_sizes is not None else [1.0], dtype=float)
+        sizes = sizes[np.isfinite(sizes) & (sizes > 0)]
+        if len(sizes) == 0:
+            raise ValueError("order_sizes no tiene valores positivos finitos")
+        self.order_sizes = sizes
+
+    def _sizes_sum(self, counts: np.ndarray, rng: np.random.Generator) -> np.ndarray:
+        total = int(counts.sum())
+        sizes = rng.choice(self.order_sizes, size=total, replace=True)
+        owner = np.repeat(np.arange(counts.size), counts.ravel())
+        return np.bincount(owner, weights=sizes, minlength=counts.size).reshape(counts.shape)
+
+    def generate_events(self, n_events: int = 1000, rng: Optional[np.random.Generator] = None,
+                        steps_per_event: int = 1,
+                        target_std: Optional[float] = 0.01,
+                        center: bool = False) -> np.ndarray:
+        rng = rng if rng is not None else np.random.default_rng()
+        if self.lambda_plus + self.lambda_minus <= 0:
+            return np.zeros(n_events)
+        shape = (n_events, int(steps_per_event))
+        n_buy = rng.poisson(lam=self.lambda_plus, size=shape)
+        n_sell = rng.poisson(lam=self.lambda_minus, size=shape)
+        n_cancel = rng.poisson(lam=self.theta, size=shape)
+        raw_impact = self._sizes_sum(n_buy, rng) - self._sizes_sum(n_sell, rng)
+        events = (raw_impact / (1.0 + n_cancel)).sum(axis=1)
+        if center:
+            events = events - events.mean()
+        if target_std is not None:
+            std = events.std()
+            if std > 0:
+                events = events / std * target_std
+        return events
+
+
+def ks_critical_value(n: int, m: int, alpha: float = 0.05) -> float:
+    """Valor critico asintotico del KS de 2 muestras:
+    D_crit = c(alpha) sqrt((n + m) / (n m)), c(alpha) = sqrt(-ln(alpha/2) / 2)
+    (c(0.05) = 1.358). Con n ~ 1000-1700 retornos observados y m = 5000
+    simulados, D_crit ~ 0.038-0.047: el test rechaza diferencias de 4-5
+    puntos porcentuales entre las CDF, que son pequenas para un modelo
+    reducido. D/D_crit mide cuantas veces se excede ese umbral."""
+    if n <= 0 or m <= 0:
+        return float("nan")
+    return float(np.sqrt(-np.log(alpha / 2.0) / 2.0) * np.sqrt((n + m) / (n * m)))
+
+
+def empirical_order_sizes(df_tramo: pd.DataFrame, avg_order_size: float) -> np.ndarray:
+    """Tamanos de orden para `CompoundPoissonLOBModel`: volumen por vela
+    observada (winsorizado si existe `volume_w`) / avg_order_size."""
+    obs = df_tramo[~df_tramo["is_imputed"]]
+    col = "volume_w" if "volume_w" in obs.columns else "volume"
+    v = obs[col].to_numpy(dtype=float) / float(avg_order_size)
+    return v[np.isfinite(v) & (v > 0)]
+
+
 # ---------------------------------------------------------------------------
 # 4) Calibracion
 # ---------------------------------------------------------------------------
@@ -559,7 +643,7 @@ def _observed_returns(df_tramo: pd.DataFrame) -> np.ndarray:
 
 def calibrate_tramo(df_tramo: pd.DataFrame, ticker: str, tramo: str,
                     avg_order_size: float, seed: int = DEFAULT_SEED,
-                    run_mle: bool = True) -> Dict:
+                    run_mle: bool = True, run_compound: bool = True) -> Dict:
     """Calibra (lambda+, lambda-, theta) para un ticker x tramo y valida con KS.
 
     Metodo principal: estimacion empirica directa (`estimate_order_rates` +
@@ -607,8 +691,11 @@ def calibrate_tramo(df_tramo: pd.DataFrame, ticker: str, tramo: str,
                                steps_per_event=STEPS_PER_BAR, target_std=target_std, center=True)
     out["ks_stat"] = val["ks_statistic"]
     out["p_value"] = val["p_value"]
+    out["ks_d_crit"] = val["d_crit"]
+    out["ks_d_ratio"] = val["d_ratio"]
     out["sim_drift_sd"] = val["sim_drift_sd"]
-    out["directo"] = {**direct, "ks_stat": val["ks_statistic"], "p_value": val["p_value"]}
+    out["directo"] = {**direct, "ks_stat": val["ks_statistic"], "p_value": val["p_value"],
+                      "ks_d_ratio": val["d_ratio"]}
 
     if run_mle:
         feats = extract_tramo_features(returns)
@@ -634,6 +721,7 @@ def calibrate_tramo(df_tramo: pd.DataFrame, ticker: str, tramo: str,
             "theta": mle["theta"],
             "ks_stat": mle_val["ks_statistic"],
             "p_value": mle_val["p_value"],
+            "ks_d_ratio": mle_val["d_ratio"],
             "optimizer_success": mle["optimizer_success"],
             "en_limite": bool(at_bound),
             "mejora_ks": improves,
@@ -643,8 +731,21 @@ def calibrate_tramo(df_tramo: pd.DataFrame, ticker: str, tramo: str,
             out.update({k: mle[k] for k in ("lambda_plus", "lambda_minus", "theta")})
             out["ks_stat"] = mle_val["ks_statistic"]
             out["p_value"] = mle_val["p_value"]
+            out["ks_d_ratio"] = mle_val["d_ratio"]
             out["method"] = "mle_proxy"
             out["sim_drift_sd"] = mle_val["sim_drift_sd"]
+
+    if run_compound:
+        sizes = empirical_order_sizes(df_tramo, avg_order_size)
+        final = {k: out[k] for k in ("lambda_plus", "lambda_minus", "theta")}
+        comp = validate_calibration(final, returns, n_events=N_SIM_VALIDATION, seed=tramo_seed,
+                                    steps_per_event=STEPS_PER_BAR, target_std=target_std,
+                                    center=True, order_sizes=sizes)
+        out["poisson_compuesto"] = {
+            "ks_stat": comp["ks_statistic"], "p_value": comp["p_value"],
+            "ks_d_ratio": comp["d_ratio"], "n_tamanos": int(len(sizes)),
+            "cv_tamano": float(np.std(sizes) / np.mean(sizes)) if len(sizes) else float("nan"),
+        }
     return out
 
 
@@ -682,6 +783,63 @@ def check_stylized_facts(tramo_results: Dict[str, Dict],
     return out
 
 
+OBJETIVO_METRICAS: Tuple[str, ...] = (
+    "spread_roll_bps", "spread_hl_bps", "spread_cs_bps", "spread_ar_bps", "volatilidad_bps",
+    "participacion_volumen_dia", "lambda_total", "volumen_mediano_vela",
+)
+
+
+def volume_participation(df: pd.DataFrame) -> Dict[str, Dict[str, float]]:
+    """Participacion de cada tramo en el volumen del dia (volumen crudo, sin
+    winsorizar; el DataFrame ya viene sin la subasta si se excluye). Devuelve
+    la mediana de las participaciones diarias (robusta a dias con
+    operaciones en bloque) y la participacion agregada (suma/suma)."""
+    by = df.groupby(["day", "tramo"])["volume"].sum().unstack(fill_value=0.0)
+    by = by.reindex(columns=list(TRAMO_NAMES), fill_value=0.0)
+    total = by.sum(axis=1)
+    by = by[total > 0]
+    total = total[total > 0]
+    share = by.div(total, axis=0)
+    agg = by.sum() / total.sum() if total.sum() > 0 else by.sum() * np.nan
+    return {t: {"mediana_diaria": float(share[t].median()) if len(share) else float("nan"),
+                "agregada": float(agg[t])} for t in TRAMO_NAMES}
+
+
+def build_validation_targets(df_full: pd.DataFrame, tramos: Dict[str, Dict],
+                             exclude_closing_auction: bool) -> Dict:
+    """Objetivos de validacion observados por tramo (Parte B1 de la 2.1.3b):
+    los valores que 2.2.4 (RMSC04) y 2.2.5 (PS) deben reproducir con el
+    simulador, en vez de una regla fija sobre la media jornada. Los spreads
+    y la volatilidad usan `src.analysis.intraday_profile` con las mismas
+    exclusiones que la calibracion (velas imputadas y, por defecto, subasta).
+    `ranking_observado[metrica]` ordena los tramos de mayor a menor (None si
+    la metrica no es finita en algun tramo)."""
+    pairs = ip.add_pair_columns(df_full, "tramo")
+    if exclude_closing_auction:
+        pairs = pairs[~pairs["is_auction"]]
+    pairs = pairs[pairs["tramo"].notna()]
+    metrics = ip.metrics_by_group(pairs, "tramo", TRAMO_NAMES)
+    part = volume_participation(pairs)
+    por_tramo = {}
+    for t in TRAMO_NAMES:
+        m, r = metrics[t], tramos[t]
+        por_tramo[t] = {
+            "spread_roll_bps": m["roll_bps"], "spread_hl_bps": m["hl_bps"],
+            "spread_cs_bps": m["cs_bps"], "spread_ar_bps": m["ar_bps"],
+            "volatilidad_bps": m["vol_bps"],
+            "participacion_volumen_dia": part[t]["mediana_diaria"],
+            "participacion_volumen_dia_agregada": part[t]["agregada"],
+            "lambda_total": r["lambda_plus"] + r["lambda_minus"],
+            "volumen_mediano_vela": m["volumen_mediano_vela"],
+        }
+    ranking = {}
+    for k in OBJETIVO_METRICAS:
+        vals = {t: por_tramo[t][k] for t in TRAMO_NAMES}
+        ok = all(v is not None and np.isfinite(v) for v in vals.values())
+        ranking[k] = sorted(TRAMO_NAMES, key=lambda t: -vals[t]) if ok else None
+    return {"por_tramo": por_tramo, "ranking_observado": ranking}
+
+
 def calibrate_ticker(ticker: str, data_dir: "str | Path" = DEFAULT_DATA_DIR,
                      snapshot: Optional[str] = None, avg_order_size: Optional[float] = None,
                      order_notional_clp: float = DEFAULT_ORDER_NOTIONAL_CLP,
@@ -696,6 +854,7 @@ def calibrate_ticker(ticker: str, data_dir: "str | Path" = DEFAULT_DATA_DIR,
     if avg_order_size is None:
         median_price = float(df.loc[~df["is_imputed"], "close"].median())
         avg_order_size = mp.avg_order_size_from_price(median_price, order_notional_clp)
+    df_full = df
     if exclude_closing_auction:
         df = df[~df["is_auction"]]
     df = df.copy()
@@ -718,6 +877,7 @@ def calibrate_ticker(ticker: str, data_dir: "str | Path" = DEFAULT_DATA_DIR,
         "source_file": df.attrs.get("source_file"),
         "tramos": tramos,
         "stylized_facts": check_stylized_facts(tramos, lambda_total_raw),
+        "objetivos_validacion": build_validation_targets(df_full, tramos, exclude_closing_auction),
         "returns": returns,
     }
 
@@ -735,6 +895,7 @@ def validate_calibration(
     steps_per_event: int = 1,
     target_std: Optional[float] = 0.01,
     center: bool = False,
+    order_sizes: Optional[np.ndarray] = None,
 ) -> Dict[str, float]:
     """KS de 2 muestras (`scipy.stats.ks_2samp`) entre eventos simulados por
     el modelo calibrado y retornos observados. `valid = p_value > alpha`.
@@ -742,14 +903,15 @@ def validate_calibration(
     calibracion por tramo se usa steps_per_event=10, target_std=std
     observada y center=True (ambas muestras centradas: el KS evalua forma).
     `sim_drift_sd` reporta la deriva que tendria la simulacion sin centrar,
-    en desviaciones estandar.
+    en desviaciones estandar. `d_crit` es el valor critico del KS al nivel
+    `alpha` (`ks_critical_value`) y `d_ratio` = D / d_crit. Con
+    `order_sizes` se simula `CompoundPoissonLOBModel` (Parte B3).
     """
     rng = np.random.default_rng(seed)
-    model = PoissonLOBModel(
-        lambda_plus=calibrated["lambda_plus"],
-        lambda_minus=calibrated["lambda_minus"],
-        theta=calibrated["theta"],
-    )
+    params = dict(lambda_plus=calibrated["lambda_plus"], lambda_minus=calibrated["lambda_minus"],
+                  theta=calibrated["theta"])
+    model = (PoissonLOBModel(**params) if order_sizes is None
+             else CompoundPoissonLOBModel(**params, order_sizes=order_sizes))
     simulated = model.generate_events(n_events=n_events, rng=rng,
                                       steps_per_event=steps_per_event, target_std=target_std)
     observed = np.asarray(observed_returns)
@@ -770,9 +932,12 @@ def validate_calibration(
             "n_simulated": int(len(simulated)),
             "alpha": alpha,
             "sim_drift_sd": sim_drift_sd,
+            "d_crit": float("nan"),
+            "d_ratio": float("nan"),
         }
 
     ks_stat, p_value = ks_2samp(simulated, observed)
+    d_crit = ks_critical_value(len(observed), len(simulated), alpha)
     return {
         "ks_statistic": float(ks_stat),
         "p_value": float(p_value),
@@ -781,6 +946,8 @@ def validate_calibration(
         "n_simulated": int(len(simulated)),
         "alpha": alpha,
         "sim_drift_sd": sim_drift_sd,
+        "d_crit": d_crit,
+        "d_ratio": float(ks_stat / d_crit),
     }
 
 
@@ -842,6 +1009,13 @@ def build_metadata(snapshot_dir: Path, avg_order_size: Optional[float], order_no
             "ks_stat": "KS 2 muestras, retornos log de 5 min simulados vs observados",
             "spread_roll_bps": "Roll (1984), relativo, puntos base",
             "hl_range_bps": "rango high-low / mid medio, puntos base",
+            "ks_d_crit": "valor critico KS 2 muestras al 5 %: 1.358 * sqrt((n+m)/(n*m))",
+            "ks_d_ratio": "ks_stat / ks_d_crit (> 1 = se rechaza al 5 %)",
+            "poisson_compuesto": "KS con tamanos de orden muestreados del volumen por vela / avg_order_size (2.1.3b B3)",
+            "objetivos_validacion": ("valores observados por tramo que 2.2.4 (RMSC04) y 2.2.5 (PS) comparan contra el simulador: "
+                                     "spreads Roll/HL/Corwin-Schultz/Abdi-Ranaldo y volatilidad en bps, participacion en el "
+                                     "volumen del dia (fraccion; mediana diaria y agregada, sin subasta), lambda total "
+                                     "(ordenes por paso de 30 s) y volumen mediano por vela (acciones)"),
         },
         "supuestos": [
             "Se usan precios y volumen sin normalizar (*_raw de clean_5m); velas con is_imputed=True excluidas.",
@@ -869,6 +1043,8 @@ def build_metadata(snapshot_dir: Path, avg_order_size: Optional[float], order_no
         "referencias": [
             "Cont, R., Stoikov, S. & Talreja, R. (2010). A stochastic model for order book dynamics. Operations Research, 58(3).",
             "Roll, R. (1984). A simple implicit measure of the effective bid-ask spread. Journal of Finance, 39(4).",
+            "Corwin, S. A. & Schultz, P. (2012). A simple way to estimate bid-ask spreads from daily high and low prices. Journal of Finance, 67(2).",
+            "Abdi, F. & Ranaldo, A. (2017). A simple estimation of bid-ask spreads from daily close, high, and low prices. Review of Financial Studies, 30(12).",
         ],
     }
 
@@ -881,6 +1057,7 @@ def save_calibration_by_tramo(results: Sequence[Dict], metadata: Dict, cleaning_
     params: Dict[str, Dict] = {}
     info: Dict[str, Dict] = {}
     facts: Dict[str, Dict] = {}
+    targets: Dict[str, Dict] = {}
     for res in results:
         t = res["ticker"]
         params[t] = res["tramos"]
@@ -894,12 +1071,68 @@ def save_calibration_by_tramo(results: Sequence[Dict], metadata: Dict, cleaning_
             "cobertura_baja": None if tier is None else tier != "A",
         }
         facts[t] = res["stylized_facts"]
+        if "objetivos_validacion" in res:
+            targets[t] = res["objetivos_validacion"]
     payload = {"metadata": metadata, "params": params, "tickers_info": info, "stylized_facts": facts}
+    if targets:
+        payload["objetivos_validacion"] = targets
+        payload["objetivos_validacion_resumen"] = summarize_validation_targets(targets, info)
     output_file = Path(output_file)
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as fh:
         json.dump(_json_safe(payload), fh, indent=2, ensure_ascii=False)
     return output_file
+
+
+def summarize_validation_targets(targets: Dict[str, Dict], info: Dict[str, Dict]) -> Dict:
+    """Mediana entre tickers (todos y tier A) de cada objetivo por tramo y
+    su ranking, mas el conteo de tickers por tramo que ocupa el primer
+    lugar de cada metrica."""
+    groups = {"todos": sorted(targets),
+              "tier_A": sorted(t for t in targets if info.get(t, {}).get("tier") == "A")}
+    out = {}
+    for g, names in groups.items():
+        med = {}
+        for tramo in TRAMO_NAMES:
+            med[tramo] = {}
+            for k in OBJETIVO_METRICAS:
+                vals = [targets[t]["por_tramo"][tramo][k] for t in names]
+                vals = [v for v in vals if v is not None and np.isfinite(v)]
+                med[tramo][k] = float(np.median(vals)) if vals else float("nan")
+        rank = {k: sorted(TRAMO_NAMES, key=lambda tr: -med[tr][k]) for k in OBJETIVO_METRICAS}
+        first = {k: {tr: sum(1 for t in names if (targets[t]["ranking_observado"][k] or [None])[0] == tr)
+                     for tr in TRAMO_NAMES} for k in OBJETIVO_METRICAS}
+        out[g] = {"n_tickers": len(names), "mediana_por_tramo": med, "ranking_de_medianas": rank,
+                  "tickers_por_tramo_en_primer_lugar": first}
+    return out
+
+
+def summarize_ks(results: Sequence[Dict]) -> Dict:
+    """Mediana de D y D/D_crit del modelo base y del Poisson compuesto
+    (Parte B3) sobre todos los pares ticker x tramo validados."""
+    base, base_r, comp, comp_r = [], [], [], []
+    for res in results:
+        for r in res["tramos"].values():
+            if not np.isfinite(r.get("ks_stat", np.nan)) or "poisson_compuesto" not in r:
+                continue
+            base.append(r["ks_stat"]); base_r.append(r["ks_d_ratio"])
+            comp.append(r["poisson_compuesto"]["ks_stat"]); comp_r.append(r["poisson_compuesto"]["ks_d_ratio"])
+    if not base:
+        return {}
+    med = lambda x: float(np.median(x))
+    adopt = med(comp) < med(base)
+    return {
+        "n_pares": len(base),
+        "mediana_D_base": med(base), "mediana_D_sobre_Dcrit_base": med(base_r),
+        "mediana_D_compuesto": med(comp), "mediana_D_sobre_Dcrit_compuesto": med(comp_r),
+        "pares_donde_compuesto_mejora": int(np.sum(np.array(comp) < np.array(base))),
+        "pares_no_rechazados_base": int(np.sum(np.array(base_r) <= 1.0)),
+        "pares_no_rechazados_compuesto": int(np.sum(np.array(comp_r) <= 1.0)),
+        "regla": "se adopta el Poisson compuesto como modelo de validacion de referencia solo si baja la mediana de D",
+        "compuesto_adoptado": bool(adopt),
+        "nota": ("Los campos ks_stat/p_value/ks_d_ratio de cada tramo siguen siendo los del modelo base "
+                 "(trazabilidad con la 2.1.3); el resultado compuesto esta en el bloque poisson_compuesto."),
+    }
 
 
 def plot_tramo_results(result: Dict, snapshot: str, output_file: "str | Path",
@@ -1186,6 +1419,7 @@ def run_calibration(tickers: Optional[Sequence[str]] = None, snapshot: Optional[
     output_json = Path(output_json) if output_json else DEFAULT_CALIBRATION_DIR / f"poisson_params_{tag}.json"
     metadata = build_metadata(snapshot_dir, avg_order_size, order_notional_clp,
                               exclude_closing_auction, seed, volume_winsor_q)
+    metadata["validacion_ks_resumen"] = summarize_ks(results)
     save_calibration_by_tramo(results, metadata, report, output_json)
     if verbose:
         print(f"JSON -> {output_json}")
