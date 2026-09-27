@@ -87,7 +87,9 @@ def create_backup(snapshot: str, root: Path = REPO_ROOT, out_dir: Optional[Path]
         for rel in files:
             zf.write(root / rel, arcname=rel)
             lines.append(f"{sha256_file(root / rel)}  {rel}")
-    sums_path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    # open(..., newline="\n") y no Path.write_text(newline=...), que no existe en Python 3.9
+    with open(sums_path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write("\n".join(lines) + "\n")
     return zip_path, sums_path, len(files)
 
 
