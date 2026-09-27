@@ -241,6 +241,42 @@ python -m src.envs.calibration_poisson --demo
 pytest tests/test_calibration_poisson.py
 ```
 
+## 9. Actualización 2.1.3b (2026-09-27)
+
+La 2.1.3b agrega cuatro cambios. Los valores de las secciones 1 a 8 no cambian: `tests/test_market_params.py` recalcula los 30 tickers y los compara contra este JSON.
+
+**Configuración compartida.** Los tramos, la exclusión de la subasta y el nocional por orden se leen ahora desde [`src/config/market_params.py`](../src/config/market_params.py) (`TRAMOS_EJECUTOR`, `INCLUDE_CLOSING_AUCTION`, `AVG_ORDER_NOTIONAL_CLP` y `ORDER_SIZE_POLICY`).
+
+**Objetivos de validación.** El JSON incluye dos bloques nuevos:
+
+- `objetivos_validacion[ticker]`: por tramo, los valores observados de spread (Roll, HL, Corwin-Schultz y Abdi-Ranaldo), volatilidad, participación en el volumen del día (mediana diaria y agregada, sin subasta), λ total y volumen mediano por vela, más el ranking observado de los tramos para cada métrica.
+- `objetivos_validacion_resumen`: las medianas entre tickers, para todos los tickers y para los tier A.
+
+Esto es lo que 2.2.4 (RMSC04) y 2.2.5 (PS) compararán contra el simulador, en lugar de la regla fija de la §5.3. Los flags de `stylized_facts` se conservan solo por trazabilidad. El análisis que motiva este cambio está en [`docs/robustez_patron_intradiario_BF.md`](robustez_patron_intradiario_BF.md). Una salvedad: la participación de la media jornada es la mayor en parte porque dura 30 velas, frente a 24 de los otros tramos.
+
+**Tamaño del KS.** Cada tramo reporta ahora `ks_d_crit` y `ks_d_ratio`:
+
+$$
+D_{crit}(n, m) = c(\alpha)\sqrt{\frac{n+m}{n\,m}}, \qquad c(0{,}05) = \sqrt{-\ln(0{,}025)/2} = 1{,}358
+$$
+
+Con n ≈ 1 000–1 700 retornos observados y m = 5 000 simulados, D_crit ≈ 0,038–0,047. Es decir, el test rechaza diferencias de apenas 4–5 puntos porcentuales entre las CDF, pequeñas para un modelo reducido. Por eso el rechazo en los 90 pares (§5.2) debe leerse junto con D/D_crit: la mediana es **2,67**, lo que significa que el estadístico excede el umbral unas 2,7 veces, no que el ajuste sea arbitrariamente malo.
+
+**Variante Poisson compuesta (B3).** `CompoundPoissonLOBModel` asigna a cada llegada un tamaño muestreado de la distribución empírica del volumen por vela (winsorizado) / `avg_order_size`, y usa la volatilidad del tramo para la escala. No se modificó la API de `PoissonLOBModel`.
+
+| 90 pares ticker × tramo | Poisson base | Poisson compuesto |
+|---|---:|---:|
+| Mediana de D | 0,171 | 0,159 |
+| Mediana de D/D_crit | 2,67 | 2,51 |
+| Pares en que mejora D | — | 76 / 90 |
+| Pares no rechazados al 5 % | 0 | 0 |
+
+En FALABELLA, D baja de 0,100 / 0,116 / 0,114 a 0,091 / 0,109 / 0,100 en apertura / media jornada / cierre.
+
+Como baja la mediana de D, se adopta como **modelo de validación de referencia** según la regla fijada de antemano (`metadata.validacion_ks_resumen.compuesto_adoptado = true`). Sus resultados quedan en el bloque `poisson_compuesto` de cada tramo. Los campos `ks_stat`, `p_value` y `ks_d_ratio` siguen correspondiendo al modelo base, para mantener la trazabilidad con la §5, y la regla de adopción del MLE-proxy (§3.5) sigue usando el KS base.
+
+La mejora es moderada y el test sigue rechazando en los 90 pares. La heterogeneidad del tamaño de orden explica parte de las colas pesadas, pero no la masa en cero de los retornos. Para 2.2.4 esto sugiere configurar RMSC04 con tamaños de orden heterogéneos.
+
 ## Referencias
 
 - Cont, R., Stoikov, S., & Talreja, R. (2010). A stochastic model for order book dynamics. *Operations Research*, 58(3), 549–563.
