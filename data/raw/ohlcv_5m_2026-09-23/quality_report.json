@@ -1,0 +1,422 @@
+{
+  "AGUAS-A": {
+    "rows": 2688,
+    "trading_days": 60,
+    "avg_rows_per_day": 44.8,
+    "date_min": "2026-06-30 10:40:00-04:00",
+    "date_max": "2026-09-23 12:05:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CHILE": {
+    "rows": 4372,
+    "trading_days": 60,
+    "avg_rows_per_day": 72.9,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "BCI": {
+    "rows": 4025,
+    "trading_days": 60,
+    "avg_rows_per_day": 67.1,
+    "date_min": "2026-06-30 09:40:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ITAUCL": {
+    "rows": 3408,
+    "trading_days": 60,
+    "avg_rows_per_day": 56.8,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:30:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "BSANTANDER": {
+    "rows": 4079,
+    "trading_days": 60,
+    "avg_rows_per_day": 68.0,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CAP": {
+    "rows": 1653,
+    "trading_days": 60,
+    "avg_rows_per_day": 27.6,
+    "date_min": "2026-06-30 09:45:00-04:00",
+    "date_max": "2026-09-23 12:15:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CENCOSUD": {
+    "rows": 4052,
+    "trading_days": 60,
+    "avg_rows_per_day": 67.5,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CENCOMALLS": {
+    "rows": 1962,
+    "trading_days": 60,
+    "avg_rows_per_day": 32.7,
+    "date_min": "2026-06-30 09:55:00-04:00",
+    "date_max": "2026-09-23 12:20:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "COLBUN": {
+    "rows": 2039,
+    "trading_days": 60,
+    "avg_rows_per_day": 34.0,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:30:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CCU": {
+    "rows": 2024,
+    "trading_days": 60,
+    "avg_rows_per_day": 33.7,
+    "date_min": "2026-06-30 09:40:00-04:00",
+    "date_max": "2026-09-23 12:25:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "VAPORES": {
+    "rows": 2805,
+    "trading_days": 60,
+    "avg_rows_per_day": 46.8,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ANDINA-B": {
+    "rows": 3108,
+    "trading_days": 60,
+    "avg_rows_per_day": 51.8,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:30:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ENTEL": {
+    "rows": 1763,
+    "trading_days": 60,
+    "avg_rows_per_day": 29.4,
+    "date_min": "2026-06-30 10:50:00-04:00",
+    "date_max": "2026-09-23 12:25:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CMPC": {
+    "rows": 3359,
+    "trading_days": 60,
+    "avg_rows_per_day": 56.0,
+    "date_min": "2026-06-30 09:45:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "COPEC": {
+    "rows": 3978,
+    "trading_days": 60,
+    "avg_rows_per_day": 66.3,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ENELAM": {
+    "rows": 3218,
+    "trading_days": 60,
+    "avg_rows_per_day": 53.6,
+    "date_min": "2026-06-30 09:40:00-04:00",
+    "date_max": "2026-09-23 12:30:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ENELCHILE": {
+    "rows": 3431,
+    "trading_days": 60,
+    "avg_rows_per_day": 57.2,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:30:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ECL": {
+    "rows": 2239,
+    "trading_days": 60,
+    "avg_rows_per_day": 37.3,
+    "date_min": "2026-06-30 11:05:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "FALABELLA": {
+    "rows": 4304,
+    "trading_days": 60,
+    "avg_rows_per_day": 71.7,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "IAM": {
+    "rows": 912,
+    "trading_days": 60,
+    "avg_rows_per_day": 15.2,
+    "date_min": "2026-06-30 10:00:00-04:00",
+    "date_max": "2026-09-23 12:05:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "ILC": {
+    "rows": 1901,
+    "trading_days": 60,
+    "avg_rows_per_day": 31.7,
+    "date_min": "2026-06-30 09:40:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "LTM": {
+    "rows": 4515,
+    "trading_days": 60,
+    "avg_rows_per_day": 75.2,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "PARAUCO": {
+    "rows": 3217,
+    "trading_days": 60,
+    "avg_rows_per_day": 53.6,
+    "date_min": "2026-06-30 09:45:00-04:00",
+    "date_max": "2026-09-23 12:25:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "MALLPLAZA": {
+    "rows": 3683,
+    "trading_days": 60,
+    "avg_rows_per_day": 61.4,
+    "date_min": "2026-06-30 09:35:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "QUINENCO": {
+    "rows": 2301,
+    "trading_days": 60,
+    "avg_rows_per_day": 38.4,
+    "date_min": "2026-06-30 09:35:00-04:00",
+    "date_max": "2026-09-23 12:20:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "RIPLEY": {
+    "rows": 1604,
+    "trading_days": 60,
+    "avg_rows_per_day": 26.7,
+    "date_min": "2026-06-30 09:35:00-04:00",
+    "date_max": "2026-09-23 12:05:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "SALFACORP": {
+    "rows": 966,
+    "trading_days": 60,
+    "avg_rows_per_day": 16.1,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:00:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "SMU": {
+    "rows": 1751,
+    "trading_days": 60,
+    "avg_rows_per_day": 29.2,
+    "date_min": "2026-06-30 09:50:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "SQM-B": {
+    "rows": 4490,
+    "trading_days": 60,
+    "avg_rows_per_day": 74.8,
+    "date_min": "2026-06-30 09:30:00-04:00",
+    "date_max": "2026-09-23 12:35:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  },
+  "CONCHATORO": {
+    "rows": 1140,
+    "trading_days": 60,
+    "avg_rows_per_day": 19.0,
+    "date_min": "2026-06-30 09:55:00-04:00",
+    "date_max": "2026-09-23 10:30:00-03:00",
+    "null_counts": {
+      "open": 0,
+      "high": 0,
+      "low": 0,
+      "close": 0,
+      "volume": 0
+    }
+  }
+}
