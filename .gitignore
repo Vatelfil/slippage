@@ -34,9 +34,37 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 
-# Experiment results
+# Evidencia del pipeline de datos (BF): se versionan SOLO los reportes JSON de
+# cada snapshot, nunca los .parquet. Patron de re-inclusion: des-ignorar la
+# carpeta, re-ignorar su contenido, des-ignorar *.json.
+!data/raw/ticker_validation_*.json
+!data/raw/ohlcv_5m_*/
+data/raw/ohlcv_5m_*/*
+!data/raw/ohlcv_5m_*/*.json
+
+!data/processed/clean_5m_*/
+data/processed/clean_5m_*/*
+!data/processed/clean_5m_*/*.json
+
+!data/processed/sm_features_*/
+data/processed/sm_features_*/*
+!data/processed/sm_features_*/*.json
+
+# Salidas del modo --demo (sintetico) de calibration_poisson.py: nunca se versionan
+data/calibration/demo/
+
+# Experiment results (se versionan solo las figuras de los sprints)
 results/*
+!results/sprint2/
+results/sprint2/*
+!results/sprint2/*.png
+!results/sprint3/
+results/sprint3/*
+!results/sprint3/*.png
 experiments/output/*
+
+# Parquet: nunca se versiona, en ninguna ruta (salvaguarda final)
+*.parquet
 
 # Trained models
 *.pt

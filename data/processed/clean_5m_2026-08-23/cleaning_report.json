@@ -1,0 +1,883 @@
+{
+  "generated_at": "2026-08-30T23:26:01.411187+00:00",
+  "input_dir": "data/raw/ohlcv_5m_2026-08-23",
+  "output_dir": "data/processed/clean_5m_2026-08-23",
+  "edge_policy": "bfill",
+  "coverage_threshold": 0.6,
+  "session_window": {
+    "start": "09:30",
+    "end": "15:55",
+    "timezone": "America/Santiago",
+    "bars_per_day": 78
+  },
+  "dst_note": "Verificado con ZoneInfo('America/Santiago'): offset constante UTC-04:00 en toda la ventana de descarga (2026-05-28 a 2026-08-21), sin transicion de horario de verano. El codigo se mantiene tz-aware de todas formas por si una corrida futura cruza un cambio de huso.",
+  "closing_auction_note": "yfinance no timestampea de forma consistente el ultimo print de la jornada para el IPSA: en la corrida de referencia (2026-08-23), ~35 de 60 dias no traen NINGUNA vela a las 15:55 -- el cierre real llega timestampeado a las 16:00 (con volumen consistente con la subasta de cierre, ej. varios millones de acciones). La vela 15:50 no existe NUNCA en ningun dia ni ticker verificado. Sin correccion, el filtro de horario y la grilla de 78 velas (fija en 09:30-15:55) descartaban ese cierre por completo, y el perfil de volumen/volatilidad no mostraba el salto esperado en la subasta de cierre (confirmado con --plot-ticker FALABELLA). Fix (fold_closing_auction, decision confirmada con BF): el filtro de horario acepta hasta las 16:00 inclusive, y cualquier fila con timestamp en (15:55, 16:00] se fusiona dentro de la ultima vela de la grilla (15:55): open=el mas temprano, high=max, low=min, close=el mas tardio (precio de cierre final), volume=suma. La grilla se mantiene en 78 velas, sin agregar una vela 79.",
+  "per_ticker": {
+    "AGUAS-A": {
+      "rows_raw_session_filtered": 2467,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 38,
+      "ffill_imputed_count": {
+        "open": 2062,
+        "high": 2062,
+        "low": 2062,
+        "close": 2062
+      },
+      "bfill_edge_imputed_count": {
+        "open": 154,
+        "high": 154,
+        "low": 154,
+        "close": 154
+      },
+      "volume_zero_filled_count": 2216,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 52.71,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "ANDINA-B": {
+      "rows_raw_session_filtered": 2963,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 40,
+      "ffill_imputed_count": {
+        "open": 1602,
+        "high": 1602,
+        "low": 1602,
+        "close": 1602
+      },
+      "bfill_edge_imputed_count": {
+        "open": 120,
+        "high": 120,
+        "low": 120,
+        "close": 120
+      },
+      "volume_zero_filled_count": 1722,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 63.31,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "BCI": {
+      "rows_raw_session_filtered": 4028,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 39,
+      "ffill_imputed_count": {
+        "open": 599,
+        "high": 599,
+        "low": 599,
+        "close": 599
+      },
+      "bfill_edge_imputed_count": {
+        "open": 57,
+        "high": 57,
+        "low": 57,
+        "close": 57
+      },
+      "volume_zero_filled_count": 656,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 86.07,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "BSANTANDER": {
+      "rows_raw_session_filtered": 4092,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 40,
+      "ffill_imputed_count": {
+        "open": 582,
+        "high": 582,
+        "low": 582,
+        "close": 582
+      },
+      "bfill_edge_imputed_count": {
+        "open": 11,
+        "high": 11,
+        "low": 11,
+        "close": 11
+      },
+      "volume_zero_filled_count": 593,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 87.44,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "CAP": {
+      "rows_raw_session_filtered": 1620,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 39,
+      "ffill_imputed_count": {
+        "open": 2813,
+        "high": 2813,
+        "low": 2813,
+        "close": 2813
+      },
+      "bfill_edge_imputed_count": {
+        "open": 252,
+        "high": 252,
+        "low": 252,
+        "close": 252
+      },
+      "volume_zero_filled_count": 3065,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 34.62,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "CCU": {
+      "rows_raw_session_filtered": 1829,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 38,
+      "ffill_imputed_count": {
+        "open": 2587,
+        "high": 2587,
+        "low": 2587,
+        "close": 2587
+      },
+      "bfill_edge_imputed_count": {
+        "open": 267,
+        "high": 267,
+        "low": 267,
+        "close": 267
+      },
+      "volume_zero_filled_count": 2854,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 39.08,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "CENCOMALLS": {
+      "rows_raw_session_filtered": 1527,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 42,
+      "ffill_imputed_count": {
+        "open": 2936,
+        "high": 2936,
+        "low": 2936,
+        "close": 2936
+      },
+      "bfill_edge_imputed_count": {
+        "open": 224,
+        "high": 224,
+        "low": 224,
+        "close": 224
+      },
+      "volume_zero_filled_count": 3160,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 32.63,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "CENCOSUD": {
+      "rows_raw_session_filtered": 4042,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 40,
+      "ffill_imputed_count": {
+        "open": 624,
+        "high": 624,
+        "low": 624,
+        "close": 624
+      },
+      "bfill_edge_imputed_count": {
+        "open": 19,
+        "high": 19,
+        "low": 19,
+        "close": 19
+      },
+      "volume_zero_filled_count": 643,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 86.37,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "CHILE": {
+      "rows_raw_session_filtered": 4348,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 41,
+      "ffill_imputed_count": {
+        "open": 336,
+        "high": 336,
+        "low": 336,
+        "close": 336
+      },
+      "bfill_edge_imputed_count": {
+        "open": 2,
+        "high": 2,
+        "low": 2,
+        "close": 2
+      },
+      "volume_zero_filled_count": 338,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 92.91,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "CMPC": {
+      "rows_raw_session_filtered": 3244,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 43,
+      "ffill_imputed_count": {
+        "open": 1393,
+        "high": 1393,
+        "low": 1393,
+        "close": 1393
+      },
+      "bfill_edge_imputed_count": {
+        "open": 51,
+        "high": 51,
+        "low": 51,
+        "close": 51
+      },
+      "volume_zero_filled_count": 1444,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 69.32,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "COLBUN": {
+      "rows_raw_session_filtered": 1995,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 36,
+      "ffill_imputed_count": {
+        "open": 2529,
+        "high": 2529,
+        "low": 2529,
+        "close": 2529
+      },
+      "bfill_edge_imputed_count": {
+        "open": 160,
+        "high": 160,
+        "low": 160,
+        "close": 160
+      },
+      "volume_zero_filled_count": 2689,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 42.63,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "CONCHATORO": {
+      "rows_raw_session_filtered": 1091,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 36,
+      "ffill_imputed_count": {
+        "open": 3091,
+        "high": 3091,
+        "low": 3091,
+        "close": 3091
+      },
+      "bfill_edge_imputed_count": {
+        "open": 499,
+        "high": 499,
+        "low": 499,
+        "close": 499
+      },
+      "volume_zero_filled_count": 3590,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 23.31,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "COPEC": {
+      "rows_raw_session_filtered": 3785,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 46,
+      "ffill_imputed_count": {
+        "open": 879,
+        "high": 879,
+        "low": 879,
+        "close": 879
+      },
+      "bfill_edge_imputed_count": {
+        "open": 28,
+        "high": 28,
+        "low": 28,
+        "close": 28
+      },
+      "volume_zero_filled_count": 907,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 80.88,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "ECL": {
+      "rows_raw_session_filtered": 2102,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 42,
+      "ffill_imputed_count": {
+        "open": 2347,
+        "high": 2347,
+        "low": 2347,
+        "close": 2347
+      },
+      "bfill_edge_imputed_count": {
+        "open": 238,
+        "high": 238,
+        "low": 238,
+        "close": 238
+      },
+      "volume_zero_filled_count": 2585,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 44.91,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "ENELAM": {
+      "rows_raw_session_filtered": 3149,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 38,
+      "ffill_imputed_count": {
+        "open": 1373,
+        "high": 1373,
+        "low": 1373,
+        "close": 1373
+      },
+      "bfill_edge_imputed_count": {
+        "open": 161,
+        "high": 161,
+        "low": 161,
+        "close": 161
+      },
+      "volume_zero_filled_count": 1534,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 67.29,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "ENELCHILE": {
+      "rows_raw_session_filtered": 3393,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 45,
+      "ffill_imputed_count": {
+        "open": 1205,
+        "high": 1205,
+        "low": 1205,
+        "close": 1205
+      },
+      "bfill_edge_imputed_count": {
+        "open": 92,
+        "high": 92,
+        "low": 92,
+        "close": 92
+      },
+      "volume_zero_filled_count": 1297,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 72.5,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "ENTEL": {
+      "rows_raw_session_filtered": 1870,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 34,
+      "ffill_imputed_count": {
+        "open": 2583,
+        "high": 2583,
+        "low": 2583,
+        "close": 2583
+      },
+      "bfill_edge_imputed_count": {
+        "open": 228,
+        "high": 228,
+        "low": 228,
+        "close": 228
+      },
+      "volume_zero_filled_count": 2811,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 39.96,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "FALABELLA": {
+      "rows_raw_session_filtered": 4349,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 41,
+      "ffill_imputed_count": {
+        "open": 310,
+        "high": 310,
+        "low": 310,
+        "close": 310
+      },
+      "bfill_edge_imputed_count": {
+        "open": 27,
+        "high": 27,
+        "low": 27,
+        "close": 27
+      },
+      "volume_zero_filled_count": 337,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 92.93,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "IAM": {
+      "rows_raw_session_filtered": 920,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 35,
+      "ffill_imputed_count": {
+        "open": 3265,
+        "high": 3265,
+        "low": 3265,
+        "close": 3265
+      },
+      "bfill_edge_imputed_count": {
+        "open": 496,
+        "high": 496,
+        "low": 496,
+        "close": 496
+      },
+      "volume_zero_filled_count": 3761,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 19.66,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "ILC": {
+      "rows_raw_session_filtered": 1796,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 36,
+      "ffill_imputed_count": {
+        "open": 2633,
+        "high": 2633,
+        "low": 2633,
+        "close": 2633
+      },
+      "bfill_edge_imputed_count": {
+        "open": 253,
+        "high": 253,
+        "low": 253,
+        "close": 253
+      },
+      "volume_zero_filled_count": 2886,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 38.38,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "ITAUCL": {
+      "rows_raw_session_filtered": 3656,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 46,
+      "ffill_imputed_count": {
+        "open": 983,
+        "high": 983,
+        "low": 983,
+        "close": 983
+      },
+      "bfill_edge_imputed_count": {
+        "open": 52,
+        "high": 52,
+        "low": 52,
+        "close": 52
+      },
+      "volume_zero_filled_count": 1035,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 78.12,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "LTM": {
+      "rows_raw_session_filtered": 4523,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 43,
+      "ffill_imputed_count": {
+        "open": 165,
+        "high": 165,
+        "low": 165,
+        "close": 165
+      },
+      "bfill_edge_imputed_count": {
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0
+      },
+      "volume_zero_filled_count": 165,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 96.65,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "MALLPLAZA": {
+      "rows_raw_session_filtered": 3654,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 43,
+      "ffill_imputed_count": {
+        "open": 955,
+        "high": 955,
+        "low": 955,
+        "close": 955
+      },
+      "bfill_edge_imputed_count": {
+        "open": 79,
+        "high": 79,
+        "low": 79,
+        "close": 79
+      },
+      "volume_zero_filled_count": 1034,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 78.08,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "PARAUCO": {
+      "rows_raw_session_filtered": 3460,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 44,
+      "ffill_imputed_count": {
+        "open": 1109,
+        "high": 1109,
+        "low": 1109,
+        "close": 1109
+      },
+      "bfill_edge_imputed_count": {
+        "open": 120,
+        "high": 120,
+        "low": 120,
+        "close": 120
+      },
+      "volume_zero_filled_count": 1229,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 73.93,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "QUINENCO": {
+      "rows_raw_session_filtered": 2453,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 37,
+      "ffill_imputed_count": {
+        "open": 2182,
+        "high": 2182,
+        "low": 2182,
+        "close": 2182
+      },
+      "bfill_edge_imputed_count": {
+        "open": 47,
+        "high": 47,
+        "low": 47,
+        "close": 47
+      },
+      "volume_zero_filled_count": 2229,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 52.41,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "RIPLEY": {
+      "rows_raw_session_filtered": 1564,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 34,
+      "ffill_imputed_count": {
+        "open": 2837,
+        "high": 2837,
+        "low": 2837,
+        "close": 2837
+      },
+      "bfill_edge_imputed_count": {
+        "open": 280,
+        "high": 280,
+        "low": 280,
+        "close": 280
+      },
+      "volume_zero_filled_count": 3117,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 33.42,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "SALFACORP": {
+      "rows_raw_session_filtered": 967,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 35,
+      "ffill_imputed_count": {
+        "open": 3086,
+        "high": 3086,
+        "low": 3086,
+        "close": 3086
+      },
+      "bfill_edge_imputed_count": {
+        "open": 630,
+        "high": 630,
+        "low": 630,
+        "close": 630
+      },
+      "volume_zero_filled_count": 3716,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 20.66,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "SMU": {
+      "rows_raw_session_filtered": 1711,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 39,
+      "ffill_imputed_count": {
+        "open": 2750,
+        "high": 2750,
+        "low": 2750,
+        "close": 2750
+      },
+      "bfill_edge_imputed_count": {
+        "open": 223,
+        "high": 223,
+        "low": 223,
+        "close": 223
+      },
+      "volume_zero_filled_count": 2973,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 36.56,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    },
+    "SQM-B": {
+      "rows_raw_session_filtered": 4503,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 45,
+      "ffill_imputed_count": {
+        "open": 187,
+        "high": 187,
+        "low": 187,
+        "close": 187
+      },
+      "bfill_edge_imputed_count": {
+        "open": 0,
+        "high": 0,
+        "low": 0,
+        "close": 0
+      },
+      "volume_zero_filled_count": 187,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 96.22,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": false,
+      "tier": "A"
+    },
+    "VAPORES": {
+      "rows_raw_session_filtered": 2606,
+      "trading_days_raw": 60,
+      "trading_days_kept": 60,
+      "trading_days_discarded": [],
+      "n_days_discarded": 0,
+      "days_with_late_close_folded": 40,
+      "ffill_imputed_count": {
+        "open": 1962,
+        "high": 1962,
+        "low": 1962,
+        "close": 1962
+      },
+      "bfill_edge_imputed_count": {
+        "open": 117,
+        "high": 117,
+        "low": 117,
+        "close": 117
+      },
+      "volume_zero_filled_count": 2079,
+      "rows_final": 4680,
+      "coverage_pct": 100.0,
+      "coverage_pre_fill_pct": 55.68,
+      "under_threshold_post_fill": false,
+      "under_threshold_pre_fill": true,
+      "tier": "B"
+    }
+  },
+  "summary": {
+    "n_tickers": 30,
+    "total_rows_final": 140400,
+    "tickers_bajo_umbral_60pct_pre_fill": [
+      "AGUAS-A",
+      "CAP",
+      "CCU",
+      "CENCOMALLS",
+      "COLBUN",
+      "CONCHATORO",
+      "ECL",
+      "ENTEL",
+      "IAM",
+      "ILC",
+      "QUINENCO",
+      "RIPLEY",
+      "SALFACORP",
+      "SMU",
+      "VAPORES"
+    ],
+    "tickers_tier_A": [
+      "ANDINA-B",
+      "BCI",
+      "BSANTANDER",
+      "CENCOSUD",
+      "CHILE",
+      "CMPC",
+      "COPEC",
+      "ENELAM",
+      "ENELCHILE",
+      "FALABELLA",
+      "ITAUCL",
+      "LTM",
+      "MALLPLAZA",
+      "PARAUCO",
+      "SQM-B"
+    ],
+    "tickers_tier_B": [
+      "AGUAS-A",
+      "CAP",
+      "CCU",
+      "CENCOMALLS",
+      "COLBUN",
+      "CONCHATORO",
+      "ECL",
+      "ENTEL",
+      "IAM",
+      "ILC",
+      "QUINENCO",
+      "RIPLEY",
+      "SALFACORP",
+      "SMU",
+      "VAPORES"
+    ],
+    "coverage_metric_note": "coverage_pct se calcula tal como fue definido en el briefing (filas_finales / (dias_conservados x 78), post reindex+ffill+bfill), pero por construccion del propio relleno es ~100% para cualquier ticker que conserve al menos un dia -- no discrimina liquidez, se reporta solo por completitud/transparencia. coverage_pre_fill_pct (filas realmente observadas antes de rellenar / velas teoricas de los dias conservados) es la metrica valida, y define el campo 'tier' de cada ticker (A si >=60%, B si no). Que la mitad del IPSA (tier B) tenga cobertura pre-fill baja no es un defecto del pipeline: es evidencia empirica que respalda la premisa del proyecto (mercado chileno de liquidez fina fuera de las acciones mas liquidas). El pipeline NO descarta ningun ticker por esto; 'tier' es una etiqueta de uso, no un filtro."
+  }
+}
