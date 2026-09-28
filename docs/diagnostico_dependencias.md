@@ -64,3 +64,12 @@ En el Dockerfile se introdujo la instalación de uild-essential, cmake, y la deg
 
 ### Ajuste Adicional de Pip
 Al construir el contenedor, la instalación de gym==0.21.0 también falla si la versión de pip es >= 24.1 debido a metadatos mal formados en el setup original de gym (un paréntesis faltante). La solución implementada en el Dockerfile fue instalar pip==23.3.2 explícitamente.
+
+
+## ACTUALIZACION: Migracion a Gymnasium (Septiembre 2026)
+
+Debido a la falta de soporte de `gym` para versiones modernas de Python y librerias como NumPy 2.0 (y especialmente para mantener compatibilidad en entornos como Google Colab), el proyecto ha sido migrado para utilizar **Gymnasium**.
+
+*   **Dependencias Actualizadas:** Se ha anadido `gymnasium==0.29.1` a los requerimientos.
+*   **Capa de Compatibilidad:** Para mantener la compatibilidad con entornos antiguos que fueron disenados para `gym` (como `abides-gym`), se recomienda el uso de la libreria `shimmy==1.3.0` o adaptar los scripts de inicializacion para mapear la antigua API de `step` y `reset` a la nueva API de Gymnasium.
+*   **Codigo:** Se han actualizado los scripts (ej. `test_abides.py`, `maestro_env.py`, `ejecutor_env.py`) para importar `gymnasium as gym` y soportar el retorno de 5 valores en `step()` y 2 valores en `reset()`.
