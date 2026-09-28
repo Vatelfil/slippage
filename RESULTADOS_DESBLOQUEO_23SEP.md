@@ -20,7 +20,9 @@ Verifiqué contra el repositorio real (`https://github.com/jpmorganchase/abides-
 
 ## 2. `test_abides.py` — nombre de entorno real, no adivinado
 
-La versión anterior probaba `"markets-execution-v0"` y `"rmc-v0"`, ninguno de los cuales existe según el README oficial. El entorno de ejemplo documentado es `"markets-daily_investor-v0"` con `background_config="rmsc04"`. Reescrito para usar ese nombre y dejar instrucciones de cómo listar los entornos reales (`gym.envs.registry`) si ese no resulta ser el más adecuado para ejecución de órdenes.
+> **CORRECCIÓN 27 sept:** lo que sigue estaba mal. `"markets-execution-v0"` SÍ existe (es el entorno de ejecución de órdenes); solo `"rmc-v0"` no existe. Verificado en `abides_gym/__init__.py` del repo oficial. `test_abides.py` ya usa `markets-execution-v0`.
+
+(Texto original, incorrecto:) La versión anterior probaba `"markets-execution-v0"` y `"rmc-v0"`, ninguno de los cuales existe según el README oficial.
 
 ⚠️ **Tampoco pude ejecutar este script** (ABIDES-Gym no está instalado aquí). Mauricio debe correrlo dentro del contenedor y confirmar.
 
@@ -71,7 +73,7 @@ Esto no lo esperaba poder resolver, pero el entorno sí tenía acceso a internet
 |---|---|
 | `Dockerfile` | Reescrito con URL/versiones reales verificadas contra el repo oficial |
 | `docs/diagnostico_dependencias.md` | Corregido con las mismas versiones reales |
-| `src/envs/test_abides.py` | Nombre de entorno real (`markets-daily_investor-v0`) en vez de adivinado |
+| `src/envs/test_abides.py` | Corregido dos veces; entorno correcto: `markets-execution-v0` (ver corrección 27 sept) |
 | `src/envs/spaces.py` | + `MaestroDiscreteActionSpace`, + `EjecutorActionSpace.decode_flat/encode_flat` |
 | `src/envs/maestro_env.py` | `action_space` ahora `Discrete(40)`, compatible con `MasterActorCritic` |
 | `notebooks/Training_PPO_Sprint4_PS.ipynb` | `ppo_update()` real, training loop completo, ambos verificados por ejecución |
@@ -81,5 +83,5 @@ Esto no lo esperaba poder resolver, pero el entorno sí tenía acceso a internet
 ## Lo que sigue sin poder resolverse desde este entorno
 
 - Construir y correr el Dockerfile de verdad (sin Docker aquí).
-- Confirmar que `"markets-daily_investor-v0"` es el entorno correcto para el problema de ejecución de este proyecto (requiere ABIDES-Gym instalado para inspeccionar el registro real de entornos).
+- ~~Confirmar el entorno correcto~~ Resuelto 27 sept: es `markets-execution-v0`.
 - Integrar ABIDES-Gym de verdad en `MaestroEnv`/`EjecutorEnv` (siguen siendo stubs) — el training loop del punto 4 ya está listo para recibir recompensas reales en cuanto eso exista.

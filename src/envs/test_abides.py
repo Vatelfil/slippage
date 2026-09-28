@@ -1,24 +1,23 @@
 """Prueba de concepto (PoC) de ABIDES-Gym.
 
-Corregido 23 sept 2026 (PS): la version anterior adivinaba nombres de entorno
-inexistentes ("markets-execution-v0", "rmc-v0") envueltos en un try/except que
-nunca se confirmo que pasara con exito. Verificado contra el README real de
-https://github.com/jpmorganchase/abides-jpmc-public: el entorno de ejemplo
-registrado es "markets-daily_investor-v0", que requiere el kwarg
-`background_config="rmsc04"` (la configuracion RMSC04 citada en el Titulo I,
-seccion 4.3.3.a: 1 Exchange Agent, 2 Market Makers, 102 Value Agents,
-12 Momentum Agents, 1000 Noise Agents).
+CORREGIDO 27 sept 2026 (PS), segunda correccion. Historial:
+- Version original (Mauricio): probaba "markets-execution-v0" y, como respaldo,
+  "rmc-v0". "markets-execution-v0" SI existe; "rmc-v0" no.
+- Mi correccion del 23 sept la cambio a "markets-daily_investor-v0" (el unico
+  ejemplo del README) por error: pense que "markets-execution-v0" no existia.
+  Verificado ahora contra abides-gym/abides_gym/__init__.py del repo oficial
+  (jpmorganchase/abides-jpmc-public): se registran exactamente dos entornos,
+  "markets-daily_investor-v0" y "markets-execution-v0". El de ejecucion de
+  ordenes (el que corresponde a este proyecto) es "markets-execution-v0".
 
-IMPORTANTE: este script NO se pudo ejecutar en el entorno donde se corrigio
-(sin Docker/sin ABIDES-Gym instalado localmente). El nombre de entorno y el
-kwarg estan verificados contra la documentacion oficial, pero Mauricio debe
-correr este script dentro del contenedor (ver Dockerfile) y confirmar que
-realmente pasa. Si "markets-daily_investor-v0" no es el entorno mas adecuado
-para el problema de ejecucion de ordenes de este proyecto (podria existir un
-"markets-execution-v0" real en una version distinta del repo), validarlo
-contra `gym.envs.registry` dentro del contenedor:
-    import gym, abides_gym
-    print([k for k in gym.envs.registry.env_specs.keys() if 'markets' in k])
+Ese entorno tiene 3 acciones discretas (0=MKT, 1=LMT near touch, 2=Hold, con
+tamano fijo `order_fixed_size`) y ~8 features de observacion (holdings_pct,
+time_pct, diff_pct, imbalance_all, imbalance_5, price_impact, spread,
+direction_feature) + historial de retornos. NO coincide con nuestros contratos
+S_E (27 dims) / A_E (240 acciones): ver el documento de mapeo.
+
+IMPORTANTE: este script NO se ha ejecutado (ABIDES-Gym no esta instalado en el
+entorno donde se escribio). Mauricio debe correrlo dentro del contenedor.
 """
 import gym
 import abides_gym  # noqa: F401  (el import registra los entornos "markets-*-v0")
@@ -27,9 +26,9 @@ import abides_gym  # noqa: F401  (el import registra los entornos "markets-*-v0"
 def test_abides_orderbook():
     print("Iniciando prueba de concepto de ABIDES-Gym...")
 
-    env_id = "markets-daily_investor-v0"
-    print(f"Creando entorno '{env_id}' (background_config='rmsc04')...")
-    env = gym.make(env_id, background_config="rmsc04")
+    env_id = "markets-execution-v0"
+    print(f"Creando entorno '{env_id}' (background_config='rmsc04', direction='BUY')...")
+    env = gym.make(env_id, background_config="rmsc04", direction="BUY")
 
     # gym==0.18.0 (version pineada por el repo oficial de ABIDES-Gym) usa la
     # API vieja de 4 valores: reset() -> obs, step() -> (obs, reward, done, info).
