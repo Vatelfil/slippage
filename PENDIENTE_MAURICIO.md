@@ -24,7 +24,7 @@ Benjamín, mientras tanto, **ya entregó lo suyo**: datos reales del IPSA limpio
 - URL correcta del repo.
 - Versiones reales: `gym==0.18.0`, `numpy==1.22.0`, `ray[rllib]==1.7.0`, `pomegranate==0.14.5`.
 - Método de instalación real: clonar el repo completo y correr `python setup.py install` en `abides-core` → `abides-markets` → `abides-gym` (no `pip install git+...#subdirectory=X`, que nunca fue válido).
-- `src/envs/test_abides.py` actualizado con el nombre de entorno real documentado (`markets-daily_investor-v0`, con `background_config="rmsc04"`) en vez de nombres adivinados que nunca se confirmaron.
+- `src/envs/test_abides.py`: **CORRECCIÓN (27 sept):** en la primera versión de este documento te dije que usaras `markets-daily_investor-v0`; eso fue un error mío. El entorno correcto para ejecución de órdenes es `markets-execution-v0` (que ya estaba en tu versión original; verificado en `abides_gym/__init__.py` del repo oficial, que registra solo ese y `daily_investor`). El que no existe es `rmc-v0`. Ya está corregido en el script.
 
 **Lo que me falta a mí (no tengo Docker en mi entorno):** construir la imagen y confirmar que compila. Eso te toca a ti:
 
@@ -34,7 +34,7 @@ docker run -it slippage bash
 python src/envs/test_abides.py
 ```
 
-Si `test_abides.py` falla porque `"markets-daily_investor-v0"` no es el entorno correcto para ejecución de órdenes, lista los reales:
+Si `test_abides.py` falla, lista los entornos realmente registrados (deberían ser solo `markets-daily_investor-v0` y `markets-execution-v0`):
 ```python
 import gym, abides_gym
 print([k for k in gym.envs.registry.env_specs.keys() if 'markets' in k])
