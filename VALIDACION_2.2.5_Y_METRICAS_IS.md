@@ -35,6 +35,20 @@ El **Título I (sección 4.1.1)** planteaba la hipótesis de que la media jornad
 
 **OBI (Order Book Imbalance) no se pudo calcular** — requiere el libro de órdenes Nivel 2, que solo existe una vez que ABIDES-Gym esté integrado. No hay un proxy razonable desde datos OHLCV agregados, así que no se inventó uno.
 
+### Actualización 29 sept — ya se puede completar la comparación real (falta correrla)
+
+Ahora que ABIDES-Gym está conectado al Ejecutor (verificado, ver `INTEGRACION_ABIDES_PARA_MAURICIO.md`), la mitad que faltaba de la tarea 2.2.5 — comparar el simulador contra los datos reales — ya es técnicamente posible. Dejé todo el código listo y probado con datos sintéticos, pero **no lo pude correr con ABIDES real** porque no lo tengo instalado en este entorno (solo corre en Colab):
+
+1. `src/envs/collect_abides_stats.py` — corre varios episodios del Ejecutor contra ABIDES real (los 3 tramos) y guarda `data/analysis/perfil_mercado_abides_simulado.json` con spread/OBI simulados. Se corre así, en Colab:
+   ```bash
+   PYTHONPATH=. python src/envs/collect_abides_stats.py
+   ```
+2. `compare_simulated_vs_real()` (nuevo, en `src/analysis/market_validation.py`) — compara ese JSON contra los datos reales ya caracterizados arriba. **Probada con datos sintéticos** (round-trip verificado), lista para usar con el resultado real del paso 1.
+
+⚠️ **Limitación real, no maquillable:** `rmsc04` (la configuración de ABIDES) todavía no está calibrada con parámetros del IPSA (tarea 2.2.4, pendiente de Benjamín) — simula genéricamente, no el spread/tick real de un papel chileno. Por eso la comparación es de **forma** (¿el spread es más ancho en el mismo tramo en ambos lados?), no de magnitud absoluta, hasta que 2.2.4 esté lista. Repetir esta comparación después de esa calibración.
+
+**Para cerrar la tarea de verdad:** correr el paso 1 en Colab, pasarme el JSON resultante (o los números), y termino el análisis con datos reales del simulador — en vez de la comparación sintética que valida solo el mecanismo.
+
 ---
 
 ## 2. Métricas de ejecución — Implementation Shortfall (métrica principal de la tesis)

@@ -61,9 +61,21 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
             para un episodio real, pasar el P_mid observado en ese momento.
     """
 
-    def __init__(self, executor_id="apertura", max_steps: int = 60,
+    def __init__(self, executor_id="apertura", max_steps: Optional[int] = None,
+                 ventana_min: Optional[int] = None,
                  ticker: str = DEFAULT_TICKER, q_slice: float = 1000.0,
-                 p_referencia: Optional[float] = None, seed: Optional[int] = None):
+                 p_referencia: Optional[float] = None, seed: Optional[int] = None,
+                 **_ignored_kwargs):
+        # Mismo contrato que EjecutorEnvAbides (abides_ejecutor_env.py): acepta
+        # `ventana_min` (minutos de la ventana asignada por el Maestro) y lo
+        # convierte a pasos de 30 seg (max_steps = ventana_min * 2). Si se pasa
+        # `max_steps` directo (uso standalone, sin Maestro) tiene prioridad.
+        # `**_ignored_kwargs` absorbe kwargs propios de EjecutorEnvAbides
+        # (background_config, timestep_duration, etc.) para que
+        # `MaestroEjecutorEnv` pueda pasar `executor_env_kwargs` compartidos
+        # sin que este fallback truene por un kwarg que no usa.
+        if max_steps is None:
+            max_steps = max(1, int(ventana_min) * 2) if ventana_min is not None else 60
         super().__init__(executor_id=executor_id, max_steps=max_steps)
         tramo = _EXECUTOR_TO_TRAMO[self.executor_id]
         self._sim = PoissonLOBSimulator(ticker=ticker, tramo=tramo, seed=seed)
