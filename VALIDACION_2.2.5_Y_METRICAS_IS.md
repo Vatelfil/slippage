@@ -35,6 +35,38 @@ El **Título I (sección 4.1.1)** planteaba la hipótesis de que la media jornad
 
 **OBI (Order Book Imbalance) no se pudo calcular** — requiere el libro de órdenes Nivel 2, que solo existe una vez que ABIDES-Gym esté integrado. No hay un proxy razonable desde datos OHLCV agregados, así que no se inventó uno.
 
+### Actualización 29 sept — ya se puede completar la comparación real (falta correrla)
+
+Ahora que ABIDES-Gym está conectado al Ejecutor (verificado, ver `INTEGRACION_ABIDES_PARA_MAURICIO.md`), la mitad que faltaba de la tarea 2.2.5 — comparar el simulador contra los datos reales — ya es técnicamente posible. Dejé todo el código listo y probado con datos sintéticos, pero **no lo pude correr con ABIDES real** porque no lo tengo instalado en este entorno (solo corre en Colab):
+
+1. `src/envs/collect_abides_stats.py` — corre varios episodios del Ejecutor contra ABIDES real (los 3 tramos) y guarda `data/analysis/perfil_mercado_abides_simulado.json` con spread/OBI simulados. Se corre así, en Colab:
+   ```bash
+   PYTHONPATH=. python src/envs/collect_abides_stats.py
+   ```
+2. `compare_simulated_vs_real()` (nuevo, en `src/analysis/market_validation.py`) — compara ese JSON contra los datos reales ya caracterizados arriba. **Probada con datos sintéticos** (round-trip verificado), lista para usar con el resultado real del paso 1.
+
+⚠️ **Limitación real, no maquillable:** `rmsc04` (la configuración de ABIDES) todavía no está calibrada con parámetros del IPSA (tarea 2.2.4, pendiente de Benjamín) — simula genéricamente, no el spread/tick real de un papel chileno. Por eso la comparación es de **forma** (¿el spread es más ancho en el mismo tramo en ambos lados?), no de magnitud absoluta, hasta que 2.2.4 esté lista. Repetir esta comparación después de esa calibración.
+
+**Para cerrar la tarea de verdad:** correr el paso 1 en Colab, pasarme el JSON resultante (o los números), y termino el análisis con datos reales del simulador — en vez de la comparación sintética que valida solo el mecanismo.
+
+### Actualización 3 oct — tarea 2.2.5 cerrada con datos reales del simulador
+
+Paolo corrió `collect_abides_stats.py` en Colab (30 episodios, ABIDES-Gym real, `rmsc04` sin calibrar) y se ejecutó `compare_simulated_vs_real()` con el resultado real (`data/analysis/perfil_mercado_abides_simulado.json`).
+
+| Tramo | Spread real (%, high-low proxy) | Spread simulado (normalizado, ABIDES real) | OBI simulado |
+|---|---|---|---|
+| Apertura (09:30–11:00) | 0.138% | 0.00193 | -0.035 |
+| Media jornada (11:00–14:00) | 0.112% | 0.00082 | 0.102 |
+| Cierre (14:00–16:00) | 0.128% | 0.00081 | 0.081 |
+
+- **Orden real** (spread, menor→mayor): media jornada → cierre → apertura.
+- **Orden simulado** (spread, menor→mayor): cierre → media jornada → apertura.
+- **`forma_coincide = False`** — la forma del spread simulado (por ABIDES-Gym con `rmsc04` genérico) **no** replica la forma real del IPSA (la "L" descrita en la sección 1).
+
+**Hallazgo honesto, esperado y no maquillado:** esto no es un bug — es exactamente la limitación anotada arriba: `rmsc04` todavía simula un mercado genérico (agentes de ruido/valor/momentum sin calibrar a ningún activo real), no al IPSA. No hay ninguna razón para que su forma coincida con la del mercado chileno hasta que la tarea 2.2.4 (calibración de `rmsc04` con parámetros reales, base dejada en `src/envs/calibrate_rmsc04_ipsa.py`) esté completa. **Recomendación para el capítulo de resultados del Título II:** presentar esta comparación como la línea base *pre-calibración* (spread simulado sin forma real) y, si el tiempo lo permite, repetirla *post-calibración* (2.2.4) para mostrar la mejora — es un antes/después más fuerte para la tesis que un solo número aislado.
+
+Con esto, la tarea 2.2.5 queda **completa** (ambos lados: datos reales y datos simulados, comparados).
+
 ---
 
 ## 2. Métricas de ejecución — Implementation Shortfall (métrica principal de la tesis)

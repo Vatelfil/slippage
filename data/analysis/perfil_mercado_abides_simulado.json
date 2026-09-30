@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "q_slice": 500,
+    "ventana_min": 10,
+    "p_referencia": 5800.0,
+    "n_episodios_por_tramo": 10
+  },
+  "por_tramo": {
+    "apertura": {
+      "tramo": "apertura",
+      "n_episodios": 10,
+      "spread_mean": 0.001927595983983742,
+      "spread_std": 0.0059291439956681595,
+      "obi_mean": -0.03517874586913321,
+      "obi_std": 0.3839500748085475,
+      "p_mid_mean": 0.5008153667052587,
+      "n_observaciones": 90
+    },
+    "media_jornada": {
+      "tramo": "media_jornada",
+      "n_episodios": 10,
+      "spread_mean": 0.000821148817245241,
+      "spread_std": 0.0007139197540232108,
+      "obi_mean": 0.10194984212537984,
+      "obi_std": 0.3073677739957057,
+      "p_mid_mean": 0.500758660228356,
+      "n_observaciones": 92
+    },
+    "cierre": {
+      "tramo": "cierre",
+      "n_episodios": 10,
+      "spread_mean": 0.0008085878588919809,
+      "spread_std": 0.0006613261060960233,
+      "obi_mean": 0.08146007600521972,
+      "obi_std": 0.32145622436038634,
+      "p_mid_mean": 0.5003291718488516,
+      "n_observaciones": 86
+    }
+  }
+}

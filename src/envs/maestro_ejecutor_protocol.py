@@ -3,25 +3,46 @@ Protocolo de Coordinación Maestro <-> Ejecutores <-> ABIDES-Gym
 ================================================================
 
 Tarea 1.2.5 (Sprint 2) - Paolo Sepulveda (PS)
-Especificacion de referencia para Mauricio Reynoso (MR), quien la implementara
-en Sprint 3 (tareas 2.1.1, 2.1.2, 2.3.1, 2.3.2).
+Especificacion de referencia para Mauricio Reynoso (MR).
 
-Este archivo es PSEUDOCODIGO ALTAMENTE COMENTADO, no codigo ejecutable:
-las llamadas a ABIDES-Gym, a las politicas RL y al pipeline de datos son
-placeholders. El detalle narrativo de cada paso esta en:
-    docs/arquitectura_entorno_simulacion.md
+*** BASE PARCIALMENTE CONECTADA (29 sept 2026, PS) - NO ES TU TAREA TERMINADA ***
+Antes este archivo era pseudocodigo puro. Ahora `_run_executor_episode()` usa
+de verdad un entorno de Ejecutor real (ABIDES-Gym o el fallback de Poisson,
+inyectable via `executor_env_factory`) en vez de placeholders -- eso deja
+lista la "plomeria" de coordinacion. Lo que SIGUE siendo tuyo, sin tocar:
+    - `maestro_policy()` / `executor_policy()`: siguen lanzando
+      NotImplementedError. Son tus redes PPO entrenadas (tareas 2.1.1/2.1.2),
+      no las voy a inventar.
+    - `LAMBDA_PENALTY_PLACEHOLDER` / la calibracion de R_M: sigue en 0.1
+      sin calibrar (tarea 2.2.2), no lo cambie.
+    - El Maestro no tiene su propia conexion a ABIDES (no existe un "ABIDES
+      del Maestro" -- el Maestro orquesta a los Ejecutores, que si hablan con
+      ABIDES; ver docs/arquitectura_entorno_simulacion.md). Si esa premisa no
+      te sirve, es una decision tuya cambiarla, no la reescribi por mi cuenta.
+
+Probado (con el fallback de Poisson, que comparte la misma interfaz que
+EjecutorEnvAbides -- ver tests/test_maestro_ejecutor_protocol.py): el loop de
+coordinacion corre un episodio completo sin crashear, actualiza Q_executed,
+y calcula R_M con numeros reales (no placeholders). NO probado con ABIDES-Gym
+real (correrlo requiere el entorno de Colab, ver
+DIAGNOSTICO_COLAB_MAURICIO_29SEP.md); para eso, pasar
+`executor_env_factory=EjecutorEnvAbides` (de src/envs/abides_ejecutor_env.py).
 
 Contratos de datos que este archivo respeta y NO redefine
 (cualquier cambio a estos rangos/dimensiones debe pasar por Sprint 1
 y actualizar los JSON correspondientes):
     - docs/schemas/SM_schema.json  -> vector S_M, 7 variables, Box([7,])
-    - docs/schemas/SE_schema.json  -> vector S_E, 26 variables, Box([26,])
+    - docs/schemas/SE_schema.json  -> vector S_E, 27 variables, Box([27,])
 """
 
 from __future__ import annotations
 
+from typing import Callable, Optional
+
 import numpy as np
 import pandas as pd
+
+from src.envs.spaces import EjecutorActionSpace
 
 # Constantes fijadas por los esquemas de Sprint 1 (SM_schema.json / SE_schema.json).
 # No cambiar aqui: si estos valores cambian, deben cambiar primero los JSON.
@@ -43,12 +64,16 @@ class MaestroEjecutorEnv:
     Entorno que coordina al Agente Maestro, a los 3 Agentes Ejecutores
     y a ABIDES-Gym, siguiendo la interfaz de Gymnasium (reset/step/close).
 
-    Ejemplo de uso esperado (Sprint 3):
+    Ejemplo de uso:
+
+        from src.envs.abides_ejecutor_env import EjecutorEnvAbides  # ABIDES real
 
         env = MaestroEjecutorEnv(
             meta_orden_quantity=10_000,
-            datos_historicos=df_yfinance_limpio,   # salida de la tarea 1.2.1 (BF)
-            abides_config=RMSC04_CONFIG,            # salida de la tarea 1.2.3/1.2.4 (MR)
+            datos_historicos=df_sm_features,   # salida de la tarea 1.2.2 (BF), con
+                                                # columnas 'volatilidad'/'vol_promedio'
+            executor_env_factory=EjecutorEnvAbides,  # o EjecutorEnvPoissonFallback (default)
+            executor_env_kwargs={"background_config": "rmsc04"},
         )
 
         s_m = env.reset()
@@ -59,21 +84,36 @@ class MaestroEjecutorEnv:
         env.close()
     """
 
-    def __init__(self, meta_orden_quantity: int, datos_historicos: pd.DataFrame, abides_config: dict):
+    def __init__(self, meta_orden_quantity: int, datos_historicos: pd.DataFrame,
+                 executor_env_factory: Optional[Callable] = None, executor_env_kwargs: Optional[dict] = None):
         """
         Args:
             meta_orden_quantity: Q_total, cantidad total de acciones a comprar (ej. 10_000).
             datos_historicos: DataFrame OHLCV de yfinance ya limpio (tarea 1.2.1, BF),
                 indexado por timestamp, resolucion 5 min, horario 09:30-16:00 Chile.
-            abides_config: configuracion RMSC04 para ABIDES-Gym (tarea 1.2.3/1.2.4, MR).
+            executor_env_factory: clase/funcion que construye el entorno del Ejecutor
+                para un tramo dado, con la firma de EjecutorEnv (executor_id, q_slice,
+                ventana_min, ...). Usar `EjecutorEnvAbides` (ABIDES-Gym real,
+                src/envs/abides_ejecutor_env.py) o `EjecutorEnvPoissonFallback`
+                (src/envs/fallback_poisson_env.py) para pruebas sin ABIDES. Si es
+                None, usa EjecutorEnvPoissonFallback por defecto (para que el
+                orquestador funcione "de fabrica" sin depender de tener ABIDES
+                instalado -- cambiar a EjecutorEnvAbides cuando corresponda).
+            executor_env_kwargs: kwargs extra para `executor_env_factory` (ej.
+                background_config, timestep_duration para EjecutorEnvAbides).
         """
         self.Q_total = meta_orden_quantity
         self.Q_executed = 0.0
         self.df_yfinance = datos_historicos
-        self.abides_config = abides_config
+
+        if executor_env_factory is None:
+            from src.envs.fallback_poisson_env import EjecutorEnvPoissonFallback
+            executor_env_factory = EjecutorEnvPoissonFallback
+        self._executor_env_factory = executor_env_factory
+        self._executor_env_kwargs = executor_env_kwargs or {}
+        self._executor_action_space = EjecutorActionSpace()  # para decode_flat() de las 240 acciones
 
         # Se inicializan de verdad en reset(), no en __init__().
-        self.abides_env = None
         self.current_time = None
         self.decision_count = 0
         self.executor_reports: list[dict] = []
@@ -94,21 +134,18 @@ class MaestroEjecutorEnv:
         # 1. Fijar el reloj al inicio de la jornada.
         self.current_time = self.df_yfinance.index[0]  # 09:30
 
-        # 2. Inicializar ABIDES-Gym con la config RMSC04 (tarea 1.2.3/1.2.4, MR).
-        #    self.abides_env = ABIDESGymEnvironment(**self.abides_config)
-        #    initial_lob_state = self.abides_env.reset()
-        self.abides_env = None  # placeholder: reemplazar por instancia real en Sprint 3
-
-        # 3. Resetear contadores.
+        # 2. Resetear contadores.
         self.Q_executed = 0.0
         self.decision_count = 0
         self.executor_reports = []
 
-        # 4. Fijar precio de referencia (arrival price) = P_mid al inicio de jornada.
-        #    self.P_referencia = self.abides_env.get_mid_price()
-        self.P_referencia = None  # placeholder
+        # 3. P_referencia (arrival price): el Maestro no tiene su propio ABIDES
+        # (ver docstring de modulo), asi que se fija con el primer reporte del
+        # Ejecutor en step() -- ver _run_executor_episode(). None aqui es
+        # intencional, no un placeholder por completar.
+        self.P_referencia = None
 
-        # 5. Calcular S_M inicial.
+        # 4. Calcular S_M inicial.
         s_m_initial = self._compute_sm_state()
 
         return s_m_initial
@@ -138,6 +175,7 @@ class MaestroEjecutorEnv:
             "timestamp_inicio": self.current_time,
             "q_slice": q_slice,
             "ventana_min": ventana_min,
+            "tramo": self._tramo_de(self.current_time),  # que Ejecutor de los 3 esta activo
         }
 
         # 4. El Ejecutor del tramo activo opera durante la ventana asignada.
@@ -169,9 +207,22 @@ class MaestroEjecutorEnv:
         return s_m_next, r_m, done, info
 
     def close(self):
-        """Finaliza el episodio: cierra ABIDES-Gym y guarda logs (seccion 5 del documento)."""
-        # self.abides_env.close()
+        """Finaliza el episodio: guarda logs (seccion 5 del documento).
+        Cada `env` del Ejecutor se cierra en `_run_executor_episode()` (uno
+        nuevo por decision del Maestro), no hay un ABIDES "del Maestro" que
+        cerrar aca -- ver docstring de modulo."""
         self._save_logs()
+
+    @staticmethod
+    def _tramo_de(timestamp) -> str:
+        """Mapea la hora actual al tramo del Ejecutor activo (mismos limites
+        que build_sm_features.py / EjecutorEnv.VALID_EXECUTOR_IDS)."""
+        hour = timestamp.hour
+        if hour < 11:
+            return "apertura"
+        if hour < 14:
+            return "media_jornada"
+        return "cierre"
 
     # ------------------------------------------------------------------
     # Helpers internos (fase E-F del ciclo: la ventana del Ejecutor)
@@ -179,52 +230,79 @@ class MaestroEjecutorEnv:
 
     def _run_executor_episode(self, msg_asignar: dict) -> dict:
         """
-        Simula la ventana de ejecucion asignada a un Ejecutor: un sub-loop
-        de (ventana_min * 2) pasos, cada uno de 30 segundos.
+        Simula la ventana de ejecucion asignada a un Ejecutor: un episodio
+        completo del `executor_env_factory` inyectado (ABIDES-Gym real o el
+        fallback de Poisson), de (ventana_min * 2) pasos de 30 segundos.
 
         Args:
-            msg_asignar: mensaje ASIGNAR construido en step().
+            msg_asignar: mensaje ASIGNAR construido en step() (incluye "tramo").
 
         Returns:
             executor_report: mensaje REPORTE (formato en arquitectura_entorno_simulacion.md, seccion 3.2).
         """
         q_slice = msg_asignar["q_slice"]
         ventana_min = msg_asignar["ventana_min"]
-        n_pasos = ventana_min * 2  # cada paso = 30 seg
+        tramo = msg_asignar["tramo"]
+
+        env = self._executor_env_factory(
+            executor_id=tramo, q_slice=max(int(round(q_slice)), 1), ventana_min=int(ventana_min),
+            **self._executor_env_kwargs,
+        )
+        s_e, info = env.reset()
+
+        # Primer episodio del dia: no hay P_referencia todavia (el Maestro no
+        # tiene su propio ABIDES, ver docstring de modulo) -- se fija aca con
+        # lo que el propio Ejecutor reporte como referencia inicial. Duck-typed
+        # porque EjecutorEnvAbides e EjecutorEnvPoissonFallback no comparten
+        # exactamente las mismas llaves en `info` todavia (ver nota abajo).
+        if self.P_referencia is None:
+            self.P_referencia = info.get("entry_price") or info.get("p_referencia")
 
         q_ejecutado_acumulado = 0.0
         monto_acumulado = 0.0  # suma de (precio * cantidad) para promediar despues
         razon_termino = "ventana_completada"
+        remaining_prev = float(q_slice)
 
-        for step_idx in range(n_pasos):
-            # a) Calcular S_E actual: 3 privadas + 23 desde ABIDES-Gym (ver seccion 4.2 del documento).
-            tau_slice = step_idx / n_pasos
-            q_pendiente = (q_slice - q_ejecutado_acumulado) / q_slice if q_slice > 0 else 0.0
-            # s_e_abides = self.abides_env.get_state()  # 23 variables (Bid/Ask LOB + mercado)
-            # s_e = np.concatenate([[q_slice, q_pendiente, tau_slice], s_e_abides])
-            s_e = None  # placeholder, shape esperado (26,)
+        done = False
+        while not done:
+            # a) Politica del Ejecutor: TU red PPO entrenada (tareas 2.1.1/2.1.2).
+            #    Debe devolver el indice plano 0-239 (igual que
+            #    ExecutorActorCritic.get_action_and_value(), ver src/models/actor_critic.py).
+            a_e_idx = executor_policy(s_e)  # NotImplementedError hasta que lo conectes
+            a_e = self._executor_action_space.decode_flat(a_e_idx)
 
-            # b) Politica del Ejecutor (Sprint 3: red neuronal entrenada).
-            # a_e = executor_policy(s_e)  # (tipo_orden, volumen_frac, nivel_precio)
-            a_e = None  # placeholder
+            # b) Ejecutar la accion en el entorno real (ABIDES-Gym o fallback).
+            s_e, reward, done, truncated, info = env.step(a_e)
+            done = done or truncated
 
-            # c) Ejecutar la accion en ABIDES-Gym.
-            # resultado = self.abides_env.step(a_e)
-            # if resultado["executado"]:
-            #     q_ejecutado_acumulado += resultado["cantidad_ejecutada"]
-            #     monto_acumulado += resultado["precio_ejecucion"] * resultado["cantidad_ejecutada"]
+            # c) Cantidad ejecutada este paso: NOTA -- EjecutorEnvPoissonFallback
+            # expone `info['q_ejecutado_step']` directo; EjecutorEnvAbides (ABIDES
+            # real) no tiene ese campo todavia, solo `info['remaining']` -- se
+            # deriva de la diferencia. Mauricio: si unificas el formato de `info`
+            # entre los dos entornos, esto se simplifica a una sola linea.
+            if "q_ejecutado_step" in info:
+                q_paso = float(info["q_ejecutado_step"])
+                p_paso = float(info.get("p_ejecutado_step", self.P_referencia or 0.0))
+            else:
+                remaining_now = float(info.get("remaining", remaining_prev))
+                q_paso = max(remaining_prev - remaining_now, 0.0)
+                remaining_prev = remaining_now
+                p_paso = float(info.get("best_ask", self.P_referencia or 0.0))
 
-            # d) Si se agoto el q_slice antes de completar la ventana, terminar antes.
+            if q_paso > 0:
+                q_ejecutado_acumulado += q_paso
+                monto_acumulado += p_paso * q_paso
+
             if q_ejecutado_acumulado >= q_slice:
                 razon_termino = "inventario_agotado"
-                break
 
-        # Precio promedio ponderado por volumen; si no hubo ejecuciones, usar P_mid vigente.
+        env.close()
+
+        # Precio promedio ponderado por volumen; si no hubo ejecuciones, usar P_referencia.
         if q_ejecutado_acumulado > 0:
             p_promedio = monto_acumulado / q_ejecutado_acumulado
         else:
-            # p_promedio = self.abides_env.get_mid_price()
-            p_promedio = self.P_referencia  # placeholder razonable mientras no hay ABIDES real
+            p_promedio = self.P_referencia
 
         slippage_parcial = (p_promedio - self.P_referencia) * q_ejecutado_acumulado if self.P_referencia else 0.0
 
@@ -261,9 +339,12 @@ class MaestroEjecutorEnv:
         s_m[3] = self._lookup_yfinance_feature("volatilidad")
         s_m[4] = self._lookup_yfinance_feature("vol_promedio")
 
-        # OBI_agregado: viene de ABIDES-Gym. Placeholder 0.0 documentado en SM_schema.json
-        # mientras ABIDES-Gym no este integrado (tareas 1.2.3/1.2.4).
-        s_m[5] = 0.0  # self.abides_env.get_market_imbalance()
+        # OBI_agregado: placeholder 0.0 documentado en SM_schema.json. El Maestro
+        # no tiene su propio ABIDES (ver docstring de modulo); si se quiere un
+        # valor real, hay que decidir como agregarlo desde los 3 Ejecutores
+        # (ej. promedio del OBI_t de cada S_E en su ultimo step) -- es una
+        # decision de diseno pendiente, no la tome por mi cuenta.
+        s_m[5] = 0.0
 
         hour = self.current_time.hour
         if 9 <= hour < 11:
@@ -276,9 +357,18 @@ class MaestroEjecutorEnv:
         return s_m
 
     def _lookup_yfinance_feature(self, columna: str) -> float:
-        """Busca en self.df_yfinance (ya con features calculadas por BF) el valor en self.current_time."""
-        # return float(self.df_yfinance.loc[self.current_time, columna])
-        return 0.0  # placeholder hasta que exista data/processed/vector_estado_SM_*.csv (tarea 1.2.2)
+        """Busca en self.df_yfinance (features S_M ya calculadas por Benjamin,
+        tarea 1.2.2 -- ver data/processed/sm_features_<fecha>/) el valor en
+        self.current_time. Conectado 29 sept (PS): antes era placeholder fijo
+        en 0.0; los archivos reales ya existen localmente
+        (data/processed/sm_features_2026-09-23/), asi que quien construya
+        `datos_historicos` debe pasar ESE dataframe (con columnas
+        'volatilidad'/'vol_promedio' ya calculadas), no el OHLCV crudo de
+        yfinance sin procesar."""
+        if self.current_time not in self.df_yfinance.index or columna not in self.df_yfinance.columns:
+            return 0.0  # fuera de rango de los datos cargados o columna no presente
+        valor = self.df_yfinance.loc[self.current_time, columna]
+        return float(valor) if pd.notna(valor) else 0.0
 
     def _is_jornada_terminada(self) -> bool:
         return self.current_time.hour >= 16
@@ -292,8 +382,13 @@ class MaestroEjecutorEnv:
         """
         IS_total = sum(r["slippage_parcial"] for r in self.executor_reports)
         Q_pendiente = self.Q_total - self.Q_executed
-        # P_mid_cierre = self.abides_env.get_mid_price()
-        P_mid_cierre = self.P_referencia  # placeholder razonable mientras no hay ABIDES real
+        # P_mid_cierre: se usa el p_promedio del ULTIMO reporte del Ejecutor
+        # (viene de un env real ahora, ABIDES o fallback) como proxy del precio
+        # de cierre; si no hubo ningun reporte (episodio vacio), cae a P_referencia.
+        if self.executor_reports:
+            P_mid_cierre = self.executor_reports[-1]["p_promedio"]
+        else:
+            P_mid_cierre = self.P_referencia
 
         r_m = -IS_total - LAMBDA_PENALTY_PLACEHOLDER * max(0.0, Q_pendiente) * (P_mid_cierre or 0.0)
         return r_m
@@ -324,14 +419,22 @@ def maestro_policy(s_m: np.ndarray) -> tuple[int, int]:
     raise NotImplementedError("Sprint 3: reemplazar por red Actor-Critico del Maestro (PPO).")
 
 
-def executor_policy(s_e: np.ndarray) -> tuple[int, float, int]:
+def executor_policy(s_e: np.ndarray) -> int:
     """
     Politica de un Agente Ejecutor.
 
+    ACTUALIZADO 29 sept (PS): el contrato de retorno paso de una tupla
+    (tipo_orden, volumen_frac, nivel_precio) a un unico indice plano 0-239,
+    para calzar con `ExecutorActorCritic` (src/models/actor_critic.py, un
+    solo `actor_head` Categorical de 240 salidas, no 3 cabezas separadas).
+    `_run_executor_episode()` ya llama `EjecutorActionSpace().decode_flat()`
+    sobre el resultado de esta funcion -- Mauricio: cuando conectes la red
+    real, `executor_policy(s_e)` deberia ser básicamente
+    `int(actor_critic.get_action_and_value(torch.tensor(s_e))[0])`.
+
     Args:
-        s_e: vector S_E, shape (26,).
+        s_e: vector S_E, shape (27,).
     Returns:
-        (tipo_orden, volumen_frac, nivel_precio) - accion en el espacio hibrido
-        Dict({Discrete(3), Box(0,1,(1,)), Discrete(4)}).
+        indice entero en [0, 240) -- ver spaces.EjecutorActionSpace.decode_flat().
     """
-    raise NotImplementedError("Sprint 3: reemplazar por red Actor-Critico del Ejecutor (PPO).")
+    raise NotImplementedError("Reemplazar por la red Actor-Critico del Ejecutor (PPO) entrenada.")
