@@ -1,6 +1,18 @@
-# Integración ABIDES-Gym → EjecutorEnv (borrador para Mauricio)
+# Integración ABIDES-Gym → EjecutorEnv
 
-**Estado: escrito, NO probado contra ABIDES** (no se pudo instalar donde se escribió). La lógica pura sí está probada (8 tests con datos falsos en el formato de ABIDES). Está hecho a partir del código fuente real de `SubGymMarketsExecutionEnv_v0`.
+**Estado (29 sept, actualizado): ✅ VERIFICADO contra ABIDES-Gym real**, corriendo en Colab (Python 3.9 vía `condacolab`, ver `DIAGNOSTICO_COLAB_MAURICIO_29SEP.md` para cómo se instaló). Un episodio completo corrió sin errores en los 3 tramos:
+
+```
+[apertura]      pasos=10 reward_total=-3.6250 holdings=494/500
+[media_jornada] pasos=10 reward_total=-4.8100 holdings=491/500
+[cierre]        pasos=6  reward_total=0.8530  holdings=500/500 (orden completa)
+```
+
+Se encontraron y corrigieron 2 bugs reales al probarlo (no eran solo teoría):
+1. Faltaban los decoradores `raw_state_pre_process`/`raw_state_to_state_pre_process` (heredados de `SubGymMarketsExecutionEnv_v0` pero no re-declarados, así que no se aplicaban a los métodos sobreescritos). Sin ellos, `raw_state` llegaba en su forma más cruda y no como el dict `{'parsed_mkt_data':..., 'internal_data':...}` esperado.
+2. El `observation_space` tenía shape `(27,)` en vez de `(27,1)` (así es como ABIDES reshapea el estado internamente), lo que hacía fallar el `assert` interno de ABIDES aunque los valores estuvieran bien.
+
+Rama con todo esto: `fix/desbloqueo-abides-poc-v3` (main sigue protegido, y las ramas anteriores de esta misma serie quedaron bloqueadas a mitad de camino — revisa cuál es la vigente antes de trabajar sobre esto).
 
 ## Archivos
 | Archivo | Qué es |
@@ -26,15 +38,18 @@ Se eligió la **opción B (extender ABIDES)** para respetar el Título I (27 var
 - `R_E = Σ (P_mid − P_ejec)·q / tamaño_orden`, con β=0 (pendiente de calibración).
 - La penalización de ABIDES por orden incompleta se anula: en nuestro diseño es el λ de R_M, del Maestro.
 
-## Qué hay que verificar (no pude)
-1. Que `from abides_gym.envs.markets_execution_environment_v0 import SubGymMarketsExecutionEnv_v0` funcione.
-2. La **forma de `raw_state`**: si `bids/asks` llegan como buffer de snapshots o el último. El código acepta ambas, pero confirmarlo imprimiendo `raw_state`.
-3. Que el libro traiga **≥5 niveles**. Si trae menos, se rellena con 0. Si trae menos de 5, subir `market_data_buffer_length` / niveles suscritos.
-4. Que `step()` del entorno base **no valide** la acción contra `Discrete(3)` (le pasamos un arreglo de 3 números).
-5. Que exista `env.seed()` (se llama con `hasattr`). Si no, fijar la semilla en la config de fondo.
-6. Que `self.first_interval` y `self.execution_window` sean números en nanosegundos (así los usa el código base).
-7. Que `inter_wakeup_executed_orders` traiga objetos con `.fill_price` y `.quantity`.
-8. **Conflicto de versiones:** `requirements.txt` fija `numpy==1.26.4` y `pandas==2.2.1`, pero ABIDES pide `numpy==1.22.0` y `pandas==1.2.4`. En el `Dockerfile`, `pip install -r requirements.txt` va al final y puede romper ABIDES. Probablemente hay que instalar PyTorch/gymnasium con restricciones o separar los requirements.
+## Qué ya se verificó (dejó de ser hipótesis)
+1. ✅ El import de `SubGymMarketsExecutionEnv_v0` funciona.
+2. ✅ La forma de `raw_state` (buffer de snapshots) — confirmada leyendo el código fuente real en vivo (`inspect.getsource`) y corrigiendo los decoradores.
+3. ✅ `step()` acepta el arreglo de 3 números sin problema (la validación de `Discrete(3)` del padre no se ejecuta porque sobreescribimos `_map_action_space_to_ABIDES_SIMULATOR_SPACE`, no `step()`).
+4. ✅ `inter_wakeup_executed_orders` trae objetos con `.fill_price`/`.quantity` — el cálculo de `R_E` dio números con sentido (negativo = costo, como se esperaba).
+5. ✅ **Conflicto de versiones resuelto en Colab**: instalar todo en un solo `pip install` (no en comandos separados) con `ray[tune]` en vez de `ray[rllib]` evita que se sobreescriban `numpy`/`gym`. Ver `DIAGNOSTICO_COLAB_MAURICIO_29SEP.md` para las versiones exactas que sí conviven.
+
+## Qué sigue sin verificar
+1. Que el libro traiga **≥5 niveles reales** (si `rmsc04` trae menos, se rellena con 0 — no se confirmó cuántos niveles trae en la práctica).
+2. Que exista `env.seed()` de verdad (se llama con `hasattr`, nunca se confirmó si existe en esta versión).
+3. Si los valores de `tasa_ordenes` (placeholder 0.0) y las constantes de normalización de `BridgeConfig` dan resultados razonables con muchos episodios, no solo con 1.
+4. El Maestro sigue sin resolver (ver limitaciones abajo).
 
 ## Pendiente / limitaciones
 - `tasa_ordenes` (S_E) queda en **0.0** (placeholder): ABIDES no la entrega directa. Hay que derivarla del número de actualizaciones del libro entre despertares.
