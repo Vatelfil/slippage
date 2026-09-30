@@ -72,9 +72,16 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         super().__init__(*args, **kwargs)
         self._remaining = float(self.parent_order_size)
         self.action_space = gym.spaces.MultiDiscrete([3, 10, 8])
+        # CORREGIDO 29 sept: shape debe ser (OBS_DIM, 1), no (OBS_DIM,) -- asi es
+        # como ABIDES reshapea el estado internamente (ver raw_state_to_state,
+        # `.reshape(num_state_features, 1)`, mismo patron que el original). Con
+        # shape (OBS_DIM,) el assert interno `observation_space.contains(state)`
+        # de core_environment.py fallaba SIEMPRE por desajuste de forma, no por
+        # valores fuera de rango (el traceback "INVALID STATE" con valores todos
+        # dentro de [0,1]/[-1,1] fue la pista).
         self.observation_space = gym.spaces.Box(
-            low=np.array([0] * 24 + [-1] + [0] * 2, dtype=np.float32),
-            high=np.ones(br.OBS_DIM, dtype=np.float32),
+            low=np.array([0] * 24 + [-1] + [0] * 2, dtype=np.float32).reshape(br.OBS_DIM, 1),
+            high=np.ones((br.OBS_DIM, 1), dtype=np.float32),
             dtype=np.float32,
         )
 
