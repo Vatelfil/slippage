@@ -49,6 +49,24 @@ Ahora que ABIDES-Gym está conectado al Ejecutor (verificado, ver `INTEGRACION_A
 
 **Para cerrar la tarea de verdad:** correr el paso 1 en Colab, pasarme el JSON resultante (o los números), y termino el análisis con datos reales del simulador — en vez de la comparación sintética que valida solo el mecanismo.
 
+### Actualización 3 oct — tarea 2.2.5 cerrada con datos reales del simulador
+
+Paolo corrió `collect_abides_stats.py` en Colab (30 episodios, ABIDES-Gym real, `rmsc04` sin calibrar) y se ejecutó `compare_simulated_vs_real()` con el resultado real (`data/analysis/perfil_mercado_abides_simulado.json`).
+
+| Tramo | Spread real (%, high-low proxy) | Spread simulado (normalizado, ABIDES real) | OBI simulado |
+|---|---|---|---|
+| Apertura (09:30–11:00) | 0.138% | 0.00193 | -0.035 |
+| Media jornada (11:00–14:00) | 0.112% | 0.00082 | 0.102 |
+| Cierre (14:00–16:00) | 0.128% | 0.00081 | 0.081 |
+
+- **Orden real** (spread, menor→mayor): media jornada → cierre → apertura.
+- **Orden simulado** (spread, menor→mayor): cierre → media jornada → apertura.
+- **`forma_coincide = False`** — la forma del spread simulado (por ABIDES-Gym con `rmsc04` genérico) **no** replica la forma real del IPSA (la "L" descrita en la sección 1).
+
+**Hallazgo honesto, esperado y no maquillado:** esto no es un bug — es exactamente la limitación anotada arriba: `rmsc04` todavía simula un mercado genérico (agentes de ruido/valor/momentum sin calibrar a ningún activo real), no al IPSA. No hay ninguna razón para que su forma coincida con la del mercado chileno hasta que la tarea 2.2.4 (calibración de `rmsc04` con parámetros reales, base dejada en `src/envs/calibrate_rmsc04_ipsa.py`) esté completa. **Recomendación para el capítulo de resultados del Título II:** presentar esta comparación como la línea base *pre-calibración* (spread simulado sin forma real) y, si el tiempo lo permite, repetirla *post-calibración* (2.2.4) para mostrar la mejora — es un antes/después más fuerte para la tesis que un solo número aislado.
+
+Con esto, la tarea 2.2.5 queda **completa** (ambos lados: datos reales y datos simulados, comparados).
+
 ---
 
 ## 2. Métricas de ejecución — Implementation Shortfall (métrica principal de la tesis)

@@ -34,11 +34,34 @@ condacolab.install()
 ```python
 # Celda 2 (después del reinicio automático) — crear el entorno con Python 3.9
 !conda create -n abides python=3.9 -y
-!conda run -n abides pip install pip==23.3.2 setuptools==57.5.0 wheel==0.38.4
-!conda run -n abides pip install numpy==1.22.0 cython
-!conda run -n abides pip install gym==0.18.0 pandas==1.2.4 scipy==1.10.0 coloredlogs==15.0.1 psutil==5.8.0 tqdm==4.61.1
-!conda run -n abides pip install pomegranate==0.14.5
-!conda run -n abides pip install "ray[rllib]==1.7.0"
+```
+
+**ACTUALIZACIÓN 29 sept (PS), verificada funcionando de punta a punta en Colab real:**
+instalar cada paquete en un comando `pip install` separado (como en el bloque
+original de arriba) deja que instalaciones posteriores —sobre todo
+`ray[rllib]`— se lleven por delante `numpy`/`gym` y los suban a versiones
+incompatibles sin avisar ("whack-a-mole" de dependencias). La solución real:
+**un solo `pip install` con TODAS las versiones fijadas a la vez**, y
+`ray[tune]` en vez de `ray[rllib]` (evita arrastrar `matplotlib`/
+`scikit-image`, que piden `numpy>=1.23` y rompen el pin de `numpy==1.22.0`).
+Además, el adaptador propio del proyecto (`abides_ejecutor_env.py`) importa
+`gymnasium` (para la capa `EjecutorEnvAbides`, no para ABIDES-Gym en sí, que
+sigue usando `gym` viejo) — instalarlo aparte con `--no-deps` para que no
+intente resolver ni tocar las versiones ya fijadas.
+
+```python
+# Celda 2b — instalar TODO en un solo comando (evita que instalaciones
+# posteriores suban numpy/gym sin avisar)
+!conda run -n abides pip install \
+    pip==23.3.2 setuptools==57.5.0 wheel==0.38.4 cython \
+    numpy==1.22.0 \
+    gym==0.18.0 pandas==1.2.4 scipy==1.10.0 coloredlogs==15.0.1 \
+    psutil==5.8.0 tqdm==4.61.1 pomegranate==0.14.5 \
+    "ray[tune]==1.7.0"
+
+# Celda 2c — gymnasium para el adaptador propio (src/envs/abides_ejecutor_env.py),
+# --no-deps para que no toque nada de lo ya instalado arriba
+!conda run -n abides pip install "gymnasium==0.29.1" --no-deps
 ```
 
 ```bash
