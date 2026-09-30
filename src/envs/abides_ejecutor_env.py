@@ -28,6 +28,7 @@ from src.envs.ejecutor_env import EjecutorEnv
 
 try:  # ABIDES solo existe en el entorno con Python 3.9 / Docker
     import gym
+    import abides_markets.agents.utils as markets_agent_utils
     from abides_gym.envs.markets_execution_environment_v0 import SubGymMarketsExecutionEnv_v0
 except ImportError as e:  # pragma: no cover
     raise ImportError(
@@ -44,7 +45,22 @@ TRAMO_FIRST_INTERVAL = {"apertura": "00:00:30", "media_jornada": "02:00:00", "ci
 
 
 class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
-    """Entorno de ejecucion de ABIDES con nuestro S_E (27), A_E (240) y R_E."""
+    """Entorno de ejecucion de ABIDES con nuestro S_E (27), A_E (240) y R_E.
+
+    CORREGIDO 29 sept 2026 (PS), tras probar contra ABIDES real: a los metodos
+    `raw_state_to_*` les faltaban los decoradores `raw_state_pre_process` /
+    `raw_state_to_state_pre_process` que trae la clase original. Sin ellos,
+    `raw_state` llega en su forma mas cruda (una secuencia, no el dict
+    {'parsed_mkt_data':..., 'internal_data':...} que el resto del codigo
+    asume) -- de ahi el error real observado: "sequence index must be
+    integer, not 'str'". Se reasignan aqui explicitamente porque son
+    decoradores resueltos por NOMBRE en el cuerpo de la clase: heredarlos de
+    SubGymMarketsExecutionEnv_v0 no los deja utilizables como `@nombre` en el
+    cuerpo de ESTA subclase, solo via `self.` o `NombreClase.atributo`.
+    """
+
+    raw_state_pre_process = markets_agent_utils.ignore_buffers_decorator
+    raw_state_to_state_pre_process = markets_agent_utils.ignore_mkt_data_buffer_decorator
 
     def __init__(self, *args, bridge_cfg: Optional[br.BridgeConfig] = None,
                  beta: float = 0.0, **kwargs):
@@ -74,6 +90,7 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
             best_ask=self._best_ask, direction=self.direction, cfg=self._cfg)
 
     # --- observacion: S_E de 27 dims ---
+    @raw_state_to_state_pre_process
     def raw_state_to_state(self, raw_state: Dict[str, Any]) -> np.ndarray:
         mkt, internal = raw_state["parsed_mkt_data"], raw_state["internal_data"]
         bids, asks = br.last_snapshot(mkt["bids"]), br.last_snapshot(mkt["asks"])
@@ -96,6 +113,7 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         return obs.reshape(br.OBS_DIM, 1)
 
     # --- recompensa R_E ---
+    @raw_state_pre_process
     def raw_state_to_reward(self, raw_state: Dict[str, Any]) -> float:
         mkt = raw_state["parsed_mkt_data"]
         bids, asks = br.last_snapshot(mkt["bids"]), br.last_snapshot(mkt["asks"])
@@ -103,11 +121,13 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         orders = br.last_orders(raw_state["internal_data"]["inter_wakeup_executed_orders"])
         return br.step_reward(orders, mid, self.parent_order_size, beta=self._beta)
 
+    @raw_state_pre_process
     def raw_state_to_update_reward(self, raw_state: Dict[str, Any]) -> float:
         # ABIDES penaliza aqui la orden incompleta al final. En nuestro contrato esa
         # penalizacion (lambda * Q_pendiente) pertenece a R_M del Maestro, no a R_E.
         return 0.0
 
+    @raw_state_pre_process
     def raw_state_to_info(self, raw_state: Dict[str, Any]) -> Dict[str, Any]:
         internal = raw_state["internal_data"]
         return {"holdings": br.last_scalar(internal["holdings"]),
