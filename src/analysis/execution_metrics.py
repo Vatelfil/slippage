@@ -17,7 +17,8 @@ price), NO el precio de la primera ejecucion.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Optional, Sequence
+from itertools import combinations
+from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 from scipy import stats
@@ -162,4 +163,142 @@ def compare_strategies(is_ppo: Sequence[float], is_benchmark: Sequence[float],
         "n_ppo": int(len(is_ppo)),
         "n_benchmark": int(len(is_benchmark)),
         "benchmark_name": benchmark_name,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Extension (1 oct 2026, PS) -- tarea 3.2.3 (Sprint 7) pide explicitamente
+# Wilcoxon signed-rank, Kruskal-Wallis y effect size (Cohen's d), que
+# `compare_strategies()` (arriba, Sprint 4) no cubre: esa solo compara 2
+# muestras INDEPENDIENTES (t-test de Welch o Mann-Whitney U). Las funciones
+# de aqui abajo cubren los 2 casos que faltan:
+#   - Mismas corridas evaluadas con 2 estrategias distintas (ej. TWAP y VWAP
+#     sobre las mismas 10 meta-ordenes) -> muestras PAREADAS -> Wilcoxon.
+#   - Comparar 3+ estrategias a la vez (ej. PPO vs TWAP vs VWAP) -> test
+#     omnibus -> Kruskal-Wallis, con post-hoc pareado si resulta
+#     significativo.
+# Probadas con las corridas reales de TWAP/VWAP de `src/analysis/benchmarks.py`
+# (tarea 2.3.4) -- no solo con datos sinteticos.
+# ---------------------------------------------------------------------------
+
+def cohens_d_paired(sample_a: Sequence[float], sample_b: Sequence[float]) -> float:
+    """Effect size de Cohen's d para muestras PAREADAS: d = media(diff) / std(diff).
+
+    Convencion de signo: positivo si `sample_a` tuvo, en promedio, MENOR IS
+    (mejor) que `sample_b` -- igual convencion que `reduction_pct` en
+    `compare_strategies()`.
+    """
+    a = np.asarray(sample_a, dtype=float)
+    b = np.asarray(sample_b, dtype=float)
+    diff = b - a  # positivo si a es mejor (menor IS) que b
+    std_diff = np.std(diff, ddof=1)
+    if std_diff == 0:
+        return 0.0
+    return float(np.mean(diff) / std_diff)
+
+
+def compare_paired(sample_a: Sequence[float], sample_b: Sequence[float],
+                    alpha: float = 0.05, name_a: str = "A", name_b: str = "B") -> Dict:
+    """Compara 2 muestras PAREADAS de IS (misma corrida/semilla evaluada con
+    2 estrategias distintas, ej. TWAP vs VWAP sobre las mismas 10
+    meta-ordenes) -- requiere `len(sample_a) == len(sample_b)`.
+
+    Usa Wilcoxon signed-rank (no asume normalidad de las diferencias; test
+    estandar para datos pareados no parametricos, pedido explicitamente por
+    la tarea 3.2.3) y reporta Cohen's d pareado como effect size.
+
+    Returns:
+        dict con: test_used ("Wilcoxon signed-rank"), statistic, p_value,
+        significant, cohens_d, mean_a, mean_b, reduction_pct (positivo =
+        `sample_a` mejor), n.
+    """
+    a = np.asarray(sample_a, dtype=float)
+    b = np.asarray(sample_b, dtype=float)
+    if len(a) != len(b):
+        raise ValueError(f"Las muestras pareadas deben tener el mismo largo "
+                          f"(se recibieron {len(a)} de {name_a} y {len(b)} de {name_b}).")
+    if len(a) < 3:
+        raise ValueError(f"Se necesitan al menos 3 pares para un test confiable (se recibieron {len(a)}).")
+
+    diff = a - b
+    if np.all(diff == 0):
+        statistic, p_value = 0.0, 1.0
+    else:
+        statistic, p_value = stats.wilcoxon(a, b, alternative="two-sided")
+
+    mean_a, mean_b = float(np.mean(a)), float(np.mean(b))
+    reduction_pct = float((mean_b - mean_a) / abs(mean_b) * 100) if mean_b != 0 else float("nan")
+
+    return {
+        "test_used": "Wilcoxon signed-rank",
+        "statistic": float(statistic),
+        "p_value": float(p_value),
+        "significant": bool(p_value < alpha),
+        "alpha": alpha,
+        "cohens_d": cohens_d_paired(a, b),
+        "mean_a": mean_a,
+        "mean_b": mean_b,
+        "reduction_pct": reduction_pct,
+        "n": int(len(a)),
+        "name_a": name_a,
+        "name_b": name_b,
+    }
+
+
+def compare_groups_kruskal(samples: Dict[str, Sequence[float]], alpha: float = 0.05) -> Dict:
+    """Compara 3+ grupos de IS (ej. PPO vs TWAP vs VWAP) con Kruskal-Wallis
+    (test omnibus no parametrico -- no asume normalidad ni varianzas
+    iguales), pedido explicitamente por la tarea 3.2.3.
+
+    Si el resultado es significativo, corre post-hoc pareado (Mann-Whitney U
+    entre cada par de grupos, con correccion de Bonferroni: alpha_corregido =
+    alpha / n_comparaciones) para saber CUALES pares difieren -- Kruskal-
+    Wallis por si solo solo dice que "al menos un grupo difiere", no cual.
+
+    Args:
+        samples: dict {nombre_grupo: lista_de_IS}, minimo 3 grupos.
+
+    Returns:
+        dict con: statistic (H), p_value, significant, n_groups, means (por
+        grupo), post_hoc (lista de comparaciones pareadas con su p-value
+        corregido y Cohen's d, solo si el omnibus fue significativo).
+    """
+    if len(samples) < 3:
+        raise ValueError(f"Kruskal-Wallis necesita al menos 3 grupos (se recibieron {len(samples)}).")
+
+    names = list(samples.keys())
+    arrays = [np.asarray(samples[n], dtype=float) for n in names]
+    for n, arr in zip(names, arrays):
+        if len(arr) < 3:
+            raise ValueError(f"Grupo {n!r} tiene menos de 3 muestras ({len(arr)}).")
+
+    statistic, p_value = stats.kruskal(*arrays)
+    significant = bool(p_value < alpha)
+
+    post_hoc: List[Dict] = []
+    if significant:
+        pairs = list(combinations(range(len(names)), 2))
+        alpha_corregido = alpha / len(pairs)
+        for i, j in pairs:
+            u_stat, p_pair = stats.mannwhitneyu(arrays[i], arrays[j], alternative="two-sided")
+            pooled_std = np.sqrt((np.var(arrays[i], ddof=1) + np.var(arrays[j], ddof=1)) / 2)
+            d = float((np.mean(arrays[j]) - np.mean(arrays[i])) / pooled_std) if pooled_std > 0 else 0.0
+            post_hoc.append({
+                "group_a": names[i], "group_b": names[j],
+                "p_value": float(p_pair), "alpha_corregido": alpha_corregido,
+                "significant": bool(p_pair < alpha_corregido),
+                "cohens_d": d,
+            })
+
+    return {
+        "test_used": "Kruskal-Wallis",
+        "statistic": float(statistic),
+        "p_value": float(p_value),
+        "significant": significant,
+        "alpha": alpha,
+        "n_groups": len(names),
+        "group_names": names,
+        "means": {n: float(np.mean(arr)) for n, arr in zip(names, arrays)},
+        "post_hoc_method": "Mann-Whitney U pareado, correccion de Bonferroni" if significant else None,
+        "post_hoc": post_hoc,
     }
