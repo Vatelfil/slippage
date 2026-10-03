@@ -82,3 +82,5 @@ report_sprint4*.pdf
 build/
 dist/
 *.egg-info/
+# Respaldos de snapshots (zip + SHA256SUMS, scripts/backup_snapshot.py): se comparten por Drive
+backups/
