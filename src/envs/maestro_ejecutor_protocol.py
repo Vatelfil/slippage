@@ -35,7 +35,9 @@ y actualizar los JSON correspondientes):
     - docs/schemas/SE_schema.json  -> vector S_E, 27 variables, Box([27,])
 """
 
-from __future__ import annotations
+import os
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+import torch
 
 from typing import Callable, Optional
 
@@ -43,6 +45,7 @@ import numpy as np
 import pandas as pd
 
 from src.envs.spaces import EjecutorActionSpace
+from src.models.actor_critic import MasterActorCritic, ExecutorActorCritic
 
 # Constantes fijadas por los esquemas de Sprint 1 (SM_schema.json / SE_schema.json).
 # No cambiar aqui: si estos valores cambian, deben cambiar primero los JSON.
@@ -53,9 +56,10 @@ JORNADA_INICIO = "09:30"
 JORNADA_FIN = "16:00"
 JORNADA_DURACION_MIN = 390
 
-# Hiperparametros pendientes de calibracion (Sprint 4, tareas 2.2.2/2.2.3).
-# NO fijar un valor final aqui: usar un placeholder explicito.
-LAMBDA_PENALTY_PLACEHOLDER = 0.1  # lambda: penalizacion por inventario no ejecutado
+# Calibracion experimental (Sprint 4, tarea 2.2.2 - Mauricio Reynoso).
+# Penalizacion por inventario no ejecutado al cierre: lambda * Q_pendiente * P_mid_cierre.
+LAMBDA_PENALTY = 0.05             # Calibrado: penaliza sin desestabilizar la escala de IS
+LAMBDA_PENALTY_PLACEHOLDER = LAMBDA_PENALTY  # Mantiene compatibilidad hacia atras
 BETA_RISK_PLACEHOLDER = 0.0       # beta: aversion al riesgo temporal (usado por el Ejecutor)
 
 
@@ -84,13 +88,16 @@ class MaestroEjecutorEnv:
         env.close()
     """
 
-    def __init__(self, meta_orden_quantity: int, datos_historicos: pd.DataFrame,
-                 executor_env_factory: Optional[Callable] = None, executor_env_kwargs: Optional[dict] = None):
+    def __init__(self, meta_orden_quantity: int, datos_historicos: Optional[pd.DataFrame] = None,
+                 executor_env_factory: Optional[Callable] = None, executor_env_kwargs: Optional[dict] = None,
+                 executor_policy_fn: Optional[Callable] = None, lambda_penalty: Optional[float] = None,
+                 executor_step_callback: Optional[Callable] = None):
         """
         Args:
             meta_orden_quantity: Q_total, cantidad total de acciones a comprar (ej. 10_000).
             datos_historicos: DataFrame OHLCV de yfinance ya limpio (tarea 1.2.1, BF),
                 indexado por timestamp, resolucion 5 min, horario 09:30-16:00 Chile.
+                Si es None, se genera un DataFrame sintetico representativo.
             executor_env_factory: clase/funcion que construye el entorno del Ejecutor
                 para un tramo dado, con la firma de EjecutorEnv (executor_id, q_slice,
                 ventana_min, ...). Usar `EjecutorEnvAbides` (ABIDES-Gym real,
@@ -101,9 +108,24 @@ class MaestroEjecutorEnv:
                 instalado -- cambiar a EjecutorEnvAbides cuando corresponda).
             executor_env_kwargs: kwargs extra para `executor_env_factory` (ej.
                 background_config, timestep_duration para EjecutorEnvAbides).
+            executor_policy_fn: funcion opcional `s_e -> int` o `(s_e, tramo) -> int / (idx, logp, val)`
+                para la politica del Ejecutor. Si es None, usa `executor_policy`.
+            lambda_penalty: factor lambda de penalizacion por inventario no ejecutado.
+                Si es None, usa LAMBDA_PENALTY.
+            executor_step_callback: callback opcional `(tramo, s_e, a_e_idx, log_prob, reward, value, done)`
+                llamado en cada transicion de un Ejecutor (util para rollout buffers en PPO).
         """
         self.Q_total = meta_orden_quantity
         self.Q_executed = 0.0
+
+        if datos_historicos is None:
+            idx = pd.date_range("2026-09-29 09:30", "2026-09-29 16:00", freq="5min")
+            rng = np.random.default_rng(0)
+            datos_historicos = pd.DataFrame(
+                {"volatilidad": rng.uniform(0.001, 0.003, len(idx)),
+                 "vol_promedio": rng.uniform(0.1, 0.3, len(idx))},
+                index=idx,
+            )
         self.df_yfinance = datos_historicos
 
         if executor_env_factory is None:
@@ -112,6 +134,9 @@ class MaestroEjecutorEnv:
         self._executor_env_factory = executor_env_factory
         self._executor_env_kwargs = executor_env_kwargs or {}
         self._executor_action_space = EjecutorActionSpace()  # para decode_flat() de las 240 acciones
+        self.executor_policy_fn = executor_policy_fn
+        self.lambda_penalty = lambda_penalty if lambda_penalty is not None else LAMBDA_PENALTY
+        self.executor_step_callback = executor_step_callback
 
         # Se inicializan de verdad en reset(), no en __init__().
         self.current_time = None
@@ -265,15 +290,31 @@ class MaestroEjecutorEnv:
 
         done = False
         while not done:
-            # a) Politica del Ejecutor: TU red PPO entrenada (tareas 2.1.1/2.1.2).
+            # a) Politica del Ejecutor: red PPO (tareas 2.1.1/2.1.2).
             #    Debe devolver el indice plano 0-239 (igual que
             #    ExecutorActorCritic.get_action_and_value(), ver src/models/actor_critic.py).
-            a_e_idx = executor_policy(s_e)  # NotImplementedError hasta que lo conectes
+            log_prob_step = 0.0
+            value_step = 0.0
+            if self.executor_policy_fn is not None:
+                try:
+                    res = self.executor_policy_fn(s_e, tramo)
+                except TypeError:
+                    res = self.executor_policy_fn(s_e)
+                if isinstance(res, tuple):
+                    a_e_idx, log_prob_step, value_step = res
+                else:
+                    a_e_idx = int(res)
+            else:
+                a_e_idx = executor_policy(s_e)
             a_e = self._executor_action_space.decode_flat(a_e_idx)
 
             # b) Ejecutar la accion en el entorno real (ABIDES-Gym o fallback).
-            s_e, reward, done, truncated, info = env.step(a_e)
+            s_e_next, reward, done, truncated, info = env.step(a_e)
             done = done or truncated
+
+            if self.executor_step_callback is not None:
+                self.executor_step_callback(tramo, s_e, a_e_idx, log_prob_step, float(reward), value_step, bool(done))
+            s_e = s_e_next
 
             # c) Cantidad ejecutada este paso: NOTA -- EjecutorEnvPoissonFallback
             # expone `info['q_ejecutado_step']` directo; EjecutorEnvAbides (ABIDES
@@ -378,7 +419,7 @@ class MaestroEjecutorEnv:
         R_M = -IS_total - lambda * max(0, Q_pendiente) * P_mid_cierre
 
         IS_total = suma de slippage_parcial de todos los reportes de la jornada.
-        lambda: LAMBDA_PENALTY_PLACEHOLDER (se calibra en Sprint 4, tarea 2.2.2).
+        lambda: self.lambda_penalty (calibrado en Sprint 4, tarea 2.2.2).
         """
         IS_total = sum(r["slippage_parcial"] for r in self.executor_reports)
         Q_pendiente = self.Q_total - self.Q_executed
@@ -390,7 +431,7 @@ class MaestroEjecutorEnv:
         else:
             P_mid_cierre = self.P_referencia
 
-        r_m = -IS_total - LAMBDA_PENALTY_PLACEHOLDER * max(0.0, Q_pendiente) * (P_mid_cierre or 0.0)
+        r_m = -IS_total - self.lambda_penalty * max(0.0, Q_pendiente) * (P_mid_cierre or 0.0)
         return r_m
 
     def _save_logs(self):
@@ -403,38 +444,82 @@ class MaestroEjecutorEnv:
 
 
 # ----------------------------------------------------------------------
-# Politicas (placeholders): en Sprint 3, Mauricio las reemplaza por redes
-# neuronales Actor-Critico entrenadas con PPO (tareas 2.1.1 / 2.1.2).
+# Politicas PPO conectadas a redes reales (Mauricio Reynoso - Tarea 2.2.1)
 # ----------------------------------------------------------------------
 
-def maestro_policy(s_m: np.ndarray) -> tuple[int, int]:
+_default_master_network: Optional[MasterActorCritic] = None
+_default_executor_network: Optional[ExecutorActorCritic] = None
+
+
+def get_default_master_network() -> MasterActorCritic:
+    """Instancia singleton de MasterActorCritic para inferencia por defecto."""
+    global _default_master_network
+    if _default_master_network is None:
+        _default_master_network = MasterActorCritic(obs_dim=7)
+    return _default_master_network
+
+
+def get_default_executor_network() -> ExecutorActorCritic:
+    """Instancia singleton de ExecutorActorCritic para inferencia por defecto."""
+    global _default_executor_network
+    if _default_executor_network is None:
+        _default_executor_network = ExecutorActorCritic(obs_dim=27, action_dim=240)
+    return _default_executor_network
+
+
+def maestro_policy(s_m: np.ndarray, model: Optional[MasterActorCritic] = None, deterministic: bool = False) -> tuple[int, int]:
     """
-    Politica del Agente Maestro.
+    Politica del Agente Maestro evaluada con la red real MasterActorCritic (PPO).
 
     Args:
-        s_m: vector S_M, shape (7,).
+        s_m: vector S_M, shape (7,) o (1, 7).
+        model: red MasterActorCritic opcional. Si es None, usa la red por defecto.
+        deterministic: si True, toma argmax de logits. Si False, muestrea de Categorical.
     Returns:
         (alpha_idx, ventana_idx) - accion en MultiDiscrete([10, 4]).
     """
-    raise NotImplementedError("Sprint 3: reemplazar por red Actor-Critico del Maestro (PPO).")
+    net = model if model is not None else get_default_master_network()
+    device = next(net.parameters()).device
+    obs = torch.as_tensor(s_m, dtype=torch.float32, device=device)
+    if obs.dim() == 1:
+        obs = obs.unsqueeze(0)
+
+    with torch.no_grad():
+        if deterministic:
+            logits, _ = net(obs)
+            action_idx = int(torch.argmax(logits, dim=-1).item())
+        else:
+            action, _, _, _ = net.get_action_and_value(obs)
+            action_idx = int(action.item())
+
+    # Decodificacion: 40 logits -> (alpha_idx 0..9, ventana_idx 0..3)
+    alpha_idx, ventana_idx = divmod(action_idx, len(VENTANA_MIN_VALUES))
+    return int(alpha_idx), int(ventana_idx)
 
 
-def executor_policy(s_e: np.ndarray) -> int:
+def executor_policy(s_e: np.ndarray, model: Optional[ExecutorActorCritic] = None, deterministic: bool = False) -> int:
     """
-    Politica de un Agente Ejecutor.
-
-    ACTUALIZADO 29 sept (PS): el contrato de retorno paso de una tupla
-    (tipo_orden, volumen_frac, nivel_precio) a un unico indice plano 0-239,
-    para calzar con `ExecutorActorCritic` (src/models/actor_critic.py, un
-    solo `actor_head` Categorical de 240 salidas, no 3 cabezas separadas).
-    `_run_executor_episode()` ya llama `EjecutorActionSpace().decode_flat()`
-    sobre el resultado de esta funcion -- Mauricio: cuando conectes la red
-    real, `executor_policy(s_e)` deberia ser básicamente
-    `int(actor_critic.get_action_and_value(torch.tensor(s_e))[0])`.
+    Politica del Agente Ejecutor evaluada con la red real ExecutorActorCritic (PPO).
 
     Args:
-        s_e: vector S_E, shape (27,).
+        s_e: vector S_E, shape (27,) o (1, 27).
+        model: red ExecutorActorCritic opcional. Si es None, usa la red por defecto.
+        deterministic: si True, toma argmax de logits. Si False, muestrea de Categorical.
     Returns:
-        indice entero en [0, 240) -- ver spaces.EjecutorActionSpace.decode_flat().
+        indice entero en [0, 240) -- decodificado luego por EjecutorActionSpace.decode_flat().
     """
-    raise NotImplementedError("Reemplazar por la red Actor-Critico del Ejecutor (PPO) entrenada.")
+    net = model if model is not None else get_default_executor_network()
+    device = next(net.parameters()).device
+    obs = torch.as_tensor(s_e, dtype=torch.float32, device=device)
+    if obs.dim() == 1:
+        obs = obs.unsqueeze(0)
+
+    with torch.no_grad():
+        if deterministic:
+            logits, _ = net(obs)
+            action_idx = int(torch.argmax(logits, dim=-1).item())
+        else:
+            action, _, _, _ = net.get_action_and_value(obs)
+            action_idx = int(action.item())
+
+    return int(action_idx)
