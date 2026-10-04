@@ -41,7 +41,11 @@ SESSION_LABELS = {0.0: "Apertura (09:30-11:00)", 0.5: "Media jornada (11:00-14:0
 
 
 def find_latest_clean_combined(processed_dir: Path = DEFAULT_PROCESSED_DIR) -> Path:
-    """Encuentra el `_combined.parquet` mas reciente de `clean_5m_*` (excluyendo `clean_5m_demo`)."""
+    """Encuentra el `_combined.parquet` mas reciente de `clean_5m_*` (excluyendo `clean_5m_demo`).
+
+    Solo considera carpetas que realmente contienen `_combined.parquet`: en el
+    repositorio se versionan los reportes de cada snapshot pero no los parquet,
+    asi que una carpeta mas nueva puede existir sin datos en este equipo."""
     candidates = sorted(
         p for p in processed_dir.glob("clean_5m_*") if p.name != "clean_5m_demo"
     )
@@ -50,10 +54,14 @@ def find_latest_clean_combined(processed_dir: Path = DEFAULT_PROCESSED_DIR) -> P
             f"No se encontro ninguna carpeta clean_5m_* en {processed_dir}. "
             "Correr primero src/data/download_ohlcv.py y src/data/clean_ohlcv.py."
         )
-    path = candidates[-1] / "_combined.parquet"
-    if not path.exists():
-        raise FileNotFoundError(f"No existe {path}")
-    return path
+    for folder in reversed(candidates):
+        path = folder / "_combined.parquet"
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        f"Ninguna carpeta clean_5m_* de {processed_dir} contiene _combined.parquet "
+        f"(revisadas: {[c.name for c in candidates]}). Regenerar con src/data/clean_ohlcv.py."
+    )
 
 
 def _session_from_hour(hour: pd.Series) -> pd.Series:
