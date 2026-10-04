@@ -535,7 +535,8 @@ def build_base_report(ticker: str, snapshot: str, unidad_cuenta: str,
                       processed_dir: Optional[Path] = None,
                       usar_kappa_regla: bool = False) -> Dict:
     """Bloque A completo para un ticker: config por tramo (lista para
-    `to_abides_kwargs`) mas la evidencia de A4 y A5."""
+    `to_abides_kwargs`), la evidencia de A4 y A5 y los retornos reales de
+    5 min por tramo."""
     segmentos = real_returns_by_tramo(ticker, snapshot, processed_dir)
     evidencia = evidencia_a4_a5(segmentos)
     por_tramo = {}
@@ -548,7 +549,12 @@ def build_base_report(ticker: str, snapshot: str, unidad_cuenta: str,
             ticker, tramo, calibration_json=calibration_json, snapshot=snapshot,
             clean_5m_dir=_clean_dir(snapshot, processed_dir),
             unidad_cuenta=unidad_cuenta, kappa_oracle=kappa)
-        por_tramo[tramo] = {"config": cfg, "abides_kwargs": to_abides_kwargs(cfg), **evidencia[tramo]}
+        por_tramo[tramo] = {
+            "config": cfg, "abides_kwargs": to_abides_kwargs(cfg), **evidencia[tramo],
+            # muestra real para el KS de la validacion: asi Colab no necesita
+            # los .parquet (que no se versionan)
+            "retornos_reales_5min": [round(float(x), 10) for x in np.concatenate(segmentos[tramo])],
+        }
     return {
         "metadata": {
             "tarea": "2.2.4 bloque A", "ticker": ticker, "snapshot": snapshot,
