@@ -514,6 +514,18 @@ def to_abides_kwargs(cfg: Dict) -> Dict:
             if not k.startswith("_") and k not in _LLAVES_NO_ABIDES}
 
 
+def load_abides_kwargs(json_path: Union[str, Path]) -> Dict[str, Dict]:
+    """{tramo: abides_kwargs} desde un JSON de la 2.2.4 (`rmsc04_base_*.json`
+    de este modulo o `rmsc04_ipsa_*.json` de la validacion). Ambos guardan la
+    config de cada tramo en `por_tramo[tramo]["abides_kwargs"]`."""
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    faltan = [t for t in _TRAMO_HORAS if "abides_kwargs" not in data.get("por_tramo", {}).get(t, {})]
+    if faltan:
+        raise ValueError(f"{json_path}: falta por_tramo[tramo]['abides_kwargs'] para {faltan}")
+    return {t: to_abides_kwargs(data["por_tramo"][t]["abides_kwargs"]) for t in _TRAMO_HORAS}
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------

@@ -259,3 +259,20 @@ def test_falabella_real_vr_calza_con_rebote_bid_ask_y_mantiene_kappa():
         assert vr["patron_mas_cercano"] == "rebote_bid_ask_ma1", tramo
         assert vr["kappa_oracle_adoptado"] == cal.KAPPA_ORACLE_RMSC04
         assert e["curtosis_real"]["exceso_curtosis"] > 3.0
+
+
+def test_load_abides_kwargs_lee_el_json_base_versionado():
+    path = cal.DEFAULT_OUT_DIR / "rmsc04_base_FALABELLA_2026-08-23.json"
+    kw = cal.load_abides_kwargs(path)
+    assert set(kw) == {"apertura", "media_jornada", "cierre"}
+    for tramo, k in kw.items():
+        assert set(k) <= set(RMSC04_BUILD_CONFIG_PARAMS) and "ticker" not in k
+        assert k["r_bar"] == 59_698  # decimos de CLP
+    assert kw["apertura"]["fund_vol"] > kw["media_jornada"]["fund_vol"] > kw["cierre"]["fund_vol"]
+
+
+def test_load_abides_kwargs_rechaza_json_sin_config(tmp_path):
+    bad = tmp_path / "x.json"
+    bad.write_text('{"por_tramo": {"apertura": {}}}', encoding="utf-8")
+    with pytest.raises(ValueError):
+        cal.load_abides_kwargs(bad)
