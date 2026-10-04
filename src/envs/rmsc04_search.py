@@ -376,13 +376,23 @@ def save_json(path: Union[str, Path], data: Dict) -> None:
     """Escribe el JSON a un archivo temporal y lo renombra, para que una
     desconexion de Colab a mitad de escritura no deje un archivo corrupto."""
     import os
+    import time
 
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(path.name + ".tmp")
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=1, ensure_ascii=False)
-    os.replace(tmp, path)
+    # En carpetas sincronizadas (OneDrive, Drive) el destino puede estar
+    # bloqueado un instante por el cliente de sincronizacion: se reintenta.
+    for intento in range(20):
+        try:
+            os.replace(tmp, path)
+            return
+        except PermissionError:
+            if intento == 19:
+                raise
+            time.sleep(0.25)
 
 
 def load_resumable(path: Union[str, Path], firma: Dict) -> Dict:
