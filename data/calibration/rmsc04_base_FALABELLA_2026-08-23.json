@@ -1,0 +1,334 @@
+{
+  "metadata": {
+    "tarea": "2.2.4 bloque A",
+    "ticker": "FALABELLA",
+    "snapshot": "2026-08-23",
+    "unidad_cuenta": "decimos",
+    "kappa_regla_literal_forzada": false,
+    "megashock": "default de rmsc04 (megashock_lambda_a = 2,78e-18 por ns: ~1 evento cada 11 anios; no actua dentro de la jornada)",
+    "fecha_generacion": "2026-10-03T21:40:30-03:00"
+  },
+  "por_tramo": {
+    "apertura": {
+      "config": {
+        "ticker": "FALABELLA",
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.0003700648832218825,
+        "_campos_pendientes_2_2_4": [
+          "kappa",
+          "sigma_s",
+          "mm_wake_up_freq",
+          "mm_min_order_size",
+          "mm_skew_beta",
+          "mm_price_skew",
+          "mm_backstop_quantity",
+          "mm_cancel_limit_delay",
+          "num_value_agents",
+          "num_momentum_agents",
+          "mm_window_size",
+          "mm_pov",
+          "mm_num_ticks",
+          "mm_level_spacing",
+          "mm_spread_alpha",
+          "num_noise_agents",
+          "lambda_a"
+        ],
+        "_metadata": {
+          "ticker": "FALABELLA",
+          "tramo": "apertura",
+          "hora_inicio": "09:30:00",
+          "hora_fin": "11:30:00",
+          "snapshot": "2026-08-23",
+          "unidad_cuenta": "decimos",
+          "unidades_por_clp": 10,
+          "r_bar_clp_mediano": 5969.75,
+          "r_bar_fuente": "mediana de close_raw, snapshot 2026-08-23",
+          "tick_efectivo_bps": 0.1675097993232604,
+          "tick_efectivo_clp": 0.1,
+          "sigma_5min": 0.003395219386417957,
+          "sigma_5min_fuente": "obs_return_std de poisson_params_2026-08-23.json (2.1.3)",
+          "fund_vol_formula": "sigma_5min * r_bar / sqrt(Var_OU(fund_vol=1, kappa_oracle, 300e9 ns))",
+          "kappa_oracle_usado_en_fund_vol": 1.67e-16,
+          "desvio_5min_objetivo_unidades": 202.6878069303792,
+          "parametros_de_busqueda": []
+        }
+      },
+      "abides_kwargs": {
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.0003700648832218825
+      },
+      "n_retornos": 1111,
+      "n_segmentos": 127,
+      "variance_ratio": {
+        "tests": [
+          {
+            "q": 2,
+            "vr": 0.7615214753748748,
+            "z_robusto": -4.5549155557114265,
+            "p_valor": 5.240662665257876e-06,
+            "n": 1111
+          },
+          {
+            "q": 6,
+            "vr": 0.6337076641485948,
+            "z_robusto": -3.641587915789783,
+            "p_valor": 0.00027096155943799263,
+            "n": 1111
+          },
+          {
+            "q": 12,
+            "vr": 0.5867888336919032,
+            "z_robusto": -3.2634666248644106,
+            "p_valor": 0.0011005814631491373,
+            "n": 1111
+          }
+        ],
+        "alpha": 0.05,
+        "rho1": -0.23847852462512523,
+        "reversion_significativa": true,
+        "kappa_oracle_default_rmsc04": 1.67e-16,
+        "phi_nivel": 0.5230429507497496,
+        "kappa_oracle_regla": 2.160305648282322e-12,
+        "vida_media_min": 5.34760116862069,
+        "vr_teorica_ma1": {
+          "2": 0.7615214753748748,
+          "6": 0.6025357922914579,
+          "12": 0.5627893715206038
+        },
+        "vr_teorica_ou": {
+          "2": 0.7615214753748748,
+          "6": 0.342282738618341,
+          "12": 0.17464549053593492
+        },
+        "error_cuadratico_ma1": 0.0015476597795893898,
+        "error_cuadratico_ou": 0.25479062252809215,
+        "patron_mas_cercano": "rebote_bid_ask_ma1",
+        "kappa_oracle_adoptado": 1.67e-16
+      },
+      "curtosis_real": {
+        "exceso_curtosis": 5.870335097056618,
+        "n": 1111
+      }
+    },
+    "media_jornada": {
+      "config": {
+        "ticker": "FALABELLA",
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.0002434992091925498,
+        "_campos_pendientes_2_2_4": [
+          "kappa",
+          "sigma_s",
+          "mm_wake_up_freq",
+          "mm_min_order_size",
+          "mm_skew_beta",
+          "mm_price_skew",
+          "mm_backstop_quantity",
+          "mm_cancel_limit_delay",
+          "num_value_agents",
+          "num_momentum_agents",
+          "mm_window_size",
+          "mm_pov",
+          "mm_num_ticks",
+          "mm_level_spacing",
+          "mm_spread_alpha",
+          "num_noise_agents",
+          "lambda_a"
+        ],
+        "_metadata": {
+          "ticker": "FALABELLA",
+          "tramo": "media_jornada",
+          "hora_inicio": "11:30:00",
+          "hora_fin": "14:00:00",
+          "snapshot": "2026-08-23",
+          "unidad_cuenta": "decimos",
+          "unidades_por_clp": 10,
+          "r_bar_clp_mediano": 5969.75,
+          "r_bar_fuente": "mediana de close_raw, snapshot 2026-08-23",
+          "tick_efectivo_bps": 0.1675097993232604,
+          "tick_efectivo_clp": 0.1,
+          "sigma_5min": 0.0022340223920471166,
+          "sigma_5min_fuente": "obs_return_std de poisson_params_2026-08-23.json (2.1.3)",
+          "fund_vol_formula": "sigma_5min * r_bar / sqrt(Var_OU(fund_vol=1, kappa_oracle, 300e9 ns))",
+          "kappa_oracle_usado_en_fund_vol": 1.67e-16,
+          "desvio_5min_objetivo_unidades": 133.36666876042875,
+          "parametros_de_busqueda": []
+        }
+      },
+      "abides_kwargs": {
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.0002434992091925498
+      },
+      "n_retornos": 1690,
+      "n_segmentos": 101,
+      "variance_ratio": {
+        "tests": [
+          {
+            "q": 2,
+            "vr": 0.7327173224577725,
+            "z_robusto": -6.390737235633549,
+            "p_valor": 1.650878594974502e-10,
+            "n": 1690
+          },
+          {
+            "q": 6,
+            "vr": 0.5926341662124147,
+            "z_robusto": -4.580681327856085,
+            "p_valor": 4.634635832957069e-06,
+            "n": 1690
+          },
+          {
+            "q": 12,
+            "vr": 0.5878471024384522,
+            "z_robusto": -3.3750222825510003,
+            "p_valor": 0.0007380971436980433,
+            "n": 1690
+          }
+        ],
+        "alpha": 0.05,
+        "rho1": -0.2672826775422274,
+        "reversion_significativa": true,
+        "kappa_oracle_default_rmsc04": 1.67e-16,
+        "phi_nivel": 0.4654346449155452,
+        "kappa_oracle_regla": 2.5492786324174544e-12,
+        "vida_media_min": 4.531655685819384,
+        "vr_teorica_ma1": {
+          "2": 0.7327173224577725,
+          "6": 0.5545288707629543,
+          "12": 0.5099817578392498
+        },
+        "vr_teorica_ou": {
+          "2": 0.7327173224577725,
+          "6": 0.3086102071998438,
+          "12": 0.15587377700349214
+        },
+        "error_cuadratico_ma1": 0.007515025430843199,
+        "error_cuadratico_ou": 0.26727056318051245,
+        "patron_mas_cercano": "rebote_bid_ask_ma1",
+        "kappa_oracle_adoptado": 1.67e-16
+      },
+      "curtosis_real": {
+        "exceso_curtosis": 5.144611574396514,
+        "n": 1690
+      }
+    },
+    "cierre": {
+      "config": {
+        "ticker": "FALABELLA",
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.00022736929930598624,
+        "_campos_pendientes_2_2_4": [
+          "kappa",
+          "sigma_s",
+          "mm_wake_up_freq",
+          "mm_min_order_size",
+          "mm_skew_beta",
+          "mm_price_skew",
+          "mm_backstop_quantity",
+          "mm_cancel_limit_delay",
+          "num_value_agents",
+          "num_momentum_agents",
+          "mm_window_size",
+          "mm_pov",
+          "mm_num_ticks",
+          "mm_level_spacing",
+          "mm_spread_alpha",
+          "num_noise_agents",
+          "lambda_a"
+        ],
+        "_metadata": {
+          "ticker": "FALABELLA",
+          "tramo": "cierre",
+          "hora_inicio": "14:00:00",
+          "hora_fin": "16:00:00",
+          "snapshot": "2026-08-23",
+          "unidad_cuenta": "decimos",
+          "unidades_por_clp": 10,
+          "r_bar_clp_mediano": 5969.75,
+          "r_bar_fuente": "mediana de close_raw, snapshot 2026-08-23",
+          "tick_efectivo_bps": 0.1675097993232604,
+          "tick_efectivo_clp": 0.1,
+          "sigma_5min": 0.002086035957151591,
+          "sigma_5min_fuente": "obs_return_std de poisson_params_2026-08-23.json (2.1.3)",
+          "fund_vol_formula": "sigma_5min * r_bar / sqrt(Var_OU(fund_vol=1, kappa_oracle, 300e9 ns))",
+          "kappa_oracle_usado_en_fund_vol": 1.67e-16,
+          "desvio_5min_objetivo_unidades": 124.53217457003568,
+          "parametros_de_busqueda": []
+        }
+      },
+      "abides_kwargs": {
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.00022736929930598624
+      },
+      "n_retornos": 1252,
+      "n_segmentos": 73,
+      "variance_ratio": {
+        "tests": [
+          {
+            "q": 2,
+            "vr": 0.7709404269951106,
+            "z_robusto": -6.3629089364349545,
+            "p_valor": 1.9796807339701124e-10,
+            "n": 1252
+          },
+          {
+            "q": 6,
+            "vr": 0.6131005225512067,
+            "z_robusto": -4.638706674689106,
+            "p_valor": 3.505962256775901e-06,
+            "n": 1252
+          },
+          {
+            "q": 12,
+            "vr": 0.5436288933352559,
+            "z_robusto": -3.9000287240715332,
+            "p_valor": 9.618127628647171e-05,
+            "n": 1252
+          }
+        ],
+        "alpha": 0.05,
+        "rho1": -0.2290595730048894,
+        "reversion_significativa": true,
+        "kappa_oracle_default_rmsc04": 1.67e-16,
+        "phi_nivel": 0.5418808539902211,
+        "kappa_oracle_regla": 2.0423637609806812e-12,
+        "vida_media_min": 5.656413039656209,
+        "vr_teorica_ma1": {
+          "2": 0.7709404269951106,
+          "6": 0.618234044991851,
+          "12": 0.5800574494910361
+        },
+        "vr_teorica_ou": {
+          "2": 0.7709404269951106,
+          "6": 0.35459566602817794,
+          "12": 0.1817865917875361
+        },
+        "error_cuadratico_ma1": 0.001353392756243431,
+        "error_cuadratico_ou": 0.1977546120353427,
+        "patron_mas_cercano": "rebote_bid_ask_ma1",
+        "kappa_oracle_adoptado": 1.67e-16
+      },
+      "curtosis_real": {
+        "exceso_curtosis": 3.3580235041107143,
+        "n": 1252
+      }
+    }
+  }
+}
