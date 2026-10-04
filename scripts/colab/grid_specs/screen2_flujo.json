@@ -1,0 +1,5 @@
+{
+  "lambda_a": [{"lambda_a": 5.7e-12}, {"lambda_a": 5.7e-13}],
+  "num_noise_agents": [{"num_noise_agents": 1000}, {"num_noise_agents": 4000}],
+  "num_value_agents": [{"num_value_agents": 102}, {"num_value_agents": 25}]
+}
