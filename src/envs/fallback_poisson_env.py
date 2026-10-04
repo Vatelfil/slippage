@@ -23,8 +23,19 @@ from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 
+from src.config.market_params import (
+    BETA_RIESGO_EJECUTOR,
+    ESCALA_RECOMPENSA_EJECUTOR,
+    VENTANA_SIGMA2_PASOS,
+)
 from src.envs.ejecutor_env import EjecutorEnv, VALID_EXECUTOR_IDS
 from src.envs.poisson_lob_simulator import PoissonLOBSimulator
+from src.envs.reward_utils import (
+    RollingPriceVariance,
+    prior_sigma2,
+    reward_components,
+    sigma_5min_tramo,
+)
 
 # Mapeo executor_id (Sprint 3, spaces.py) -> tramo (calibracion de Benjamin).
 # Son exactamente los mismos 3 tramos, solo con nombres definidos en modulos
@@ -40,10 +51,10 @@ _EXECUTOR_TO_TRAMO = {
 # los graficos/analisis exploratorios del proyecto. Configurable.
 DEFAULT_TICKER = "FALABELLA"
 
-# beta (aversion al riesgo en R_E) sigue pendiente de calibracion (Sprint 4,
-# ver SM_schema.json/SE_schema.json, campo pending_calibration). Se deja en
-# 0.0 explicito, NO se inventa un valor final.
-BETA_PLACEHOLDER = 0.0
+# beta (aversion al riesgo en R_E), la ventana de sigma2 y la escala de la
+# recompensa viven en src/config/market_params.py (tarea 2.2.3): son comunes a
+# este entorno y a EjecutorEnvAbides. beta sigue en 0.0 hasta cerrar su
+# calibracion (ver docs/recompensa_ejecutores_2.2.3_BF.md).
 
 
 class EjecutorEnvPoissonFallback(EjecutorEnv):
@@ -59,12 +70,20 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
             episodio. Si None, usa un valor de ejemplo razonable (5800,
             el mismo del ejemplo de Contexto_Agente_Programacion.md) --
             para un episodio real, pasar el P_mid observado en ese momento.
+        beta: aversion al riesgo de R_E (1/CLP). Default
+            `BETA_RIESGO_EJECUTOR`.
+        reward_escala: "por_accion_slice" (R_E / q_slice) o "bruta" (CLP).
+            Default `ESCALA_RECOMPENSA_EJECUTOR`.
+        ventana_sigma2: pasos de la ventana movil causal de sigma2_precio.
     """
 
     def __init__(self, executor_id="apertura", max_steps: Optional[int] = None,
                  ventana_min: Optional[int] = None,
                  ticker: str = DEFAULT_TICKER, q_slice: float = 1000.0,
                  p_referencia: Optional[float] = None, seed: Optional[int] = None,
+                 beta: float = BETA_RIESGO_EJECUTOR,
+                 reward_escala: str = ESCALA_RECOMPENSA_EJECUTOR,
+                 ventana_sigma2: int = VENTANA_SIGMA2_PASOS,
                  **_ignored_kwargs):
         # Mismo contrato que EjecutorEnvAbides (abides_ejecutor_env.py): acepta
         # `ventana_min` (minutos de la ventana asignada por el Maestro) y lo
@@ -84,6 +103,10 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
         self._p_referencia_arg = p_referencia
         self.q_pendiente = self.q_slice
         self.p_referencia = 0.0
+        self.beta = float(beta)
+        self.reward_escala = reward_escala
+        self._sigma_5min = sigma_5min_tramo(ticker, tramo, self._sim.calib["calibration_path"])
+        self._var = RollingPriceVariance(window=ventana_sigma2)
 
     def reset(self, *, seed: Optional[int] = None, options: Optional[Dict[str, Any]] = None
               ) -> Tuple[np.ndarray, Dict[str, Any]]:
@@ -94,6 +117,10 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
         self.p_referencia = float(self._p_referencia_arg or 5800.0)
         self.q_pendiente = self.q_slice
         self._sim.reset(p_referencia=self.p_referencia)
+        # sigma2: prior del tramo hasta juntar SIGMA2_MIN_PUNTOS mids; el precio
+        # de referencia es el primer punto de la ventana.
+        self._var.reset(prior_sigma2=prior_sigma2(self._sigma_5min, self.p_referencia))
+        self._var.update(self.p_referencia)
 
         obs = self._compute_obs()
         info: Dict[str, Any] = {
@@ -115,8 +142,12 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
         self.q_pendiente = max(self.q_pendiente - q_ejec, 0.0)
 
         # R_E = (P_mid_t - P_ejec_t) * q_ejec - beta * sigma^2_precio * q_ejec
-        # (Contexto_Agente_Programacion.md, seccion 5.3; beta placeholder, ver arriba)
-        reward = (p_mid_before - p_ejec) * q_ejec - BETA_PLACEHOLDER * 0.0 * q_ejec
+        # (Contexto_Agente_Programacion.md, seccion 5.3). sigma2 es causal: usa
+        # los P_mid hasta t-1 y recien despues incorpora el de este paso.
+        sigma2 = self._var.step(p_mid_before)
+        comp = reward_components(p_mid_before, p_ejec, q_ejec, sigma2, self.beta,
+                                 self.reward_escala, q_slice=self.q_slice)
+        reward = comp["total"]
 
         self._step_count += 1
         done = (self._step_count >= self.max_steps) or (self.q_pendiente <= 0)
@@ -128,6 +159,9 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
             "action_parsed": parsed, "q_ejecutado_step": q_ejec,
             "p_ejecutado_step": p_ejec, "q_pendiente": self.q_pendiente,
             "p_mid": self._sim.mid_price,
+            "sigma2": sigma2, "reward_precio": comp["precio"],
+            "reward_riesgo": comp["riesgo"], "reward_escala": self.reward_escala,
+            "p_mid_decision": p_mid_before,
         }
         return obs, reward, done, truncated, info
 

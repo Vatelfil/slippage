@@ -526,6 +526,13 @@ def load_abides_kwargs(json_path: Union[str, Path]) -> Dict[str, Dict]:
     return {t: to_abides_kwargs(data["por_tramo"][t]["abides_kwargs"]) for t in _TRAMO_HORAS}
 
 
+def load_unidades_por_clp(json_path: Union[str, Path]) -> int:
+    """Unidades de cuenta de ABIDES por CLP con que se genero un JSON de la
+    2.2.4 (para `BridgeConfig.unidades_por_clp`)."""
+    with open(json_path, "r", encoding="utf-8") as f:
+        return UNIDADES_POR_CLP[json.load(f)["metadata"]["unidad_cuenta"]]
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------

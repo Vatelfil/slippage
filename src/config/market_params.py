@@ -78,6 +78,25 @@ CLOSING_AUCTION_BAR = "15:55"
 INCLUDE_CLOSING_AUCTION = False
 
 
+# --- Recompensa de los Ejecutores (tarea 2.2.3) ---------------------------
+# R_E = (P_mid - P_ejec) q_ejec - beta sigma2_precio q_ejec. Ver
+# src/envs/reward_utils.py y docs/recompensa_ejecutores_2.2.3_BF.md.
+#
+# beta (aversion al riesgo, en 1/CLP). 0.0 hasta cerrar la calibracion: la
+# fase 1 (politicas heuristicas) entrega un rango y la fase 2 (PPO, depende
+# de la 2.2.1) elige el valor.
+BETA_RIESGO_EJECUTOR = 0.0
+# Ventana movil causal de sigma2_precio, en pasos de decision (20 x 30 s =
+# 10 min), y minimo de puntos antes de dejar el prior del tramo.
+VENTANA_SIGMA2_PASOS = 20
+SIGMA2_MIN_PUNTOS = 5
+# Escala de R_E, comun a los dos entornos del Ejecutor:
+#   "por_accion_slice": R_E / q_slice, en CLP por accion del slice asignado.
+#   "bruta": R_E en CLP.
+ESCALAS_RECOMPENSA: Tuple[str, ...] = ("por_accion_slice", "bruta")
+ESCALA_RECOMPENSA_EJECUTOR = "por_accion_slice"
+
+
 def avg_order_size_from_price(median_price: float,
                               notional_clp: float = AVG_ORDER_NOTIONAL_CLP) -> float:
     """Tamano medio de orden en acciones segun ORDER_SIZE_POLICY."""
