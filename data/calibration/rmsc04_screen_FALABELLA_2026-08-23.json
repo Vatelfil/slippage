@@ -1,0 +1,981 @@
+{
+ "firma": {
+  "ticker": "FALABELLA",
+  "snapshot": "2026-08-23",
+  "kwargs_base": {
+   "date": "20260823",
+   "end_time": "16:00:00",
+   "starting_cash": 1000000,
+   "r_bar": 59698,
+   "fund_vol": 0.00027970098363024537
+  },
+  "sigma_dia_bps": 25.661613546081714,
+  "grid_spec": {
+   "mm_liquidez": [
+    {
+     "mm_window_size": "adaptive"
+    },
+    {
+     "mm_window_size": 30,
+     "mm_level_spacing": 0.1
+    },
+    {
+     "mm_window_size": 90,
+     "mm_level_spacing": 0.1
+    }
+   ],
+   "mm_pov": [
+    {
+     "mm_pov": 0.005
+    },
+    {
+     "mm_pov": 0.025
+    },
+    {
+     "mm_pov": 0.1
+    }
+   ],
+   "actividad": [
+    {
+     "num_noise_agents": 1000,
+     "lambda_a": 5.7e-12
+    },
+    {
+     "num_noise_agents": 2000,
+     "lambda_a": 1.14e-11
+    },
+    {
+     "num_noise_agents": 4000,
+     "lambda_a": 2.28e-11
+    }
+   ]
+  },
+  "modo": "screen",
+  "end_time": "11:30:00"
+ },
+ "resultados": {
+  "lambda_a=5.7e-12|mm_pov=0.025|mm_window_size='adaptive'|num_noise_agents=1000": {
+   "params": {
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.025,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "niveles": {
+    "mm_liquidez": 0,
+    "mm_pov": 1,
+    "actividad": 0
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        -0.0035731098875432577,
+        -0.004885413310062506,
+        0.0008608903149813329,
+        0.00439416839174432,
+        -0.00291045107113963,
+        -0.0015933974344444425,
+        -0.001055230876889037,
+        -0.0010225252191263757,
+        -0.005885013635240184,
+        -0.0013020890579158125,
+        -0.006776037308162262,
+        -0.0007976841851083439,
+        0.0007033676157607212,
+        -0.00022296544128046778,
+        -0.0005490499001224257,
+        0.0003260347341668802,
+        -0.00022306491281429787,
+        -0.0034552740145920064,
+        -0.0006201176699705611,
+        0.0005684558824613363,
+        0.0011187416185505963,
+        0.0024053547896638297,
+        0.001449008454574636
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 25.743495928502135,
+       "curtosis": 0.03938755275412298,
+       "spread_mediano_bps": 0.34064586455920426,
+       "spread_medio_bps": 0.8056707691612744,
+       "n_muestras_spread": 7048,
+       "volumen": 270097.0,
+       "volumen_mediano_vela": 11713.5,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 24.7
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 25.743495928502135,
+     "curtosis": 0.03938755275412298,
+     "spread_mediano_bps": 0.34064586455920426,
+     "spread_medio_bps": 0.8056707691612744,
+     "volumen_mediano_vela": 11713.5,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 34.98058740321038,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.0031857709286213795,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 2.8258840898736834,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 0.4358226669709493,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 34.060530252185984,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  },
+  "lambda_a=5.7e-12|mm_level_spacing=0.1|mm_pov=0.025|mm_window_size=30|num_noise_agents=1000": {
+   "params": {
+    "mm_window_size": 30,
+    "mm_level_spacing": 0.1,
+    "mm_pov": 0.025,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "niveles": {
+    "mm_liquidez": 1,
+    "mm_pov": 1,
+    "actividad": 0
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        -0.003303155250159312,
+        -0.001386549018152231,
+        0.00027746364773656825,
+        0.001898139386004556,
+        -0.0005707427364251027,
+        -0.0051682746646979265,
+        -0.001452592541476538,
+        -0.000625602374021399,
+        0.0013859430432553055,
+        -0.0021388754967961894,
+        7.616500729372194e-05,
+        -0.00036395184387867993,
+        0.00039780109623657674,
+        0.0001269244927897332,
+        -0.0002961822134615884,
+        -0.0006095651111137086,
+        0.00033869315570896313,
+        -9.312918294340096e-05,
+        -3.3867307890887474e-05,
+        -0.0002286343342516475,
+        0.0002540349227000222,
+        -0.00016934944451523534,
+        -0.0009573635111583519
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 14.379355416044211,
+       "curtosis": 2.8256798614739234,
+       "spread_mediano_bps": 0.5044390637967529,
+       "spread_medio_bps": 0.6887259578253355,
+       "n_muestras_spread": 7144,
+       "volumen": 434330.0,
+       "volumen_mediano_vela": 20719.5,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 39.2
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 14.379355416044211,
+     "curtosis": 2.8256798614739234,
+     "spread_mediano_bps": 0.5044390637967529,
+     "spread_medio_bps": 0.6887259578253355,
+     "volumen_mediano_vela": 20719.5,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 35.449167346652345,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.5792027127186633,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 2.433280460006971,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 1.0061559300082341,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 19.024940183545812,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  },
+  "lambda_a=5.7e-12|mm_level_spacing=0.1|mm_pov=0.025|mm_window_size=90|num_noise_agents=1000": {
+   "params": {
+    "mm_window_size": 90,
+    "mm_level_spacing": 0.1,
+    "mm_pov": 0.025,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "niveles": {
+    "mm_liquidez": 2,
+    "mm_pov": 1,
+    "actividad": 0
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        -0.002288263385893963,
+        -0.001788991880740015,
+        0.0011762236180706787,
+        0.008036806641810714,
+        -0.005060426821869888,
+        -0.004438466662813621,
+        -0.006191291265115634,
+        0.0017668222515473857,
+        0.00027024288243383853,
+        -0.002113218540825304,
+        -0.001058286267817058,
+        -0.00044905170356326034,
+        0.00031351017258350063,
+        9.318677601680885e-05,
+        -0.000245692961285383,
+        0.00015250618526873572,
+        -0.011700126226984277,
+        -0.003873294175383111,
+        0.0012641193911199474,
+        0.0006099892367101938,
+        0.0009443195592111907,
+        0.003152711970992704,
+        -0.0019692798802125686
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 36.830936802503395,
+       "curtosis": 2.0519036941534257,
+       "spread_mediano_bps": 0.34292965050326524,
+       "spread_medio_bps": 0.8932628445342281,
+       "n_muestras_spread": 6978,
+       "volumen": 326355.0,
+       "volumen_mediano_vela": 10601.5,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 26.6
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 36.830936802503395,
+     "curtosis": 2.0519036941534257,
+     "spread_mediano_bps": 0.34292965050326524,
+     "spread_medio_bps": 0.8932628445342281,
+     "volumen_mediano_vela": 10601.5,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 35.28218838990694,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.3613419270123076,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 2.8192021816106796,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 0.33607614472271513,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 48.73002643705074,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  },
+  "lambda_a=5.7e-12|mm_pov=0.005|mm_window_size='adaptive'|num_noise_agents=1000": {
+   "params": {
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.005,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "niveles": {
+    "mm_liquidez": 0,
+    "mm_pov": 0,
+    "actividad": 0
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        -0.0024984502491402563,
+        -0.002269099217146311,
+        0.0011099806893032868,
+        0.005397761808599987,
+        -0.004834833558682635,
+        -0.007190606523343634,
+        -0.005633387540451298,
+        2.552355185885344e-05,
+        0.0016236598812488048,
+        -0.0016321676594852287,
+        -0.0062643157092090165,
+        -0.0022541546397703937,
+        6.006237908883082e-05,
+        -0.003920191401209338,
+        -0.0004135471201103539,
+        -0.00043096018594945563,
+        -0.00022417271739475666,
+        -0.0048665682217161775,
+        0.0003032311467610478,
+        0.0009956840088899846,
+        0.0006142320346412504,
+        0.0008126286388719417,
+        0.0003974288136359342
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 29.333720688443012,
+       "curtosis": -0.2327657401631309,
+       "spread_mediano_bps": 0.33576764878703935,
+       "spread_medio_bps": 0.7484772885826203,
+       "n_muestras_spread": 6990,
+       "volumen": 234918.0,
+       "volumen_mediano_vela": 10538.5,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 27.6
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 29.333720688443012,
+     "curtosis": -0.2327657401631309,
+     "spread_mediano_bps": 0.33576764878703935,
+     "spread_medio_bps": 0.7484772885826203,
+     "volumen_mediano_vela": 10538.5,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 35.07271373992899,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.1337414920355416,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 2.8403081078822465,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 0.3301158621772116,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 38.81066051373778,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  },
+  "lambda_a=5.7e-12|mm_pov=0.1|mm_window_size='adaptive'|num_noise_agents=1000": {
+   "params": {
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.1,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "niveles": {
+    "mm_liquidez": 0,
+    "mm_pov": 2,
+    "actividad": 0
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        -0.0019268797222215446,
+        0.0012654569694463644,
+        0.00020935831752375258,
+        -0.0007538951605183928,
+        -0.0008215549646405399,
+        0.0005366021475462895,
+        -0.00036888304310846745,
+        0.00030182351937371526,
+        -0.010194884741190345,
+        -0.002374029247238032,
+        -0.004927103450525522,
+        -0.0007082969169456847,
+        -0.00038422623713256574,
+        -0.000324572719950095,
+        -0.0005896251778406606,
+        0.00037603302696721845,
+        7.689843002822618e-05,
+        -0.0002648972684074026,
+        0.000410133726430924,
+        -0.00015378043601428488,
+        -4.2720984981490337e-05,
+        -7.690237247608325e-05,
+        -0.00032476412154722347
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 23.153972127808025,
+       "curtosis": 8.675599550768847,
+       "spread_mediano_bps": 0.3352835660760088,
+       "spread_medio_bps": 0.900774295286281,
+       "n_muestras_spread": 7165,
+       "volumen": 450134.0,
+       "volumen_mediano_vela": 20267.0,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 23.2
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 23.153972127808025,
+     "curtosis": 8.675599550768847,
+     "spread_mediano_bps": 0.3352835660760088,
+     "spread_medio_bps": 0.900774295286281,
+     "volumen_mediano_vela": 20267.0,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 35.37022426324274,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.10282989096676301,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 2.8417508674936713,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 0.9840745917194231,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 30.634400638816523,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  },
+  "lambda_a=1.14e-11|mm_pov=0.025|mm_window_size='adaptive'|num_noise_agents=2000": {
+   "params": {
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.025,
+    "num_noise_agents": 2000,
+    "lambda_a": 1.14e-11
+   },
+   "niveles": {
+    "mm_liquidez": 0,
+    "mm_pov": 1,
+    "actividad": 1
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        -0.0030740827164831147,
+        0.0028224639678815144,
+        -0.006277368307790554,
+        -0.00028704094751746256,
+        -0.0035610856216308985,
+        -0.0009749522833741658,
+        -0.0007297164611821034,
+        -0.0003395845216051344,
+        -0.002848556603531928,
+        0.002840065512808904,
+        -0.0024484394936198695,
+        -0.0012349939181209644,
+        0.000374917991082056,
+        -8.519629230888257e-05,
+        -0.00261052205103337,
+        0.0025423597907464905,
+        -0.0028157495693802385,
+        0.0016733404968322407,
+        0.006453637571477598,
+        -0.0032003558739907333,
+        0.0003485460987497348,
+        0.0018936263497306514,
+        0.0007632293450551381
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 27.20070527750692,
+       "curtosis": 0.257832908893898,
+       "spread_mediano_bps": 0.3392705682782019,
+       "spread_medio_bps": 0.9099707561492596,
+       "n_muestras_spread": 6989,
+       "volumen": 395632.0,
+       "volumen_mediano_vela": 17138.0,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 22.6
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 27.20070527750692,
+     "curtosis": 0.257832908893898,
+     "spread_mediano_bps": 0.3392705682782019,
+     "spread_medio_bps": 0.9099707561492596,
+     "volumen_mediano_vela": 17138.0,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 35.22997188606219,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.05824666331070394,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 2.8299295816143015,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 0.8163788644291738,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 35.98852492910917,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  },
+  "lambda_a=2.28e-11|mm_pov=0.025|mm_window_size='adaptive'|num_noise_agents=4000": {
+   "params": {
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.025,
+    "num_noise_agents": 4000,
+    "lambda_a": 2.28e-11
+   },
+   "niveles": {
+    "mm_liquidez": 0,
+    "mm_pov": 1,
+    "actividad": 2
+   },
+   "corridas": {
+    "1": {
+     "momentos": {
+      "apertura": {
+       "completo": true,
+       "retornos_5min": [
+        0.0013430144294218575,
+        -0.004944468999927899,
+        0.0009100025063231032,
+        -0.001272548935207119,
+        -0.002600693857968948,
+        -0.002175247900609889,
+        -0.002001680043416821,
+        -0.00016132661457130858,
+        0.0010523993977951814,
+        -0.0015705187212215607,
+        -0.00023791518435945078,
+        -0.0005525214242607891,
+        0.0024881866492748378,
+        0.004552693779077067,
+        -0.003942208678846053,
+        0.0011605892351369104,
+        0.0028829305787338023,
+        -0.0005488914641632468,
+        0.0028172596761992953,
+        0.0023304640765183637,
+        -0.0026758683082057063,
+        -0.0028773841581227217,
+        0.0006504559756614101
+       ],
+       "n_retornos": 23,
+       "volatilidad_bps": 23.641986882639596,
+       "curtosis": -0.7110521608229656,
+       "spread_mediano_bps": 0.17012444603227259,
+       "spread_medio_bps": 0.8065252196204907,
+       "n_muestras_spread": 7193,
+       "volumen": 893983.0,
+       "volumen_mediano_vela": 35986.0,
+       "n_velas": 24,
+       "participacion_volumen": null
+      },
+      "media_jornada": {
+       "completo": false
+      },
+      "cierre": {
+       "completo": false
+      }
+     },
+     "segundos": 67.2
+    }
+   },
+   "n_errores": 0,
+   "completa": true,
+   "momentos": {
+    "apertura": {
+     "n_corridas": 1,
+     "n_retornos": 23,
+     "volatilidad_bps": 23.641986882639596,
+     "curtosis": -0.7110521608229656,
+     "spread_mediano_bps": 0.17012444603227259,
+     "spread_medio_bps": 0.8065252196204907,
+     "volumen_mediano_vela": 35986.0,
+     "participacion_volumen": null
+    },
+    "media_jornada": {
+     "n_corridas": 0
+    },
+    "cierre": {
+     "n_corridas": 0
+    }
+   },
+   "perdida": {
+    "total": 36.314880822899106,
+    "terminos": {
+     "volatilidad": {
+      "apertura": 0.08197200248010633,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "spread": {
+      "apertura": 3.5201973024401183,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "participacion": {
+      "apertura": 4.605170185988092,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     },
+     "volumen_vela": {
+      "apertura": 1.5582106181125739,
+      "media_jornada": 4.605170185988092,
+      "cierre": 4.605170185988092
+     }
+    },
+    "rankings": {
+     "volatilidad_max_apertura": null,
+     "volumen_vela_creciente": null
+    },
+    "n_rankings_fallidos": 2,
+    "vol_para_ranking": {
+     "apertura": 31.280079895690513,
+     "media_jornada": null,
+     "cierre": null
+    },
+    "pesos": {
+     "volatilidad": 1.0,
+     "spread": 1.0,
+     "participacion": 0.5,
+     "volumen_vela": 0.5,
+     "ranking": 1.0
+    }
+   }
+  }
+ },
+ "objetivos_por_tramo": {
+  "apertura": {
+   "spread_roll_bps": 35.25854288708378,
+   "spread_hl_bps": 23.74625045530174,
+   "spread_cs_bps": 5.748691295863613,
+   "spread_ar_bps": 28.235163831879582,
+   "volatilidad_bps": 33.95219386417957,
+   "participacion_volumen_dia": 0.2486665450520733,
+   "participacion_volumen_dia_agregada": 0.4442755035893818,
+   "lambda_total": 10.494737382378105,
+   "volumen_mediano_vela": 7575.5
+  },
+  "media_jornada": {
+   "spread_roll_bps": 23.829719683366108,
+   "spread_hl_bps": 16.897792121143947,
+   "spread_cs_bps": 4.148796300346402,
+   "spread_ar_bps": 16.270946249979957,
+   "volatilidad_bps": 22.340223920471164,
+   "participacion_volumen_dia": 0.38097062730605935,
+   "participacion_volumen_dia_agregada": 0.2555981307358524,
+   "lambda_total": 10.80582724895038,
+   "volumen_mediano_vela": 9396.0
+  },
+  "cierre": {
+   "spread_roll_bps": 20.58535619489291,
+   "spread_hl_bps": 18.359986173761804,
+   "spread_cs_bps": 4.861671248080638,
+   "spread_ar_bps": 15.507074096121215,
+   "volatilidad_bps": 20.86035957151591,
+   "participacion_volumen_dia": 0.30890730372094033,
+   "participacion_volumen_dia_agregada": 0.30012636567476575,
+   "lambda_total": 12.210780028595295,
+   "volumen_mediano_vela": 11964.0
+  }
+ },
+ "semillas": [
+  1
+ ],
+ "mejor": "lambda_a=5.7e-12|mm_pov=0.025|mm_window_size='adaptive'|num_noise_agents=1000"
+}

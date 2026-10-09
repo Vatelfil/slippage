@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "q_slice": 500,
+    "ventana_min": 10,
+    "p_referencia": 5800.0,
+    "n_episodios_por_tramo": 10,
+    "calibrated_json": "rmsc04_ipsa_FALABELLA_2026-08-23.json",
+    "abides_kwargs": {
+      "apertura": {
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.0003700648832218825,
+        "mm_window_size": "adaptive",
+        "mm_pov": 0.005,
+        "num_noise_agents": 1000,
+        "lambda_a": 5.7e-12
+      },
+      "media_jornada": {
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.0002434992091925498,
+        "mm_window_size": "adaptive",
+        "mm_pov": 0.005,
+        "num_noise_agents": 1000,
+        "lambda_a": 5.7e-12
+      },
+      "cierre": {
+        "date": "20260823",
+        "end_time": "16:00:00",
+        "starting_cash": 1000000,
+        "r_bar": 59698,
+        "fund_vol": 0.00022736929930598624,
+        "mm_window_size": "adaptive",
+        "mm_pov": 0.005,
+        "num_noise_agents": 1000,
+        "lambda_a": 5.7e-12
+      }
+    },
+    "seed_base": 0
+  },
+  "por_tramo": {
+    "apertura": {
+      "tramo": "apertura",
+      "n_episodios": 10,
+      "spread_mean": 0.0029034312001539994,
+      "spread_std": 0.005533202565302969,
+      "obi_mean": 0.13743457584089394,
+      "obi_std": 0.4388899542956033,
+      "p_mid_mean": 0.5039320931596271,
+      "n_observaciones": 118,
+      "spread_bps_mean": 0.5807755906993747,
+      "spread_bps_median": 0.1677064472136191,
+      "spread_bps_std": 1.107098226416217,
+      "n_observaciones_spread_bps": 118
+    },
+    "media_jornada": {
+      "tramo": "media_jornada",
+      "n_episodios": 10,
+      "spread_mean": 0.002325929537396498,
+      "spread_std": 0.0030887064648310713,
+      "obi_mean": 0.010298275757029804,
+      "obi_std": 0.486597016880138,
+      "p_mid_mean": 0.5018090575325246,
+      "n_observaciones": 98,
+      "spread_bps_mean": 0.46509815106212504,
+      "spread_bps_median": 0.1697492264117279,
+      "spread_bps_std": 0.61770085292867,
+      "n_observaciones_spread_bps": 98
+    },
+    "cierre": {
+      "tramo": "cierre",
+      "n_episodios": 10,
+      "spread_mean": 0.0047234750071884655,
+      "spread_std": 0.016776297407901663,
+      "obi_mean": 0.05934864842413884,
+      "obi_std": 0.4226236946878591,
+      "p_mid_mean": 0.5024041844450909,
+      "n_observaciones": 92,
+      "spread_bps_mean": 0.9459918272075738,
+      "spread_bps_median": 0.17158986772128826,
+      "spread_bps_std": 3.3646184567984263,
+      "n_observaciones_spread_bps": 92
+    }
+  }
+}

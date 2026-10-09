@@ -1,0 +1,377 @@
+{
+ "metadata": {
+  "tarea": "2.2.4 bloques B y C",
+  "ticker": "FALABELLA",
+  "snapshot": "2026-08-23",
+  "unidad_cuenta": "decimos",
+  "semillas_validacion": [
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110
+  ],
+  "semillas_busqueda": [
+   1,
+   2,
+   3
+  ],
+  "grid_json": "rmsc04_grid_FALABELLA_2026-08-23.json",
+  "base_json": "rmsc04_base_FALABELLA_2026-08-23.json",
+  "refinamiento": true,
+  "fecha_generacion": "2026-10-09T00:23:50+0000",
+  "nota_participacion": "participacion y volumen por vela medidos en las corridas de dia completo (config del tramo cierre)"
+ },
+ "parametros_busqueda": {
+  "mm_window_size": "adaptive",
+  "mm_pov": 0.005,
+  "num_noise_agents": 1000,
+  "lambda_a": 5.7e-12
+ },
+ "seleccion": {
+  "id": "lambda_a=5.7e-12|mm_pov=0.005|mm_window_size='adaptive'|num_noise_agents=1000",
+  "params": {
+   "mm_window_size": "adaptive",
+   "mm_pov": 0.005,
+   "num_noise_agents": 1000,
+   "lambda_a": 5.7e-12
+  },
+  "perdida_busqueda": 9.832412170295362,
+  "origen": "grilla"
+ },
+ "perdida_validacion": {
+  "total": 10.328869023267323,
+  "terminos": {
+   "volatilidad": {
+    "apertura": 0.11438519309487527,
+    "media_jornada": 0.11453297130853568,
+    "cierre": 0.007220561374383205
+   },
+   "spread": {
+    "apertura": 3.203050665770357,
+    "media_jornada": 3.198187890307766,
+    "cierre": 3.2646423299404392
+   },
+   "participacion": {
+    "apertura": 0.13797961600631725,
+    "media_jornada": 0.03151408954830625,
+    "cierre": 0.045001780529677536
+   },
+   "volumen_vela": {
+    "apertura": 0.3954532172672439,
+    "media_jornada": 0.207439791863618,
+    "cierre": 0.03631032772677135
+   }
+  },
+  "rankings": {
+   "volatilidad_max_apertura": true,
+   "volumen_vela_creciente": true
+  },
+  "n_rankings_fallidos": 0,
+  "vol_para_ranking": {
+   "apertura": 38.06665360618913,
+   "media_jornada": 19.922621513480465,
+   "cierre": 20.710278551603555
+  },
+  "pesos": {
+   "volatilidad": 1.0,
+   "spread": 1.0,
+   "participacion": 0.5,
+   "volumen_vela": 0.5,
+   "ranking": 1.0
+  }
+ },
+ "rankings": {
+  "simulado": {
+   "volatilidad_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "spread_mediano_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "participacion_volumen": [
+    "media_jornada",
+    "cierre",
+    "apertura"
+   ],
+   "volumen_mediano_vela": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ]
+  },
+  "observado": {
+   "spread_roll_bps": [
+    "apertura",
+    "media_jornada",
+    "cierre"
+   ],
+   "spread_hl_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "spread_cs_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "spread_ar_bps": [
+    "apertura",
+    "media_jornada",
+    "cierre"
+   ],
+   "volatilidad_bps": [
+    "apertura",
+    "media_jornada",
+    "cierre"
+   ],
+   "participacion_volumen_dia": [
+    "media_jornada",
+    "cierre",
+    "apertura"
+   ],
+   "lambda_total": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ],
+   "volumen_mediano_vela": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ]
+  },
+  "robustos": {
+   "volatilidad_max_apertura": true,
+   "volumen_vela_creciente": true
+  }
+ },
+ "por_tramo": {
+  "apertura": {
+   "abides_kwargs": {
+    "date": "20260823",
+    "end_time": "16:00:00",
+    "starting_cash": 1000000,
+    "r_bar": 59698,
+    "fund_vol": 0.0003700648832218825,
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.005,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "ks": {
+    "n_sim": 230,
+    "n_real": 1111,
+    "alpha": 0.05,
+    "D": 0.06676711149375807,
+    "p": 0.34582539410111346,
+    "D_crit": 0.09838427176965625,
+    "D_ratio": 0.6786360288367803,
+    "rechaza": false,
+    "estandarizado": {
+     "D": 0.06960435173952177,
+     "p": 0.2982986815918825,
+     "D_ratio": 0.7074743806864178,
+     "rechaza": false
+    }
+   },
+   "momentos_sim": {
+    "n_corridas": 10,
+    "n_retornos": 230,
+    "volatilidad_bps": 38.06665360618913,
+    "curtosis": 5.729873358069748,
+    "spread_mediano_bps": 0.23361555604533252,
+    "spread_medio_bps": 0.7860473060995695,
+    "volumen_mediano_vela": 11250.05,
+    "participacion_volumen": 0.2854572950719281
+   },
+   "momentos_vs_objetivo": {
+    "volatilidad_bps": {
+     "sim": 38.06665360618913,
+     "objetivo": 33.95219386417957,
+     "ln_sim_sobre_objetivo": 0.11438519309487527
+    },
+    "spread_vs_roll_bps": {
+     "sim": 0.23361555604533252,
+     "objetivo": 35.25854288708378,
+     "ln_sim_sobre_objetivo": -5.016786288887995
+    },
+    "spread_vs_cs_bps": {
+     "sim": 0.23361555604533252,
+     "objetivo": 5.748691295863613,
+     "ln_sim_sobre_objetivo": -3.203050665770357
+    },
+    "participacion_volumen": {
+     "sim": 0.2854572950719281,
+     "objetivo": 0.2486665450520733,
+     "ln_sim_sobre_objetivo": 0.13797961600631725
+    },
+    "volumen_mediano_vela": {
+     "sim": 11250.05,
+     "objetivo": 7575.5,
+     "ln_sim_sobre_objetivo": 0.3954532172672439
+    }
+   },
+   "curtosis": {
+    "sim": 5.729873358069748,
+    "real": 5.870335097056618
+   },
+   "n_corridas": 10,
+   "n_errores": 0
+  },
+  "media_jornada": {
+   "abides_kwargs": {
+    "date": "20260823",
+    "end_time": "16:00:00",
+    "starting_cash": 1000000,
+    "r_bar": 59698,
+    "fund_vol": 0.0002434992091925498,
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.005,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "ks": {
+    "n_sim": 300,
+    "n_real": 1690,
+    "alpha": 0.05,
+    "D": 0.07891518737672584,
+    "p": 0.07884299025002882,
+    "D_crit": 0.08508535054522072,
+    "D_ratio": 0.9274826614810079,
+    "rechaza": false,
+    "estandarizado": {
+     "D": 0.10743589743589743,
+     "p": 0.005109057539917077,
+     "D_ratio": 1.2626838433109346,
+     "rechaza": true
+    }
+   },
+   "momentos_sim": {
+    "n_corridas": 10,
+    "n_retornos": 300,
+    "volatilidad_bps": 19.922621513480465,
+    "curtosis": 2.5021595701113437,
+    "spread_mediano_bps": 0.16942081215605326,
+    "spread_medio_bps": 0.5152136112036414,
+    "volumen_mediano_vela": 11562.0,
+    "participacion_volumen": 0.39316775095838424
+   },
+   "momentos_vs_objetivo": {
+    "volatilidad_bps": {
+     "sim": 19.922621513480465,
+     "objetivo": 22.340223920471164,
+     "ln_sim_sobre_objetivo": -0.11453297130853568
+    },
+    "spread_vs_roll_bps": {
+     "sim": 0.16942081215605326,
+     "objetivo": 23.829719683366108,
+     "ln_sim_sobre_objetivo": -4.946303174105726
+    },
+    "spread_vs_cs_bps": {
+     "sim": 0.16942081215605326,
+     "objetivo": 4.148796300346402,
+     "ln_sim_sobre_objetivo": -3.1981878903077656
+    },
+    "participacion_volumen": {
+     "sim": 0.39316775095838424,
+     "objetivo": 0.38097062730605935,
+     "ln_sim_sobre_objetivo": 0.03151408954830625
+    },
+    "volumen_mediano_vela": {
+     "sim": 11562.0,
+     "objetivo": 9396.0,
+     "ln_sim_sobre_objetivo": 0.207439791863618
+    }
+   },
+   "curtosis": {
+    "sim": 2.5021595701113437,
+    "real": 5.144611574396514
+   },
+   "n_corridas": 10,
+   "n_errores": 0
+  },
+  "cierre": {
+   "abides_kwargs": {
+    "date": "20260823",
+    "end_time": "16:00:00",
+    "starting_cash": 1000000,
+    "r_bar": 59698,
+    "fund_vol": 0.00022736929930598624,
+    "mm_window_size": "adaptive",
+    "mm_pov": 0.005,
+    "num_noise_agents": 1000,
+    "lambda_a": 5.7e-12
+   },
+   "ks": {
+    "n_sim": 230,
+    "n_real": 1252,
+    "alpha": 0.05,
+    "D": 0.0790873732462842,
+    "p": 0.1656100310377797,
+    "D_crit": 0.0974294505336582,
+    "D_ratio": 0.8117399083448849,
+    "rechaza": false,
+    "estandarizado": {
+     "D": 0.11121683567162106,
+     "p": 0.014930950838235504,
+     "D_ratio": 1.1415114738145817,
+     "rechaza": true
+    }
+   },
+   "momentos_sim": {
+    "n_corridas": 10,
+    "n_retornos": 230,
+    "volatilidad_bps": 20.710278551603555,
+    "curtosis": 1.9438040340365372,
+    "spread_mediano_bps": 0.18576737260735848,
+    "spread_medio_bps": 0.49886028222077494,
+    "volumen_mediano_vela": 12406.4,
+    "participacion_volumen": 0.3231262211567014
+   },
+   "momentos_vs_objetivo": {
+    "volatilidad_bps": {
+     "sim": 20.710278551603555,
+     "objetivo": 20.86035957151591,
+     "ln_sim_sobre_objetivo": -0.007220561374383205
+    },
+    "spread_vs_roll_bps": {
+     "sim": 0.18576737260735848,
+     "objetivo": 20.58535619489291,
+     "ln_sim_sobre_objetivo": -4.707840031620804
+    },
+    "spread_vs_cs_bps": {
+     "sim": 0.18576737260735848,
+     "objetivo": 4.861671248080638,
+     "ln_sim_sobre_objetivo": -3.2646423299404392
+    },
+    "participacion_volumen": {
+     "sim": 0.3231262211567014,
+     "objetivo": 0.30890730372094033,
+     "ln_sim_sobre_objetivo": 0.045001780529677536
+    },
+    "volumen_mediano_vela": {
+     "sim": 12406.4,
+     "objetivo": 11964.0,
+     "ln_sim_sobre_objetivo": 0.03631032772677135
+    }
+   },
+   "curtosis": {
+    "sim": 1.9438040340365372,
+    "real": 3.3580235041107143
+   },
+   "n_corridas": 10,
+   "n_errores": 0
+  }
+ }
+}
