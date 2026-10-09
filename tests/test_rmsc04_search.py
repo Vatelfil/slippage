@@ -357,3 +357,28 @@ def test_cli_de_grilla_y_validacion_nombres_de_salida(tmp_path, monkeypatch, cap
     assert set(final["por_tramo"]) == set(ss.TRAMO_NAMES)
     assert (tmp_path / "rmsc04_refine_FALABELLA_2026-08-23.json").exists()
     assert "D/D_crit" in capsys.readouterr().out
+
+
+# --- resultados versionados de Colab ---------------------------------------
+
+def test_config_calibrada_versionada_es_cargable_y_coherente_con_la_grilla():
+    from src.envs.calibrate_rmsc04_ipsa import load_abides_kwargs, load_unidades_por_clp
+    from tests.test_calibrate_rmsc04_ipsa import RMSC04_BUILD_CONFIG_PARAMS
+
+    ipsa_path = DEFAULT_OUT_DIR / "rmsc04_ipsa_FALABELLA_2026-08-23.json"
+    ipsa = json.loads(ipsa_path.read_text(encoding="utf-8"))
+    grid = json.loads((DEFAULT_OUT_DIR / "rmsc04_grid_FALABELLA_2026-08-23.json").read_text(encoding="utf-8"))
+
+    kw = load_abides_kwargs(ipsa_path)
+    base = load_abides_kwargs(BASE_JSON)
+    assert load_unidades_por_clp(ipsa_path) == 10
+    for t in ss.TRAMO_NAMES:
+        assert set(kw[t]) <= set(RMSC04_BUILD_CONFIG_PARAMS)
+        assert kw[t]["fund_vol"] == base[t]["fund_vol"] and kw[t]["r_bar"] == 59_698
+        assert kw[t]["mm_pov"] == 0.005
+        assert ipsa["por_tramo"][t]["n_corridas"] == 10 and ipsa["por_tramo"][t]["n_errores"] == 0
+        assert ipsa["por_tramo"][t]["ks"]["rechaza"] is False
+    # la config validada es la ganadora de la grilla; el refinamiento no la mejoro
+    assert len(grid["resultados"]) == 27 and rs.best_config(grid["resultados"]) == grid["mejor"]
+    assert ipsa["seleccion"]["id"] == grid["mejor"] and ipsa["seleccion"]["origen"] == "grilla"
+    assert set(ipsa["metadata"]["semillas_validacion"]).isdisjoint(ipsa["metadata"]["semillas_busqueda"])

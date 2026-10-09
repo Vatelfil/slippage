@@ -3,7 +3,7 @@
 **Proyecto:** Coordinación de Agentes para la Mitigación del Slippage (IPSA) — Título II, UTEM
 **Responsable:** Benjamín Farias (BF)
 
-> **Estado al 2026-10-03.** Implementados σ² causal, la escala común y el barrido de β de la fase 1 en el fallback Poisson. **Pendientes:** el barrido en ABIDES calibrado (Colab), la confirmación de la escala por parte de Mauricio Reynoso y la fase 2 con PPO, que depende de la 2.2.1. `BETA_RIESGO_EJECUTOR` sigue en 0.
+> **Estado al 2026-10-08.** Implementados σ² causal y la escala común; barrido de β de la fase 1 corrido en el fallback Poisson y en ABIDES calibrado. **Rango recomendado: β ∈ [0,0046; 0,046] CLP⁻¹** (0,1 β\* a β\* de ABIDES). **Pendientes:** una decisión sobre la definición de σ² que el barrido dejó a la vista (§5.5), la confirmación de la escala por parte de Mauricio Reynoso y la fase 2 con PPO. `BETA_RIESGO_EJECUTOR` sigue en 0.
 
 | Qué | Dónde |
 |---|---|
@@ -11,7 +11,7 @@
 | Parámetros (β, ventana, escala) | [`src/config/market_params.py`](../src/config/market_params.py) |
 | Entornos | [`src/envs/fallback_poisson_env.py`](../src/envs/fallback_poisson_env.py), [`src/envs/abides_ejecutor_env.py`](../src/envs/abides_ejecutor_env.py), [`src/envs/abides_bridge.py`](../src/envs/abides_bridge.py) |
 | Barrido de β | [`src/experiments/beta_sweep.py`](../src/experiments/beta_sweep.py), [`scripts/beta_sweep.py`](../scripts/beta_sweep.py), [`scripts/colab/beta_sweep_abides.py`](../scripts/colab/beta_sweep_abides.py) |
-| Resultado local | [`data/calibration/beta_sweep_poisson_2026-10-03.json`](../data/calibration/beta_sweep_poisson_2026-10-03.json) |
+| Resultados | [`beta_sweep_poisson_2026-10-03.json`](../data/calibration/beta_sweep_poisson_2026-10-03.json), [`beta_sweep_abides_2026-10-09.json`](../data/calibration/beta_sweep_abides_2026-10-09.json) |
 | Tests | `tests/test_reward_utils.py`, `tests/test_beta_sweep.py` |
 
 ---
@@ -114,7 +114,7 @@ R_E medio por episodio (CLP por acción) en apertura:
 
 El slippage (18,2 / 17,7 / 18,4 bps en apertura) y el cumplimiento (100 % / 92 % / 100 %) no dependen de β. El ranking cambia con β en apertura y media jornada (la agresiva pasa del segundo al tercer lugar ya con 0,1 β\*) y no cambia en cierre.
 
-### 5.2 Por qué este resultado no fija β
+### 5.2 Por qué el resultado del fallback no fija β
 
 **El fallback Poisson no sirve para calibrar el nivel de β.** Su P_mid se mueve ≈ 0,19–0,21 CLP por paso, contra 3,9–6,4 CLP del prior (que sale de la volatilidad real). La σ² de la ventana, una vez que deja el prior, es 157–479 veces menor que el prior:
 
@@ -131,15 +131,72 @@ En el fallback el término de riesgo pesa casi solo en los cuatro primeros pasos
 - *Convención del nivel de precio invertida.* El contrato (`spaces.py`, `abides_bridge.py`) dice que el nivel 0 es el más pasivo y el 7 el más agresivo. `PoissonLOBSimulator.execute_limit_buy` usa la probabilidad de llenado `1 − nivel/8`: el nivel 0 se llena siempre y el 7 casi nunca. La política pasiva usa el nivel 7 en el fallback y el 0 en ABIDES (`NIVEL_PASIVO`). No se modificó el simulador.
 - *Una LIMIT llenada paga como una MARKET.* En el fallback una orden límite que se llena barre el lado ask igual que una de mercado, así que nunca compra bajo el mid: el término de precio es siempre negativo y las políticas se diferencian solo por cuándo y cuánto barren.
 
-### 5.3 Recomendación
+### 5.3 Resultado en ABIDES calibrado
 
-- **Rango provisional:** β ∈ [0,1 β\*, β\*], dejando 3 β\* fuera por quedar al borde del 80 % en apertura y superarlo en la política agresiva.
-- **El valor en CLP⁻¹ debe salir de ABIDES calibrado**, donde la volatilidad del mid está fijada a la real (2.2.4) y σ² de la ventana es comparable con el prior. `scripts/colab/beta_sweep_abides.py` calcula su propio β\*. No se recomienda trasladar β = 0,059–0,59 del fallback a ABIDES.
-- `BETA_RIESGO_EJECUTOR` se mantiene en 0,0 hasta tener ese resultado.
+Config de la 2.2.4 (`rmsc04_ipsa_FALABELLA_2026-08-23.json`), 20 semillas, slice de 1 000 acciones, ventana de 15 min. Se corrió dos veces (5 y 8 de octubre) con resultados idénticos.
+
+β\* = **0,0456 CLP⁻¹** (por tramo: 0,0455 / 0,0439 / 0,0488), 13 veces menor que el del fallback, como se anticipaba: en ABIDES la volatilidad del mid es la real.
+
+Peso del riesgo por tramo:
+
+| β | Apertura | Media jornada | Cierre | Regla |
+|---|---:|---:|---:|---|
+| 0 | 0 % | 0 % | 0 % | descartado (< 5 %) |
+| 0,1 β\* = 0,0046 | 9,1 % | 9,4 % | 8,6 % | admisible |
+| 0,3 β\* = 0,0137 | 23,1 % | 23,8 % | 21,9 % | admisible |
+| β\* = 0,0456 | 50,0 % | 51,0 % | 48,3 % | admisible |
+| 3 β\* = 0,137 | 75,0 % | 75,7 % | 73,7 % | admisible por tramo; la política pasiva llega a 86–90 % |
+
+R_E medio por episodio (CLP por acción):
+
+| Tramo | β | Agresiva | TWAP | Pasiva | Ranking |
+|---|---|---:|---:|---:|---|
+| Apertura | 0 | −2,57 | −0,87 | −0,09 | pasiva > TWAP > agresiva |
+| Apertura | β\* | −4,41 | −3,26 | −1,76 | pasiva > TWAP > agresiva |
+| Media jornada | 0 | −1,55 | −0,69 | +0,01 | pasiva > TWAP > agresiva |
+| Media jornada | β\* | −2,36 | −3,33 | −1,08 | pasiva > agresiva > TWAP |
+| Cierre | 0 | −0,20 | −0,24 | +0,19 | pasiva > agresiva > TWAP |
+| Cierre | β\* | −0,89 | −1,39 | −0,62 | pasiva > agresiva > TWAP |
+
+Qué se observa:
+
+- **La política pasiva domina en los tres tramos y para todos los β.** Una orden límite de 1 000 acciones en el mejor bid se llena completa en 2–4 pasos (mediana) y casi sin costo frente al mid.
+- **La agresiva paga impacto, no spread:** ≈ 2,6 CLP por acción en apertura (4,4 bps) con un spread de 0,2 bps. El libro es poco profundo (`mm_pov` = 0,005) y una orden de mercado de 1 000 acciones lo recorre; en apertura necesita una mediana de 3 pasos para completarse.
+- **El ranking cambia con β solo en media jornada:** la TWAP pasa del segundo al tercer lugar con β\*.
+- **Cumplimiento:** 100 % en agresiva y pasiva; 95–100 % en TWAP (usa los 30 pasos).
+- **El slippage frente al precio de llegada no discrimina** con 20 semillas: su desvío entre episodios (2–15 CLP) es del tamaño de las diferencias entre políticas o mayor. El término de precio de R_E, medido contra el mid del paso, sí las separa.
+
+### 5.4 Qué mide realmente el término de riesgo
+
+| Tramo | Prior (CLP²) | σ² media al ejecutar: agresiva | pasiva | TWAP |
+|---|---:|---:|---:|---:|
+| Apertura | 41,1 | 40,3 | 36,7 | 52,7 |
+| Media jornada | 17,8 | 17,7 | 23,9 | 58,1 |
+| Cierre | 15,5 | 15,3 | 17,6 | 25,4 |
+
+Las políticas agresiva y pasiva terminan en los primeros pasos, cuando todavía rige el prior. La TWAP reparte la ejecución en 30 pasos y ve la ventana llena, cuya varianza es 1,3–3,3 veces el prior. Eso **no** refleja un mercado más volátil: es la propiedad descrita en §2. La varianza del *nivel* del precio en una ventana de *n* puntos crece como (n + 1)/6 veces la varianza de un paso, de 1× con 5 puntos a 3,5× con 20.
+
+**Consecuencia: tal como está definido, el término de riesgo castiga ejecutar tarde durante los primeros 20 pasos del episodio**, con independencia del estado del mercado. Eso contradice la interpretación de §3 (el riesgo no debería penalizar la espera) y explica por qué la TWAP pierde posiciones al subir β.
+
+### 5.5 Decisión abierta sobre σ²
+
+Dos formas de quitar ese efecto, ninguna implementada:
+
+- **Normalizar por el largo de la ventana:** usar σ²·6/(n + 1), que estima la varianza de un paso para cualquier *n* y es comparable con el prior. Es el cambio mínimo.
+- **Usar la varianza de los incrementos del mid** en vez de la del nivel. No depende de *n*, pero se aparta de la redacción del Título I ("varianza del precio").
+
+Con cualquiera de las dos β\* sube (σ² medio baja) y hay que repetir el barrido. Se mantuvo la definición del plan hasta decidirlo con el equipo, porque cambia la recompensa que verá PPO.
+
+### 5.6 Recomendación
+
+- **Rango para la fase 2: β ∈ [0,0046; 0,046] CLP⁻¹** (0,1 β\* a β\*). Se deja fuera 3 β\*: aunque pasa la regla por tramo, la política pasiva queda con 86–90 % de peso de riesgo y la TWAP con 80–85 %.
+- **Finalistas sugeridos:** 0,3 β\* = 0,014 y β\* = 0,046.
+- **Condición:** estos valores valen para la definición actual de σ². Si se adopta la normalización de §5.5 hay que recalcularlos.
+- `BETA_RIESGO_EJECUTOR` se mantiene en 0,0 hasta la fase 2.
 
 ## 6. Pendientes
 
-1. **Barrido en ABIDES calibrado** (Celda 12 del notebook), con la config de la 2.2.4.
+1. **Definición de σ²** (§5.5): decidir si se normaliza por el largo de la ventana y, si se hace, repetir el barrido.
 2. **Fase 2 (PPO).** Corridas cortas con 2–3 β finalistas y elección por IS y cumplimiento. Depende de la 2.2.1 (Mauricio); si se atrasa pasa al Sprint 5.
 3. **Escala.** Confirmación de Mauricio del default `por_accion_slice`.
 4. **P_mid de referencia.** El fallback usa el mid previo a la ejecución y `ExecutionEnv27` el del despertar siguiente, posterior a los fills (así estaba antes de esta tarea; no se cambió para no romper la regresión con β = 0). Con una orden de mercado grande el mid posterior ya incorpora parte del impacto y subestima el costo. Conviene unificarlo en el mid previo.

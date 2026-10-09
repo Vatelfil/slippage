@@ -132,6 +132,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--grid-spec", default=None, help="JSON con {factor: [niveles]} para reemplazar la grilla")
     ap.add_argument("--screen", action="store_true", help="corre solo el sondeo de sensibilidad")
     ap.add_argument("--max-configs", type=int, default=rs.MAX_COMBINACIONES)
+    ap.add_argument("--factorial", action="store_true",
+                    help="con --screen: todas las combinaciones de la grilla en vez de un factor por vez")
+    ap.add_argument("--tag", default="", help="con --screen: sufijo del archivo de salida")
     ap.add_argument("--retry-errors", action="store_true")
     args = ap.parse_args(argv)
 
@@ -152,8 +155,10 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         return rs.loss(pooled, objetivos, vol_ref_unica_bps=dia["sigma_dia_bps"])
 
     if args.screen:
-        configs, seeds, end_time = rs.build_screen(spec), [1], SCREEN_END_TIME
-        out_path = out_dir / f"rmsc04_screen_{args.ticker}_{args.snapshot}.json"
+        configs = rs.build_grid(spec, args.max_configs) if args.factorial else rs.build_screen(spec)
+        seeds, end_time = [1], SCREEN_END_TIME
+        sufijo = f"_{args.tag}" if args.tag else ""
+        out_path = out_dir / f"rmsc04_screen{sufijo}_{args.ticker}_{args.snapshot}.json"
         firma.update({"modo": "screen", "end_time": end_time})
     else:
         configs = rs.build_grid(spec, args.max_configs)
