@@ -18,11 +18,16 @@ Requiere ABIDES-Gym instalado (Python 3.9, ver Dockerfile).
 """
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple
 
 import gymnasium
 import numpy as np
 
+from src.config.market_params import (
+    BETA_RIESGO_EJECUTOR,
+    ESCALA_RECOMPENSA_EJECUTOR,
+    VENTANA_SIGMA2_PASOS,
+)
 from src.envs import abides_bridge as br
 from src.envs.ejecutor_env import EjecutorEnv
 
@@ -63,9 +68,17 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
     raw_state_to_state_pre_process = markets_agent_utils.ignore_mkt_data_buffer_decorator
 
     def __init__(self, *args, bridge_cfg: Optional[br.BridgeConfig] = None,
-                 beta: float = 0.0, **kwargs):
+                 beta: float = BETA_RIESGO_EJECUTOR,
+                 reward_escala: str = ESCALA_RECOMPENSA_EJECUTOR,
+                 sigma_5min: Optional[float] = None,
+                 ventana_sigma2: int = VENTANA_SIGMA2_PASOS, **kwargs):
         self._cfg = bridge_cfg or br.BridgeConfig()
-        self._beta = beta  # PENDIENTE de calibracion (Sprint 4); 0.0 explicito
+        self._beta = beta
+        # R_E (2.2.3): varianza movil causal del P_mid, escala comun con el
+        # fallback y precios en CLP. `sigma_5min` fija el prior de sigma2.
+        self._reward = br.ExecutorRewardState(
+            beta=beta, escala=reward_escala, unidades_por_clp=self._cfg.unidades_por_clp,
+            sigma_5min=sigma_5min, window=ventana_sigma2)
         self._entry_price: Optional[float] = None
         self._best_bid = 0.0
         self._best_ask = 0.0
@@ -88,7 +101,9 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
     def reset(self):
         self._entry_price = None
         self._remaining = float(self.parent_order_size)
-        return super().reset()
+        state = super().reset()  # fija self._entry_price en raw_state_to_state
+        self._reward.reset(self._entry_price)
+        return state
 
     # --- accion: nuestras 240 -> ordenes ABIDES ---
     def _map_action_space_to_ABIDES_SIMULATOR_SPACE(self, action):
@@ -126,7 +141,7 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         bids, asks = br.last_snapshot(mkt["bids"]), br.last_snapshot(mkt["asks"])
         mid = br.mid_price(bids, asks, br.last_scalar(mkt["last_transaction"]))
         orders = br.last_orders(raw_state["internal_data"]["inter_wakeup_executed_orders"])
-        return br.step_reward(orders, mid, self.parent_order_size, beta=self._beta)
+        return self._reward.step(orders, mid, self.parent_order_size)
 
     @raw_state_pre_process
     def raw_state_to_update_reward(self, raw_state: Dict[str, Any]) -> float:
@@ -137,9 +152,12 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
     @raw_state_pre_process
     def raw_state_to_info(self, raw_state: Dict[str, Any]) -> Dict[str, Any]:
         internal = raw_state["internal_data"]
-        return {"holdings": br.last_scalar(internal["holdings"]),
+        info = {"holdings": br.last_scalar(internal["holdings"]),
                 "remaining": self._remaining, "entry_price": self._entry_price,
-                "best_bid": self._best_bid, "best_ask": self._best_ask}
+                "best_bid": self._best_bid, "best_ask": self._best_ask,
+                "unidades_por_clp": self._cfg.unidades_por_clp}
+        info.update(self._reward.last)  # sigma2 y componentes de R_E del paso (en CLP)
+        return info
 
 
 class EjecutorEnvAbides(EjecutorEnv):
@@ -149,6 +167,10 @@ class EjecutorEnvAbides(EjecutorEnv):
     def __init__(self, executor_id="apertura", q_slice: int = 1000, ventana_min: int = 10,
                  timestep_duration: str = "30s", background_config: str = "rmsc04",
                  seed: Optional[int] = None, **abides_kwargs):
+        # `abides_kwargs` llega a ExecutionEnv27: ademas de los argumentos de
+        # ABIDES (p. ej. `background_config_extra_kvargs` con la config
+        # calibrada de la 2.2.4) acepta `bridge_cfg`, `beta`, `reward_escala`,
+        # `sigma_5min` y `ventana_sigma2`.
         super().__init__(executor_id=executor_id, max_steps=max(1, ventana_min * 2))
         self._seed = seed
         self._inner = ExecutionEnv27(
@@ -170,7 +192,11 @@ class EjecutorEnvAbides(EjecutorEnv):
             self._inner.seed(s)  # API vieja de gym; verificar que existe (ver doc)
         obs = np.asarray(self._inner.reset(), dtype=np.float32).reshape(br.OBS_DIM)
         self._step_count = 0
-        return obs, {"executor_id": self.executor_id}
+        # `entry_price` es lo que MaestroEjecutorEnv usa como P_referencia del
+        # primer episodio; sin esta llave quedaba en None con ABIDES.
+        return obs, {"executor_id": self.executor_id,
+                     "entry_price": self._inner._entry_price,
+                     "unidades_por_clp": self._inner._cfg.unidades_por_clp}
 
     def step(self, action) -> Tuple[np.ndarray, float, bool, bool, Dict[str, Any]]:
         action_arr = np.asarray(action, dtype=np.int64)
@@ -184,3 +210,25 @@ class EjecutorEnvAbides(EjecutorEnv):
     def close(self):
         if hasattr(self._inner, "close"):
             self._inner.close()
+
+
+def make_calibrated_env_factory(calibrated_json, ticker: str = "FALABELLA", **common) -> Callable:
+    """Fabrica de `EjecutorEnvAbides` con rmsc04 calibrado (2.2.4), para pasar
+    como `executor_env_factory` a `MaestroEjecutorEnv`. Cada tramo usa su
+    propia config (`fund_vol` es por tramo), la unidad de cuenta del JSON y el
+    `sigma_5min` del tramo como prior de sigma2."""
+    from src.envs.calibrate_rmsc04_ipsa import load_abides_kwargs, load_unidades_por_clp
+    from src.envs.reward_utils import sigma_5min_tramo
+
+    kwargs_por_tramo = load_abides_kwargs(calibrated_json)
+    unidades = load_unidades_por_clp(calibrated_json)
+
+    def factory(executor_id="apertura", **kw):
+        args = {"background_config_extra_kvargs": dict(kwargs_por_tramo[executor_id]),
+                "bridge_cfg": br.BridgeConfig(unidades_por_clp=unidades),
+                "sigma_5min": sigma_5min_tramo(ticker, executor_id)}
+        args.update(common)
+        args.update(kw)
+        return EjecutorEnvAbides(executor_id=executor_id, **args)
+
+    return factory

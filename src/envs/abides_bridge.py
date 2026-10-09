@@ -13,15 +13,26 @@ markets_execution_environment_v0.py), de donde salen la estructura de
 mkt_open/current_time/inter_wakeup_executed_orders) y el formato de ordenes
 ({"type": "MKT"|"LMT"|"CCL_ALL", "direction", "size", "limit_price"}).
 
-Precios de ABIDES: enteros en centavos. Todo se normaliza respecto del precio
-de entrada, asi que la escala absoluta no importa.
+Precios de ABIDES: enteros en la unidad de cuenta de la simulacion (centavos
+en rmsc04 sin calibrar; decimos de CLP con la config calibrada de la 2.2.4).
+La observacion se normaliza respecto del precio de entrada, asi que la escala
+absoluta no importa. La recompensa si depende de la unidad: se convierte a CLP
+con `BridgeConfig.unidades_por_clp` (ver `ExecutorRewardState`).
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
+
+from src.config.market_params import (
+    BETA_RIESGO_EJECUTOR,
+    ESCALA_RECOMPENSA_EJECUTOR,
+    STEP_SECONDS,
+    VENTANA_SIGMA2_PASOS,
+)
+from src.envs.reward_utils import RollingPriceVariance, prior_sigma2, reward_components
 
 N_LEVELS = 5
 OBS_DIM = 27  # SE_schema.json: privado 3 + bid 10 + ask 10 + mercado 4
@@ -35,7 +46,10 @@ class BridgeConfig:
     volume_cap: float = 2000.0    # volumen por nivel que se satura en 1.0
     q_slice_cap: float = 10_000.0  # tamano de slice que se satura en 1.0
     spread_cap_frac: float = 0.02  # spread que se satura en 1.0 (2% del precio)
-    tick: int = 1                 # tick de ABIDES: 1 centavo
+    tick: int = 1                 # tick de ABIDES: 1 unidad de cuenta
+    # Unidades de cuenta de ABIDES por CLP, para expresar R_E en CLP: 100 con
+    # centavos (rmsc04 sin calibrar), 10 con la config calibrada en decimos.
+    unidades_por_clp: float = 100.0
 
 
 # ---------------------------------------------------------------------------
@@ -168,11 +182,69 @@ def map_action_to_abides_orders(action: Sequence[int], remaining: float, best_bi
 
 def step_reward(executed_orders: Sequence, mid: float, parent_size: float,
                 beta: float = 0.0, sigma2: float = 0.0) -> float:
-    """R_E de un paso, dividido por `parent_size` (igual que la clase base de ABIDES,
-    para mantener la escala acotada: unidades = centavos por accion de la orden).
-    `beta` sigue PENDIENTE de calibracion (Sprint 4): 0.0 explicito, no inventado."""
+    """R_E de un paso en la unidad de cuenta de ABIDES, dividido por
+    `parent_size`. Es la formula original (previa a la 2.2.3) y se conserva
+    por compatibilidad; el entorno usa `ExecutorRewardState`, que agrega la
+    varianza movil y la conversion a CLP. Equivale a `ExecutorRewardState`
+    con escala "por_accion_slice" y `unidades_por_clp = 1`."""
     total = 0.0
     for o in executed_orders:
         q = float(o.quantity)
         total += (mid - float(o.fill_price)) * q - beta * sigma2 * q
     return total / max(parent_size, 1e-9)
+
+
+def fills_summary(executed_orders: Sequence) -> Tuple[float, float]:
+    """(cantidad total, precio promedio ponderado) de las ordenes ejecutadas
+    entre dos despertares; (0, nan) si no hubo."""
+    q = sum(float(o.quantity) for o in executed_orders)
+    if q <= 0:
+        return 0.0, float("nan")
+    return q, sum(float(o.fill_price) * float(o.quantity) for o in executed_orders) / q
+
+
+class ExecutorRewardState:
+    """Estado de la recompensa de un episodio del Ejecutor en ABIDES (2.2.3):
+    mantiene la varianza movil causal del P_mid y calcula R_E en CLP con
+    `reward_utils`, igual que `EjecutorEnvPoissonFallback`.
+
+    Los precios entran en la unidad de cuenta de ABIDES y se pasan a CLP con
+    `unidades_por_clp`. `sigma_5min` (desvio del retorno de 5 min del tramo)
+    fija el prior de sigma2; con None el prior es 0.
+    """
+
+    def __init__(self, beta: float = BETA_RIESGO_EJECUTOR, escala: str = ESCALA_RECOMPENSA_EJECUTOR,
+                 unidades_por_clp: float = 100.0, sigma_5min: Optional[float] = None,
+                 window: int = VENTANA_SIGMA2_PASOS, step_seconds: float = STEP_SECONDS):
+        self.beta = float(beta)
+        self.escala = escala
+        self.unidades_por_clp = float(unidades_por_clp)
+        self.sigma_5min = sigma_5min
+        self.step_seconds = float(step_seconds)
+        self._var = RollingPriceVariance(window=window)
+        self.last: Dict[str, Any] = {}
+
+    def reset(self, entry_price: float) -> None:
+        """Inicio de episodio: fija el prior con el precio de entrada y lo
+        registra como primer punto de la ventana."""
+        p_ref = float(entry_price) / self.unidades_por_clp
+        prior = prior_sigma2(self.sigma_5min, p_ref, self.step_seconds) if self.sigma_5min else 0.0
+        self._var.reset(prior_sigma2=prior)
+        self._var.update(p_ref)
+        self.last = {}
+
+    def step(self, executed_orders: Sequence, mid: float, parent_size: float) -> float:
+        """R_E del paso. `mid` es el P_mid del despertar actual; sigma2 usa
+        solo los P_mid de los despertares anteriores."""
+        p_mid = float(mid) / self.unidades_por_clp
+        sigma2 = self._var.step(p_mid)
+        q, p_fill = fills_summary(executed_orders)
+        p_ejec = p_fill / self.unidades_por_clp if q > 0 else p_mid
+        comp = reward_components(p_mid, p_ejec, q, sigma2, self.beta, self.escala,
+                                 q_slice=max(float(parent_size), 1e-9))
+        self.last = {
+            "sigma2": sigma2, "reward_precio": comp["precio"], "reward_riesgo": comp["riesgo"],
+            "reward_escala": self.escala, "p_mid_clp": p_mid,
+            "q_fill_step": q, "p_fill_step_clp": p_ejec if q > 0 else None,
+        }
+        return comp["total"]
