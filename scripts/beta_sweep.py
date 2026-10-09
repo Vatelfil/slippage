@@ -48,7 +48,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     out_path = Path(args.out_dir) / f"beta_sweep_{ENTORNO}_{args.fecha}.json"
     firma = {"entorno": ENTORNO, "ticker": args.ticker, "q_slice": args.q_slice,
              "ventana_min": args.ventana_min, "p_referencia": args.p_referencia,
-             "ventana_sigma2": VENTANA_SIGMA2_PASOS, "politicas": list(bs.POLITICAS),
+             "ventana_sigma2": VENTANA_SIGMA2_PASOS, "sigma2": "nivel_normalizada_6_sobre_n_mas_1", "politicas": list(bs.POLITICAS),
              "nivel_pasivo": bs.NIVEL_PASIVO[ENTORNO]}
     estado = load_resumable(out_path, firma)
 

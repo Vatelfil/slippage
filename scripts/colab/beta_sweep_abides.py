@@ -47,7 +47,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
 
     out_path = Path(args.out_dir) / f"beta_sweep_{ENTORNO}_{args.fecha}.json"
     firma = {"entorno": ENTORNO, "ticker": args.ticker, "q_slice": args.q_slice,
-             "ventana_min": args.ventana_min, "ventana_sigma2": VENTANA_SIGMA2_PASOS,
+             "ventana_min": args.ventana_min, "ventana_sigma2": VENTANA_SIGMA2_PASOS, "sigma2": "nivel_normalizada_6_sobre_n_mas_1",
              "politicas": list(bs.POLITICAS), "nivel_pasivo": bs.NIVEL_PASIVO[ENTORNO],
              "calibrated_json": Path(args.calibrated_json).name,
              "abides_kwargs": load_abides_kwargs(args.calibrated_json),

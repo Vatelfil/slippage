@@ -3,7 +3,7 @@
 **Proyecto:** Coordinación de Agentes para la Mitigación del Slippage (IPSA) — Título II, UTEM
 **Responsable:** Benjamín Farias (BF)
 
-> **Estado al 2026-10-08.** Implementados σ² causal y la escala común; barrido de β de la fase 1 corrido en el fallback Poisson y en ABIDES calibrado. **Rango recomendado: β ∈ [0,0046; 0,046] CLP⁻¹** (0,1 β\* a β\* de ABIDES). **Pendientes:** una decisión sobre la definición de σ² que el barrido dejó a la vista (§5.5), la confirmación de la escala por parte de Mauricio Reynoso y la fase 2 con PPO. `BETA_RIESGO_EJECUTOR` sigue en 0.
+> **Estado al 2026-10-09.** Implementados σ² causal **normalizada por el largo de la ventana** (decisión del 9 oct, §2 y §5.5) y la escala común en CLP por acción del slice (decisión del 9 oct, §4). Barrido de β de la fase 1 corrido en el fallback Poisson con la definición final, y en ABIDES calibrado con la definición **anterior** de σ². **Pendientes:** repetir el barrido de ABIDES con la σ² normalizada (el rango de β de §5.6 es provisional hasta entonces) y la fase 2 con PPO. `BETA_RIESGO_EJECUTOR` sigue en 0.
 
 | Qué | Dónde |
 |---|---|
@@ -11,7 +11,7 @@
 | Parámetros (β, ventana, escala) | [`src/config/market_params.py`](../src/config/market_params.py) |
 | Entornos | [`src/envs/fallback_poisson_env.py`](../src/envs/fallback_poisson_env.py), [`src/envs/abides_ejecutor_env.py`](../src/envs/abides_ejecutor_env.py), [`src/envs/abides_bridge.py`](../src/envs/abides_bridge.py) |
 | Barrido de β | [`src/experiments/beta_sweep.py`](../src/experiments/beta_sweep.py), [`scripts/beta_sweep.py`](../scripts/beta_sweep.py), [`scripts/colab/beta_sweep_abides.py`](../scripts/colab/beta_sweep_abides.py) |
-| Resultados | [`beta_sweep_poisson_2026-10-03.json`](../data/calibration/beta_sweep_poisson_2026-10-03.json), [`beta_sweep_abides_2026-10-09.json`](../data/calibration/beta_sweep_abides_2026-10-09.json) |
+| Resultados | [`beta_sweep_poisson_2026-10-09.json`](../data/calibration/beta_sweep_poisson_2026-10-09.json), [`beta_sweep_abides_2026-10-09.json`](../data/calibration/beta_sweep_abides_2026-10-09.json) |
 | Tests | `tests/test_reward_utils.py`, `tests/test_beta_sweep.py` |
 
 ---
@@ -28,7 +28,13 @@ Antes de esta tarea el término de riesgo era 0 en los dos entornos: el fallback
 
 ## 2. σ²_precio
 
-**Definición.** Varianza muestral del P_mid en una ventana móvil de las últimas W decisiones. W = `VENTANA_SIGMA2_PASOS` = 20 pasos, es decir, 10 min con pasos de 30 s. Unidades: CLP².
+**Definición.** Varianza muestral del P_mid en una ventana móvil de las últimas W decisiones, normalizada por el número *n* de puntos de la ventana:
+
+$$
+\sigma^2_{precio} = \operatorname{Var}\big(P_{mid}\ \text{en la ventana}\big)\cdot\frac{6}{n+1}
+$$
+
+W = `VENTANA_SIGMA2_PASOS` = 20 pasos, es decir, 10 min con pasos de 30 s. Unidades: CLP². Con la normalización, σ² estima la varianza del cambio de precio en **un paso**, cualquiera sea el largo de la ventana.
 
 **Causalidad.** La varianza que entra en la recompensa del paso *t* usa solo los P_mid observados hasta *t* − 1; el P_mid de *t* se incorpora después. `RollingPriceVariance.step(p_mid_t)` hace las dos cosas en ese orden. El test `test_sigma2_es_causal_sin_look_ahead` aplica un shock de precio en *t* = 25 y comprueba que σ² no cambia hasta *t* = 26.
 
@@ -40,7 +46,9 @@ $$
 
 con σ_5min el desvío del retorno de 5 min del tramo (`obs_return_std` de la 2.1.3) y P_ref el precio de entrada. Es la varianza del cambio de precio en un paso. Para FALABELLA a 5 970 CLP: 41,1 / 17,8 / 15,5 CLP² en apertura / media jornada / cierre.
 
-**Por qué 5 puntos.** Para un paseo aleatorio, la varianza muestral de *n* niveles consecutivos vale en promedio σ²_paso · (n + 1)/6. Con *n* = 5 coincide con el prior, de modo que el paso del prior a la ventana no tiene un salto en promedio. Con la ventana llena (*n* = 20) vale 3,5 veces el prior: σ² mide la dispersión del nivel en 10 min, no la de un paso.
+**Por qué se normaliza.** Para un paseo aleatorio, la varianza muestral de *n* niveles consecutivos vale en promedio σ²_paso · (n + 1)/6: crece con *n*, de 1 vez la varianza de un paso con 5 puntos a 3,5 veces con 20. Sin el factor 6/(n + 1), σ² subía mientras la ventana se llenaba y el término de riesgo castigaba ejecutar tarde aunque el mercado no estuviera más volátil; el barrido en ABIDES lo dejó a la vista (§5.4). Con el factor, la ventana es comparable con el prior para cualquier *n*. El test `test_sigma2_normalizada_no_crece_con_el_largo_de_la_ventana` comprueba que la media de σ² es la varianza de un paso con 5, 10 y 20 puntos.
+
+**Por qué 5 puntos como mínimo.** Con *n* = 5 el factor vale 1, así que el paso del prior a la ventana no cambia la fórmula; con menos puntos la varianza muestral es demasiado ruidosa.
 
 ## 3. Interpretación del término de riesgo
 
@@ -63,7 +71,7 @@ Antes los dos entornos entregaban R_E en escalas distintas:
 
 **Regresión.** Con β = 0 y la escala anterior de cada entorno, la recompensa es idéntica a la previa (`test_fallback_beta_cero_reproduce_la_recompensa_anterior`, `test_bridge_beta_cero_reproduce_step_reward_anterior`).
 
-**Pendiente de acordar.** El default está fijado de forma provisional; se envió la propuesta a Mauricio porque cambia la escala que ve PPO en el fallback. Si se objeta, basta con cambiar la constante.
+**Decisión (2026-10-09).** La escala queda en CLP por acción del slice. Cambia la escala que ve PPO en el fallback respecto de la previa a esta tarea; `"bruta"` sigue disponible como opción.
 
 **`info`.** Los dos entornos exponen `sigma2`, `reward_precio`, `reward_riesgo` y `reward_escala` en cada paso.
 
@@ -89,7 +97,7 @@ con medias ponderadas por q_ejec: es el β con el que, en el agregado, el térmi
 
 ### 5.1 Resultado en el fallback Poisson
 
-β\* = **0,59 CLP⁻¹** (por tramo: 0,48 / 0,68 / 0,78).
+Corrido con la σ² normalizada. β\* = **0,59 CLP⁻¹** (por tramo: 0,48 / 0,68 / 0,79). Es prácticamente igual al obtenido antes de normalizar (0,5905 contra 0,5917), porque en el fallback casi todo el riesgo se acumula mientras rige el prior, que no cambió.
 
 Peso del riesgo por tramo (las tres políticas juntas):
 
@@ -98,8 +106,8 @@ Peso del riesgo por tramo (las tres políticas juntas):
 | 0 | 0 % | 0 % | 0 % | descartado (< 5 %) |
 | 0,1 β\* = 0,059 | 10,9 % | 8,0 % | 7,0 % | admisible |
 | 0,3 β\* = 0,177 | 26,9 % | 20,8 % | 18,5 % | admisible |
-| β\* = 0,591 | 55,1 % | 46,6 % | 43,0 % | admisible |
-| 3 β\* = 1,772 | 78,7 % | 72,4 % | 69,4 % | admisible, al borde en apertura |
+| β\* = 0,592 | 55,1 % | 46,6 % | 43,0 % | admisible |
+| 3 β\* = 1,775 | 78,7 % | 72,4 % | 69,4 % | admisible, al borde en apertura |
 
 Por política el margen es más estrecho: con 3 β\* la política agresiva tiene 81–87 % de peso de riesgo, y con 0,1 β\* la TWAP tiene 3–5 %.
 
@@ -108,21 +116,21 @@ R_E medio por episodio (CLP por acción) en apertura:
 | β | Agresiva | TWAP | Pasiva | Ranking |
 |---|---:|---:|---:|---|
 | 0 | −10,87 | −9,70 | −10,92 | TWAP > agresiva > pasiva |
-| 0,1 β\* | −13,29 | −10,17 | −11,89 | TWAP > pasiva > agresiva |
-| β\* | −35,13 | −14,37 | −20,65 | TWAP > pasiva > agresiva |
-| 3 β\* | −83,65 | −23,72 | −40,12 | TWAP > pasiva > agresiva |
+| 0,1 β\* | −13,30 | −10,17 | −11,89 | TWAP > pasiva > agresiva |
+| β\* | −35,17 | −14,36 | −20,66 | TWAP > pasiva > agresiva |
+| 3 β\* | −83,79 | −23,67 | −40,14 | TWAP > pasiva > agresiva |
 
 El slippage (18,2 / 17,7 / 18,4 bps en apertura) y el cumplimiento (100 % / 92 % / 100 %) no dependen de β. El ranking cambia con β en apertura y media jornada (la agresiva pasa del segundo al tercer lugar ya con 0,1 β\*) y no cambia en cierre.
 
 ### 5.2 Por qué el resultado del fallback no fija β
 
-**El fallback Poisson no sirve para calibrar el nivel de β.** Su P_mid se mueve ≈ 0,19–0,21 CLP por paso, contra 3,9–6,4 CLP del prior (que sale de la volatilidad real). La σ² de la ventana, una vez que deja el prior, es 157–479 veces menor que el prior:
+**El fallback Poisson no sirve para calibrar el nivel de β.** Su P_mid se mueve ≈ 0,19–0,21 CLP por paso, contra 3,9–6,4 CLP del prior (que sale de la volatilidad real). La σ² de la ventana, una vez que deja el prior, es 400–1 350 veces menor que el prior:
 
 | Tramo | Prior (CLP²) | σ² mediana de la ventana (CLP²) | Razón |
 |---|---:|---:|---:|
-| Apertura | 41,08 | 0,086 | 479 |
-| Media jornada | 17,79 | 0,073 | 244 |
-| Cierre | 15,51 | 0,099 | 157 |
+| Apertura | 41,08 | 0,030 | 1 349 |
+| Media jornada | 17,79 | 0,029 | 615 |
+| Cierre | 15,51 | 0,039 | 401 |
 
 En el fallback el término de riesgo pesa casi solo en los cuatro primeros pasos del episodio, mientras rige el prior. Por eso la política agresiva, que ejecuta todo en el primer paso, es la más castigada: el barrido mide el efecto "ejecutar antes de que la ventana se llene", no "ejecutar cuando el precio está volátil". β\* queda determinado por el prior y por cuánto se ejecuta bajo él.
 
@@ -131,7 +139,9 @@ En el fallback el término de riesgo pesa casi solo en los cuatro primeros pasos
 - *Convención del nivel de precio invertida.* El contrato (`spaces.py`, `abides_bridge.py`) dice que el nivel 0 es el más pasivo y el 7 el más agresivo. `PoissonLOBSimulator.execute_limit_buy` usa la probabilidad de llenado `1 − nivel/8`: el nivel 0 se llena siempre y el 7 casi nunca. La política pasiva usa el nivel 7 en el fallback y el 0 en ABIDES (`NIVEL_PASIVO`). No se modificó el simulador.
 - *Una LIMIT llenada paga como una MARKET.* En el fallback una orden límite que se llena barre el lado ask igual que una de mercado, así que nunca compra bajo el mid: el término de precio es siempre negativo y las políticas se diferencian solo por cuándo y cuánto barren.
 
-### 5.3 Resultado en ABIDES calibrado
+### 5.3 Resultado en ABIDES calibrado (σ² sin normalizar)
+
+> Esta corrida es del 8 de octubre y usa la definición **anterior** de σ² (varianza del nivel sin el factor 6/(n + 1)). Se conserva porque es la evidencia que motivó el cambio. Las cifras de las políticas agresiva y pasiva casi no dependen de la definición (ejecutan bajo el prior); las de la TWAP sí.
 
 Config de la 2.2.4 (`rmsc04_ipsa_FALABELLA_2026-08-23.json`), 20 semillas, slice de 1 000 acciones, ventana de 15 min. Se corrió dos veces (5 y 8 de octubre) con resultados idénticos.
 
@@ -166,7 +176,7 @@ Qué se observa:
 - **Cumplimiento:** 100 % en agresiva y pasiva; 95–100 % en TWAP (usa los 30 pasos).
 - **El slippage frente al precio de llegada no discrimina** con 20 semillas: su desvío entre episodios (2–15 CLP) es del tamaño de las diferencias entre políticas o mayor. El término de precio de R_E, medido contra el mid del paso, sí las separa.
 
-### 5.4 Qué mide realmente el término de riesgo
+### 5.4 Qué medía el término de riesgo sin normalizar
 
 | Tramo | Prior (CLP²) | σ² media al ejecutar: agresiva | pasiva | TWAP |
 |---|---:|---:|---:|---:|
@@ -176,31 +186,29 @@ Qué se observa:
 
 Las políticas agresiva y pasiva terminan en los primeros pasos, cuando todavía rige el prior. La TWAP reparte la ejecución en 30 pasos y ve la ventana llena, cuya varianza es 1,3–3,3 veces el prior. Eso **no** refleja un mercado más volátil: es la propiedad descrita en §2. La varianza del *nivel* del precio en una ventana de *n* puntos crece como (n + 1)/6 veces la varianza de un paso, de 1× con 5 puntos a 3,5× con 20.
 
-**Consecuencia: tal como está definido, el término de riesgo castiga ejecutar tarde durante los primeros 20 pasos del episodio**, con independencia del estado del mercado. Eso contradice la interpretación de §3 (el riesgo no debería penalizar la espera) y explica por qué la TWAP pierde posiciones al subir β.
+**Consecuencia: sin normalizar, el término de riesgo castigaba ejecutar tarde durante los primeros 20 pasos del episodio**, con independencia del estado del mercado. Eso contradecía la interpretación de §3 (el riesgo no debería penalizar la espera) y explica por qué la TWAP perdía posiciones al subir β.
 
-### 5.5 Decisión abierta sobre σ²
+### 5.5 Decisión: σ² normalizada por el largo de la ventana
 
-Dos formas de quitar ese efecto, ninguna implementada:
+Había dos formas de quitar ese efecto:
 
-- **Normalizar por el largo de la ventana:** usar σ²·6/(n + 1), que estima la varianza de un paso para cualquier *n* y es comparable con el prior. Es el cambio mínimo.
-- **Usar la varianza de los incrementos del mid** en vez de la del nivel. No depende de *n*, pero se aparta de la redacción del Título I ("varianza del precio").
+- **Normalizar por el largo de la ventana**, σ²·6/(n + 1). Estima la varianza de un paso para cualquier *n* y es comparable con el prior. Es el cambio mínimo y mantiene la redacción del Título I ("varianza del precio").
+- Usar la varianza de los incrementos del mid en vez de la del nivel.
 
-Con cualquiera de las dos β\* sube (σ² medio baja) y hay que repetir el barrido. Se mantuvo la definición del plan hasta decidirlo con el equipo, porque cambia la recompensa que verá PPO.
+**Se adoptó la primera (2026-10-09)** y está implementada en `RollingPriceVariance`. Con β = 0 la recompensa no cambia.
 
 ### 5.6 Recomendación
 
-- **Rango para la fase 2: β ∈ [0,0046; 0,046] CLP⁻¹** (0,1 β\* a β\*). Se deja fuera 3 β\*: aunque pasa la regla por tramo, la política pasiva queda con 86–90 % de peso de riesgo y la TWAP con 80–85 %.
-- **Finalistas sugeridos:** 0,3 β\* = 0,014 y β\* = 0,046.
-- **Condición:** estos valores valen para la definición actual de σ². Si se adopta la normalización de §5.5 hay que recalcularlos.
+- **Rango provisional para la fase 2: β ∈ [0,0046; 0,046] CLP⁻¹** (0,1 β\* a β\* de la corrida de ABIDES del 8 de octubre).
+- **Es provisional porque esa corrida usa la σ² sin normalizar.** Con la normalización, la σ² que ve la TWAP baja (hasta 3,5 veces con la ventana llena) y la de las políticas que ejecutan bajo el prior no cambia; β\* debería subir y el ranking de la TWAP mejorar. Hay que repetir `scripts/colab/beta_sweep_abides.py` para tener el rango definitivo.
 - `BETA_RIESGO_EJECUTOR` se mantiene en 0,0 hasta la fase 2.
 
 ## 6. Pendientes
 
-1. **Definición de σ²** (§5.5): decidir si se normaliza por el largo de la ventana y, si se hace, repetir el barrido.
+1. **Repetir el barrido de β en ABIDES** con la σ² normalizada (Celda 12 del notebook, ~2 h) y actualizar §5.3 y §5.6.
 2. **Fase 2 (PPO).** Corridas cortas con 2–3 β finalistas y elección por IS y cumplimiento. Depende de la 2.2.1 (Mauricio); si se atrasa pasa al Sprint 5.
-3. **Escala.** Confirmación de Mauricio del default `por_accion_slice`.
-4. **P_mid de referencia.** El fallback usa el mid previo a la ejecución y `ExecutionEnv27` el del despertar siguiente, posterior a los fills (así estaba antes de esta tarea; no se cambió para no romper la regresión con β = 0). Con una orden de mercado grande el mid posterior ya incorpora parte del impacto y subestima el costo. Conviene unificarlo en el mid previo.
-5. **Schema.** `SE_schema.json` lista β en `pending_calibration`. Cuando β quede fijado, propuesta para el equipo: reemplazar esa entrada por el valor, la ventana W = 20 y la escala. No se modificó el schema.
+3. **P_mid de referencia.** El fallback usa el mid previo a la ejecución y `ExecutionEnv27` el del despertar siguiente, posterior a los fills (así estaba antes de esta tarea; no se cambió para no romper la regresión con β = 0). Con una orden de mercado grande el mid posterior ya incorpora parte del impacto y subestima el costo. Conviene unificarlo en el mid previo.
+4. **Schema.** `SE_schema.json` lista β en `pending_calibration`. Cuando β quede fijado, propuesta para el equipo: reemplazar esa entrada por el valor, la ventana W = 20 y la escala. No se modificó el schema.
 
 ## 7. Reproducción
 
