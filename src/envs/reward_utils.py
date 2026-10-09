@@ -9,18 +9,27 @@ sean las mismas en ambos. Logica pura: no importa ABIDES ni gymnasium.
 
 sigma2_precio
     Varianza del P_mid en una ventana movil CAUSAL de las ultimas W
-    decisiones (`VENTANA_SIGMA2_PASOS`, 20 pasos = 10 min con pasos de 30 s):
-    la varianza que entra en la recompensa del paso t usa solo los P_mid
+    decisiones (`VENTANA_SIGMA2_PASOS`, 20 pasos = 10 min con pasos de 30 s),
+    normalizada por el largo de la ventana:
+
+        sigma2 = Var_muestral(P_mid en la ventana de n puntos) * 6 / (n + 1)
+
+    La varianza que entra en la recompensa del paso t usa solo los P_mid
     observados hasta t-1. Mientras la ventana tiene menos de
     `SIGMA2_MIN_PUNTOS` puntos se usa un prior del tramo,
 
         prior = (sigma_5min * P_ref)^2 * (dt_paso / 300 s),
 
-    la varianza de un cambio de precio de un paso. Para un paseo aleatorio,
-    la varianza muestral de n niveles consecutivos vale en promedio
-    sigma_paso^2 * (n + 1) / 6: con n = 5 coincide con el prior (por eso el
-    minimo es 5) y con la ventana llena (n = 20) es 3,5 veces el prior.
-    Unidades: (unidad de precio)^2; en los entornos, CLP^2.
+    la varianza de un cambio de precio de un paso.
+
+    Por que se normaliza. Para un paseo aleatorio, la varianza muestral de n
+    niveles consecutivos vale en promedio sigma_paso^2 * (n + 1) / 6: crece
+    con n, de 1 vez la varianza de un paso con 5 puntos a 3,5 veces con 20.
+    Sin normalizar, sigma2 subia mientras la ventana se llenaba y el termino
+    de riesgo castigaba ejecutar tarde aunque el mercado no estuviera mas
+    volatil (se vio en el barrido de beta en ABIDES del 2026-10-08). Con el
+    factor 6 / (n + 1), sigma2 estima la varianza de UN paso para cualquier
+    n y es comparable con el prior. Unidades: CLP^2.
 
 Interpretacion
     Todo el slice debe ejecutarse, asi que el termino de riesgo no castiga
@@ -70,7 +79,9 @@ def sigma_5min_tramo(ticker: str, tramo: str,
 
 
 class RollingPriceVariance:
-    """Varianza muestral del P_mid en una ventana movil de `window` puntos.
+    """Varianza del P_mid en una ventana movil de `window` puntos, normalizada
+    por 6 / (n + 1) para estimar la varianza de un paso (ver el docstring del
+    modulo).
 
     Uso causal: leer `sigma2` ANTES de `update(p_mid_t)`, o llamar a
     `step(p_mid_t)`, que devuelve la varianza con los datos hasta t-1 y luego
@@ -100,11 +111,12 @@ class RollingPriceVariance:
 
     @property
     def sigma2(self) -> float:
-        """Varianza con los puntos incorporados hasta ahora (el prior si hay
-        menos de `min_points`)."""
+        """Varianza de un paso estimada con los puntos incorporados hasta
+        ahora (el prior si hay menos de `min_points`)."""
         if self.usa_prior:
             return self.prior_sigma2
-        return float(np.var(np.fromiter(self._buf, dtype=float), ddof=1))
+        n = len(self._buf)
+        return float(np.var(np.fromiter(self._buf, dtype=float), ddof=1) * 6.0 / (n + 1))
 
     def update(self, p_mid: float) -> None:
         self._buf.append(float(p_mid))
@@ -138,6 +150,13 @@ def executor_reward(p_mid: float, p_ejec: float, q_ejec: float, sigma2: float,
                     q_slice: Optional[float] = None) -> float:
     """R_E = (P_mid - P_ejec) q_ejec - beta sigma2 q_ejec, en la escala pedida."""
     return reward_components(p_mid, p_ejec, q_ejec, sigma2, beta, escala, q_slice)["total"]
+
+
+def normalized_level_variance(niveles) -> float:
+    """Var_muestral(niveles) * 6 / (n + 1): la misma formula de
+    `RollingPriceVariance.sigma2`, para una ventana dada."""
+    x = np.asarray(niveles, dtype=float)
+    return float(np.var(x, ddof=1) * 6.0 / (len(x) + 1))
 
 
 def beta_star(abs_price_diff_mean: float, sigma2_mean: float) -> float:

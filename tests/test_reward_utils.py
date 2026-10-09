@@ -15,6 +15,7 @@ from src.envs.reward_utils import (
     RollingPriceVariance,
     beta_star,
     executor_reward,
+    normalized_level_variance,
     prior_sigma2,
     reward_components,
     sigma_5min_tramo,
@@ -62,6 +63,7 @@ def test_con_menos_de_5_puntos_usa_el_prior():
     assert rv.sigma2 == 7.0 and len(rv) == 4
     rv.update(98.0)  # quinto punto: deja el prior
     assert not rv.usa_prior
+    # con 5 puntos el factor de normalizacion 6 / (n + 1) vale 1
     assert rv.sigma2 == pytest.approx(np.var([100.0, 101.0, 99.0, 102.0, 98.0], ddof=1))
     rv.reset(prior_sigma2=3.0)
     assert rv.sigma2 == 3.0 and len(rv) == 0
@@ -82,7 +84,7 @@ def test_sigma2_es_causal_sin_look_ahead():
             assert s_a == s_b                        # hasta t = 25 inclusive, identicas
         if t >= 5:
             ventana = precios[max(0, t - 20):t]      # solo precios anteriores a t
-            assert s_a == pytest.approx(np.var(ventana, ddof=1))
+            assert s_a == pytest.approx(np.var(ventana, ddof=1) * 6.0 / (len(ventana) + 1))
     assert a.sigma2 != b.sigma2                      # el shock recien se ve despues
 
 
@@ -93,14 +95,29 @@ def test_ventana_movil_descarta_los_puntos_viejos():
     assert rv.sigma2 == 0.0 and len(rv) == 5
 
 
-def test_prior_calza_con_la_varianza_esperada_de_5_niveles_de_un_paseo_aleatorio():
+def test_sigma2_normalizada_no_crece_con_el_largo_de_la_ventana():
     """E[var muestral de n niveles de un paseo aleatorio] = sigma_paso^2 (n+1)/6:
-    con n = 5 es el prior (varianza de un paso) y con n = 20 es 3,5 veces."""
+    sin normalizar es 1 vez la varianza de un paso con n = 5 y 3,5 veces con
+    n = 20. Con el factor 6 / (n + 1), sigma2 estima la varianza de un paso
+    (el prior) para cualquier largo de ventana."""
     rng = np.random.default_rng(1)
     pasos = rng.normal(0, 2.0, size=(20_000, 20))
     niveles = np.cumsum(pasos, axis=1)
     assert np.var(niveles[:, :5], axis=1, ddof=1).mean() == pytest.approx(4.0, rel=0.03)
     assert np.var(niveles, axis=1, ddof=1).mean() == pytest.approx(4.0 * 3.5, rel=0.03)
+
+    def sigma2_media(n):
+        vals = []
+        for fila in niveles[:4000]:
+            rv = RollingPriceVariance(window=20, prior_sigma2=0.0)
+            for p in fila[:n]:
+                rv.update(p)
+            vals.append(rv.sigma2)
+        return float(np.mean(vals))
+
+    for n in (5, 10, 20):
+        assert sigma2_media(n) == pytest.approx(4.0, rel=0.06), n
+    assert normalized_level_variance(niveles[0]) == pytest.approx(np.var(niveles[0], ddof=1) * 6 / 21)
 
 
 # --- formula y escala ------------------------------------------------------
@@ -157,7 +174,7 @@ def test_fallback_sigma2_usa_prior_y_luego_solo_mids_anteriores():
         if len(previos) < 5:
             assert info["sigma2"] == pytest.approx(prior)
         else:
-            assert info["sigma2"] == pytest.approx(np.var(previos, ddof=1))
+            assert info["sigma2"] == pytest.approx(normalized_level_variance(previos))
 
 
 def test_bridge_beta_cero_reproduce_step_reward_anterior():

@@ -51,7 +51,7 @@ def test_nombres_de_archivo_encadenados_entre_celdas():
     assert texto.count('--grid-json "{RESULTS_DIR}/rmsc04_grid_FALABELLA_2026-08-23.json"') == 1
     assert texto.count('--calibrated-json "{RESULTS_DIR}/rmsc04_ipsa_FALABELLA_2026-08-23.json"') == 2
     assert "--ticker FALABELLA --snapshot 2026-08-23 --seeds 3 --out-dir" in texto
-    assert "BRANCH = 'feature/2.2.4-2.2.3-rmsc04-recompensa-BF'" in texto
+    assert "BRANCH = 'main'" in texto
 
 
 def test_todas_las_celdas_de_trabajo_escriben_en_results_dir():

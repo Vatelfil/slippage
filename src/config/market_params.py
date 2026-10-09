@@ -87,10 +87,13 @@ INCLUDE_CLOSING_AUCTION = False
 # de la 2.2.1) elige el valor.
 BETA_RIESGO_EJECUTOR = 0.0
 # Ventana movil causal de sigma2_precio, en pasos de decision (20 x 30 s =
-# 10 min), y minimo de puntos antes de dejar el prior del tramo.
+# 10 min), y minimo de puntos antes de dejar el prior del tramo. sigma2 es la
+# varianza del nivel del P_mid en la ventana por 6 / (n + 1), que estima la
+# varianza de un paso (ver src/envs/reward_utils.py).
 VENTANA_SIGMA2_PASOS = 20
 SIGMA2_MIN_PUNTOS = 5
-# Escala de R_E, comun a los dos entornos del Ejecutor:
+# Escala de R_E, comun a los dos entornos del Ejecutor (decision del
+# 2026-10-09: CLP por accion del slice):
 #   "por_accion_slice": R_E / q_slice, en CLP por accion del slice asignado.
 #   "bruta": R_E en CLP.
 ESCALAS_RECOMPENSA: Tuple[str, ...] = ("por_accion_slice", "bruta")
