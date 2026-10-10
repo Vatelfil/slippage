@@ -4,7 +4,7 @@
 **Responsable:** Benjamín Farias (BF). La plantilla inicial de `calibrate_rmsc04_ipsa.py` es de Paolo Sepúlveda (PS).
 **Activo:** FALABELLA (MVP), snapshot `2026-08-23`.
 
-> **Estado al 2026-10-08.** Calibración corrida en Colab (ABIDES, Python 3.9) entre el 4 y el 8 de octubre: dos sondeos, grilla de 27 combinaciones × 3 semillas, refinamiento local y validación con 10 semillas nuevas por tramo. **Resultado:** el KS de los retornos de 5 min no rechaza en ningún tramo y la volatilidad queda dentro de ±12 % del objetivo. **Limitación principal:** el spread simulado (≈ 0,2 bps) queda 20–100 veces por debajo de los proxies reales y RMSC04 no permite corregirlo sin romper el volumen y la volatilidad (§8.1).
+> **Estado al 2026-10-09.** Calibración corrida en Colab (ABIDES, Python 3.9) entre el 4 y el 9 de octubre: dos sondeos, grilla de 27 combinaciones × 3 semillas, refinamiento local y validación con **30 semillas** nuevas por tramo. **Resultado:** la volatilidad de 5 min queda dentro de un 10 % del objetivo en los tres tramos. **El KS de los retornos de 5 min rechaza en media jornada y cierre** y queda al borde en apertura; la meta del plan (p > 0,05) no se cumple en dos de tres tramos. La distancia D (0,06–0,10) es menor o igual que la del modelo de Poisson de la 2.1.3b (§8.3). **Limitación principal:** el spread simulado (≈ 0,2 bps) queda 20–100 veces por debajo de los proxies reales y RMSC04 no permite corregirlo sin romper el volumen y la volatilidad (§8.1).
 
 | Qué | Dónde |
 |---|---|
@@ -94,7 +94,7 @@ El valor de la plantilla quedaba √(300·10⁹) ≈ 547 723 veces más grande. 
 | **Corregida, décimos** | 0,00037 | 24,3 | 0,67 bps (4 ticks) | 59 707 → 57 820 |
 | Corregida, 1 unidad = 1 CLP | 3,7e-5 | 35,4 | 1,69 bps (1 tick) | 5 968 → 5 870 |
 
-Con la plantilla original el precio explota; con la conversión corregida la volatilidad queda en el orden de magnitud correcto en las tres unidades. La volatilidad de esta celda es una estimación gruesa (una hora, una semilla, velas de 1 min, spread por evento). La medición que vale es la de la validación (§8.3), donde cada tramo corre con su `fund_vol` y 10 semillas: 38,1 / 19,9 / 20,7 bps contra 34,0 / 22,3 / 20,9.
+Con la plantilla original el precio explota; con la conversión corregida la volatilidad queda en el orden de magnitud correcto en las tres unidades. La volatilidad de esta celda es una estimación gruesa (una hora, una semilla, velas de 1 min, spread por evento). La medición que vale es la de la validación (§8.3), donde cada tramo corre con su `fund_vol` y 30 semillas: 34,0 / 20,0 / 20,5 bps contra 34,0 / 22,3 / 20,9.
 
 **Limitación.** `fund_vol` es único por simulación. Se usa una configuración por tramo: cada Ejecutor corre su propio episodio y basta con que calce el tramo medido. No es una volatilidad intradiaria variable.
 
@@ -151,7 +151,7 @@ Exceso de curtosis real de los retornos de 5 min (0 = normal):
 |---:|---:|---:|
 | 5,87 | 5,14 | 3,36 |
 
-Curtosis simulada con la config calibrada (10 semillas): **5,73 / 2,50 / 1,94**. Calza en la apertura y es aproximadamente la mitad de la real en media jornada y cierre: el simulador tiene colas más livianas en esos tramos. No se agregaron megashocks a la búsqueda: un megashock de RMSC04 es un salto del fundamental de ≈ 1 000 unidades (≈ 1,7 % del precio en décimos), demasiado grande para corregir colas de retornos de 5 min, y el KS sobre los retornos no rechaza (§8.3). Queda como diferencia declarada.
+Curtosis simulada con la config calibrada: **8,67 / 2,70 / 5,56** con 30 semillas; con las primeras 10 había dado 5,73 / 2,50 / 1,94. El estimador es inestable (en cierre pasa de 1,9 a 5,6 al agregar semillas): depende de unos pocos retornos extremos, así que no permite concluir si las colas simuladas son más livianas o más pesadas que las reales. No se agregaron megashocks a la búsqueda: un megashock de RMSC04 es un salto del fundamental de ≈ 1 000 unidades (≈ 1,7 % del precio en décimos), demasiado grande para ajustar colas de retornos de 5 min.
 
 ## 7. Diseño de la búsqueda (método de momentos simulado)
 
@@ -190,7 +190,7 @@ $$
 **Validación** (`rmsc04_validate.py`):
 
 1. toma la mejor configuración de la grilla y, con `--refine`, evalúa hasta 10 vecinos (cada parámetro ×1,5 y ÷1,5, de a uno);
-2. corre 10 semillas **nuevas** (101–110, distintas de las de la búsqueda) por tramo, cada uno con su config;
+2. corre semillas **nuevas** (101 en adelante, distintas de las de la búsqueda) por tramo, cada uno con su config. Se corrieron 10 y después se amplió a 30;
 3. KS de 2 muestras de los retornos de 5 min simulados contra los reales por tramo: D, p, D_crit y D/D_crit con `ks_critical_value`, como en la 2.1.3b. También sobre las muestras estandarizadas, que compara solo la forma;
 4. tabla de momentos simulados contra objetivos y rankings.
 
@@ -259,7 +259,7 @@ El spread queda en 1–3 ticks con todas las palancas. La ventana fija del cread
 
 **Inestabilidad con poco flujo de valor.** En una corrida exploratoria del 4 oct (grilla de 8, flujo de valor en 0,4 / 0,6 / 0,8 / 1,0 × `mm_pov` en 0,005 / 0,025, con el peso del spread en 0), el flujo 0,4× dio volatilidades de 40 a 6 863 bps: el precio explota durante la tarde. Eligió la misma config ganadora. Su archivo no se conservó (lo sobrescribió la grilla de 27), por lo que estas cifras salen de la salida de consola y no de un JSON versionado.
 
-### 8.3 Validación (10 semillas nuevas por tramo, 101–110)
+### 8.3 Validación (30 semillas nuevas por tramo, 101–130)
 
 Config calibrada: rmsc04 por defecto con `mm_pov` = 0,005 y, por tramo, `r_bar` = 59 698 y `fund_vol` = 3,70e-4 / 2,43e-4 / 2,27e-4.
 
@@ -267,32 +267,40 @@ Config calibrada: rmsc04 por defecto con `mm_pov` = 0,005 y, por tramo, `r_bar` 
 
 | Tramo | n sim / n real | D | p | D_crit | D/D_crit | Rechaza al 5 % |
 |---|---|---:|---:|---:|---:|:---:|
-| Apertura | 230 / 1 111 | 0,067 | 0,35 | 0,098 | 0,68 | no |
-| Media jornada | 300 / 1 690 | 0,079 | 0,079 | 0,085 | 0,93 | no |
-| Cierre | 230 / 1 252 | 0,079 | 0,17 | 0,097 | 0,81 | no |
+| Apertura | 690 / 1 111 | 0,064 | 0,058 | 0,066 | 0,97 | no (al borde) |
+| Media jornada | 900 / 1 690 | 0,074 | 0,003 | 0,056 | 1,32 | **sí** |
+| Cierre | 690 / 1 252 | 0,099 | 0,0003 | 0,064 | 1,54 | **sí** |
 
-Se cumple la meta del plan (p > 0,05) en los tres tramos. Tres salvedades:
+**La meta del plan (p > 0,05) no se cumple en media jornada ni en cierre.** Con ambas muestras estandarizadas (solo forma) rechaza en los tres tramos: p = 0,040 / 0,002 / 0,0003.
 
-1. **Potencia baja.** Con 230–300 retornos simulados D_crit es 0,085–0,098; en la 2.1.3 era ≈ 0,04 porque se simulaban 5 000. "No rechaza" significa que con esta muestra no se detecta diferencia.
-2. **Media jornada está al borde** (D/D_crit = 0,93).
-3. **La forma sí difiere en dos tramos.** Con ambas muestras estandarizadas (media 0, desvío 1) el KS rechaza en media jornada (D = 0,107; p = 0,005; D/D_crit = 1,26) y en cierre (D = 0,111; p = 0,015; D/D_crit = 1,14), y no rechaza en apertura (D = 0,070; p = 0,30). Es coherente con la curtosis: el simulador tiene colas más livianas que el mercado en esos dos tramos.
+**Qué pasó con 10 semillas.** La primera validación (semillas 101–110) no rechazaba en ningún tramo (p = 0,35 / 0,079 / 0,17). Era falta de potencia: con 230–300 retornos simulados D_crit valía 0,085–0,098. La distancia D casi no cambió al triplicar la muestra (0,067 → 0,064; 0,079 → 0,074; 0,079 → 0,099); lo que bajó fue el umbral. Por eso se amplió a 30 semillas antes de dar el resultado por bueno.
+
+**Tamaño de la diferencia, como en la 2.1.3b.** D mide la mayor distancia entre las dos funciones de distribución acumulada. Comparado con el modelo de Poisson calibrado para el mismo activo:
+
+| Tramo | D con RMSC04 calibrado | D con Poisson compuesto (2.1.3b) | D con Poisson base (2.1.3) |
+|---|---:|---:|---:|
+| Apertura | 0,064 | 0,091 | 0,100 |
+| Media jornada | 0,074 | 0,109 | 0,116 |
+| Cierre | 0,099 | 0,100 | 0,114 |
+
+Los retornos simulados quedan a 6–10 puntos porcentuales de los reales en el peor punto de la CDF: más cerca que el modelo de Poisson en apertura y media jornada, e igual en cierre. El simulador aproxima la distribución de retornos; no se puede afirmar que sea la misma. (Los D/D_crit no son comparables entre las dos tareas, porque la 2.1.3 simulaba 5 000 retornos.)
 
 **Momentos simulados contra objetivos:**
 
 | Momento | Apertura | Media jornada | Cierre |
 |---|---|---|---|
-| Volatilidad de 5 min (bps) | 38,1 / 34,0 (+12 %) | 19,9 / 22,3 (−11 %) | 20,7 / 20,9 (−1 %) |
-| Participación de volumen | 0,285 / 0,249 | 0,393 / 0,381 | 0,323 / 0,309 |
-| Volumen mediano por vela | 11 250 / 7 576 (+49 %) | 11 562 / 9 396 (+23 %) | 12 406 / 11 964 (+4 %) |
-| Spread mediano (bps) | 0,23 / [5,7; 35,3] | 0,17 / [4,1; 23,8] | 0,19 / [4,9; 20,6] |
-| Exceso de curtosis | 5,73 / 5,87 | 2,50 / 5,14 | 1,94 / 3,36 |
+| Volatilidad de 5 min (bps) | 34,0 / 34,0 (0 %) | 20,0 / 22,3 (−10 %) | 20,5 / 20,9 (−2 %) |
+| Participación de volumen | 0,285 / 0,249 | 0,390 / 0,381 | 0,323 / 0,309 |
+| Volumen mediano por vela | 11 268 / 7 576 (+49 %) | 11 471 / 9 396 (+22 %) | 12 399 / 11 964 (+4 %) |
+| Spread mediano (bps) | 0,23 / [5,7; 35,3] | 0,17 / [4,1; 23,8] | 0,17 / [4,9; 20,6] |
+| Exceso de curtosis | 8,67 / 5,87 | 2,70 / 5,14 | 5,56 / 3,36 |
 
-Pérdida de validación: 10,33, de la cual 9,67 es el término del spread; el resto suma 0,66.
+Pérdida de validación: 10,27, de la cual 9,72 es el término del spread; el resto suma 0,55.
 
 **Rankings.**
 
-- *Volatilidad máxima en la apertura:* se cumple, **por construcción** (`fund_vol` por tramo). El orden completo simulado es apertura > cierre > media jornada; el observado, apertura > media jornada > cierre. Los dos últimos difieren en 0,8 bps, dentro del ruido.
-- *Volumen por vela creciente:* se cumple (11 250 < 11 562 < 12 406), pero el aumento es de 10 % entre apertura y cierre contra 58 % en los datos reales, y es del orden del ruido entre semillas. RMSC04 no tiene un mecanismo que haga crecer el volumen; no se da por reproducido.
+- *Volatilidad máxima en la apertura:* se cumple, **por construcción** (`fund_vol` por tramo). El orden completo simulado es apertura > cierre > media jornada; el observado, apertura > media jornada > cierre. Los dos últimos difieren en 0,5 bps, dentro del ruido.
+- *Volumen por vela creciente:* se cumple (11 268 < 11 471 < 12 399), pero el aumento es de 10 % entre apertura y cierre contra 58 % en los datos reales. RMSC04 no tiene un mecanismo que haga crecer el volumen; no se da por reproducido.
 - *Participación de volumen:* mismo orden que el observado (media jornada > cierre > apertura). Es en buena parte aritmética: la media jornada dura 30 velas y los otros tramos 24.
 
 ## 9. Antes y después de la 2.2.5
@@ -321,13 +329,13 @@ Orden de menor a mayor: real media jornada → cierre → apertura; antes cierre
 4. **Actividad estacionaria y volumen alto en la apertura.** RMSC04 no tiene un mecanismo que haga crecer el volumen durante el día; el volumen por vela simulado queda 49 % sobre el real en apertura y 4 % en cierre.
 5. **Sin subasta ni operaciones en bloque.** Los objetivos excluyen la subasta de cierre; el simulador no la modela.
 6. **Un activo y un régimen.** Solo FALABELLA, con el snapshot previo a la transición del IPSA a MSCI (1-sep-2026).
-7. **Muestra de la validación.** 10 semillas por tramo: el KS tiene poca potencia y la media jornada queda al borde. El KS de forma (muestras estandarizadas) rechaza en media jornada y cierre.
-8. **Colas.** La curtosis simulada es aproximadamente la mitad de la real en media jornada y cierre.
+7. **El KS rechaza en dos de tres tramos** con 30 semillas (§8.3). La calibración aproxima la distribución de retornos de 5 min (D = 0,06–0,10), no la reproduce.
+8. **Colas.** La curtosis simulada es inestable entre muestras y no permite comparar las colas con las reales.
 9. **Python.** Los tests corren en Python 3.11; la compatibilidad con 3.9 se verificó estáticamente (`vermin`: mínimo 3.7) y el código que usa ABIDES corrió en Colab con Python 3.9. La suite de tests no se ha ejecutado en 3.9.
 
 ## 11. Párrafo para el informe
 
-> Para que el mercado simulado fuera representativo del activo en estudio, la configuración de referencia RMSC04 de ABIDES-Gym se ajustó con datos reales de FALABELLA. El nivel de precios se fijó en la mediana observada y la volatilidad del valor fundamental se derivó, por tramo horario, del desvío de los retornos de cinco minutos, corrigiendo un error de unidades de la configuración inicial: el oráculo del simulador mide el tiempo en nanosegundos, por lo que el parámetro de volatilidad debe dividirse por la raíz del número de nanosegundos de una vela. La unidad de cuenta se eligió de modo que el tick del simulador coincidiera con el incremento mínimo de precio observado en los datos. Un test de razón de varianzas mostró reversión significativa en los retornos de cinco minutos, pero con la forma propia del rebote entre precios de compra y de venta y no la de un valor fundamental que revierte, por lo que no se introdujo reversión intradiaria en el oráculo. Los parámetros del creador de mercado y de la actividad, que no pueden estimarse directamente sin datos del libro de órdenes, se obtuvieron mediante una búsqueda en grilla que minimiza la distancia entre momentos simulados y observados. De este modo, el simulador aproxima, mediante calibración con datos reales del IPSA, la volatilidad y el perfil de volumen del activo. Con diez simulaciones independientes por tramo, la volatilidad de cinco minutos quedó dentro de un 12 % de la observada (38,1, 19,9 y 20,7 puntos base frente a 34,0, 22,3 y 20,9) y la prueba de Kolmogórov-Smirnov no rechazó la igualdad entre las distribuciones de retornos simulados y reales en ninguno de los tres tramos (p = 0,35, 0,08 y 0,17), aunque con una muestra que le da poca potencia y con colas más livianas que las reales en la media jornada y el cierre. La participación de cada tramo en el volumen diario se aproximó a la observada y el volumen por vela resultó entre un 4 % y un 49 % mayor. La calibración tiene limitaciones que se declaran. La principal es que el spread simulado, de uno a dos ticks, es entre veinte y cien veces menor que los estimadores indirectos del spread real, y la arquitectura del simulador no permite ampliarlo sin deteriorar el volumen y la volatilidad; por ello el costo absoluto de ejecución queda subestimado y las conclusiones deben leerse en términos relativos entre estrategias. Además, la volatilidad se fija por tramo en lugar de variar de forma continua durante la jornada.
+> Para que el mercado simulado fuera representativo del activo en estudio, la configuración de referencia RMSC04 de ABIDES-Gym se ajustó con datos reales de FALABELLA. El nivel de precios se fijó en la mediana observada y la volatilidad del valor fundamental se derivó, por tramo horario, del desvío de los retornos de cinco minutos, corrigiendo un error de unidades de la configuración inicial: el oráculo del simulador mide el tiempo en nanosegundos, por lo que el parámetro de volatilidad debe dividirse por la raíz del número de nanosegundos de una vela. La unidad de cuenta se eligió de modo que el tick del simulador coincidiera con el incremento mínimo de precio observado en los datos. Un test de razón de varianzas mostró reversión significativa en los retornos de cinco minutos, pero con la forma propia del rebote entre precios de compra y de venta y no la de un valor fundamental que revierte, por lo que no se introdujo reversión intradiaria en el oráculo. Los parámetros del creador de mercado y de la actividad, que no pueden estimarse directamente sin datos del libro de órdenes, se obtuvieron mediante una búsqueda en grilla que minimiza la distancia entre momentos simulados y observados. De este modo, el simulador aproxima, mediante calibración con datos reales del IPSA, la volatilidad y el perfil de volumen del activo. Con treinta simulaciones independientes por tramo, la volatilidad de cinco minutos quedó dentro de un 10 % de la observada (34,0, 20,0 y 20,5 puntos base frente a 34,0, 22,3 y 20,9). La prueba de Kolmogórov-Smirnov rechazó la igualdad entre las distribuciones de retornos simulados y reales en la media jornada y en el cierre (p = 0,003 y 0,0003) y no la rechazó, por un margen estrecho, en la apertura (p = 0,058); la distancia máxima entre las distribuciones acumuladas fue de 0,06 a 0,10, menor o igual que la obtenida con el modelo de Poisson calibrado en la etapa anterior. La participación de cada tramo en el volumen diario se aproximó a la observada y el volumen por vela resultó entre un 4 % y un 49 % mayor. La calibración tiene limitaciones que se declaran. La principal es que el spread simulado, de uno a dos ticks, es entre veinte y cien veces menor que los estimadores indirectos del spread real, y la arquitectura del simulador no permite ampliarlo sin deteriorar el volumen y la volatilidad; por ello el costo absoluto de ejecución queda subestimado y las conclusiones deben leerse en términos relativos entre estrategias. Además, la volatilidad se fija por tramo en lugar de variar de forma continua durante la jornada.
 
 ## 12. Reproducción
 
