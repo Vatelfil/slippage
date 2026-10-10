@@ -82,10 +82,14 @@ INCLUDE_CLOSING_AUCTION = False
 # R_E = (P_mid - P_ejec) q_ejec - beta sigma2_precio q_ejec. Ver
 # src/envs/reward_utils.py y docs/recompensa_ejecutores_2.2.3_BF.md.
 #
-# beta (aversion al riesgo, en 1/CLP). 0.0 hasta cerrar la calibracion: la
-# fase 1 (politicas heuristicas) entrega un rango y la fase 2 (PPO, depende
-# de la 2.2.1) elige el valor.
-BETA_RIESGO_EJECUTOR = 0.0
+# beta (aversion al riesgo, en 1/CLP) = 0,1 x beta* (beta* = 0,0618 del barrido
+# de BF en ABIDES). Elegido en la fase 2 (PPO, tramo apertura, 300 episodios,
+# 30 semillas de evaluacion; ver docs/beta_fase2_apertura_PS.md): es el unico
+# de 0,1/0,3/1 x beta* que cumple el 95 % de la orden. VALOR PROVISIONAL: una
+# sola semilla de red, solo apertura y la diferencia con beta = 0 esta dentro
+# del error estandar. Revalidar en el Sprint 5 (media jornada y cierre cuestan
+# ~2 h por beta en Colab). Con beta alto la red aprende a no operar.
+BETA_RIESGO_EJECUTOR = 0.0061796
 # Ventana movil causal de sigma2_precio, en pasos de decision (20 x 30 s =
 # 10 min), y minimo de puntos antes de dejar el prior del tramo. sigma2 es la
 # varianza del nivel del P_mid en la ventana por 6 / (n + 1), que estima la

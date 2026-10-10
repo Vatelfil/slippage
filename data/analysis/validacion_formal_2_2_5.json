@@ -1,0 +1,787 @@
+{
+ "metadata": {
+  "ticker": "FALABELLA",
+  "snapshot": "2026-08-23",
+  "semillas": 30,
+  "fecha": "2026-10-10"
+ },
+ "despues": {
+  "alpha": 0.05,
+  "por_tramo": {
+   "apertura": {
+    "ks": {
+     "n_sim": 690,
+     "n_real": 1111,
+     "alpha": 0.05,
+     "D": 0.07273249064036838,
+     "p": 0.020780135476714,
+     "D_crit": 0.0658275233032056,
+     "D_ratio": 1.1048948371543326,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.08717958752396979,
+      "p": 0.002862593879606045,
+      "D_ratio": 1.3243637789988736,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 401689.5,
+     "p": 0.08644995030203458,
+     "g": 0.007965125311566455,
+     "efecto": "trivial",
+     "rank_biserial": -0.047990451219035,
+     "mediana_abs_sim": 0.001356017752014287,
+     "mediana_abs_real": 0.0015387289
+    },
+    "brown_forsythe": {
+     "W": 0.026455104561528296,
+     "p": 0.8708120852390357,
+     "razon_desvios": 0.9753587224970324
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 33.95219386417957,
+     "media": 31.187996188897273,
+     "mediana": 31.135652568398154,
+     "sesgo_pct": -8.141440539424453,
+     "ic95": [
+      28.556638084711345,
+      33.8193542930832
+     ],
+     "p": 0.03272089920938015
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 7575.5,
+     "media": 11322.1,
+     "mediana": 11312.75,
+     "sesgo_pct": 49.45680153125206,
+     "ic95": [
+      11136.85811960983,
+      11507.341880390171
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.2486665450520733,
+     "media": 0.2844668449865248,
+     "mediana": 0.2836865800532751,
+     "sesgo_pct": 14.396910499944635,
+     "ic95": [
+      0.28151610968186636,
+      0.28741758029118325
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "spread": {
+     "simulado_bps": 0.1734249564382811,
+     "rango_real_bps": [
+      5.748691295863613,
+      35.25854288708378
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 33.14800484271404
+    },
+    "n_semillas": 30
+   },
+   "media_jornada": {
+    "ks": {
+     "n_sim": 900,
+     "n_real": 1690,
+     "alpha": 0.05,
+     "D": 0.09795529257067719,
+     "p": 2.3153153861133073e-05,
+     "D_crit": 0.05604250108968733,
+     "D_ratio": 1.7478751066786784,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.09039447731755423,
+      "p": 0.00012465787854922712,
+      "D_ratio": 1.6129629399104064,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 810207.0,
+     "p": 0.006087723291183408,
+     "g": -0.027688350275319275,
+     "efecto": "trivial",
+     "rank_biserial": -0.06536094674556203,
+     "mediana_abs_sim": 0.0008836461445021941,
+     "mediana_abs_real": 0.0008753486
+    },
+    "brown_forsythe": {
+     "W": 0.45721267438549795,
+     "p": 0.49898994316065315,
+     "razon_desvios": 0.8914930010034612
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 22.340223920471164,
+     "media": 19.302316440512474,
+     "mediana": 19.379495897157966,
+     "sesgo_pct": -13.598375248042812,
+     "ic95": [
+      18.29258685830968,
+      20.31204602271527
+     ],
+     "p": 9.220093488693237e-06
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 9396.0,
+     "media": 11503.383333333333,
+     "mediana": 11504.75,
+     "sesgo_pct": 22.42851568043139,
+     "ic95": [
+      11334.14114909982,
+      11672.625517566847
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.38097062730605935,
+     "media": 0.389739595855363,
+     "mediana": 0.389746036593994,
+     "sesgo_pct": 2.301743998300148,
+     "ic95": [
+      0.3867989690053821,
+      0.3926802227053439
+     ],
+     "p": 1.991167664527893e-06
+    },
+    "spread": {
+     "simulado_bps": 0.16847213060220856,
+     "rango_real_bps": [
+      4.148796300346402,
+      23.829719683366108
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 24.626009569157866
+    },
+    "n_semillas": 30
+   },
+   "cierre": {
+    "ks": {
+     "n_sim": 690,
+     "n_real": 1252,
+     "alpha": 0.05,
+     "D": 0.06603000416724546,
+     "p": 0.03906106595714249,
+     "D_crit": 0.06439173645646659,
+     "D_ratio": 1.0254422042475348,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.08650738528499329,
+      "p": 0.002374148763944701,
+      "D_ratio": 1.3434547668003711,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 443260.0,
+     "p": 0.3385087912441225,
+     "g": -0.031503388751211885,
+     "efecto": "trivial",
+     "rank_biserial": -0.026207343612538736,
+     "mediana_abs_sim": 0.0008126515852026615,
+     "mediana_abs_real": 0.00091916595
+    },
+    "brown_forsythe": {
+     "W": 0.4747778825268954,
+     "p": 0.4908796889559383,
+     "razon_desvios": 0.9556988111850614
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 20.86035957151591,
+     "media": 18.75762647876683,
+     "mediana": 19.554270643277356,
+     "sesgo_pct": -10.080042415089952,
+     "ic95": [
+      16.86848019071457,
+      20.64677276681909
+     ],
+     "p": 0.026228994131088257
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 11964.0,
+     "media": 12521.633333333333,
+     "mediana": 12506.0,
+     "sesgo_pct": 4.660927226122811,
+     "ic95": [
+      12391.162345024957,
+      12652.10432164171
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.30890730372094033,
+     "media": 0.3257935591581121,
+     "mediana": 0.3255886954734778,
+     "sesgo_pct": 5.466447453254912,
+     "ic95": [
+      0.3227194305880327,
+      0.32886768772819147
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "spread": {
+     "simulado_bps": 0.16843949920504708,
+     "rango_real_bps": [
+      4.861671248080638,
+      20.58535619489291
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 28.86301176995523
+    },
+    "n_semillas": 30
+   }
+  },
+  "p_ajustados_holm": {
+   "apertura:ks": 0.187021219290426,
+   "apertura:ks_estandarizado": 0.031488532675666495,
+   "apertura:mannwhitney": 0.43224975151017286,
+   "apertura:brown_forsythe": 1.0,
+   "apertura:volatilidad": 0.22904629446566105,
+   "apertura:volumen_vela": 3.91155481338501e-08,
+   "apertura:participacion": 3.91155481338501e-08,
+   "media_jornada:ks": 0.000324144154055863,
+   "media_jornada:ks_estandarizado": 0.0016205524211399527,
+   "media_jornada:mannwhitney": 0.06087723291183408,
+   "media_jornada:brown_forsythe": 1.0,
+   "media_jornada:volatilidad": 0.00013830140233039856,
+   "media_jornada:volumen_vela": 3.91155481338501e-08,
+   "media_jornada:participacion": 3.185868263244629e-05,
+   "cierre:ks": 0.23436639574285495,
+   "cierre:ks_estandarizado": 0.028489785167336412,
+   "cierre:mannwhitney": 1.0,
+   "cierre:brown_forsythe": 1.0,
+   "cierre:volatilidad": 0.20983195304870605,
+   "cierre:volumen_vela": 3.91155481338501e-08,
+   "cierre:participacion": 3.91155481338501e-08
+  },
+  "p_crudos": {
+   "apertura:ks": 0.020780135476714,
+   "apertura:ks_estandarizado": 0.002862593879606045,
+   "apertura:mannwhitney": 0.08644995030203458,
+   "apertura:brown_forsythe": 0.8708120852390357,
+   "apertura:volatilidad": 0.03272089920938015,
+   "apertura:volumen_vela": 1.862645149230957e-09,
+   "apertura:participacion": 1.862645149230957e-09,
+   "media_jornada:ks": 2.3153153861133073e-05,
+   "media_jornada:ks_estandarizado": 0.00012465787854922712,
+   "media_jornada:mannwhitney": 0.006087723291183408,
+   "media_jornada:brown_forsythe": 0.49898994316065315,
+   "media_jornada:volatilidad": 9.220093488693237e-06,
+   "media_jornada:volumen_vela": 1.862645149230957e-09,
+   "media_jornada:participacion": 1.991167664527893e-06,
+   "cierre:ks": 0.03906106595714249,
+   "cierre:ks_estandarizado": 0.002374148763944701,
+   "cierre:mannwhitney": 0.3385087912441225,
+   "cierre:brown_forsythe": 0.4908796889559383,
+   "cierre:volatilidad": 0.026228994131088257,
+   "cierre:volumen_vela": 1.862645149230957e-09,
+   "cierre:participacion": 1.862645149230957e-09
+  },
+  "patron_entre_tramos": {
+   "real": {
+    "H": 80.10946348747139,
+    "p": 4.022083010137038e-18,
+    "significativo": true,
+    "medianas_abs": {
+     "apertura": 0.0015387289,
+     "media_jornada": 0.0008753486,
+     "cierre": 0.00091916595
+    },
+    "post_hoc": [
+     {
+      "group_a": "apertura",
+      "group_b": "media_jornada",
+      "p_value": 1.5938160756325698e-16,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.36223954945657516
+     },
+     {
+      "group_a": "apertura",
+      "group_b": "cierre",
+      "p_value": 5.5957418575893225e-14,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.39106207489976563
+     },
+     {
+      "group_a": "media_jornada",
+      "group_b": "cierre",
+      "p_value": 0.6715958096491668,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": false,
+      "cohens_d": -0.02378258495999811
+     }
+    ]
+   },
+   "simulado": {
+    "H": 80.08481644752152,
+    "p": 4.071955904077758e-18,
+    "significativo": true,
+    "medianas_abs": {
+     "apertura": 0.001356017752014287,
+     "media_jornada": 0.0008836461445021941,
+     "cierre": 0.0008126515852026615
+    },
+    "post_hoc": [
+     {
+      "group_a": "apertura",
+      "group_b": "media_jornada",
+      "p_value": 1.5399850875732466e-13,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.42787112956411616
+     },
+     {
+      "group_a": "apertura",
+      "group_b": "cierre",
+      "p_value": 3.3603242313654495e-16,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.44530145390416354
+     },
+     {
+      "group_a": "media_jornada",
+      "group_b": "cierre",
+      "p_value": 0.11165796251497281,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": false,
+      "cohens_d": -0.02897323155176516
+     }
+    ]
+   }
+  },
+  "rankings": {
+   "volatilidad_sim_bps": {
+    "apertura": 31.187996188897273,
+    "media_jornada": 19.302316440512474,
+    "cierre": 18.75762647876683
+   },
+   "ranking_volatilidad_desc": [
+    "apertura",
+    "media_jornada",
+    "cierre"
+   ],
+   "volatilidad_maxima_en_apertura": true,
+   "volumen_vela_sim": {
+    "apertura": 11322.1,
+    "media_jornada": 11503.383333333333,
+    "cierre": 12521.633333333333
+   },
+   "volumen_vela_creciente": true
+  },
+  "veredicto": {
+   "A_literal_plan": false,
+   "B_forma": false,
+   "C_efecto_pequeno": true,
+   "D_patron": true,
+   "simulador_valido": false,
+   "texto": "NO VÁLIDO según el criterio del plan"
+  }
+ },
+ "antes": {
+  "alpha": 0.05,
+  "por_tramo": {
+   "apertura": {
+    "ks": {
+     "n_sim": 690,
+     "n_real": 1111,
+     "alpha": 0.05,
+     "D": 0.32404805697961103,
+     "p": 4.536501637521293e-40,
+     "D_crit": 0.0658275233032056,
+     "D_ratio": 4.922683411420871,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.08597424959887293,
+      "p": 0.0034240491106284038,
+      "D_ratio": 1.3060532325190222,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 146606.5,
+     "p": 7.499106745930935e-108,
+     "g": -0.982797020005296,
+     "efecto": "grande",
+     "rank_biserial": 0.6175100118707523,
+     "mediana_abs_sim": 0.00017494183327046312,
+     "mediana_abs_real": 0.0015387289
+    },
+    "brown_forsythe": {
+     "W": 411.4784266407014,
+     "p": 1.4911031432278005e-82,
+     "razon_desvios": 0.09006862397748876
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 33.95219386417957,
+     "media": 2.952959009756908,
+     "mediana": 2.8634980351637016,
+     "sesgo_pct": -91.3025973474063,
+     "ic95": [
+      2.780820762808328,
+      3.125097256705488
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 7575.5,
+     "media": 13079.933333333332,
+     "mediana": 13038.0,
+     "sesgo_pct": 72.6609904736761,
+     "ic95": [
+      12909.686236905403,
+      13250.180429761262
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.2486665450520733,
+     "media": 0.29023215134563013,
+     "mediana": 0.2905895372387083,
+     "sesgo_pct": 16.71539944581309,
+     "ic95": [
+      0.28817058741724133,
+      0.29229371527401893
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "spread": {
+     "simulado_bps": 0.10001600262293966,
+     "rango_real_bps": [
+      5.748691295863613,
+      35.25854288708378
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 57.477715016627684
+    },
+    "n_semillas": 30
+   },
+   "media_jornada": {
+    "ks": {
+     "n_sim": 900,
+     "n_real": 1690,
+     "alpha": 0.05,
+     "D": 0.27942800788954636,
+     "p": 6.827184769379891e-41,
+     "D_crit": 0.05604250108968733,
+     "D_ratio": 4.9860017389724485,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.09245890861275477,
+      "p": 7.978725493523881e-05,
+      "D_ratio": 1.649799827184526,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 361558.0,
+     "p": 2.0464548199416518e-107,
+     "g": -0.8630056844324393,
+     "efecto": "grande",
+     "rank_biserial": 0.5245785667324129,
+     "mediana_abs_sim": 0.00016016351334791843,
+     "mediana_abs_real": 0.0008753486
+    },
+    "brown_forsythe": {
+     "W": 437.6314651884796,
+     "p": 6.517956331425914e-90,
+     "razon_desvios": 0.14035092742735547
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 22.340223920471164,
+     "media": 3.038247566895472,
+     "mediana": 2.9910685372085704,
+     "sesgo_pct": -86.40010244431161,
+     "ic95": [
+      2.804044226322738,
+      3.272450907468206
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 9396.0,
+     "media": 13350.433333333332,
+     "mediana": 13462.0,
+     "sesgo_pct": 42.08634880090818,
+     "ic95": [
+      13184.924395861892,
+      13515.942270804773
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.38097062730605935,
+     "media": 0.3886641617347594,
+     "mediana": 0.3888311864762749,
+     "sesgo_pct": 2.0194560622961855,
+     "ic95": [
+      0.38635375853016163,
+      0.3909745649393571
+     ],
+     "p": 5.718320608139038e-07
+    },
+    "spread": {
+     "simulado_bps": 0.09997950708986214,
+     "rango_real_bps": [
+      4.148796300346402,
+      23.829719683366108
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 41.496466837123336
+    },
+    "n_semillas": 30
+   },
+   "cierre": {
+    "ks": {
+     "n_sim": 690,
+     "n_real": 1252,
+     "alpha": 0.05,
+     "D": 0.27456128165948973,
+     "p": 4.992494995657719e-30,
+     "D_crit": 0.06439173645646659,
+     "D_ratio": 4.263921067653032,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.09611057091262676,
+      "p": 0.0004929665581161842,
+      "D_ratio": 1.4925916926872187,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 197208.5,
+     "p": 1.1505166806332466e-87,
+     "g": -0.9179077032513404,
+     "efecto": "grande",
+     "rank_biserial": 0.543435430846877,
+     "mediana_abs_sim": 0.00016948738744479186,
+     "mediana_abs_real": 0.00091916595
+    },
+    "brown_forsythe": {
+     "W": 375.09228025942207,
+     "p": 1.5433687559090747e-76,
+     "razon_desvios": 0.15525008689588837
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 20.86035957151591,
+     "media": 3.1380399332371525,
+     "mediana": 3.229245585229952,
+     "sesgo_pct": -84.95692309387593,
+     "ic95": [
+      2.903054463933387,
+      3.373025402540918
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 11964.0,
+     "media": 14257.6,
+     "mediana": 14300.5,
+     "sesgo_pct": 19.170845870946174,
+     "ic95": [
+      14086.443394473972,
+      14428.756605526029
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.30890730372094033,
+     "media": 0.3211036869196105,
+     "mediana": 0.32121834233514635,
+     "sesgo_pct": 3.9482340015139616,
+     "ic95": [
+      0.31884015699272805,
+      0.32336721684649294
+     ],
+     "p": 3.725290298461914e-09
+    },
+    "spread": {
+     "simulado_bps": 0.09999675038246977,
+     "rango_real_bps": [
+      4.861671248080638,
+      20.58535619489291
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 48.618292389358764
+    },
+    "n_semillas": 30
+   }
+  },
+  "p_ajustados_holm": {
+   "apertura:ks": 6.351102292529811e-39,
+   "apertura:ks_estandarizado": 0.0034240491106284038,
+   "apertura:mannwhitney": 1.5748124166454965e-106,
+   "apertura:brown_forsythe": 2.534875343487261e-81,
+   "apertura:volatilidad": 2.2351741790771484e-08,
+   "apertura:volumen_vela": 2.2351741790771484e-08,
+   "apertura:participacion": 2.2351741790771484e-08,
+   "media_jornada:ks": 1.0240777154069837e-39,
+   "media_jornada:ks_estandarizado": 0.00023936176480571643,
+   "media_jornada:mannwhitney": 4.0929096398833036e-106,
+   "media_jornada:brown_forsythe": 1.2384117029709237e-88,
+   "media_jornada:volatilidad": 2.2351741790771484e-08,
+   "media_jornada:volumen_vela": 2.2351741790771484e-08,
+   "media_jornada:participacion": 2.2873282432556152e-06,
+   "cierre:ks": 6.490243494355035e-29,
+   "cierre:ks_estandarizado": 0.0009859331162323684,
+   "cierre:mannwhitney": 2.070930025139844e-86,
+   "cierre:brown_forsythe": 2.4693900094545195e-75,
+   "cierre:volatilidad": 2.2351741790771484e-08,
+   "cierre:volumen_vela": 2.2351741790771484e-08,
+   "cierre:participacion": 2.2351741790771484e-08
+  },
+  "p_crudos": {
+   "apertura:ks": 4.536501637521293e-40,
+   "apertura:ks_estandarizado": 0.0034240491106284038,
+   "apertura:mannwhitney": 7.499106745930935e-108,
+   "apertura:brown_forsythe": 1.4911031432278005e-82,
+   "apertura:volatilidad": 1.862645149230957e-09,
+   "apertura:volumen_vela": 1.862645149230957e-09,
+   "apertura:participacion": 1.862645149230957e-09,
+   "media_jornada:ks": 6.827184769379891e-41,
+   "media_jornada:ks_estandarizado": 7.978725493523881e-05,
+   "media_jornada:mannwhitney": 2.0464548199416518e-107,
+   "media_jornada:brown_forsythe": 6.517956331425914e-90,
+   "media_jornada:volatilidad": 1.862645149230957e-09,
+   "media_jornada:volumen_vela": 1.862645149230957e-09,
+   "media_jornada:participacion": 5.718320608139038e-07,
+   "cierre:ks": 4.992494995657719e-30,
+   "cierre:ks_estandarizado": 0.0004929665581161842,
+   "cierre:mannwhitney": 1.1505166806332466e-87,
+   "cierre:brown_forsythe": 1.5433687559090747e-76,
+   "cierre:volatilidad": 1.862645149230957e-09,
+   "cierre:volumen_vela": 1.862645149230957e-09,
+   "cierre:participacion": 3.725290298461914e-09
+  },
+  "patron_entre_tramos": {
+   "real": {
+    "H": 80.10946348747139,
+    "p": 4.022083010137038e-18,
+    "significativo": true,
+    "medianas_abs": {
+     "apertura": 0.0015387289,
+     "media_jornada": 0.0008753486,
+     "cierre": 0.00091916595
+    },
+    "post_hoc": [
+     {
+      "group_a": "apertura",
+      "group_b": "media_jornada",
+      "p_value": 1.5938160756325698e-16,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.36223954945657516
+     },
+     {
+      "group_a": "apertura",
+      "group_b": "cierre",
+      "p_value": 5.5957418575893225e-14,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.39106207489976563
+     },
+     {
+      "group_a": "media_jornada",
+      "group_b": "cierre",
+      "p_value": 0.6715958096491668,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": false,
+      "cohens_d": -0.02378258495999811
+     }
+    ]
+   },
+   "simulado": {
+    "H": 2.20405546087435,
+    "p": 0.3321967947391712,
+    "significativo": false,
+    "medianas_abs": {
+     "apertura": 0.00017494183327046312,
+     "media_jornada": 0.00016016351334791843,
+     "cierre": 0.00016948738744479186
+    },
+    "post_hoc": []
+   }
+  },
+  "rankings": {
+   "volatilidad_sim_bps": {
+    "apertura": 2.952959009756908,
+    "media_jornada": 3.038247566895472,
+    "cierre": 3.1380399332371525
+   },
+   "ranking_volatilidad_desc": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ],
+   "volatilidad_maxima_en_apertura": false,
+   "volumen_vela_sim": {
+    "apertura": 13079.933333333332,
+    "media_jornada": 13350.433333333332,
+    "cierre": 14257.6
+   },
+   "volumen_vela_creciente": true
+  },
+  "veredicto": {
+   "A_literal_plan": false,
+   "B_forma": false,
+   "C_efecto_pequeno": false,
+   "D_patron": false,
+   "simulador_valido": false,
+   "texto": "NO VÁLIDO según el criterio del plan"
+  }
+ },
+ "comparacion": [
+  {
+   "tramo": "apertura",
+   "D_antes": 0.32404805697961103,
+   "p_antes": 4.536501637521293e-40,
+   "D_despues": 0.07273249064036838,
+   "p_despues": 0.020780135476714,
+   "g_antes": -0.982797020005296,
+   "g_despues": 0.007965125311566455,
+   "mejora_D": true
+  },
+  {
+   "tramo": "media_jornada",
+   "D_antes": 0.27942800788954636,
+   "p_antes": 6.827184769379891e-41,
+   "D_despues": 0.09795529257067719,
+   "p_despues": 2.3153153861133073e-05,
+   "g_antes": -0.8630056844324393,
+   "g_despues": -0.027688350275319275,
+   "mejora_D": true
+  },
+  {
+   "tramo": "cierre",
+   "D_antes": 0.27456128165948973,
+   "p_antes": 4.992494995657719e-30,
+   "D_despues": 0.06603000416724546,
+   "p_despues": 0.03906106595714249,
+   "g_antes": -0.9179077032513404,
+   "g_despues": -0.031503388751211885,
+   "mejora_D": true
+  }
+ ]
+}
