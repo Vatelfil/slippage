@@ -376,8 +376,10 @@ def test_config_calibrada_versionada_es_cargable_y_coherente_con_la_grilla():
         assert set(kw[t]) <= set(RMSC04_BUILD_CONFIG_PARAMS)
         assert kw[t]["fund_vol"] == base[t]["fund_vol"] and kw[t]["r_bar"] == 59_698
         assert kw[t]["mm_pov"] == 0.005
-        assert ipsa["por_tramo"][t]["n_corridas"] == 10 and ipsa["por_tramo"][t]["n_errores"] == 0
-        assert ipsa["por_tramo"][t]["ks"]["rechaza"] is False
+        assert ipsa["por_tramo"][t]["n_corridas"] == 30 and ipsa["por_tramo"][t]["n_errores"] == 0
+    # con 30 semillas el KS rechaza en media jornada y cierre; apertura queda al borde
+    assert [ipsa["por_tramo"][t]["ks"]["rechaza"] for t in ss.TRAMO_NAMES] == [False, True, True]
+    assert all(0.05 < ipsa["por_tramo"][t]["ks"]["D"] < 0.11 for t in ss.TRAMO_NAMES)
     # la config validada es la ganadora de la grilla; el refinamiento no la mejoro
     assert len(grid["resultados"]) == 27 and rs.best_config(grid["resultados"]) == grid["mejor"]
     assert ipsa["seleccion"]["id"] == grid["mejor"] and ipsa["seleccion"]["origen"] == "grilla"

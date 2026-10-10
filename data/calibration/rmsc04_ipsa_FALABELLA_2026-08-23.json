@@ -14,7 +14,27 @@
    107,
    108,
    109,
-   110
+   110,
+   111,
+   112,
+   113,
+   114,
+   115,
+   116,
+   117,
+   118,
+   119,
+   120,
+   121,
+   122,
+   123,
+   124,
+   125,
+   126,
+   127,
+   128,
+   129,
+   130
   ],
   "semillas_busqueda": [
    1,
@@ -24,7 +44,7 @@
   "grid_json": "rmsc04_grid_FALABELLA_2026-08-23.json",
   "base_json": "rmsc04_base_FALABELLA_2026-08-23.json",
   "refinamiento": true,
-  "fecha_generacion": "2026-10-09T00:23:50+0000",
+  "fecha_generacion": "2026-10-10T00:37:57+0000",
   "nota_participacion": "participacion y volumen por vela medidos en las corridas de dia completo (config del tramo cierre)"
  },
  "parametros_busqueda": {
@@ -45,27 +65,27 @@
   "origen": "grilla"
  },
  "perdida_validacion": {
-  "total": 10.328869023267323,
+  "total": 10.270772855285333,
   "terminos": {
    "volatilidad": {
-    "apertura": 0.11438519309487527,
-    "media_jornada": 0.11453297130853568,
-    "cierre": 0.007220561374383205
+    "apertura": 0.001959770795971586,
+    "media_jornada": 0.10982784807463308,
+    "cierre": 0.018957332606827845
    },
    "spread": {
-    "apertura": 3.203050665770357,
-    "media_jornada": 3.198187890307766,
-    "cierre": 3.2646423299404392
+    "apertura": 3.225259943400256,
+    "media_jornada": 3.1695941226832924,
+    "cierre": 3.326012801407051
    },
    "participacion": {
     "apertura": 0.13797961600631725,
-    "media_jornada": 0.03151408954830625,
-    "cierre": 0.045001780529677536
+    "media_jornada": 0.023146055643818133,
+    "cierre": 0.04485190188978184
    },
    "volumen_vela": {
-    "apertura": 0.3954532172672439,
-    "media_jornada": 0.207439791863618,
-    "cierre": 0.03631032772677135
+    "apertura": 0.39707707605677844,
+    "media_jornada": 0.19953223272839107,
+    "cierre": 0.03573519030951737
    }
   },
   "rankings": {
@@ -74,9 +94,9 @@
   },
   "n_rankings_fallidos": 0,
   "vol_para_ranking": {
-   "apertura": 38.06665360618913,
-   "media_jornada": 19.922621513480465,
-   "cierre": 20.710278551603555
+   "apertura": 34.01879762490925,
+   "media_jornada": 20.016580774454155,
+   "cierre": 20.468627624886793
   },
   "pesos": {
    "volatilidad": 1.0,
@@ -170,46 +190,46 @@
     "lambda_a": 5.7e-12
    },
    "ks": {
-    "n_sim": 230,
+    "n_sim": 690,
     "n_real": 1111,
     "alpha": 0.05,
-    "D": 0.06676711149375807,
-    "p": 0.34582539410111346,
-    "D_crit": 0.09838427176965625,
-    "D_ratio": 0.6786360288367803,
+    "D": 0.06391421750870739,
+    "p": 0.05846431164500345,
+    "D_crit": 0.0658275233032056,
+    "D_ratio": 0.9709345620419987,
     "rechaza": false,
     "estandarizado": {
-     "D": 0.06960435173952177,
-     "p": 0.2982986815918825,
-     "D_ratio": 0.7074743806864178,
-     "rechaza": false
+     "D": 0.06736195358666301,
+     "p": 0.03964087746679115,
+     "D_ratio": 1.0233098589535221,
+     "rechaza": true
     }
    },
    "momentos_sim": {
-    "n_corridas": 10,
-    "n_retornos": 230,
-    "volatilidad_bps": 38.06665360618913,
-    "curtosis": 5.729873358069748,
-    "spread_mediano_bps": 0.23361555604533252,
-    "spread_medio_bps": 0.7860473060995695,
-    "volumen_mediano_vela": 11250.05,
+    "n_corridas": 30,
+    "n_retornos": 690,
+    "volatilidad_bps": 34.01879762490925,
+    "curtosis": 8.668514743237939,
+    "spread_mediano_bps": 0.22848431479770792,
+    "spread_medio_bps": 0.6913347756277665,
+    "volumen_mediano_vela": 11268.333333333334,
     "participacion_volumen": 0.2854572950719281
    },
    "momentos_vs_objetivo": {
     "volatilidad_bps": {
-     "sim": 38.06665360618913,
+     "sim": 34.01879762490925,
      "objetivo": 33.95219386417957,
-     "ln_sim_sobre_objetivo": 0.11438519309487527
+     "ln_sim_sobre_objetivo": 0.001959770795971586
     },
     "spread_vs_roll_bps": {
-     "sim": 0.23361555604533252,
+     "sim": 0.22848431479770792,
      "objetivo": 35.25854288708378,
-     "ln_sim_sobre_objetivo": -5.016786288887995
+     "ln_sim_sobre_objetivo": -5.038995566517895
     },
     "spread_vs_cs_bps": {
-     "sim": 0.23361555604533252,
+     "sim": 0.22848431479770792,
      "objetivo": 5.748691295863613,
-     "ln_sim_sobre_objetivo": -3.203050665770357
+     "ln_sim_sobre_objetivo": -3.225259943400256
     },
     "participacion_volumen": {
      "sim": 0.2854572950719281,
@@ -217,16 +237,16 @@
      "ln_sim_sobre_objetivo": 0.13797961600631725
     },
     "volumen_mediano_vela": {
-     "sim": 11250.05,
+     "sim": 11268.333333333334,
      "objetivo": 7575.5,
-     "ln_sim_sobre_objetivo": 0.3954532172672439
+     "ln_sim_sobre_objetivo": 0.39707707605677844
     }
    },
    "curtosis": {
-    "sim": 5.729873358069748,
+    "sim": 8.668514743237939,
     "real": 5.870335097056618
    },
-   "n_corridas": 10,
+   "n_corridas": 30,
    "n_errores": 0
   },
   "media_jornada": {
@@ -242,63 +262,63 @@
     "lambda_a": 5.7e-12
    },
    "ks": {
-    "n_sim": 300,
+    "n_sim": 900,
     "n_real": 1690,
     "alpha": 0.05,
-    "D": 0.07891518737672584,
-    "p": 0.07884299025002882,
-    "D_crit": 0.08508535054522072,
-    "D_ratio": 0.9274826614810079,
-    "rechaza": false,
+    "D": 0.07425378040762656,
+    "p": 0.0028830815431054794,
+    "D_crit": 0.05604250108968733,
+    "D_ratio": 1.3249547925920526,
+    "rechaza": true,
     "estandarizado": {
-     "D": 0.10743589743589743,
-     "p": 0.005109057539917077,
-     "D_ratio": 1.2626838433109346,
+     "D": 0.07750821827744905,
+     "p": 0.0016081825623602513,
+     "D_ratio": 1.3830256817662219,
      "rechaza": true
     }
    },
    "momentos_sim": {
-    "n_corridas": 10,
-    "n_retornos": 300,
-    "volatilidad_bps": 19.922621513480465,
-    "curtosis": 2.5021595701113437,
-    "spread_mediano_bps": 0.16942081215605326,
-    "spread_medio_bps": 0.5152136112036414,
-    "volumen_mediano_vela": 11562.0,
-    "participacion_volumen": 0.39316775095838424
+    "n_corridas": 30,
+    "n_retornos": 900,
+    "volatilidad_bps": 20.016580774454155,
+    "curtosis": 2.700004475532027,
+    "spread_mediano_bps": 0.1743351158943731,
+    "spread_medio_bps": 0.46755479071545836,
+    "volumen_mediano_vela": 11470.933333333332,
+    "participacion_volumen": 0.38989143715904895
    },
    "momentos_vs_objetivo": {
     "volatilidad_bps": {
-     "sim": 19.922621513480465,
+     "sim": 20.016580774454155,
      "objetivo": 22.340223920471164,
-     "ln_sim_sobre_objetivo": -0.11453297130853568
+     "ln_sim_sobre_objetivo": -0.10982784807463308
     },
     "spread_vs_roll_bps": {
-     "sim": 0.16942081215605326,
+     "sim": 0.1743351158943731,
      "objetivo": 23.829719683366108,
-     "ln_sim_sobre_objetivo": -4.946303174105726
+     "ln_sim_sobre_objetivo": -4.917709406481252
     },
     "spread_vs_cs_bps": {
-     "sim": 0.16942081215605326,
+     "sim": 0.1743351158943731,
      "objetivo": 4.148796300346402,
-     "ln_sim_sobre_objetivo": -3.1981878903077656
+     "ln_sim_sobre_objetivo": -3.1695941226832924
     },
     "participacion_volumen": {
-     "sim": 0.39316775095838424,
+     "sim": 0.38989143715904895,
      "objetivo": 0.38097062730605935,
-     "ln_sim_sobre_objetivo": 0.03151408954830625
+     "ln_sim_sobre_objetivo": 0.023146055643818133
     },
     "volumen_mediano_vela": {
-     "sim": 11562.0,
+     "sim": 11470.933333333332,
      "objetivo": 9396.0,
-     "ln_sim_sobre_objetivo": 0.207439791863618
+     "ln_sim_sobre_objetivo": 0.19953223272839107
     }
    },
    "curtosis": {
-    "sim": 2.5021595701113437,
+    "sim": 2.700004475532027,
     "real": 5.144611574396514
    },
-   "n_corridas": 10,
+   "n_corridas": 30,
    "n_errores": 0
   },
   "cierre": {
@@ -314,63 +334,63 @@
     "lambda_a": 5.7e-12
    },
    "ks": {
-    "n_sim": 230,
+    "n_sim": 690,
     "n_real": 1252,
     "alpha": 0.05,
-    "D": 0.0790873732462842,
-    "p": 0.1656100310377797,
-    "D_crit": 0.0974294505336582,
-    "D_ratio": 0.8117399083448849,
-    "rechaza": false,
+    "D": 0.09898365513728759,
+    "p": 0.00029824806828266135,
+    "D_crit": 0.06439173645646659,
+    "D_ratio": 1.5372105270713985,
+    "rechaza": true,
     "estandarizado": {
-     "D": 0.11121683567162106,
-     "p": 0.014930950838235504,
-     "D_ratio": 1.1415114738145817,
+     "D": 0.09958327545492429,
+     "p": 0.000268031899731791,
+     "D_ratio": 1.5465225964553648,
      "rechaza": true
     }
    },
    "momentos_sim": {
-    "n_corridas": 10,
-    "n_retornos": 230,
-    "volatilidad_bps": 20.710278551603555,
-    "curtosis": 1.9438040340365372,
-    "spread_mediano_bps": 0.18576737260735848,
-    "spread_medio_bps": 0.49886028222077494,
-    "volumen_mediano_vela": 12406.4,
-    "participacion_volumen": 0.3231262211567014
+    "n_corridas": 30,
+    "n_retornos": 690,
+    "volatilidad_bps": 20.468627624886793,
+    "curtosis": 5.560938488362645,
+    "spread_mediano_bps": 0.17470952445653187,
+    "spread_medio_bps": 0.4356384157773805,
+    "volumen_mediano_vela": 12399.266666666666,
+    "participacion_volumen": 0.32307779506726864
    },
    "momentos_vs_objetivo": {
     "volatilidad_bps": {
-     "sim": 20.710278551603555,
+     "sim": 20.468627624886793,
      "objetivo": 20.86035957151591,
-     "ln_sim_sobre_objetivo": -0.007220561374383205
+     "ln_sim_sobre_objetivo": -0.018957332606827845
     },
     "spread_vs_roll_bps": {
-     "sim": 0.18576737260735848,
+     "sim": 0.17470952445653187,
      "objetivo": 20.58535619489291,
-     "ln_sim_sobre_objetivo": -4.707840031620804
+     "ln_sim_sobre_objetivo": -4.769210503087415
     },
     "spread_vs_cs_bps": {
-     "sim": 0.18576737260735848,
+     "sim": 0.17470952445653187,
      "objetivo": 4.861671248080638,
-     "ln_sim_sobre_objetivo": -3.2646423299404392
+     "ln_sim_sobre_objetivo": -3.326012801407051
     },
     "participacion_volumen": {
-     "sim": 0.3231262211567014,
+     "sim": 0.32307779506726864,
      "objetivo": 0.30890730372094033,
-     "ln_sim_sobre_objetivo": 0.045001780529677536
+     "ln_sim_sobre_objetivo": 0.04485190188978184
     },
     "volumen_mediano_vela": {
-     "sim": 12406.4,
+     "sim": 12399.266666666666,
      "objetivo": 11964.0,
-     "ln_sim_sobre_objetivo": 0.03631032772677135
+     "ln_sim_sobre_objetivo": 0.03573519030951737
     }
    },
    "curtosis": {
-    "sim": 1.9438040340365372,
+    "sim": 5.560938488362645,
     "real": 3.3580235041107143
    },
-   "n_corridas": 10,
+   "n_corridas": 30,
    "n_errores": 0
   }
  }
