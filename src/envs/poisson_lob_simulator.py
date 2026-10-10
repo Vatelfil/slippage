@@ -201,17 +201,19 @@ class PoissonLOBSimulator:
         return filled, avg_price
 
     def execute_limit_buy(self, quantity: float, price_level: int) -> Tuple[float, float]:
-        """Ejecuta una orden LIMITE de compra en `price_level` (0=mejor bid,
-        mas alto=mas lejos/mas agresivo hacia el ask, ver EjecutorActionSpace).
+        """Ejecuta una orden LIMITE de compra en `price_level` (0=mas pasivo,
+        cerca del propio bid; 7=mas agresivo, cruzando el spread; ver
+        EjecutorActionSpace).
 
         Aproximacion (sin colas de ordenes reales): la probabilidad de llenado
-        decae con la distancia al mejor ask -- un nivel agresivo (cerca o
-        cruzando el spread) tiene alta probabilidad de llenarse este mismo
-        paso; uno pasivo (cerca del propio bid) tiene baja probabilidad.
+        crece con la agresividad -- un nivel agresivo tiene alta probabilidad
+        de llenarse este mismo paso; uno pasivo, baja. Corregido por PS: antes
+        la probabilidad estaba invertida (el nivel 0 siempre llenaba).
         """
-        # price_level in [0,7] (EjecutorActionSpace.N_PRICE_LEVELS=8); lo mapeamos
-        # a una probabilidad de fill decreciente 0 (agresivo) -> 7 (pasivo).
-        fill_prob = max(0.05, 1.0 - price_level / 8.0)
+        # price_level in [0,7] (EjecutorActionSpace.N_PRICE_LEVELS=8): fill de 0,05
+        # (nivel 0, pasivo) a 1,0 (nivel 7, agresivo).
+        nivel = min(max(int(price_level), 0), 7)
+        fill_prob = 0.05 + 0.95 * nivel / 7.0
         if self.rng.uniform() > fill_prob:
             return 0.0, float(self.mid_price)  # no se llena este paso
         # Si se llena, se llena como si fuera un market buy pequeno (mismo mecanismo).

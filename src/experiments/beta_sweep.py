@@ -44,11 +44,10 @@ NIVEL_MEDIO = 4
 
 # Nivel de precio "pasivo" (el mas alejado de cruzar el spread) en cada
 # entorno. El contrato (spaces.py, abides_bridge.py) dice 0 = mejor precio
-# propio y 7 = mas agresivo: en ABIDES el nivel 0 deja la orden en el mejor
-# bid. `PoissonLOBSimulator.execute_limit_buy` usa la convencion inversa
-# (probabilidad de llenado 1 - nivel / 8: el nivel 0 se llena siempre y el 7
-# casi nunca), asi que ahi la politica pasiva usa el nivel 7.
-NIVEL_PASIVO = {"abides": 0, "poisson": 7}
+# propio y 7 = mas agresivo. Desde la correccion de PS, `PoissonLOBSimulator.
+# execute_limit_buy` respeta el mismo contrato (antes estaba invertido y aqui
+# se usaba el nivel 7), asi que ambos entornos usan el nivel 0.
+NIVEL_PASIVO = {"abides": 0, "poisson": 0}
 
 
 def politica_agresiva(paso: int, max_pasos: int, nivel_pasivo: int) -> np.ndarray:
