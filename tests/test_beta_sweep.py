@@ -37,9 +37,32 @@ def test_politicas_generan_acciones_validas_del_espacio_del_ejecutor():
 def test_step_record_normaliza_el_info_de_ambos_entornos():
     fb = {"q_ejecutado_step": 100.0, "p_ejecutado_step": 5805.0, "p_mid_decision": 5800.0, "sigma2": 4.0}
     ab = {"q_fill_step": 100.0, "p_fill_step_clp": 5805.0, "p_mid_clp": 5800.0, "sigma2": 4.0}
-    assert bs.step_record(fb) == bs.step_record(ab) == {"q": 100.0, "p_mid": 5800.0, "p_ejec": 5805.0, "sigma2": 4.0}
+    esperado = {"q": 100.0, "p_mid": 5800.0, "p_ejec": 5805.0, "sigma2": 4.0, "q_pend": None}
+    assert bs.step_record(fb) == bs.step_record(ab) == esperado
+    # con la cantidad pendiente (D3, opcion A) ambos entornos la entregan con otro nombre
+    assert bs.step_record({**fb, "q_pendiente": 900.0})["q_pend"] == 900.0
+    assert bs.step_record({**ab, "remaining": 900.0})["q_pend"] == 900.0
     sin_fill = bs.step_record({"q_fill_step": 0.0, "p_fill_step_clp": None, "p_mid_clp": 5800.0, "sigma2": 4.0})
     assert sin_fill["q"] == 0.0 and sin_fill["p_ejec"] == 5800.0
+
+
+def test_riesgo_sobre_pendiente_beta_star_y_peso():
+    pasos = [{"q": 600.0, "p_mid": 5800.0, "p_ejec": 5805.0, "sigma2": 4.0, "q_pend": 400.0},
+             {"q": 0.0, "p_mid": 5801.0, "p_ejec": 5801.0, "sigma2": 9.0, "q_pend": 400.0},
+             {"q": 400.0, "p_mid": 5802.0, "p_ejec": 5800.0, "sigma2": 1.0, "q_pend": 0.0}]
+    e = bs.summarize_episode(pasos, q_slice=1000.0, p_ref=5800.0)
+    assert e["sigma2_qpend"] == pytest.approx(4 * 400 + 9 * 400 + 1 * 0)
+    assert bs.beta_star_from_episodes([e], base="pendiente") == pytest.approx(e["abs_precio"] / e["sigma2_qpend"])
+    assert bs.beta_star_from_episodes([e]) == pytest.approx(e["abs_precio"] / e["sigma2_q"])   # por defecto, igual que antes
+    b = bs.beta_star_from_episodes([e], base="pendiente")
+    assert bs.risk_weight([e], b, base="pendiente") == pytest.approx(0.5)
+    with pytest.raises(ValueError):
+        bs.beta_star_from_episodes([e], base="otro")
+
+
+def test_summarize_episode_sin_q_pend_deja_sigma2_qpend_en_none():
+    pasos = [{"q": 100.0, "p_mid": 5800.0, "p_ejec": 5801.0, "sigma2": 4.0}]
+    assert bs.summarize_episode(pasos, 100.0, 5800.0)["sigma2_qpend"] is None
 
 
 def test_summarize_episode_valores_conocidos():

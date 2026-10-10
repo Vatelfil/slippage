@@ -48,26 +48,42 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--ventana-min", type=int, default=15)
     ap.add_argument("--max-minutes", type=float, default=None)
     ap.add_argument("--fecha", default=dt.date.today().isoformat())
+    ap.add_argument("--riesgo-sobre", choices=["ejecutado", "pendiente"], default="ejecutado",
+                    help="sobre que cantidad se cobra el riesgo de R_E (decision D3 del Sprint 5)")
+    ap.add_argument("--beta-star", type=float, default=None,
+                    help="beta* a usar; con --riesgo-sobre pendiente hay que recalcularlo (no sirve el del barrido)")
+    ap.add_argument("--normalizar-recompensa", action="store_true")
     args = ap.parse_args(argv)
 
     from src.envs.abides_ejecutor_env import make_calibrated_env_factory  # requiere ABIDES
 
-    with open(args.beta_sweep_json, "r", encoding="utf-8") as f:
-        beta_star = float(json.load(f)["reporte"]["beta_star"])
+    if args.beta_star is not None:
+        beta_star = float(args.beta_star)
+    elif args.riesgo_sobre == "pendiente":
+        raise SystemExit("Con --riesgo-sobre pendiente hay que pasar --beta-star (recalculado con "
+                         "beta_sweep.beta_star_from_episodes(..., base='pendiente')).")
+    else:
+        with open(args.beta_sweep_json, "r", encoding="utf-8") as f:
+            beta_star = float(json.load(f)["reporte"]["beta_star"])
     out_dir = Path(args.out_dir)
-    out_path = out_dir / f"beta_fase2_{args.tramo}_{args.fecha}.json"
+    sufijo = "" if args.riesgo_sobre == "ejecutado" else "_pend"
+    out_path = out_dir / f"beta_fase2_{args.tramo}{sufijo}_{args.fecha}.json"
     firma = {"entorno": "abides", "ticker": args.ticker, "tramo": args.tramo, "n_train": args.episodes,
              "n_eval": args.eval_seeds, "q_slice": args.q_slice, "ventana_min": args.ventana_min,
              "beta_star": beta_star, "cfg": bp.PPO_CFG, "calibrated_json": Path(args.calibrated_json).name}
+    if args.riesgo_sobre != "ejecutado" or args.normalizar_recompensa:  # no cambia la firma de las corridas ya hechas
+        firma.update({"riesgo_sobre": args.riesgo_sobre, "normalizar": bool(args.normalizar_recompensa)})
     estado = load_resumable(out_path, firma)
-    factory = make_calibrated_env_factory(args.calibrated_json, ticker=args.ticker)
+    factory = make_calibrated_env_factory(args.calibrated_json, ticker=args.ticker,
+                                          riesgo_sobre=args.riesgo_sobre,
+                                          normalizar_recompensa=args.normalizar_recompensa)
 
     completo = bp.correr_fase2(
         factory, "abides", beta_star, args.tramo, args.episodes, args.eval_seeds, args.q_slice,
         args.ventana_min, estado, lambda e: save_json(out_path, e), out_dir,
         presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60)
     if completo:
-        md = out_dir / f"beta_fase2_{args.tramo}_{args.fecha}.md"
+        md = out_dir / f"beta_fase2_{args.tramo}{sufijo}_{args.fecha}.md"
         md.write_text(bp.informe_markdown(estado), encoding="utf-8")
         print(f"\nGuardado: {out_path}\nInforme: {md}")
     else:

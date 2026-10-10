@@ -90,7 +90,11 @@ def step_record(info: Dict) -> Dict[str, float]:
         q = float(info.get("q_fill_step", 0.0))
         p_mid = float(info["p_mid_clp"])
         p_ejec = float(info["p_fill_step_clp"]) if q > 0 else p_mid
-    return {"q": q, "p_mid": p_mid, "p_ejec": p_ejec, "sigma2": float(info["sigma2"])}
+    # cantidad pendiente al final del paso (solo para riesgo_sobre="pendiente"):
+    # Poisson la entrega como `q_pendiente`; ABIDES como `remaining`.
+    q_pend = info.get("q_pendiente", info.get("remaining"))
+    return {"q": q, "p_mid": p_mid, "p_ejec": p_ejec, "sigma2": float(info["sigma2"]),
+            "q_pend": None if q_pend is None else float(q_pend)}
 
 
 def run_episode(env, politica: Callable[[int, int, int], np.ndarray], nivel_pasivo: int,
@@ -118,6 +122,7 @@ def summarize_episode(pasos: Sequence[Dict[str, float]], q_slice: float, p_ref: 
     q = np.array([s["q"] for s in pasos], dtype=float)
     dif = np.array([s["p_mid"] - s["p_ejec"] for s in pasos], dtype=float)
     s2 = np.array([s["sigma2"] for s in pasos], dtype=float)
+    qp = np.array([s["q_pend"] if s.get("q_pend") is not None else np.nan for s in pasos], dtype=float)
     q_ejec = float(q.sum())
     out = {
         "q_slice": q_slice, "p_referencia": p_ref, "n_pasos": len(pasos),
@@ -125,6 +130,8 @@ def summarize_episode(pasos: Sequence[Dict[str, float]], q_slice: float, p_ref: 
         "precio": float((dif * q).sum()),            # sum (P_mid - P_ejec) q
         "abs_precio": float(np.abs(dif * q).sum()),  # sum |P_mid - P_ejec| q
         "sigma2_q": float((s2 * q).sum()),           # sum sigma2 q
+        # sum sigma2 Q_pendiente (riesgo_sobre="pendiente"); None si el entorno no la entrega
+        "sigma2_qpend": None if np.isnan(qp).any() else float((s2 * qp).sum()),
         "cumplimiento": q_ejec / q_slice if q_slice > 0 else float("nan"),
         "IS_total": None, "slippage_bps": None, "p_promedio": None,
     }
@@ -140,17 +147,26 @@ def summarize_episode(pasos: Sequence[Dict[str, float]], q_slice: float, p_ref: 
 # beta* y agregacion
 # ---------------------------------------------------------------------------
 
-def beta_star_from_episodes(episodios: Sequence[Dict]) -> float:
+def _campo_riesgo(base: str) -> str:
+    if base not in ("ejecutado", "pendiente"):
+        raise ValueError(f"base invalida: {base!r}")
+    return "sigma2_q" if base == "ejecutado" else "sigma2_qpend"
+
+
+def beta_star_from_episodes(episodios: Sequence[Dict], base: str = "ejecutado") -> float:
     """beta* = sum|P_mid - P_ejec| q / sum sigma2 q sobre todos los episodios:
-    con este beta, sum|riesgo| = sum|precio| en el agregado."""
+    con este beta, sum|riesgo| = sum|precio| en el agregado. Con
+    `base="pendiente"` el denominador es sum sigma2 Q_pendiente (riesgo sobre el
+    inventario pendiente, decision D3)."""
+    campo = _campo_riesgo(base)
     num = sum(e["abs_precio"] for e in episodios)
-    den = sum(e["sigma2_q"] for e in episodios)
+    den = sum(e[campo] for e in episodios)
     return float(num / den) if den > 0 else float("nan")
 
 
-def risk_weight(episodios: Sequence[Dict], beta: float) -> float:
+def risk_weight(episodios: Sequence[Dict], beta: float, base: str = "ejecutado") -> float:
     """Peso del riesgo en [0, 1]: sum|riesgo| / (sum|precio| + sum|riesgo|)."""
-    riesgo = beta * sum(e["sigma2_q"] for e in episodios)
+    riesgo = beta * sum(e[_campo_riesgo(base)] for e in episodios)
     precio = sum(e["abs_precio"] for e in episodios)
     return float(riesgo / (precio + riesgo)) if (precio + riesgo) > 0 else float("nan")
 
