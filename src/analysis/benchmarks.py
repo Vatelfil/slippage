@@ -89,8 +89,45 @@ def vwap_schedule(q_total: float, volume_profile: Optional[pd.DataFrame] = None,
     return (weights * q_total).tolist()
 
 
+def periodo_inicio(tramo_inicio: str) -> int:
+    """Indice del primer periodo de 30 min de una meta-orden que arranca en
+    `tramo_inicio` (apertura 09:30 = 0, media jornada 11:30 = 4, cierre 14:00 = 9)."""
+    for i in range(N_PERIODS):
+        if _tramo_for_period(i) == tramo_inicio:
+            return i
+    raise ValueError(f"tramo desconocido: {tramo_inicio!r}")
+
+
+def schedule_desde(kind: str, q_total: float, start_period: int = 0,
+                   volume_profile: Optional[pd.DataFrame] = None) -> List[float]:
+    """TWAP o VWAP de una meta-orden que empieza en el periodo `start_period`:
+    los periodos anteriores quedan en 0 y la orden se reparte desde ahi hasta
+    el cierre (mismos pesos que `twap_schedule` / `vwap_schedule`, renormalizados)."""
+    base = twap_schedule(1.0) if kind == "TWAP" else vwap_schedule(1.0, volume_profile=volume_profile)
+    w = np.array(base, dtype=float)
+    w[:start_period] = 0.0
+    return (w / w.sum() * q_total).tolist()
+
+
+def _leer_reset(info: Dict) -> float:
+    """P_referencia en CLP desde el info de reset (Poisson: `p_referencia`;
+    ABIDES: `entry_price` en la unidad de cuenta de ABIDES)."""
+    if info.get("p_referencia") is not None:
+        return float(info["p_referencia"])
+    return float(info["entry_price"]) / float(info.get("unidades_por_clp", 1.0))
+
+
+def _leer_paso(info: Dict, p_ref: float):
+    """(cantidad, precio en CLP) ejecutados en el paso, para ambos entornos."""
+    if "q_ejecutado_step" in info:                      # Poisson
+        return float(info["q_ejecutado_step"]), float(info.get("p_ejecutado_step", p_ref))
+    q = float(info.get("q_fill_step", 0.0))             # ABIDES
+    p = info.get("p_fill_step_clp")
+    return q, float(p if p is not None else p_ref)
+
+
 def run_benchmark_episode(schedule: Sequence[float], seed: int = 0,
-                           ticker: str = DEFAULT_TICKER) -> EpisodeExecutionResult:
+                           ticker: str = DEFAULT_TICKER, env_factory=None) -> EpisodeExecutionResult:
     """Corre una jornada completa (los `len(schedule)` periodos) ejecutando,
     en cada uno, el `q_slice` que diga el `schedule` (TWAP o VWAP) con la
     politica ingenua (ver docstring de modulo), contra
@@ -111,20 +148,24 @@ def run_benchmark_episode(schedule: Sequence[float], seed: int = 0,
         if q_slice <= 0:
             continue
         tramo = _tramo_for_period(i)
-        env = EjecutorEnvPoissonFallback(
-            executor_id=tramo, q_slice=max(q_slice, 1.0), ventana_min=VENTANA_MIN_BENCHMARK,
-            ticker=ticker, seed=seed * 1000 + i,
-        )
+        if env_factory is None:
+            env = EjecutorEnvPoissonFallback(
+                executor_id=tramo, q_slice=max(q_slice, 1.0), ventana_min=VENTANA_MIN_BENCHMARK,
+                ticker=ticker, seed=seed * 1000 + i,
+            )
+        else:  # p. ej. la fabrica calibrada de ABIDES (`make_calibrated_env_factory`)
+            env = env_factory(executor_id=tramo, q_slice=int(max(q_slice, 1.0)),
+                              ventana_min=VENTANA_MIN_BENCHMARK, seed=seed * 1000 + i)
         obs, info = env.reset()
+        p_ref_periodo = _leer_reset(info)
         if p_referencia is None:
-            p_referencia = float(info["p_referencia"])
+            p_referencia = p_ref_periodo
 
         done = False
         while not done:
             obs, reward, done, truncated, info = env.step(naive_action)
             done = done or truncated
-            q_paso = float(info.get("q_ejecutado_step", 0.0))
-            p_paso = float(info.get("p_ejecutado_step", p_referencia))
+            q_paso, p_paso = _leer_paso(info, p_referencia)
             if q_paso > 0:
                 q_executed_total += q_paso
                 monto_acumulado += p_paso * q_paso

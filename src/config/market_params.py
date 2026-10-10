@@ -103,6 +103,15 @@ SIGMA2_MIN_PUNTOS = 5
 ESCALAS_RECOMPENSA: Tuple[str, ...] = ("por_accion_slice", "bruta")
 ESCALA_RECOMPENSA_EJECUTOR = "por_accion_slice"
 
+# Sobre que cantidad se cobra el termino de riesgo de R_E (decision D3 del
+# Sprint 5, ver docs/decision_RE_para_BF.md):
+#   "ejecutado": beta sigma2 q_ejec (formula original; con beta alto no operar
+#                sale gratis).
+#   "pendiente": beta sigma2 Q_pendiente (riesgo de mantener inventario; no
+#                operar deja de ser gratis). Obliga a recalcular beta*.
+RIESGOS_SOBRE: Tuple[str, ...] = ("ejecutado", "pendiente")
+RIESGO_SOBRE_EJECUTOR = "ejecutado"
+
 
 def avg_order_size_from_price(median_price: float,
                               notional_clp: float = AVG_ORDER_NOTIONAL_CLP) -> float:
