@@ -47,7 +47,7 @@
   "reward": {
     "type": "densa, cada 30 segundos",
     "formula": "R_E = (P_mid_t - P_ejec_t) * q_ejec - beta * sigma^2_precio * q_ejec",
-    "pending_calibration": ["beta (coeficiente de aversión al riesgo, Sprint 4)"]
+    "pending_calibration": ["beta: provisional 0.0061796 (0.1 x beta*, fase 2 en apertura); revalidar en Sprint 5 para media jornada y cierre"]
   },
   "consumers": [
     { "role": "MR", "task": "2.1.2 / 2.1.4", "use": "Redes Actor-Crítico de los 3 Ejecutores; formalización de gym.spaces.Dict en código" },

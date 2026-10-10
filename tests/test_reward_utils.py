@@ -39,7 +39,7 @@ def _rollout(env, acciones, seed=0):
 # --- configuracion ---------------------------------------------------------
 
 def test_parametros_viven_en_market_params():
-    assert mp.BETA_RIESGO_EJECUTOR == 0.0
+    assert mp.BETA_RIESGO_EJECUTOR == pytest.approx(0.0061796)  # 0,1 x beta*, fase 2 (provisional)
     assert mp.VENTANA_SIGMA2_PASOS == 20 and mp.SIGMA2_MIN_PUNTOS == 5
     assert mp.ESCALA_RECOMPENSA_EJECUTOR in mp.ESCALAS_RECOMPENSA == ("por_accion_slice", "bruta")
     import src.envs.fallback_poisson_env as fb
@@ -141,7 +141,7 @@ def test_executor_reward_formula_y_escalas():
 def test_fallback_beta_cero_reproduce_la_recompensa_anterior():
     """Antes de la 2.2.3: reward = (p_mid_before - p_ejec) * q_ejec, en CLP."""
     env = EjecutorEnvPoissonFallback(executor_id="apertura", q_slice=1000.0, max_steps=40,
-                                     seed=3, reward_escala="bruta")
+                                     seed=3, reward_escala="bruta", beta=0.0)
     pasos = _rollout(env, [MARKET, LIMIT_MID] * 20)
     assert len(pasos) > 5
     for r, info in pasos:
