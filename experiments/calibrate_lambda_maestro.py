@@ -44,6 +44,13 @@ def run_lambda_experiments(
     # Datos sinteticos para la jornada (09:30 a 16:00)
     idx = pd.date_range("2026-09-29 09:30", "2026-09-29 16:00", freq="5min")
     rng = np.random.default_rng(seed)
+    # Las politicas sin entrenar (redes inicializadas al azar) deben ser reproducibles:
+    # se fija la semilla y se descartan las redes por defecto ya creadas, para que se
+    # vuelvan a inicializar y a muestrear desde el mismo estado del generador.
+    torch.manual_seed(seed)
+    import src.envs.maestro_ejecutor_protocol as _mep
+    _mep._default_master_network = None
+    _mep._default_executor_network = None
     df_datos = pd.DataFrame(
         {
             "volatilidad": rng.uniform(0.001, 0.003, len(idx)),
@@ -55,10 +62,15 @@ def run_lambda_experiments(
     for q_total in meta_ordenes:
         for lam in lambdas:
             for run_i in range(n_runs_per_config):
+                n_env = [0]
+                def _factory(*a, _s=seed + 1000 * len(records) + run_i, **kw):
+                    n_env[0] += 1
+                    return EjecutorEnvPoissonFallback(*a, seed=_s + n_env[0], **kw)
+
                 env = MaestroEjecutorEnv(
                     meta_orden_quantity=q_total,
                     datos_historicos=df_datos,
-                    executor_env_factory=EjecutorEnvPoissonFallback,
+                    executor_env_factory=_factory,
                     lambda_penalty=lam,
                 )
                 s_m = env.reset()

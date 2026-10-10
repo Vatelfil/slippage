@@ -35,17 +35,19 @@ y actualizar los JSON correspondientes):
     - docs/schemas/SE_schema.json  -> vector S_E, 27 variables, Box([27,])
 """
 
+from __future__ import annotations
+
 import os
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
-import torch
 
-from typing import Callable, Optional
+from typing import TYPE_CHECKING, Callable, Optional
 
 import numpy as np
 import pandas as pd
 
 from src.envs.spaces import EjecutorActionSpace
-from src.models.actor_critic import MasterActorCritic, ExecutorActorCritic
+if TYPE_CHECKING:  # torch se importa solo al usar las redes (el orquestador corre sin torch)
+    from src.models.actor_critic import MasterActorCritic, ExecutorActorCritic
 
 # Constantes fijadas por los esquemas de Sprint 1 (SM_schema.json / SE_schema.json).
 # No cambiar aqui: si estos valores cambian, deben cambiar primero los JSON.
@@ -58,7 +60,7 @@ JORNADA_DURACION_MIN = 390
 
 # Calibracion experimental (Sprint 4, tarea 2.2.2 - Mauricio Reynoso).
 # Penalizacion por inventario no ejecutado al cierre: lambda * Q_pendiente * P_mid_cierre.
-LAMBDA_PENALTY = 0.05             # Calibrado: penaliza sin desestabilizar la escala de IS
+LAMBDA_PENALTY = 0.05             # Calibrado por escala con politica SIN entrenar; revalidar al entrenar (Sprint 5-6)
 LAMBDA_PENALTY_PLACEHOLDER = LAMBDA_PENALTY  # Mantiene compatibilidad hacia atras
 BETA_RISK_PLACEHOLDER = 0.0       # beta: aversion al riesgo temporal (usado por el Ejecutor)
 
@@ -447,14 +449,15 @@ class MaestroEjecutorEnv:
 # Politicas PPO conectadas a redes reales (Mauricio Reynoso - Tarea 2.2.1)
 # ----------------------------------------------------------------------
 
-_default_master_network: Optional[MasterActorCritic] = None
-_default_executor_network: Optional[ExecutorActorCritic] = None
+_default_master_network: Optional["MasterActorCritic"] = None
+_default_executor_network: Optional["ExecutorActorCritic"] = None
 
 
 def get_default_master_network() -> MasterActorCritic:
     """Instancia singleton de MasterActorCritic para inferencia por defecto."""
     global _default_master_network
     if _default_master_network is None:
+        from src.models.actor_critic import MasterActorCritic
         _default_master_network = MasterActorCritic(obs_dim=7)
     return _default_master_network
 
@@ -463,6 +466,7 @@ def get_default_executor_network() -> ExecutorActorCritic:
     """Instancia singleton de ExecutorActorCritic para inferencia por defecto."""
     global _default_executor_network
     if _default_executor_network is None:
+        from src.models.actor_critic import ExecutorActorCritic
         _default_executor_network = ExecutorActorCritic(obs_dim=27, action_dim=240)
     return _default_executor_network
 
@@ -478,6 +482,7 @@ def maestro_policy(s_m: np.ndarray, model: Optional[MasterActorCritic] = None, d
     Returns:
         (alpha_idx, ventana_idx) - accion en MultiDiscrete([10, 4]).
     """
+    import torch
     net = model if model is not None else get_default_master_network()
     device = next(net.parameters()).device
     obs = torch.as_tensor(s_m, dtype=torch.float32, device=device)
@@ -508,6 +513,7 @@ def executor_policy(s_e: np.ndarray, model: Optional[ExecutorActorCritic] = None
     Returns:
         indice entero en [0, 240) -- decodificado luego por EjecutorActionSpace.decode_flat().
     """
+    import torch
     net = model if model is not None else get_default_executor_network()
     device = next(net.parameters()).device
     obs = torch.as_tensor(s_e, dtype=torch.float32, device=device)
