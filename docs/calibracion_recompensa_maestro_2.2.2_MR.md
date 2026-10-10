@@ -22,6 +22,8 @@ Donde:
 - $P_{\text{mid\_cierre}}$ es el precio de mercado al momento del cierre bursátil.
 - $\lambda$ es el factor de penalización por inventario pendiente (hiperparámetro objeto de esta calibración).
 
+> **Alcance de esta calibración (nota de PS, 10 oct 2026).** λ = 0,05 se eligió por escala: se comparó el tamaño de la penalización con el del IS usando una política **sin entrenar** (redes con pesos al azar) y el simulador de Poisson. Es un valor provisional razonable, no un óptimo: **debe revalidarse cuando el Maestro tenga entrenamiento real** (Sprint 5–6).
+
 Hasta el Sprint 3, el código utilizaba un valor provisional no calibrado (`LAMBDA_PENALTY_PLACEHOLDER = 0.1`). La sección 4.3 del Título I estipula explícitamente que $\lambda$ debe ser calibrado experimentalmente para asegurar convergencia estable en el entrenamiento PPO.
 
 ---
