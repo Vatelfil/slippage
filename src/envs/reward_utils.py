@@ -54,6 +54,8 @@ from src.config.market_params import (
     BETA_RIESGO_EJECUTOR,
     ESCALA_RECOMPENSA_EJECUTOR,
     ESCALAS_RECOMPENSA,
+    RIESGO_SOBRE_EJECUTOR,
+    RIESGOS_SOBRE,
     SIGMA2_MIN_PUNTOS,
     STEP_SECONDS,
     VENTANA_SIGMA2_PASOS,
@@ -130,13 +132,26 @@ class RollingPriceVariance:
 def reward_components(p_mid: float, p_ejec: float, q_ejec: float, sigma2: float,
                       beta: float = BETA_RIESGO_EJECUTOR,
                       escala: str = ESCALA_RECOMPENSA_EJECUTOR,
-                      q_slice: Optional[float] = None) -> Dict[str, float]:
+                      q_slice: Optional[float] = None,
+                      riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR,
+                      q_pendiente: Optional[float] = None) -> Dict[str, float]:
     """Componentes de R_E ya escaladas: `precio` = (P_mid - P_ejec) q_ejec,
-    `riesgo` = beta sigma2 q_ejec y `total` = precio - riesgo."""
+    `riesgo` = beta sigma2 q_base y `total` = precio - riesgo.
+
+    `q_base` es q_ejec si `riesgo_sobre = "ejecutado"` (formula original) y la
+    cantidad pendiente al final del paso (`q_pendiente`) si es "pendiente"."""
     if escala not in ESCALAS_RECOMPENSA:
         raise ValueError(f"escala invalida: {escala!r}. Validas: {list(ESCALAS_RECOMPENSA)}")
+    if riesgo_sobre not in RIESGOS_SOBRE:
+        raise ValueError(f"riesgo_sobre invalido: {riesgo_sobre!r}. Validos: {list(RIESGOS_SOBRE)}")
+    if riesgo_sobre == "pendiente":
+        if q_pendiente is None:
+            raise ValueError("riesgo_sobre='pendiente' requiere q_pendiente")
+        q_base = max(float(q_pendiente), 0.0)
+    else:
+        q_base = float(q_ejec)
     precio = (float(p_mid) - float(p_ejec)) * float(q_ejec)
-    riesgo = float(beta) * float(sigma2) * float(q_ejec)
+    riesgo = float(beta) * float(sigma2) * q_base
     if escala == "por_accion_slice":
         if q_slice is None or q_slice <= 0:
             raise ValueError("escala 'por_accion_slice' requiere q_slice > 0")
@@ -147,9 +162,51 @@ def reward_components(p_mid: float, p_ejec: float, q_ejec: float, sigma2: float,
 def executor_reward(p_mid: float, p_ejec: float, q_ejec: float, sigma2: float,
                     beta: float = BETA_RIESGO_EJECUTOR,
                     escala: str = ESCALA_RECOMPENSA_EJECUTOR,
-                    q_slice: Optional[float] = None) -> float:
-    """R_E = (P_mid - P_ejec) q_ejec - beta sigma2 q_ejec, en la escala pedida."""
-    return reward_components(p_mid, p_ejec, q_ejec, sigma2, beta, escala, q_slice)["total"]
+                    q_slice: Optional[float] = None,
+                    riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR,
+                    q_pendiente: Optional[float] = None) -> float:
+    """R_E = (P_mid - P_ejec) q_ejec - beta sigma2 q_base, en la escala pedida
+    (q_base: ver `reward_components`)."""
+    return reward_components(p_mid, p_ejec, q_ejec, sigma2, beta, escala, q_slice,
+                             riesgo_sobre, q_pendiente)["total"]
+
+
+class RunningRewardNormalizer:
+    """Lleva R_E al rango [-1, 1] con media y varianza moviles (Welford).
+
+        z = (r - media) / desvio;   salida = clip(z, -clip, clip) / clip
+
+    Hasta juntar `min_count` recompensas usa media 0 y desvio 1 (no distorsiona
+    con pocos datos). Apagado por defecto en los entornos (`normalizar=False`):
+    se activa para entrenar. Los extremos se recortan a `clip` desvios (5 por
+    defecto), asi un solo paso muy malo no domina el gradiente.
+    """
+
+    def __init__(self, clip: float = 5.0, min_count: int = 20):
+        if clip <= 0 or min_count < 2:
+            raise ValueError("se requiere clip > 0 y min_count >= 2")
+        self.clip, self.min_count = float(clip), int(min_count)
+        self.n, self.mean, self._m2 = 0, 0.0, 0.0
+
+    @property
+    def std(self) -> float:
+        return float(np.sqrt(self._m2 / (self.n - 1))) if self.n > 1 else 1.0
+
+    def update(self, x: float) -> None:
+        self.n += 1
+        d = float(x) - self.mean
+        self.mean += d / self.n
+        self._m2 += d * (float(x) - self.mean)
+
+    def normalize(self, x: float) -> float:
+        """Normaliza con las estadisticas ANTERIORES a `x` (causal) y despues
+        incorpora `x`."""
+        if self.n >= self.min_count and self.std > 1e-12:
+            z = (float(x) - self.mean) / self.std
+        else:
+            z = float(x)
+        self.update(x)
+        return float(np.clip(z, -self.clip, self.clip) / self.clip)
 
 
 def normalized_level_variance(niveles) -> float:

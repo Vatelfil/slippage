@@ -29,10 +29,11 @@ import numpy as np
 from src.config.market_params import (
     BETA_RIESGO_EJECUTOR,
     ESCALA_RECOMPENSA_EJECUTOR,
+    RIESGO_SOBRE_EJECUTOR,
     STEP_SECONDS,
     VENTANA_SIGMA2_PASOS,
 )
-from src.envs.reward_utils import RollingPriceVariance, prior_sigma2, reward_components
+from src.envs.reward_utils import RollingPriceVariance, RunningRewardNormalizer, prior_sigma2, reward_components
 
 N_LEVELS = 5
 OBS_DIM = 27  # SE_schema.json: privado 3 + bid 10 + ask 10 + mercado 4
@@ -215,8 +216,11 @@ class ExecutorRewardState:
 
     def __init__(self, beta: float = BETA_RIESGO_EJECUTOR, escala: str = ESCALA_RECOMPENSA_EJECUTOR,
                  unidades_por_clp: float = 100.0, sigma_5min: Optional[float] = None,
-                 window: int = VENTANA_SIGMA2_PASOS, step_seconds: float = STEP_SECONDS):
+                 window: int = VENTANA_SIGMA2_PASOS, step_seconds: float = STEP_SECONDS,
+                 riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR, normalizar_recompensa: bool = False):
         self.beta = float(beta)
+        self.riesgo_sobre = riesgo_sobre
+        self._normalizador = RunningRewardNormalizer() if normalizar_recompensa else None
         self.escala = escala
         self.unidades_por_clp = float(unidades_por_clp)
         self.sigma_5min = sigma_5min
@@ -233,18 +237,24 @@ class ExecutorRewardState:
         self._var.update(p_ref)
         self.last = {}
 
-    def step(self, executed_orders: Sequence, mid: float, parent_size: float) -> float:
+    def step(self, executed_orders: Sequence, mid: float, parent_size: float,
+             q_pendiente: Optional[float] = None) -> float:
         """R_E del paso. `mid` es el P_mid del despertar actual; sigma2 usa
-        solo los P_mid de los despertares anteriores."""
+        solo los P_mid de los despertares anteriores. `q_pendiente` (cantidad
+        que falta al final del paso) solo se usa con `riesgo_sobre='pendiente'`."""
         p_mid = float(mid) / self.unidades_por_clp
         sigma2 = self._var.step(p_mid)
         q, p_fill = fills_summary(executed_orders)
         p_ejec = p_fill / self.unidades_por_clp if q > 0 else p_mid
         comp = reward_components(p_mid, p_ejec, q, sigma2, self.beta, self.escala,
-                                 q_slice=max(float(parent_size), 1e-9))
+                                 q_slice=max(float(parent_size), 1e-9),
+                                 riesgo_sobre=self.riesgo_sobre, q_pendiente=q_pendiente)
         self.last = {
             "sigma2": sigma2, "reward_precio": comp["precio"], "reward_riesgo": comp["riesgo"],
             "reward_escala": self.escala, "p_mid_clp": p_mid,
             "q_fill_step": q, "p_fill_step_clp": p_ejec if q > 0 else None,
+            "reward_sin_normalizar": comp["total"],
         }
+        if self._normalizador is not None:
+            return self._normalizador.normalize(comp["total"])
         return comp["total"]

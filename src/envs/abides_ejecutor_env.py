@@ -26,6 +26,7 @@ import numpy as np
 from src.config.market_params import (
     BETA_RIESGO_EJECUTOR,
     ESCALA_RECOMPENSA_EJECUTOR,
+    RIESGO_SOBRE_EJECUTOR,
     VENTANA_SIGMA2_PASOS,
 )
 from src.envs import abides_bridge as br
@@ -71,14 +72,17 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
                  beta: float = BETA_RIESGO_EJECUTOR,
                  reward_escala: str = ESCALA_RECOMPENSA_EJECUTOR,
                  sigma_5min: Optional[float] = None,
-                 ventana_sigma2: int = VENTANA_SIGMA2_PASOS, **kwargs):
+                 ventana_sigma2: int = VENTANA_SIGMA2_PASOS,
+                 riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR,
+                 normalizar_recompensa: bool = False, **kwargs):
         self._cfg = bridge_cfg or br.BridgeConfig()
         self._beta = beta
         # R_E (2.2.3): varianza movil causal del P_mid, escala comun con el
         # fallback y precios en CLP. `sigma_5min` fija el prior de sigma2.
         self._reward = br.ExecutorRewardState(
             beta=beta, escala=reward_escala, unidades_por_clp=self._cfg.unidades_por_clp,
-            sigma_5min=sigma_5min, window=ventana_sigma2)
+            sigma_5min=sigma_5min, window=ventana_sigma2, riesgo_sobre=riesgo_sobre,
+            normalizar_recompensa=normalizar_recompensa)
         self._entry_price: Optional[float] = None
         self._best_bid = 0.0
         self._best_ask = 0.0
@@ -141,7 +145,9 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         bids, asks = br.last_snapshot(mkt["bids"]), br.last_snapshot(mkt["asks"])
         mid = br.mid_price(bids, asks, br.last_scalar(mkt["last_transaction"]))
         orders = br.last_orders(raw_state["internal_data"]["inter_wakeup_executed_orders"])
-        return self._reward.step(orders, mid, self.parent_order_size)
+        holdings = br.last_scalar(raw_state["internal_data"]["holdings"])
+        q_pend = max(float(self.parent_order_size) - float(holdings), 0.0)
+        return self._reward.step(orders, mid, self.parent_order_size, q_pendiente=q_pend)
 
     @raw_state_pre_process
     def raw_state_to_update_reward(self, raw_state: Dict[str, Any]) -> float:

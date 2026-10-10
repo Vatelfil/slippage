@@ -25,6 +25,7 @@ import numpy as np
 
 from src.config.market_params import (
     BETA_RIESGO_EJECUTOR,
+    RIESGO_SOBRE_EJECUTOR,
     ESCALA_RECOMPENSA_EJECUTOR,
     VENTANA_SIGMA2_PASOS,
 )
@@ -34,6 +35,7 @@ from src.envs.reward_utils import (
     RollingPriceVariance,
     prior_sigma2,
     reward_components,
+    RunningRewardNormalizer,
     sigma_5min_tramo,
 )
 
@@ -84,6 +86,8 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
                  beta: float = BETA_RIESGO_EJECUTOR,
                  reward_escala: str = ESCALA_RECOMPENSA_EJECUTOR,
                  ventana_sigma2: int = VENTANA_SIGMA2_PASOS,
+                 riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR,
+                 normalizar_recompensa: bool = False,
                  **_ignored_kwargs):
         # Mismo contrato que EjecutorEnvAbides (abides_ejecutor_env.py): acepta
         # `ventana_min` (minutos de la ventana asignada por el Maestro) y lo
@@ -105,6 +109,11 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
         self.p_referencia = 0.0
         self.beta = float(beta)
         self.reward_escala = reward_escala
+        self.riesgo_sobre = riesgo_sobre
+        # Normalizacion de R_E a [-1, 1] con estadisticas moviles; apagada por
+        # defecto (se activa para entrenar). Las estadisticas viven toda la vida
+        # del entorno (no se reinician en reset()).
+        self._normalizador = RunningRewardNormalizer() if normalizar_recompensa else None
         self._sigma_5min = sigma_5min_tramo(ticker, tramo, self._sim.calib["calibration_path"])
         self._var = RollingPriceVariance(window=ventana_sigma2)
 
@@ -146,8 +155,12 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
         # los P_mid hasta t-1 y recien despues incorpora el de este paso.
         sigma2 = self._var.step(p_mid_before)
         comp = reward_components(p_mid_before, p_ejec, q_ejec, sigma2, self.beta,
-                                 self.reward_escala, q_slice=self.q_slice)
+                                 self.reward_escala, q_slice=self.q_slice,
+                                 riesgo_sobre=self.riesgo_sobre, q_pendiente=self.q_pendiente)
         reward = comp["total"]
+        reward_sin_normalizar = reward
+        if self._normalizador is not None:
+            reward = self._normalizador.normalize(reward)
 
         self._step_count += 1
         done = (self._step_count >= self.max_steps) or (self.q_pendiente <= 0)
@@ -161,7 +174,7 @@ class EjecutorEnvPoissonFallback(EjecutorEnv):
             "p_mid": self._sim.mid_price,
             "sigma2": sigma2, "reward_precio": comp["precio"],
             "reward_riesgo": comp["riesgo"], "reward_escala": self.reward_escala,
-            "p_mid_decision": p_mid_before,
+            "p_mid_decision": p_mid_before, "reward_sin_normalizar": reward_sin_normalizar,
         }
         return obs, reward, done, truncated, info
 

@@ -136,6 +136,61 @@ def test_executor_reward_formula_y_escalas():
     assert beta_star(5.0, 20.0) == 0.25
 
 
+# --- riesgo sobre lo ejecutado o lo pendiente (D3) -------------------------
+
+def test_riesgo_sobre_pendiente_cobra_aunque_no_se_ejecute():
+    from src.envs.reward_utils import reward_components
+    ej = reward_components(100.0, 100.0, 0.0, 2.0, beta=0.5, escala="bruta", riesgo_sobre="ejecutado")
+    pe = reward_components(100.0, 100.0, 0.0, 2.0, beta=0.5, escala="bruta", riesgo_sobre="pendiente",
+                           q_pendiente=400.0)
+    assert ej["riesgo"] == 0.0           # no operar sale gratis
+    assert pe["riesgo"] == pytest.approx(0.5 * 2.0 * 400.0)
+    assert pe["total"] == pytest.approx(-400.0)
+
+
+def test_riesgo_sobre_invalido_o_sin_pendiente():
+    from src.envs.reward_utils import reward_components
+    with pytest.raises(ValueError):
+        reward_components(1.0, 1.0, 1.0, 1.0, riesgo_sobre="otro")
+    with pytest.raises(ValueError):
+        reward_components(1.0, 1.0, 1.0, 1.0, riesgo_sobre="pendiente")
+
+
+def test_fallback_riesgo_pendiente_penaliza_esperar():
+    kw = dict(executor_id="apertura", q_slice=1000.0, max_steps=10, seed=5, beta=0.01, reward_escala="bruta")
+    env_e = EjecutorEnvPoissonFallback(riesgo_sobre="ejecutado", **kw)
+    env_p = EjecutorEnvPoissonFallback(riesgo_sobre="pendiente", **kw)
+    for env in (env_e, env_p):
+        env.reset()
+    a = np.array([1, 0, 0])  # LIMIT_SELL: no ejecuta (esperar)
+    _, r_e, *_, info_e = env_e.step(a)
+    _, r_p, *_, info_p = env_p.step(a)
+    assert info_e["reward_riesgo"] == 0.0
+    assert info_p["reward_riesgo"] > 0.0 and r_p < r_e
+
+
+def test_normalizador_rango_y_estadisticas():
+    from src.envs.reward_utils import RunningRewardNormalizer
+    rng = np.random.default_rng(0)
+    nz = RunningRewardNormalizer(clip=5.0, min_count=20)
+    out = np.array([nz.normalize(x) for x in rng.normal(10.0, 3.0, 5000)])
+    assert np.all(np.abs(out) <= 1.0)
+    resto = out[200:] * 5.0
+    assert abs(resto.mean()) < 0.1 and abs(resto.std() - 1.0) < 0.1
+    assert abs(nz.mean - 10.0) < 0.3 and abs(nz.std - 3.0) < 0.2
+
+
+def test_normalizador_recorta_extremos_y_es_causal():
+    from src.envs.reward_utils import RunningRewardNormalizer
+    nz = RunningRewardNormalizer(clip=5.0, min_count=20)
+    for x in np.random.default_rng(1).normal(0.0, 1.0, 100):
+        nz.normalize(x)
+    assert nz.normalize(1000.0) == pytest.approx(1.0)       # recortado
+    assert nz.normalize(-1000.0) == pytest.approx(-1.0)
+    a, b = RunningRewardNormalizer(), RunningRewardNormalizer()
+    assert a.normalize(3.0) == b.normalize(3.0)
+
+
 # --- regresion: con beta = 0 la recompensa es la anterior ------------------
 
 def test_fallback_beta_cero_reproduce_la_recompensa_anterior():
@@ -230,7 +285,8 @@ def test_ambos_entornos_comparten_el_default_de_escala_y_beta():
         texto = f.read()
     assert "reward_escala: str = ESCALA_RECOMPENSA_EJECUTOR" in texto
     assert "beta: float = BETA_RIESGO_EJECUTOR" in texto
-    assert "self._reward.step(orders, mid, self.parent_order_size)" in texto
+    assert "self._reward.step(orders, mid, self.parent_order_size, q_pendiente=q_pend)" in texto
+    assert "riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR" in texto
     assert inspect.signature(br.ExecutorRewardState).parameters["window"].default == mp.VENTANA_SIGMA2_PASOS
 
 
