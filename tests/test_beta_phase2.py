@@ -81,3 +81,12 @@ def test_presupuesto_agotado_devuelve_false(tmp_path):
     ok = bp.correr_fase2(_factory, "poisson", 0.06, "apertura", 2, 2, 1000, 15, estado, lambda e: None,
                          tmp_path, presupuesto_s=-1, cfg=CFG, log=lambda *_: None)
     assert ok is False
+
+
+def test_seleccion_robusta_si_una_politica_no_ejecuta():
+    """Con beta alto la red puede aprender a no operar: slippage None no debe tumbar la seleccion."""
+    ev = {"0x": {"beta": 0.0, "slippage_bps_medio": 5.0, "cumplimiento_medio": 0.97, "slippage_por_semilla": []},
+          "1x": {"beta": 0.06, "slippage_bps_medio": None, "cumplimiento_medio": 0.0,
+                 "slippage_por_semilla": [None, None, None]}}
+    r = bp.seleccionar_beta(ev, 0.06)
+    assert r["criterio"] == "central_sin_candidato_que_cumpla"

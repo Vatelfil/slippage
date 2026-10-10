@@ -234,7 +234,9 @@ def correr_fase2(factory: Callable, entorno: str, beta_star: float, tramo: str, 
         estado["episodios_eval"][k] = eps
         estado["evaluacion"][k] = ev
         guardar(estado)
-        log(f"  evaluacion: slippage {ev['slippage_bps_medio']:.2f} bps, cumplimiento {ev['cumplimiento_medio']:.3f}")
+        sl = ev["slippage_bps_medio"]
+        log(f"  evaluacion: slippage {'sin ejecuciones' if sl is None else f'{sl:.2f} bps'}, "
+            f"cumplimiento {(ev['cumplimiento_medio'] or 0.0):.3f}")
 
     for nombre in bs.POLITICAS:
         if nombre in estado["referencias"]:
