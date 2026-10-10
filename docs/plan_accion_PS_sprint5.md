@@ -34,7 +34,7 @@ Quién hace cada paso: **[C]** Claude Code (código, análisis, documentos) · *
 | Día | Qué | Quién |
 |---|---|---|
 | Lun 19 | 18:00 congelamiento del simulador. Verificar que los JSON de calibración quedaron fijos y avisar | PS |
-| Mar 20 | T4: correr los benchmarks sobre las 10 meta-órdenes (≈ 100 corridas, ≈ 3 h) en un cuaderno | PS (celdas) |
+| Mar 20 | T4: correr los benchmarks sobre las 10 meta-órdenes (40 jornadas completas en ABIDES, ≈ 8 min cada una; 5–6 h repartidas en 2 cuadernos) | PS (celdas) |
 | Mar 20 | P5: iniciar β en media jornada (100 episodios, 15 semillas de evaluación, ≈ 3 h) en un segundo cuaderno | PS (celdas) |
 | Mié 21 | P5: β en cierre (≈ 4–5 h). T4: análisis, tabla de IS por orden y estrategia, gráficos | PS y C |
 | Jue 22 | T4 entregada (documento y PR). P5 entregada: tabla de β por tramo con la regla previa y `BETA_RIESGO_EJECUTOR` actualizado | C |
@@ -47,7 +47,7 @@ Quién hace cada paso: **[C]** Claude Code (código, análisis, documentos) · *
 | P4 calibración COPEC y ECL | 13–15 oct | 4–6 h | ≈ 30 min (celdas) |
 | P4 validación 30 semillas | 15 oct | ≈ 3 h | ≈ 15 min |
 | P3 validación de la candidata de BF | 16–19 oct | ≈ 1,5 h | ≈ 15 min |
-| T4 benchmarks | 20 oct | ≈ 3 h | ≈ 20 min |
+| T4 benchmarks | 20–21 oct | 5–6 h en 2 cuadernos | ≈ 20 min |
 | P5 β media jornada y cierre | 20–22 oct | ≈ 8 h en 2 cuadernos | ≈ 30 min |
 
 Regla: máximo dos cuadernos al mismo tiempo, cada comando con `--max-minutes`, y los resultados se miran en `resultados/` de Drive.
