@@ -27,7 +27,7 @@
 | 1.2.1 Limpieza de datos | Hecho | `data/processed/clean_5m_*` y `docs/evidencia_pipeline_datos_BF.md` | BF |
 | 1.2.2 Features de S_M | Hecho | `src/features/build_sm_features.py` y `tests/test_pipeline_sm.py` | BF |
 | 1.2.3 PoC de ABIDES-Gym | **Por cerrar** | Falta el notebook del plan; evidencia equivalente en `docs/poc_abides_gym_1.2.3.md` | MR |
-| 1.2.4 Dependencias | **Por cerrar** | Faltaba `requirements-locked.txt` y `docs/dependencias_resueltas.md` (borradores en este PR); falta el `pip freeze` completo de Colab | MR |
+| 1.2.4 Dependencias | **Por cerrar** | Faltaban `requirements-locked.txt` y `docs/dependencias_resueltas.md`; quedaron escritos en este PR con el `pip freeze` completo del 15 oct (56 paquetes) | MR |
 | 1.2.5 Arquitectura del entorno | Hecho | `docs/arquitectura_entorno_simulacion.md` | PS |
 
 ## Sprint 3

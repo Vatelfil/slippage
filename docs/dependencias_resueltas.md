@@ -46,7 +46,7 @@ No se mezclan: ABIDES-Gym exige versiones antiguas (gym 0.18.0, numpy 1.22.0) qu
 
 ## 5. Estado
 
-El archivo `requirements-locked.txt` tiene los pines de la receta. La lista completa de paquetes (`pip freeze`) se genera en Colab con la celda de la sección 6 de este documento y se reemplaza en el archivo.
+`requirements-locked.txt` contiene el `pip freeze` completo del entorno `abides` (Python 3.9.23), generado en Colab el 15 de octubre de 2026 con 56 paquetes; `abides-core`, `abides-markets` y `abides-gym` se instalan aparte desde el repositorio oficial. La lista de conda también se guardó en Drive (`conda_export_abides.txt`, 81 líneas).
 
 ## 6. Cómo regenerar el `pip freeze` completo
 
