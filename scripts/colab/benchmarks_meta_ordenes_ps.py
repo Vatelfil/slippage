@@ -72,7 +72,7 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
             corridas[clave] = {"orden": oid, "estrategia": estrategia, "seed": int(seed), "ticker": o["ticker"],
                                "tramo_inicio": o["tramo_inicio"], "cantidad": o["cantidad"],
                                "segundos": round(time.time() - t0, 1), **{k: _num(v) for k, v in m.items()}}
-            log(f"{clave}: IS={corridas[clave].get('IS_total')} cumpl={corridas[clave].get('pct_cumplimiento')} ({time.time() - t0:.0f}s)")
+            log(f"{clave}: IS={corridas[clave].get('IS_total')} cumpl={corridas[clave].get('execution_rate')} ({time.time() - t0:.0f}s)")
         except Exception as e:  # una corrida fallida no tumba la sesion
             corridas[clave] = {"orden": oid, "estrategia": estrategia, "seed": int(seed), "error": f"{type(e).__name__}: {e}"}
             log(f"{clave}: ERROR {corridas[clave]['error']}")
@@ -113,7 +113,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--max-minutes", type=float, default=None)
     args = ap.parse_args(argv)
 
-    with open(args.meta_ordenes, "r", encoding="utf-8") as f:
+    with open(args.meta_ordenes, "r", encoding="utf-8-sig") as f:  # tolera el BOM que agrega Windows
         data = json.load(f)
     ordenes = data["meta_ordenes"] if isinstance(data, dict) else data
     if args.ordenes:
