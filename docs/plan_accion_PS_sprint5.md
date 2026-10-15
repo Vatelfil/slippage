@@ -23,7 +23,7 @@ Quién hace cada paso: **[C]** Claude Code (código, análisis, documentos) · *
 | Mar 13 | Reunión de arranque: confirmar asignaciones, tomar D1, D2 y D5. Mandar el mensaje al grupo con el plan | PS |
 | Mar 13 | P4: calibración de COPEC y ECL en Colab (sondeo, grilla y refinamiento con `rmsc04_grid_search.py`). Unas 1–2 h de corrida por activo; los pasos de Colab los doy uno a uno | PS (celdas) y C (instrucciones, revisión de resultados) |
 | Mié 14 | P8: revisar el PR de cierre del Sprint 4 (la parte de PS ya está) y aprobar los de BF/MR cuando los suban. Esperar la decisión D3 de BF a las 18:00 | PS |
-| Mié 14 | P2: con la decisión, fijar el valor de `riesgo_sobre`, actualizar tests y la nota en `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` | C |
+| Mié 14 | P2: con la decisión de BF (por defecto la opción 0: no hay cambios de código), dejar escrita la regla de vigilancia y, solo si BF elige otra opción, actualizar `riesgo_sobre`, los tests y la nota en `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` | C |
 | Jue 15 | P4: validación con 30 semillas de COPEC y ECL (`validacion_2_2_5_ps.py`, unas 1,5 h por activo) y tabla de resultados | PS (celdas) y C (análisis) |
 | Jue 15 | Apoyo en T1: escribir los esquemas JSON de ASIGNAR y REPORTE, la validación y los tests (3 h), cuando MR cierre el diseño del protocolo | C |
 | Vie 16 | P1 y P2 entregados (PR). Revisión de la versión de calibración de BF (P3): correr la validación formal de 30 semillas sobre su candidata | PS (celdas) y C |
@@ -56,6 +56,7 @@ Regla: máximo dos cuadernos al mismo tiempo, cada comando con `--max-minutes`, 
 
 - **No hay parquet del 08-23:** usar el del 2026-09-23 (está local), declarar la diferencia de fecha respecto de FALABELLA y avisar a BF.
 - **COPEC o ECL no calibran bien el viernes 16:** plan B del documento del sprint (solo FALABELLA con otros tramos y semillas) y se declara como desviación.
-- **BF no decide D3 el 14:** rige la opción B (β = 0) y se sigue.
+- **BF no decide D3 el 14:** rige la opción 0 (fórmula del Título I con el β actual 0,0061796, sin cambios de código) y se sigue.
+- **Cumplimiento de la orden < 95 % en la 2.3.5:** se activa la opción A (`riesgo_sobre="pendiente"`, ya implementada), se recalcula β\* y se repite la fase 2. La revisión final de R_E es el viernes 23 oct.
 - **MR avisa atraso en T2 el 15:** PS toma checkpoints y CSV (5 h), que se suman a esta lista.
 - **Colab se corta:** volver a ejecutar la misma celda; el avance queda en Drive.
