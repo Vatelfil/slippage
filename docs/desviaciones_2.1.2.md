@@ -12,7 +12,7 @@
 El Título I describe una cabeza **híbrida** (discreta para el tipo de orden, continua para el volumen). Aquí es **totalmente discreta**:
 1. El entorno ya expone `MultiDiscrete([3, 10, 8])` (`EjecutorActionSpace`, tarea 2.1.4); una cabeza continua obligaría a discretizar de todos modos.
 2. El PPO de MR (`ExecutorActorCritic` + `get_action_and_value`) usa una sola distribución categórica; mezclar dos familias complica el ratio de PPO y el gradiente.
-3. Costo: 240 logits en vez de 3 + 1 parámetros; es manejable (≈ 66 mil parámetros en la cabeza).
+3. Costo: 240 logits en vez de 3 + 1 parámetros; es manejable (≈ 62 mil parámetros en la cabeza y ≈ 135 mil en toda la red).
 
 Si el comité exige la cabeza híbrida, el cambio queda acotado a `ExecutorActorCritic` y a la política del bucle PPO; se deja como mejora opcional del Sprint 6.
 

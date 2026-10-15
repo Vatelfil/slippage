@@ -1,0 +1,39 @@
+# requirements-locked.txt -- entorno ABIDES (Python 3.9, conda "abides", Colab)
+# Borrador de PS con apoyo de Claude Code (15 oct 2026): pines de la receta probada.
+# Falta reemplazar por el `pip freeze` completo (ver docs/dependencias_resueltas.md, seccion 6).
+# El entorno de analisis local usa requirements.txt.
+#
+# Orden de instalacion (importa; ver docs/dependencias_resueltas.md):
+#   1) pip==23.3.2 setuptools==57.5.0 wheel==0.38.4
+#   2) cython<3 numpy==1.22.0
+#   3) gym==0.18.0  (pip install --no-build-isolation --no-deps)
+#   4) el resto
+#   5) gymnasium==0.29.1 importlib-metadata>=4.8 farama-notifications (--no-deps)
+#   6) abides-core, abides-markets, abides-gym (setup.py install, repo oficial)
+
+pip==23.3.2
+setuptools==57.5.0
+wheel==0.38.4
+cython<3
+numpy==1.22.0
+gym==0.18.0
+cloudpickle>=1.2,<1.7
+pyglet>=1.4,<=1.5.0
+Pillow<10
+pandas==1.2.4
+scipy==1.10.0
+coloredlogs==15.0.1
+psutil==5.8.0
+tqdm==4.61.1
+pomegranate==0.14.5
+ray[tune]==1.7.0
+protobuf==3.20.3
+pyarrow==11.0.0
+matplotlib==3.5.3
+pytest
+gymnasium==0.29.1
+importlib-metadata>=4.8
+farama-notifications
+
+# Solo para entrenar (no hace falta para calibrar ni validar):
+# torch==1.13.1+cpu   (--extra-index-url https://download.pytorch.org/whl/cpu)
