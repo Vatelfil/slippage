@@ -22,7 +22,7 @@ Donde:
 - $P_{\text{mid\_cierre}}$ es el precio de mercado al momento del cierre bursátil.
 - $\lambda$ es el factor de penalización por inventario pendiente (hiperparámetro objeto de esta calibración).
 
-> **Alcance de esta calibración (nota de PS, 10 oct 2026).** λ = 0,05 se eligió por escala: se comparó el tamaño de la penalización con el del IS usando una política **sin entrenar** (redes con pesos al azar) y el simulador de Poisson. Es un valor provisional razonable, no un óptimo: **debe revalidarse cuando el Maestro tenga entrenamiento real** (Sprint 5–6).
+> **Alcance de esta calibración:** Corresponde a una **calibración por escala con política sin entrenar; revalidar al entrenar**. $\lambda = 0{,}05$ se eligió por balance de escala comparando el tamaño de la penalización con el del IS monetario usando una política sin entrenar (redes con pesos inicializados al azar) y el simulador de Poisson. Es un valor provisional razonable, no una calibración definitiva: **debe revalidarse cuando el Maestro tenga entrenamiento real** (Sprint 5–6).
 
 Hasta el Sprint 3, el código utilizaba un valor provisional no calibrado (`LAMBDA_PENALTY_PLACEHOLDER = 0.1`). La sección 4.3 del Título I estipula explícitamente que $\lambda$ debe ser calibrado experimentalmente para asegurar convergencia estable en el entrenamiento PPO.
 
@@ -91,3 +91,5 @@ LAMBDA_PENALTY_PLACEHOLDER = LAMBDA_PENALTY  # Mantiene compatibilidad hacia atr
 ```
 
 Se actualizó el orquestador `MaestroEjecutorEnv` para que admita `lambda_penalty` parametrizable por instancia (facilitando estudios de sensibilidad futuros) utilizando `LAMBDA_PENALTY = 0.05` como valor estándar por defecto.
+
+> **Nota importante:** Se reitera que esta calibración es por escala con política sin entrenar; **revalidar al entrenar** en los Sprints 5 y 6 cuando el Maestro cuente con entrenamiento real con PPO sobre ABIDES. $\lambda = 0{,}05$ es provisional, no definitivo.

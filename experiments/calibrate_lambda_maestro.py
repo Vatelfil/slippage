@@ -11,6 +11,9 @@ probando valores de lambda en [0.01, 0.05, 0.1, 0.5, 1.0] sobre distintas
 metaordenes (1.000, 5.000, 10.000, 20.000 acciones) para determinar el valor
 optimo de lambda que penalice el inventario residual sin provocar explosiones
 de gradiente ni opacar el objetivo principal de reduccion de slippage.
+
+Nota de alcance: calibración por escala con política sin entrenar; revalidar al
+entrenar (lambda = 0.05 es provisional, no definitivo).
 """
 from __future__ import annotations
 
