@@ -1,4 +1,5 @@
 {
+ "obsoleto": "Corrido con la convencion de nivel invertida de PoissonLOBSimulator.execute_limit_buy (nivel pasivo 7), corregida el 2026-10-10 (PR #27). Reemplazado por beta_sweep_poisson_2026-10-18.json. Se conserva solo para la comparacion de docs/recompensa_ejecutores_2.2.3_BF.md, seccion 5.1.",
  "firma": {
   "entorno": "poisson",
   "ticker": "FALABELLA",
