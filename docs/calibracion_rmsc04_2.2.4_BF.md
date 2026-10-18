@@ -5,6 +5,8 @@
 **Activo:** FALABELLA (MVP), snapshot `2026-08-23`.
 
 > **Estado al 2026-10-09.** Calibración corrida en Colab (ABIDES, Python 3.9) entre el 4 y el 9 de octubre: dos sondeos, grilla de 27 combinaciones × 3 semillas, refinamiento local y validación con **30 semillas** nuevas por tramo. **Resultado:** la volatilidad de 5 min queda dentro de un 10 % del objetivo en los tres tramos. **El KS de los retornos de 5 min rechaza en media jornada y cierre** y queda al borde en apertura; la meta del plan (p > 0,05) no se cumple en dos de tres tramos. La distancia D (0,06–0,10) es menor o igual que la del modelo de Poisson de la 2.1.3b (§8.3). **Limitación principal:** el spread simulado (≈ 0,2 bps) queda 20–100 veces por debajo de los proxies reales y RMSC04 no permite corregirlo sin romper el volumen y la volatilidad (§8.1).
+>
+> **Actualización 2026-10-18 (cierre del Sprint 4).** Se corrió la grilla de actividad hacia abajo (×1 / 0,75 / 0,5 / 0,25, §8.4). Ningún nivel mejora a la config calibrada según la regla fijada antes de ver los datos: **el volumen alto queda como límite demostrado** y la config calibrada no cambia. El spread se mantiene como limitación declarada (§8.1).
 
 | Qué | Dónde |
 |---|---|
@@ -16,6 +18,7 @@
 | Evidencia del bloque A | [`data/calibration/rmsc04_base_FALABELLA_2026-08-23.json`](../data/calibration/rmsc04_base_FALABELLA_2026-08-23.json) |
 | **Config calibrada y validación** | [`data/calibration/rmsc04_ipsa_FALABELLA_2026-08-23.json`](../data/calibration/rmsc04_ipsa_FALABELLA_2026-08-23.json) |
 | Grilla, refinamiento y sondeos | `data/calibration/rmsc04_{grid,refine,screen,screen_flujo}_FALABELLA_2026-08-23.json` |
+| Grilla de actividad hacia abajo (§8.4) | [`data/calibration/rmsc04_grid_actividad_baja_FALABELLA_2026-08-23.json`](../data/calibration/rmsc04_grid_actividad_baja_FALABELLA_2026-08-23.json), spec en [`scripts/colab/grid_specs/bf_falabella_actividad_baja.json`](../scripts/colab/grid_specs/bf_falabella_actividad_baja.json) |
 | Antes/después de 2.2.5 | `data/analysis/perfil_mercado_abides_{sin_calibrar_bps,calibrado}.json` |
 | Notebook | [`notebooks/Colab_Sprint4_BF.ipynb`](../notebooks/Colab_Sprint4_BF.ipynb) |
 
@@ -303,6 +306,28 @@ Pérdida de validación: 10,27, de la cual 9,72 es el término del spread; el re
 - *Volumen por vela creciente:* se cumple (11 268 < 11 471 < 12 399), pero el aumento es de 10 % entre apertura y cierre contra 58 % en los datos reales. RMSC04 no tiene un mecanismo que haga crecer el volumen; no se da por reproducido.
 - *Participación de volumen:* mismo orden que el observado (media jornada > cierre > apertura). Es en buena parte aritmética: la media jornada dura 30 velas y los otros tramos 24.
 
+### 8.4 Grilla de actividad hacia abajo (18 oct)
+
+La validación formal de la 2.2.5 mostró el volumen por vela simulado 49 / 22 / 5 % sobre el real, y el nivel de actividad elegido (×1) era el mínimo de la grilla de §8.2. Se extendió hacia abajo, con `mm_pov` = 0,005 fijo (la config ganadora): `num_noise_agents` y `lambda_a` escalados juntos por 1 / 0,75 / 0,5 / 0,25, 3 semillas, día completo, con la misma pérdida de §7. El nivel ×1 es la config calibrada y sirve de control.
+
+**Regla fijada antes de ver los datos:** se adopta el nivel de menor pérdida solo si la volatilidad queda a ±15 % de la referencia en los tres tramos y ningún tramo pasa de 200 bps. En la grilla, la referencia es la volatilidad única del día (25,7 bps; ver `vol_ref_unica_bps` en `rmsc04_search.loss`), así que el rango es 21,8–29,5 bps.
+
+| Actividad | Pérdida | Pérdida sin spread | Vol. (bps) a / m / c | Volumen por vela a / m / c | Rankings fallidos |
+|---|---:|---:|---|---|:---:|
+| **×1 (1 000; control)** | **9,83** | 0,57 | 27,2 / 24,4 / 23,5 | 10 838 / 11 260 / 12 478 | 0 |
+| ×0,75 (750) | 10,06 | 0,57 | 24,0 / 24,4 / 22,2 | 9 686 / 10 101 / 11 054 | 0 |
+| ×0,5 (500) | 13,20 | 3,46 | 27,5 / 67,5 / 77,9 | 8 106 / 8 474 / 9 121 | 1 |
+| ×0,25 (250) | 28,27 | 21,78 | 8 551 / 14 920 / 10 418 | 3 398 / 3 306 / 4 456 | 2 |
+| Objetivo | | | 25,7 (referencia única) | 7 576 / 9 396 / 11 964 | |
+
+**Resultado: no se adopta ningún nivel; la config calibrada no cambia.** El de menor pérdida es el control.
+
+- **×0,75** cumple el rango de volatilidad y baja el exceso de volumen de la apertura de +43 % a +28 %, pero empata con el control si se quita el spread (0,565 contra 0,573): lo que gana en volumen lo pierde en volatilidad (cierre 22,2 bps, al borde del rango). Su pérdida total es mayor solo por el término del spread (0,28 → 0,23 bps en apertura), que no discrimina (§8.2). Adoptarlo habría sido cambiar la regla después de ver los datos.
+- **×0,5** acerca el volumen (+7 % en apertura), pero la volatilidad de la tarde se triplica (67,5 y 77,9 bps) y falla el ranking de volatilidad máxima en la apertura.
+- **×0,25** rompe el mercado (miles de bps); una semilla tardó 980 s.
+
+Es el mismo patrón de §8.1: en RMSC04 el flujo de los agentes de valor sostiene a la vez el volumen y la transmisión de la volatilidad del fundamental, y con menos de ≈ 0,5 veces ese flujo el precio se desestabiliza (igual que el 0,4× del 4 oct). **El volumen alto en la apertura queda como límite demostrado** (limitación 4 de §10).
+
 ## 9. Antes y después de la 2.2.5
 
 `collect_abides_stats.py` (10 episodios por tramo, política aleatoria) con rmsc04 sin calibrar y con la config calibrada, comparados con `compare_simulated_vs_real()`:
@@ -326,7 +351,7 @@ Orden de menor a mayor: real media jornada → cierre → apertura; antes cierre
 1. **El spread simulado no alcanza los proxies reales.** Es de 1–2 ticks (≈ 0,2 bps) contra 4–35 bps de Corwin-Schultz y Roll, y RMSC04 no permite abrirlo sin perder el volumen y la volatilidad (§8.1). Consecuencia para el proyecto: el costo de cruzar el spread es mucho menor en el simulador que en el mercado, así que el Implementation Shortfall absoluto queda subestimado. La comparación relativa entre políticas (PPO contra TWAP/VWAP) sigue siendo válida. Los proxies, a su vez, son estimaciones indirectas desde velas OHLCV que difieren en un factor 4–6 entre sí: el spread cotizado real no se observa.
 2. **`fund_vol` constante por tramo.** Una config por tramo; el simulador no tiene volatilidad intradiaria variable.
 3. **Tick empírico.** El tick de 0,1 CLP se midió en los datos de yfinance, no en la tabla oficial de la Bolsa de Santiago.
-4. **Actividad estacionaria y volumen alto en la apertura.** RMSC04 no tiene un mecanismo que haga crecer el volumen durante el día; el volumen por vela simulado queda 49 % sobre el real en apertura y 4 % en cierre.
+4. **Actividad estacionaria y volumen alto en la apertura.** RMSC04 no tiene un mecanismo que haga crecer el volumen durante el día; el volumen por vela simulado queda 49 % sobre el real en apertura y 4 % en cierre. Bajar la actividad no lo corrige sin perder la volatilidad (§8.4).
 5. **Sin subasta ni operaciones en bloque.** Los objetivos excluyen la subasta de cierre; el simulador no la modela.
 6. **Un activo y un régimen.** Solo FALABELLA, con el snapshot previo a la transición del IPSA a MSCI (1-sep-2026).
 7. **El KS rechaza en dos de tres tramos** con 30 semillas (§8.3). La calibración aproxima la distribución de retornos de 5 min (D = 0,06–0,10), no la reproduce.

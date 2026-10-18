@@ -40,7 +40,7 @@ Corrección: la fábrica no estaba conectada. Sin `executor_policy_fn`, `Maestro
 
 **Spread: se acepta como límite documentado.** No hace falta probar otra vez `mm_window_size` fijo: el primer sondeo de §8.1 de `docs/calibracion_rmsc04_2.2.4_BF.md` ya lo midió (ventana 30 → 0,50 bps, ventana 90 → 0,34 bps, contra 5,7–35 bps de objetivo). La ventana fija no mueve el spread y sí rompe la volatilidad (14,4 bps con ventana 30). En la grilla de 27, las combinaciones con ventana 30 y 90 tuvieron más pérdida que la ganadora.
 
-**Volumen: grilla de actividad hacia abajo, lista para Colab.** `scripts/colab/grid_specs/bf_falabella_actividad_baja.json` deja `mm_pov` = 0,005 (la config ganadora) y escala `num_noise_agents` y `lambda_a` juntos por 1 / 0,75 / 0,5 / 0,25 (4 configuraciones). El nivel 1 repite la config calibrada como control.
+**Volumen: grilla de actividad hacia abajo (corrida en Colab el 18 oct).** `scripts/colab/grid_specs/bf_falabella_actividad_baja.json` deja `mm_pov` = 0,005 (la config ganadora) y escala `num_noise_agents` y `lambda_a` juntos por 1 / 0,75 / 0,5 / 0,25 (4 configuraciones). El nivel 1 repite la config calibrada como control.
 
 ```bash
 PYTHONPATH=. python scripts/colab/rmsc04_grid_search.py --ticker FALABELLA --snapshot 2026-08-23 \
@@ -50,11 +50,13 @@ PYTHONPATH=. python scripts/colab/rmsc04_grid_search.py --ticker FALABELLA --sna
 
 La carpeta de salida tiene que ser nueva: el archivo se llama igual que el de la grilla de 27 (`rmsc04_grid_FALABELLA_2026-08-23.json`) y, como la firma no coincide, se sobrescribiría sin aviso.
 
-Se espera tener que llegar a 0,5–0,75: el volumen calibrado está 49 % sobre el objetivo en la apertura, y bajarlo a eso pide ≈ 0,67 veces. Riesgo conocido: el sondeo del 4 oct mostró que con 0,4 veces el flujo de valor el precio explota en la tarde, así que 0,25 puede salir inestable. **Regla de adopción, fijada antes de ver datos:** se adopta el nivel de menor pérdida solo si la volatilidad queda a ±15 % del objetivo en los tres tramos y ningún tramo pasa de 200 bps de volatilidad. Si se adopta, se valida con 30 semillas por tramo (`validacion_2_2_5_ps.py`). Si ninguno la cumple, el volumen alto queda como límite demostrado.
+**Regla de adopción, fijada antes de ver datos:** se adopta el nivel de menor pérdida solo si la volatilidad queda a ±15 % del objetivo en los tres tramos y ningún tramo pasa de 200 bps.
+
+**Resultado (corrida del 18 oct, 4 × 3 semillas):** el nivel de menor pérdida es el control ×1 (9,83), es decir, la config ya calibrada; **no se adopta ningún nivel y no hace falta validar**. ×0,75 baja el exceso de volumen de la apertura de +43 % a +28 %, pero empata con el control sin el spread (0,565 contra 0,573) porque pierde volatilidad; ×0,5 triplica la volatilidad de la tarde y ×0,25 rompe el mercado. **El volumen alto queda como límite demostrado.** Detalle en `docs/calibracion_rmsc04_2.2.4_BF.md` §8.4; datos en `data/calibration/rmsc04_grid_actividad_baja_FALABELLA_2026-08-23.json`.
 
 ## 6. Lo que queda pendiente
 
 - [ ] BF: confirmar D3 en el grupo.
-- [ ] BF: correr la grilla de actividad en Colab (≈ 4 × 3 días simulados) y aplicar la regla de §5.
+- [x] BF: correr la grilla de actividad en Colab y aplicar la regla de §5 (18 oct: límite demostrado).
 - [ ] PS: arreglar `tick_labels` o la versión de matplotlib (§1).
 - [ ] PS o BF: β en media jornada y cierre (P5, 20–22 oct).
