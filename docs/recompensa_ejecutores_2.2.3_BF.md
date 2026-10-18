@@ -4,6 +4,8 @@
 **Responsable:** Benjamín Farias (BF)
 
 > **Estado al 2026-10-09.** Implementados σ² causal **normalizada por el largo de la ventana** (§2 y §5.5) y la escala común en CLP por acción del slice (§4). Barrido de β de la fase 1 corrido en el fallback Poisson y en ABIDES calibrado con la definición final de σ². **Rango recomendado para la fase 2: β ∈ [0,0062; 0,062] CLP⁻¹** (0,1 β\* a β\* de ABIDES). **Pendiente:** la fase 2 con PPO, que depende de la 2.2.1. `BETA_RIESGO_EJECUTOR` sigue en 0.
+>
+> **Actualización 2026-10-18.** La fase 2 (PPO en ABIDES, apertura) la corrió PS: `BETA_RIESGO_EJECUTOR` = 0,0061796 (0,1 β\*), provisional (`docs/beta_fase2_apertura_PS.md`, decisión D3 en `docs/decision_RE_para_BF.md`). El barrido del fallback Poisson se regeneró con el simulador corregido (nivel 0 = pasivo): §5.1 usa `beta_sweep_poisson_2026-10-18.json`; el de 2026-10-09 queda **obsoleto**.
 
 | Qué | Dónde |
 |---|---|
@@ -11,7 +13,7 @@
 | Parámetros (β, ventana, escala) | [`src/config/market_params.py`](../src/config/market_params.py) |
 | Entornos | [`src/envs/fallback_poisson_env.py`](../src/envs/fallback_poisson_env.py), [`src/envs/abides_ejecutor_env.py`](../src/envs/abides_ejecutor_env.py), [`src/envs/abides_bridge.py`](../src/envs/abides_bridge.py) |
 | Barrido de β | [`src/experiments/beta_sweep.py`](../src/experiments/beta_sweep.py), [`scripts/beta_sweep.py`](../scripts/beta_sweep.py), [`scripts/colab/beta_sweep_abides.py`](../scripts/colab/beta_sweep_abides.py) |
-| Resultados | [`beta_sweep_poisson_2026-10-09.json`](../data/calibration/beta_sweep_poisson_2026-10-09.json), [`beta_sweep_abides_2026-10-10.json`](../data/calibration/beta_sweep_abides_2026-10-10.json) (σ² normalizada), [`beta_sweep_abides_2026-10-09.json`](../data/calibration/beta_sweep_abides_2026-10-09.json) (σ² anterior) |
+| Resultados | [`beta_sweep_poisson_2026-10-18.json`](../data/calibration/beta_sweep_poisson_2026-10-18.json) (nivel pasivo corregido; reemplaza al obsoleto [`beta_sweep_poisson_2026-10-09.json`](../data/calibration/beta_sweep_poisson_2026-10-09.json)), [`beta_sweep_abides_2026-10-10.json`](../data/calibration/beta_sweep_abides_2026-10-10.json) (σ² normalizada), [`beta_sweep_abides_2026-10-09.json`](../data/calibration/beta_sweep_abides_2026-10-09.json) (σ² anterior) |
 | Tests | `tests/test_reward_utils.py`, `tests/test_beta_sweep.py` |
 
 ---
@@ -97,30 +99,43 @@ con medias ponderadas por q_ejec: es el β con el que, en el agregado, el térmi
 
 ### 5.1 Resultado en el fallback Poisson
 
-Corrido con la σ² normalizada. β\* = **0,59 CLP⁻¹** (por tramo: 0,48 / 0,68 / 0,79). Es prácticamente igual al obtenido antes de normalizar (0,5905 contra 0,5917), porque en el fallback casi todo el riesgo se acumula mientras rige el prior, que no cambió.
+Corrido el 2026-10-18 con la σ² normalizada y el simulador corregido (la política pasiva usa el nivel 0, igual que en ABIDES; ver §5.2). 20 semillas por (tramo, política). β\* = **0,61 CLP⁻¹** (por tramo: 0,49 / 0,71 / 0,79), un 2,7 % sobre el del barrido obsoleto del 2026-10-09 (0,5917, nivel pasivo 7). El rango admisible no cambia: 0,1 a 3 β\*.
 
 Peso del riesgo por tramo (las tres políticas juntas):
 
 | β | Apertura | Media jornada | Cierre | Regla |
 |---|---:|---:|---:|---|
 | 0 | 0 % | 0 % | 0 % | descartado (< 5 %) |
-| 0,1 β\* = 0,059 | 10,9 % | 8,0 % | 7,0 % | admisible |
-| 0,3 β\* = 0,177 | 26,9 % | 20,8 % | 18,5 % | admisible |
-| β\* = 0,592 | 55,1 % | 46,6 % | 43,0 % | admisible |
-| 3 β\* = 1,775 | 78,7 % | 72,4 % | 69,4 % | admisible, al borde en apertura |
+| 0,1 β\* = 0,061 | 11,0 % | 7,8 % | 7,2 % | admisible |
+| 0,3 β\* = 0,182 | 27,1 % | 20,3 % | 18,8 % | admisible |
+| β\* = 0,608 | 55,3 % | 46,0 % | 43,5 % | admisible |
+| 3 β\* = 1,823 | 78,8 % | 71,8 % | 69,8 % | admisible, al borde en apertura |
 
-Por política el margen es más estrecho: con 3 β\* la política agresiva tiene 81–87 % de peso de riesgo, y con 0,1 β\* la TWAP tiene 3–5 %.
+Por política el margen es más estrecho: con 3 β\* la política agresiva tiene 82–87 % de peso de riesgo, y con 0,1 β\* la TWAP tiene 3–5 %.
 
 R_E medio por episodio (CLP por acción) en apertura:
 
 | β | Agresiva | TWAP | Pasiva | Ranking |
 |---|---:|---:|---:|---|
-| 0 | −10,87 | −9,70 | −10,92 | TWAP > agresiva > pasiva |
-| 0,1 β\* | −13,30 | −10,17 | −11,89 | TWAP > pasiva > agresiva |
-| β\* | −35,17 | −14,36 | −20,66 | TWAP > pasiva > agresiva |
-| 3 β\* | −83,79 | −23,67 | −40,14 | TWAP > pasiva > agresiva |
+| 0 | −10,87 | −10,01 | −8,78 | pasiva > TWAP > agresiva |
+| 0,1 β\* | −13,36 | −10,56 | −9,41 | pasiva > TWAP > agresiva |
+| β\* | −35,83 | −15,53 | −15,03 | pasiva > TWAP > agresiva |
+| 3 β\* | −85,76 | −26,58 | −27,54 | TWAP > pasiva > agresiva |
 
-El slippage (18,2 / 17,7 / 18,4 bps en apertura) y el cumplimiento (100 % / 92 % / 100 %) no dependen de β. El ranking cambia con β en apertura y media jornada (la agresiva pasa del segundo al tercer lugar ya con 0,1 β\*) y no cambia en cierre.
+El slippage (18,2 / 17,7 / 18,2 bps en apertura) y el cumplimiento (100 % / 95 % / 80 %) no dependen de β. Con el nivel corregido la pasiva deja de llenarse siempre (cumplimiento 80 / 90 / 80 % por tramo, antes 100 / 100 / 95 %) y pasa a primera en R_E con β bajo en apertura y cierre (en media jornada la TWAP sigue primera); la TWAP sube de 92–94 % a 95–97 % de cumplimiento porque su nivel medio (4) ahora se llena con la probabilidad que dice el contrato. El ranking cambia con β en apertura y media jornada y no cambia en cierre.
+
+Comparación con el barrido obsoleto (nivel pasivo 7, β = 0):
+
+| Tramo | Política | Slippage antes → ahora (bps) | Cumplimiento antes → ahora |
+|---|---|---:|---:|
+| Apertura | TWAP | 17,68 → 17,65 | 92,2 % → 95,1 % |
+| Apertura | Pasiva | 18,38 → 18,20 | 100 % → 80 % |
+| Media jornada | TWAP | 11,45 → 11,45 | 92,0 % → 95,4 % |
+| Media jornada | Pasiva | 12,18 → 12,03 | 100 % → 90 % |
+| Cierre | TWAP | 10,88 → 10,88 | 93,9 % → 96,5 % |
+| Cierre | Pasiva | 11,30 → 11,10 | 95 % → 80 % |
+
+La corrección no cambia la conclusión de §5.2: β\* del fallback lo fija el prior de σ², no el simulador, y no sirve para calibrar el nivel de β.
 
 ### 5.2 Por qué el resultado del fallback no fija β
 
@@ -136,7 +151,7 @@ En el fallback el término de riesgo pesa casi solo en los cuatro primeros pasos
 
 **Otras dos limitaciones del fallback que afectan la lectura:**
 
-- *Convención del nivel de precio invertida.* El contrato (`spaces.py`, `abides_bridge.py`) dice que el nivel 0 es el más pasivo y el 7 el más agresivo. `PoissonLOBSimulator.execute_limit_buy` usa la probabilidad de llenado `1 − nivel/8`: el nivel 0 se llena siempre y el 7 casi nunca. La política pasiva usa el nivel 7 en el fallback y el 0 en ABIDES (`NIVEL_PASIVO`). No se modificó el simulador.
+- *Convención del nivel de precio invertida (corregida).* El contrato (`spaces.py`, `abides_bridge.py`) dice que el nivel 0 es el más pasivo y el 7 el más agresivo. Hasta el 2026-10-10, `PoissonLOBSimulator.execute_limit_buy` usaba la probabilidad de llenado `1 − nivel/8`, con lo que el nivel 0 se llenaba siempre y el 7 casi nunca, y la política pasiva usaba el nivel 7 en el fallback. PS corrigió el simulador (PR #27) y `NIVEL_PASIVO` vale 0 en ambos entornos; §5.1 ya usa el barrido corrido después de la corrección.
 - *Una LIMIT llenada paga como una MARKET.* En el fallback una orden límite que se llena barre el lado ask igual que una de mercado, así que nunca compra bajo el mid: el término de precio es siempre negativo y las políticas se diferencian solo por cuándo y cuánto barren.
 
 ### 5.3 Resultado en ABIDES calibrado (σ² sin normalizar)

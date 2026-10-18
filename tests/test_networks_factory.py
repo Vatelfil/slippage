@@ -29,3 +29,16 @@ def test_ejecutores_independientes():
 def test_accion_aplanada_coincide_con_el_espacio():
     from src.envs.spaces import EjecutorActionSpace
     assert EjecutorActionSpace.N_FLAT == nf.N_ACCIONES_EJECUTOR
+
+
+def test_politica_usa_la_red_del_tramo():
+    ejs = nf.make_executor_networks()
+    with torch.no_grad():
+        for nombre, idx in (("apertura", 3), ("media_jornada", 100), ("cierre", 239)):
+            ejs[nombre].actor_head.bias.zero_()
+            ejs[nombre].actor_head.bias[idx] = 1e6
+    politica = nf.make_executor_policy_fn(ejs, deterministic=True)
+    s_e = torch.zeros(nf.DIM_SE).numpy()
+    assert politica(s_e, "apertura") == 3
+    assert politica(s_e, "media_jornada") == 100
+    assert politica(s_e, "cierre") == 239

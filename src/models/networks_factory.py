@@ -37,3 +37,16 @@ def make_executor_networks(obs_dim: int = DIM_SE, action_dim: int = N_ACCIONES_E
 def make_hierarchy():
     """(Maestro, {tramo: Ejecutor}) con las dimensiones oficiales."""
     return make_master_network(), make_executor_networks()
+
+
+def make_executor_policy_fn(redes: Dict[str, ExecutorActorCritic], deterministic: bool = False):
+    """Politica `(s_e, tramo) -> idx` que usa la red del tramo activo.
+
+    Se pasa como `executor_policy_fn` a `MaestroEjecutorEnv`: sin ella el
+    protocolo usa una sola red por defecto para los tres tramos."""
+    from src.envs.maestro_ejecutor_protocol import executor_policy
+
+    def politica(s_e, tramo: str) -> int:
+        return executor_policy(s_e, model=redes[tramo], deterministic=deterministic)
+
+    return politica

@@ -1,0 +1,25 @@
+{
+ "mm_pov": [
+  {
+   "mm_pov": 0.005
+  }
+ ],
+ "actividad": [
+  {
+   "num_noise_agents": 1000,
+   "lambda_a": 5.7e-12
+  },
+  {
+   "num_noise_agents": 750,
+   "lambda_a": 4.275e-12
+  },
+  {
+   "num_noise_agents": 500,
+   "lambda_a": 2.85e-12
+  },
+  {
+   "num_noise_agents": 250,
+   "lambda_a": 1.425e-12
+  }
+ ]
+}
