@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProtocoloCTDE_MensajeReporte",
+  "description": "Esquema JSON oficial para el mensaje REPORTE devuelto por un Ejecutor al Agente Maestro (Tarea 2.3.1)",
+  "type": "object",
+  "required": [
+    "tipo",
+    "ejecutor_id",
+    "q_ejecutado",
+    "p_promedio",
+    "slippage_parcial",
+    "q_pendiente",
+    "pasos_usados",
+    "razon_termino",
+    "timestamp_fin"
+  ],
+  "properties": {
+    "tipo": {
+      "type": "string",
+      "const": "reporte"
+    },
+    "ejecutor_id": {
+      "type": "string",
+      "enum": ["apertura", "media_jornada", "cierre"]
+    },
+    "q_ejecutado": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "p_promedio": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "slippage_parcial": {
+      "type": "number"
+    },
+    "q_pendiente": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "pasos_usados": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "razon_termino": {
+      "type": "string",
+      "enum": ["ventana_completada", "inventario_agotado"]
+    },
+    "hora_fin": {
+      "type": ["string", "null"]
+    },
+    "timestamp_fin": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}
