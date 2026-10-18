@@ -1,0 +1,382 @@
+{
+ "metadata": {
+  "tarea": "2.2.4 bloques B y C",
+  "ticker": "COPEC",
+  "snapshot": "2026-08-23",
+  "unidad_cuenta": "decimos",
+  "semillas_validacion": [
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110
+  ],
+  "semillas_busqueda": [
+   1,
+   2,
+   3
+  ],
+  "grid_json": "rmsc04_grid_COPEC_2026-08-23.json",
+  "base_json": "rmsc04_base_COPEC_2026-08-23.json",
+  "refinamiento": true,
+  "fecha_generacion": "2026-10-15T22:59:33+0000",
+  "nota_participacion": "participacion y volumen por vela medidos en las corridas de dia completo (config del tramo cierre)"
+ },
+ "parametros_busqueda": {
+  "mm_window_size": 90,
+  "mm_level_spacing": 0.1,
+  "mm_pov": 0.025,
+  "num_noise_agents": 250,
+  "lambda_a": 1.425e-12
+ },
+ "seleccion": {
+  "id": "lambda_a=1.425e-12|mm_level_spacing=0.1|mm_pov=0.025|mm_window_size=90|num_noise_agents=250",
+  "params": {
+   "mm_window_size": 90,
+   "mm_level_spacing": 0.1,
+   "mm_pov": 0.025,
+   "num_noise_agents": 250,
+   "lambda_a": 1.425e-12
+  },
+  "perdida_busqueda": 4.83994009458775,
+  "origen": "grilla"
+ },
+ "perdida_validacion": {
+  "total": 5.906252057470747,
+  "terminos": {
+   "volatilidad": {
+    "apertura": 0.1623567120463363,
+    "media_jornada": 0.257123267061402,
+    "cierre": 0.153593070616711
+   },
+   "spread": {
+    "apertura": 1.440374999629168,
+    "media_jornada": 0.9498597096678107,
+    "cierre": 1.107660310626675
+   },
+   "participacion": {
+    "apertura": 0.39080785624553976,
+    "media_jornada": 0.05363079776822544,
+    "cierre": 0.12097562880081597
+   },
+   "volumen_vela": {
+    "apertura": 0.1290487502499234,
+    "media_jornada": 0.3704998689549776,
+    "cierre": 0.6056050736258045
+   }
+  },
+  "rankings": {
+   "volatilidad_max_apertura": false,
+   "volumen_vela_creciente": true
+  },
+  "n_rankings_fallidos": 1,
+  "vol_para_ranking": {
+   "apertura": 27.064801228176933,
+   "media_jornada": 27.7206347204155,
+   "cierre": 28.864773214719254
+  },
+  "pesos": {
+   "volatilidad": 1.0,
+   "spread": 1.0,
+   "participacion": 0.5,
+   "volumen_vela": 0.5,
+   "ranking": 1.0
+  }
+ },
+ "rankings": {
+  "simulado": {
+   "volatilidad_bps": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ],
+   "spread_mediano_bps": [
+    "media_jornada",
+    "cierre",
+    "apertura"
+   ],
+   "participacion_volumen": [
+    "media_jornada",
+    "cierre",
+    "apertura"
+   ],
+   "volumen_mediano_vela": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ]
+  },
+  "observado": {
+   "spread_roll_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "spread_hl_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "spread_cs_bps": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ],
+   "spread_ar_bps": [
+    "cierre",
+    "apertura",
+    "media_jornada"
+   ],
+   "volatilidad_bps": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "participacion_volumen_dia": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ],
+   "lambda_total": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ],
+   "volumen_mediano_vela": [
+    "cierre",
+    "media_jornada",
+    "apertura"
+   ]
+  },
+  "robustos": {
+   "volatilidad_max_apertura": false,
+   "volumen_vela_creciente": true
+  }
+ },
+ "por_tramo": {
+  "apertura": {
+   "abides_kwargs": {
+    "date": "20260823",
+    "end_time": "16:00:00",
+    "starting_cash": 1000000,
+    "r_bar": 61300,
+    "fund_vol": 0.00035630850759055683,
+    "mm_window_size": 90,
+    "mm_level_spacing": 0.1,
+    "mm_pov": 0.025,
+    "num_noise_agents": 250,
+    "lambda_a": 1.425e-12
+   },
+   "ks": {
+    "n_sim": 230,
+    "n_real": 780,
+    "alpha": 0.05,
+    "D": 0.24453734671125976,
+    "p": 7.9513183735008e-10,
+    "D_crit": 0.10190176386038151,
+    "D_ratio": 2.3997361522250715,
+    "rechaza": true,
+    "estandarizado": {
+     "D": 0.18500557413600893,
+     "p": 8.532097754157527e-06,
+     "D_ratio": 1.8155286731787126,
+     "rechaza": true
+    }
+   },
+   "momentos_sim": {
+    "n_corridas": 10,
+    "n_retornos": 230,
+    "volatilidad_bps": 27.064801228176933,
+    "curtosis": 0.9846367285803415,
+    "spread_mediano_bps": 0.6173556681328218,
+    "spread_medio_bps": 1.7106271127800727,
+    "volumen_mediano_vela": 3700.3,
+    "participacion_volumen": 0.29584295891961143
+   },
+   "momentos_vs_objetivo": {
+    "volatilidad_bps": {
+     "sim": 27.064801228176933,
+     "objetivo": 31.835777883737798,
+     "ln_sim_sobre_objetivo": -0.1623567120463363
+    },
+    "spread_vs_roll_bps": {
+     "sim": 0.6173556681328218,
+     "objetivo": 31.140023498960403,
+     "ln_sim_sobre_objetivo": -3.9208038946463444
+    },
+    "spread_vs_cs_bps": {
+     "sim": 0.6173556681328218,
+     "objetivo": 2.606647794787077,
+     "ln_sim_sobre_objetivo": -1.4403749996291682
+    },
+    "participacion_volumen": {
+     "sim": 0.29584295891961143,
+     "objetivo": 0.20014075881970797,
+     "ln_sim_sobre_objetivo": 0.39080785624553976
+    },
+    "volumen_mediano_vela": {
+     "sim": 3700.3,
+     "objetivo": 4210.0,
+     "ln_sim_sobre_objetivo": -0.1290487502499234
+    }
+   },
+   "curtosis": {
+    "sim": 0.9846367285803415,
+    "real": 9.80838179797627
+   },
+   "n_corridas": 10,
+   "n_errores": 0
+  },
+  "media_jornada": {
+   "abides_kwargs": {
+    "date": "20260823",
+    "end_time": "16:00:00",
+    "starting_cash": 1000000,
+    "r_bar": 61300,
+    "fund_vol": 0.00023990907717597745,
+    "mm_window_size": 90,
+    "mm_level_spacing": 0.1,
+    "mm_pov": 0.025,
+    "num_noise_agents": 250,
+    "lambda_a": 1.425e-12
+   },
+   "ks": {
+    "n_sim": 300,
+    "n_real": 1294,
+    "alpha": 0.05,
+    "D": 0.26222050489438437,
+    "p": 3.0591824748956744e-15,
+    "D_crit": 0.08702592075572531,
+    "D_ratio": 3.0131310604620434,
+    "rechaza": true,
+    "estandarizado": {
+     "D": 0.12402885110767646,
+     "p": 0.0009970011942612759,
+     "D_ratio": 1.4251943562403133,
+     "rechaza": true
+    }
+   },
+   "momentos_sim": {
+    "n_corridas": 10,
+    "n_retornos": 300,
+    "volatilidad_bps": 27.7206347204155,
+    "curtosis": 1.3293546636312348,
+    "spread_mediano_bps": 1.037950712414963,
+    "spread_medio_bps": 1.6666512041935668,
+    "volumen_mediano_vela": 3814.4,
+    "participacion_volumen": 0.3778433516127616
+   },
+   "momentos_vs_objetivo": {
+    "volatilidad_bps": {
+     "sim": 27.7206347204155,
+     "objetivo": 21.435615290004787,
+     "ln_sim_sobre_objetivo": 0.257123267061402
+    },
+    "spread_vs_roll_bps": {
+     "sim": 1.037950712414963,
+     "objetivo": 20.770321107588966,
+     "ln_sim_sobre_objetivo": -2.9962767975379263
+    },
+    "spread_vs_cs_bps": {
+     "sim": 1.037950712414963,
+     "objetivo": 2.683462692704201,
+     "ln_sim_sobre_objetivo": -0.9498597096678107
+    },
+    "participacion_volumen": {
+     "sim": 0.3778433516127616,
+     "objetivo": 0.35811311430295933,
+     "ln_sim_sobre_objetivo": 0.05363079776822544
+    },
+    "volumen_mediano_vela": {
+     "sim": 3814.4,
+     "objetivo": 5525.0,
+     "ln_sim_sobre_objetivo": -0.3704998689549776
+    }
+   },
+   "curtosis": {
+    "sim": 1.3293546636312348,
+    "real": 4.215935376348931
+   },
+   "n_corridas": 10,
+   "n_errores": 0
+  },
+  "cierre": {
+   "abides_kwargs": {
+    "date": "20260823",
+    "end_time": "16:00:00",
+    "starting_cash": 1000000,
+    "r_bar": 61300,
+    "fund_vol": 0.00027706026979585567,
+    "mm_window_size": 90,
+    "mm_level_spacing": 0.1,
+    "mm_pov": 0.025,
+    "num_noise_agents": 250,
+    "lambda_a": 1.425e-12
+   },
+   "ks": {
+    "n_sim": 230,
+    "n_real": 1072,
+    "alpha": 0.05,
+    "D": 0.31000162232316675,
+    "p": 1.2882294337033037e-16,
+    "D_crit": 0.09869074226085622,
+    "D_ratio": 3.1411418662125405,
+    "rechaza": true,
+    "estandarizado": {
+     "D": 0.1896658014276444,
+     "p": 1.9336896035215172e-06,
+     "D_ratio": 1.9218195859377143,
+     "rechaza": true
+    }
+   },
+   "momentos_sim": {
+    "n_corridas": 10,
+    "n_retornos": 230,
+    "volatilidad_bps": 28.864773214719254,
+    "curtosis": 1.4613501927649803,
+    "spread_mediano_bps": 1.0160648709094189,
+    "spread_medio_bps": 1.7368458897035577,
+    "volumen_mediano_vela": 4077.8,
+    "participacion_volumen": 0.3181962632772296
+   },
+   "momentos_vs_objetivo": {
+    "volatilidad_bps": {
+     "sim": 28.864773214719254,
+     "objetivo": 24.75503397119305,
+     "ln_sim_sobre_objetivo": 0.153593070616711
+    },
+    "spread_vs_roll_bps": {
+     "sim": 1.0160648709094189,
+     "objetivo": 22.413105312758702,
+     "ln_sim_sobre_objetivo": -3.093708649947929
+    },
+    "spread_vs_cs_bps": {
+     "sim": 1.0160648709094189,
+     "objetivo": 3.0758998945057363,
+     "ln_sim_sobre_objetivo": -1.107660310626675
+    },
+    "participacion_volumen": {
+     "sim": 0.3181962632772296,
+     "objetivo": 0.35911547757539536,
+     "ln_sim_sobre_objetivo": -0.12097562880081597
+    },
+    "volumen_mediano_vela": {
+     "sim": 4077.8,
+     "objetivo": 7472.0,
+     "ln_sim_sobre_objetivo": -0.6056050736258045
+    }
+   },
+   "curtosis": {
+    "sim": 1.4613501927649803,
+    "real": 47.05515264773153
+   },
+   "n_corridas": 10,
+   "n_errores": 0
+  }
+ }
+}
