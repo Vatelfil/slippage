@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProtocoloCTDE_MensajeAsignar",
+  "description": "Esquema JSON oficial para el mensaje ASIGNAR emitido por el Agente Maestro a un Ejecutor (Tarea 2.3.1)",
+  "type": "object",
+  "required": [
+    "tipo",
+    "ejecutor_id",
+    "ventana_min",
+    "fraccion_meta_orden",
+    "q_asignado",
+    "hora_inicio",
+    "timestamp_inicio"
+  ],
+  "properties": {
+    "tipo": {
+      "type": "string",
+      "const": "asignar"
+    },
+    "ejecutor_id": {
+      "type": "string",
+      "enum": ["apertura", "media_jornada", "cierre"]
+    },
+    "ventana_min": {
+      "type": "integer",
+      "enum": [1, 5, 10, 15]
+    },
+    "fraccion_meta_orden": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "q_asignado": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "hora_inicio": {
+      "type": "string"
+    },
+    "timestamp_inicio": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

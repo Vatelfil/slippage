@@ -46,6 +46,7 @@ import numpy as np
 import pandas as pd
 
 from src.envs.spaces import EjecutorActionSpace
+from src.envs.ctde_protocol import CanalComunicacionCTDE, MensajeAsignar, MensajeReporte
 if TYPE_CHECKING:  # torch se importa solo al usar las redes (el orquestador corre sin torch)
     from src.models.actor_critic import MasterActorCritic, ExecutorActorCritic
 
@@ -139,6 +140,7 @@ class MaestroEjecutorEnv:
         self.executor_policy_fn = executor_policy_fn
         self.lambda_penalty = lambda_penalty if lambda_penalty is not None else LAMBDA_PENALTY
         self.executor_step_callback = executor_step_callback
+        self.canal = CanalComunicacionCTDE()
 
         # Se inicializan de verdad en reset(), no en __init__().
         self.current_time = None
@@ -161,10 +163,11 @@ class MaestroEjecutorEnv:
         # 1. Fijar el reloj al inicio de la jornada.
         self.current_time = self.df_yfinance.index[0]  # 09:30
 
-        # 2. Resetear contadores.
+        # 2. Resetear contadores y canal de comunicacion.
         self.Q_executed = 0.0
         self.decision_count = 0
         self.executor_reports = []
+        self.canal = CanalComunicacionCTDE()
 
         # 3. P_referencia (arrival price): el Maestro no tiene su propio ABIDES
         # (ver docstring de modulo), asi que se fija con el primer reporte del
@@ -196,17 +199,25 @@ class MaestroEjecutorEnv:
         # 2. Calcular q_slice (cantidad, no fraccion) para este tramo.
         q_slice = alpha_t * (self.Q_total - self.Q_executed)
 
-        # 3. Construir el mensaje ASIGNAR (formato en arquitectura_entorno_simulacion.md, seccion 3.1).
-        msg_asignar = {
-            "tipo": "asignar",
-            "timestamp_inicio": self.current_time,
-            "q_slice": q_slice,
-            "ventana_min": ventana_min,
-            "tramo": self._tramo_de(self.current_time),  # que Ejecutor de los 3 esta activo
-        }
+        # 3. Construir y enviar el mensaje ASIGNAR via canal CTDE (Tarea 2.3.1).
+        tramo_activo = self._tramo_de(self.current_time)
+        hora_inicio_str = (
+            self.current_time.strftime("%H:%M:%S")
+            if hasattr(self.current_time, "strftime")
+            else str(self.current_time)
+        )
+        msg_asignar = MensajeAsignar(
+            ejecutor_id=tramo_activo,
+            ventana_min=int(ventana_min),
+            fraccion_meta_orden=float(alpha_t),
+            q_asignado=float(q_slice),
+            hora_inicio=hora_inicio_str,
+            timestamp_inicio=str(self.current_time),
+        )
+        self.canal.enviar_asignacion(msg_asignar)
 
         # 4. El Ejecutor del tramo activo opera durante la ventana asignada.
-        executor_report = self._run_executor_episode(msg_asignar)
+        executor_report = self._run_executor_episode()
         self.executor_reports.append(executor_report)
 
         # 5. Actualizar inventario ejecutado con el REPORTE recibido.
@@ -255,21 +266,44 @@ class MaestroEjecutorEnv:
     # Helpers internos (fase E-F del ciclo: la ventana del Ejecutor)
     # ------------------------------------------------------------------
 
-    def _run_executor_episode(self, msg_asignar: dict) -> dict:
+    def _run_executor_episode(self, msg_asignar: Optional[Union[dict, MensajeAsignar]] = None) -> dict:
         """
-        Simula la ventana de ejecucion asignada a un Ejecutor: un episodio
+        Simula la ventana de ejecucion asignada a un Ejecutor mediante el protocolo CTDE (Tarea 2.3.1):
+        el Ejecutor retira el mensaje ASIGNAR del canal, corre un episodio
         completo del `executor_env_factory` inyectado (ABIDES-Gym real o el
-        fallback de Poisson), de (ventana_min * 2) pasos de 30 segundos.
+        fallback de Poisson), de (ventana_min * 2) pasos de 30 segundos,
+        y publica un mensaje REPORTE validado en el canal.
 
         Args:
-            msg_asignar: mensaje ASIGNAR construido en step() (incluye "tramo").
+            msg_asignar: opcional, mensaje ASIGNAR. Si es None, se retira del canal.
 
         Returns:
-            executor_report: mensaje REPORTE (formato en arquitectura_entorno_simulacion.md, seccion 3.2).
+            executor_report: diccionario con los datos del mensaje REPORTE.
         """
-        q_slice = msg_asignar["q_slice"]
-        ventana_min = msg_asignar["ventana_min"]
-        tramo = msg_asignar["tramo"]
+        if msg_asignar is None:
+            asignacion = self.canal.recibir_asignacion()
+        elif isinstance(msg_asignar, MensajeAsignar):
+            asignacion = msg_asignar
+        else:
+            # Compatibilidad con dict legacy
+            ts_ini = msg_asignar.get("timestamp_inicio", self.current_time or "2026-09-29T09:30:00")
+            hora_ini = (
+                ts_ini.strftime("%H:%M:%S")
+                if hasattr(ts_ini, "strftime")
+                else str(msg_asignar.get("hora_inicio", "09:30:00"))
+            )
+            asignacion = MensajeAsignar(
+                ejecutor_id=str(msg_asignar.get("tramo", msg_asignar.get("ejecutor_id", "apertura"))),
+                ventana_min=int(msg_asignar.get("ventana_min", 5)),
+                fraccion_meta_orden=float(msg_asignar.get("fraccion_meta_orden", 0.05)),
+                q_asignado=float(msg_asignar.get("q_slice", msg_asignar.get("q_asignado", 100.0))),
+                hora_inicio=hora_ini,
+                timestamp_inicio=str(ts_ini),
+            )
+
+        q_slice = asignacion.q_asignado
+        ventana_min = asignacion.ventana_min
+        tramo = asignacion.ejecutor_id
 
         env = self._executor_env_factory(
             executor_id=tramo, q_slice=max(int(round(q_slice)), 1), ventana_min=int(ventana_min),
@@ -277,24 +311,18 @@ class MaestroEjecutorEnv:
         )
         s_e, info = env.reset()
 
-        # Primer episodio del dia: no hay P_referencia todavia (el Maestro no
-        # tiene su propio ABIDES, ver docstring de modulo) -- se fija aca con
-        # lo que el propio Ejecutor reporte como referencia inicial. Duck-typed
-        # porque EjecutorEnvAbides e EjecutorEnvPoissonFallback no comparten
-        # exactamente las mismas llaves en `info` todavia (ver nota abajo).
         if self.P_referencia is None:
             self.P_referencia = info.get("entry_price") or info.get("p_referencia")
 
         q_ejecutado_acumulado = 0.0
-        monto_acumulado = 0.0  # suma de (precio * cantidad) para promediar despues
+        monto_acumulado = 0.0
         razon_termino = "ventana_completada"
         remaining_prev = float(q_slice)
+        pasos_usados = 0
 
         done = False
         while not done:
-            # a) Politica del Ejecutor: red PPO (tareas 2.1.1/2.1.2).
-            #    Debe devolver el indice plano 0-239 (igual que
-            #    ExecutorActorCritic.get_action_and_value(), ver src/models/actor_critic.py).
+            pasos_usados += 1
             log_prob_step = 0.0
             value_step = 0.0
             if self.executor_policy_fn is not None:
@@ -310,7 +338,6 @@ class MaestroEjecutorEnv:
                 a_e_idx = executor_policy(s_e)
             a_e = self._executor_action_space.decode_flat(a_e_idx)
 
-            # b) Ejecutar la accion en el entorno real (ABIDES-Gym o fallback).
             s_e_next, reward, done, truncated, info = env.step(a_e)
             done = done or truncated
 
@@ -318,11 +345,6 @@ class MaestroEjecutorEnv:
                 self.executor_step_callback(tramo, s_e, a_e_idx, log_prob_step, float(reward), value_step, bool(done))
             s_e = s_e_next
 
-            # c) Cantidad ejecutada este paso: NOTA -- EjecutorEnvPoissonFallback
-            # expone `info['q_ejecutado_step']` directo; EjecutorEnvAbides (ABIDES
-            # real) no tiene ese campo todavia, solo `info['remaining']` -- se
-            # deriva de la diferencia. Mauricio: si unificas el formato de `info`
-            # entre los dos entornos, esto se simplifica a una sola linea.
             if "q_ejecutado_step" in info:
                 q_paso = float(info["q_ejecutado_step"])
                 p_paso = float(info.get("p_ejecutado_step", self.P_referencia or 0.0))
@@ -341,23 +363,32 @@ class MaestroEjecutorEnv:
 
         env.close()
 
-        # Precio promedio ponderado por volumen; si no hubo ejecuciones, usar P_referencia.
         if q_ejecutado_acumulado > 0:
             p_promedio = monto_acumulado / q_ejecutado_acumulado
         else:
-            p_promedio = self.P_referencia
+            p_promedio = float(self.P_referencia or 0.0)
 
         slippage_parcial = (p_promedio - self.P_referencia) * q_ejecutado_acumulado if self.P_referencia else 0.0
+        q_pendiente = max(q_slice - q_ejecutado_acumulado, 0.0)
 
-        executor_report = {
-            "tipo": "reporte",
-            "timestamp_fin": msg_asignar["timestamp_inicio"] + pd.Timedelta(minutes=ventana_min),
-            "q_ejecutado": q_ejecutado_acumulado,
-            "p_promedio": p_promedio,
-            "slippage_parcial": slippage_parcial,
-            "razon_termino": razon_termino,
-        }
-        return executor_report
+        ts_ini = pd.Timestamp(asignacion.timestamp_inicio)
+        ts_fin = ts_ini + pd.Timedelta(minutes=ventana_min)
+        hora_fin_str = ts_fin.strftime("%H:%M:%S")
+
+        msg_reporte = MensajeReporte(
+            ejecutor_id=tramo,
+            q_ejecutado=float(q_ejecutado_acumulado),
+            p_promedio=float(p_promedio),
+            slippage_parcial=float(slippage_parcial),
+            q_pendiente=float(q_pendiente),
+            pasos_usados=int(pasos_usados),
+            razon_termino=str(razon_termino),
+            hora_fin=hora_fin_str,
+            timestamp_fin=str(ts_fin),
+        )
+        self.canal.enviar_reporte(msg_reporte)
+        reporte_recibido = self.canal.recibir_reporte()
+        return reporte_recibido.to_dict()
 
     # ------------------------------------------------------------------
     # Calculo de S_M y de la recompensa terminal (contrato: SM_schema.json)
