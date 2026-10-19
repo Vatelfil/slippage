@@ -285,7 +285,9 @@ def best_config(resultados: Dict[str, Dict]) -> Optional[str]:
 REFINE_FACTOR = 1.5
 # Parametros que se mueven juntos en el refinamiento; el resto, de a uno.
 _GRUPOS_REFINE = (("num_noise_agents", "lambda_a"),)
-_NO_REFINAR = ("mm_level_spacing",)
+# `num_momentum_agents` es un conteo chico (3 o 6): multiplicarlo por el factor del
+# refinamiento daria 4,5 o 2,0 agentes y rompe `rmsc04.build_config` (P4, 18 oct).
+_NO_REFINAR = ("mm_level_spacing", "num_momentum_agents")
 _ENTEROS = ("num_noise_agents", "mm_window_size", "mm_num_ticks")
 
 

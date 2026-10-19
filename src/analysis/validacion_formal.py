@@ -334,7 +334,8 @@ def comparar_antes_despues(antes: Dict, despues: Dict) -> List[Dict]:
 # ---------------------------------------------------------------------------
 
 def figuras(real_returns: Dict[str, Sequence[float]], sim_despues: Dict[str, Sequence[float]],
-            sim_antes: Optional[Dict[str, Sequence[float]]], out_png: str) -> str:
+            sim_antes: Optional[Dict[str, Sequence[float]]], out_png: str,
+            ticker: str = "FALABELLA") -> str:
     """CDF empirica de los retornos de 5 min (real, simulado antes y despues)
     por tramo, y diagrama de cajas de |retorno|."""
     import matplotlib
@@ -363,9 +364,12 @@ def figuras(real_returns: Dict[str, Sequence[float]], sim_despues: Dict[str, Seq
         if sim_antes is not None:
             datos.append(np.abs(_clean(sim_antes[t])) * 1e4)
             etiquetas.append("De fabrica")
-        bx.boxplot(datos, tick_labels=etiquetas, showfliers=False)
+        # sin `tick_labels=` (solo existe desde matplotlib 3.9; el proyecto fija 3.8.3)
+        bx.boxplot(datos, showfliers=False)
+        bx.set_xticks(range(1, len(etiquetas) + 1))
+        bx.set_xticklabels(etiquetas)
         bx.set_ylabel("|retorno| (bps)")
-    fig.suptitle("Validacion formal 2.2.5: retornos de 5 min, real frente a simulado (FALABELLA)")
+    fig.suptitle(f"Validacion formal 2.2.5: retornos de 5 min, real frente a simulado ({ticker})")
     fig.tight_layout()
     fig.savefig(out_png, dpi=140, bbox_inches="tight")
     plt.close(fig)

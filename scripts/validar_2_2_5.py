@@ -58,7 +58,8 @@ def main(argv=None) -> None:
         json.dump({"metadata": meta, "despues": res_d, "antes": res_a, "comparacion": comp},
                   f, indent=1, ensure_ascii=False)
     vf.figuras(real, vf.retornos_simulados(sim_d["resultados"]),
-               vf.retornos_simulados(sim_a["resultados"]) if sim_a else None, args.out_png)
+               vf.retornos_simulados(sim_a["resultados"]) if sim_a else None, args.out_png,
+               ticker=args.ticker)
     Path(args.out_md).write_text(render_markdown(res_d, res_a, comp, meta), encoding="utf-8")
     print(res_d["veredicto"]["texto"])
     print(f"JSON: {args.out_json}\nFigura: {args.out_png}\nInforme: {args.out_md}")

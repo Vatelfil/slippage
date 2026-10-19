@@ -23,62 +23,77 @@
   ],
   "grid_json": "rmsc04_grid_COPEC_2026-08-23.json",
   "base_json": "rmsc04_base_COPEC_2026-08-23.json",
-  "refinamiento": true,
-  "fecha_generacion": "2026-10-15T22:59:33+0000",
-  "nota_participacion": "participacion y volumen por vela medidos en las corridas de dia completo (config del tramo cierre)"
+  "refinamiento": false,
+  "fecha_generacion": "2026-10-18T23:45:11+0000",
+  "nota_participacion": "participacion y volumen por vela medidos en las corridas de dia completo (config del tramo cierre)",
+  "ajuste_fund_vol": {
+   "factores": {
+    "apertura": 1.45,
+    "media_jornada": 1.3,
+    "cierre": 1.48
+   },
+   "fund_vol_antes": {
+    "apertura": 0.00035630850759055683,
+    "media_jornada": 0.00023990907717597745,
+    "cierre": 0.00027706026979585567
+   },
+   "motivo": "volatilidad por corrida 21-32 % bajo la real con 30 semillas; precio sigue al oraculo (sin momentum desbocado)"
+  }
  },
  "parametros_busqueda": {
   "mm_window_size": 90,
   "mm_level_spacing": 0.1,
   "mm_pov": 0.025,
-  "num_noise_agents": 250,
-  "lambda_a": 1.425e-12
+  "num_noise_agents": 500,
+  "lambda_a": 2.85e-12,
+  "num_momentum_agents": 3
  },
  "seleccion": {
-  "id": "lambda_a=1.425e-12|mm_level_spacing=0.1|mm_pov=0.025|mm_window_size=90|num_noise_agents=250",
+  "id": "lambda_a=2.85e-12|mm_level_spacing=0.1|mm_pov=0.025|mm_window_size=90|num_momentum_agents=3|num_noise_agents=500",
   "params": {
    "mm_window_size": 90,
    "mm_level_spacing": 0.1,
    "mm_pov": 0.025,
-   "num_noise_agents": 250,
-   "lambda_a": 1.425e-12
+   "num_noise_agents": 500,
+   "lambda_a": 2.85e-12,
+   "num_momentum_agents": 3
   },
-  "perdida_busqueda": 4.83994009458775,
+  "perdida_busqueda": 7.748486593383231,
   "origen": "grilla"
  },
  "perdida_validacion": {
-  "total": 5.906252057470747,
+  "total": 8.809953506787206,
   "terminos": {
    "volatilidad": {
-    "apertura": 0.1623567120463363,
-    "media_jornada": 0.257123267061402,
-    "cierre": 0.153593070616711
+    "apertura": 0.2217045762295571,
+    "media_jornada": 0.15516252256633448,
+    "cierre": 0.2986951580961932
    },
    "spread": {
-    "apertura": 1.440374999629168,
-    "media_jornada": 0.9498597096678107,
-    "cierre": 1.107660310626675
+    "apertura": 2.070286551270966,
+    "media_jornada": 2.1061233526806995,
+    "cierre": 2.190932584448069
    },
    "participacion": {
-    "apertura": 0.39080785624553976,
-    "media_jornada": 0.05363079776822544,
-    "cierre": 0.12097562880081597
+    "apertura": 0.3848646340093956,
+    "media_jornada": 0.04605554707743926,
+    "cierre": 0.08862781371525918
    },
    "volumen_vela": {
-    "apertura": 0.1290487502499234,
-    "media_jornada": 0.3704998689549776,
-    "cierre": 0.6056050736258045
+    "apertura": 0.09873170350600906,
+    "media_jornada": 0.37444008787500477,
+    "cierre": 0.5413777368076682
    }
   },
   "rankings": {
-   "volatilidad_max_apertura": false,
-   "volumen_vela_creciente": true
+   "volatilidad_max_apertura": true,
+   "volumen_vela_creciente": false
   },
   "n_rankings_fallidos": 1,
   "vol_para_ranking": {
-   "apertura": 27.064801228176933,
-   "media_jornada": 27.7206347204155,
-   "cierre": 28.864773214719254
+   "apertura": 25.50529740087515,
+   "media_jornada": 18.354802960956928,
+   "cierre": 18.362925308198303
   },
   "pesos": {
    "volatilidad": 1.0,
@@ -91,14 +106,14 @@
  "rankings": {
   "simulado": {
    "volatilidad_bps": [
+    "apertura",
     "cierre",
-    "media_jornada",
-    "apertura"
+    "media_jornada"
    ],
    "spread_mediano_bps": [
-    "media_jornada",
     "cierre",
-    "apertura"
+    "apertura",
+    "media_jornada"
    ],
    "participacion_volumen": [
     "media_jornada",
@@ -107,8 +122,8 @@
    ],
    "volumen_mediano_vela": [
     "cierre",
-    "media_jornada",
-    "apertura"
+    "apertura",
+    "media_jornada"
    ]
   },
   "observado": {
@@ -154,8 +169,8 @@
    ]
   },
   "robustos": {
-   "volatilidad_max_apertura": false,
-   "volumen_vela_creciente": true
+   "volatilidad_max_apertura": true,
+   "volumen_vela_creciente": false
   }
  },
  "por_tramo": {
@@ -165,68 +180,69 @@
     "end_time": "16:00:00",
     "starting_cash": 1000000,
     "r_bar": 61300,
-    "fund_vol": 0.00035630850759055683,
+    "fund_vol": 0.0005166473360063074,
     "mm_window_size": 90,
     "mm_level_spacing": 0.1,
     "mm_pov": 0.025,
-    "num_noise_agents": 250,
-    "lambda_a": 1.425e-12
+    "num_noise_agents": 500,
+    "lambda_a": 2.85e-12,
+    "num_momentum_agents": 3
    },
    "ks": {
     "n_sim": 230,
     "n_real": 780,
     "alpha": 0.05,
-    "D": 0.24453734671125976,
-    "p": 7.9513183735008e-10,
+    "D": 0.09370122630992196,
+    "p": 0.08209279085351706,
     "D_crit": 0.10190176386038151,
-    "D_ratio": 2.3997361522250715,
-    "rechaza": true,
+    "D_ratio": 0.9195250676750273,
+    "rechaza": false,
     "estandarizado": {
-     "D": 0.18500557413600893,
-     "p": 8.532097754157527e-06,
-     "D_ratio": 1.8155286731787126,
+     "D": 0.12285395763656633,
+     "p": 0.008461677880258691,
+     "D_ratio": 1.2056116889683284,
      "rechaza": true
     }
    },
    "momentos_sim": {
     "n_corridas": 10,
     "n_retornos": 230,
-    "volatilidad_bps": 27.064801228176933,
-    "curtosis": 0.9846367285803415,
-    "spread_mediano_bps": 0.6173556681328218,
-    "spread_medio_bps": 1.7106271127800727,
-    "volumen_mediano_vela": 3700.3,
-    "participacion_volumen": 0.29584295891961143
+    "volatilidad_bps": 25.50529740087515,
+    "curtosis": 5.432520014333541,
+    "spread_mediano_bps": 0.32882765013227166,
+    "spread_medio_bps": 0.9808320760719724,
+    "volumen_mediano_vela": 3814.2,
+    "participacion_volumen": 0.2940899129985748
    },
    "momentos_vs_objetivo": {
     "volatilidad_bps": {
-     "sim": 27.064801228176933,
+     "sim": 25.50529740087515,
      "objetivo": 31.835777883737798,
-     "ln_sim_sobre_objetivo": -0.1623567120463363
+     "ln_sim_sobre_objetivo": -0.2217045762295571
     },
     "spread_vs_roll_bps": {
-     "sim": 0.6173556681328218,
+     "sim": 0.32882765013227166,
      "objetivo": 31.140023498960403,
-     "ln_sim_sobre_objetivo": -3.9208038946463444
+     "ln_sim_sobre_objetivo": -4.550715446288142
     },
     "spread_vs_cs_bps": {
-     "sim": 0.6173556681328218,
+     "sim": 0.32882765013227166,
      "objetivo": 2.606647794787077,
-     "ln_sim_sobre_objetivo": -1.4403749996291682
+     "ln_sim_sobre_objetivo": -2.070286551270966
     },
     "participacion_volumen": {
-     "sim": 0.29584295891961143,
+     "sim": 0.2940899129985748,
      "objetivo": 0.20014075881970797,
-     "ln_sim_sobre_objetivo": 0.39080785624553976
+     "ln_sim_sobre_objetivo": 0.3848646340093956
     },
     "volumen_mediano_vela": {
-     "sim": 3700.3,
+     "sim": 3814.2,
      "objetivo": 4210.0,
-     "ln_sim_sobre_objetivo": -0.1290487502499234
+     "ln_sim_sobre_objetivo": -0.09873170350600906
     }
    },
    "curtosis": {
-    "sim": 0.9846367285803415,
+    "sim": 5.432520014333541,
     "real": 9.80838179797627
    },
    "n_corridas": 10,
@@ -238,68 +254,69 @@
     "end_time": "16:00:00",
     "starting_cash": 1000000,
     "r_bar": 61300,
-    "fund_vol": 0.00023990907717597745,
+    "fund_vol": 0.0003118818003287707,
     "mm_window_size": 90,
     "mm_level_spacing": 0.1,
     "mm_pov": 0.025,
-    "num_noise_agents": 250,
-    "lambda_a": 1.425e-12
+    "num_noise_agents": 500,
+    "lambda_a": 2.85e-12,
+    "num_momentum_agents": 3
    },
    "ks": {
     "n_sim": 300,
     "n_real": 1294,
     "alpha": 0.05,
-    "D": 0.26222050489438437,
-    "p": 3.0591824748956744e-15,
+    "D": 0.08949510561566203,
+    "p": 0.037637189987107036,
     "D_crit": 0.08702592075572531,
-    "D_ratio": 3.0131310604620434,
+    "D_ratio": 1.0283729817334253,
     "rechaza": true,
     "estandarizado": {
-     "D": 0.12402885110767646,
-     "p": 0.0009970011942612759,
-     "D_ratio": 1.4251943562403133,
+     "D": 0.1327820710973725,
+     "p": 0.0003294082878276918,
+     "D_ratio": 1.5257761129592755,
      "rechaza": true
     }
    },
    "momentos_sim": {
     "n_corridas": 10,
     "n_retornos": 300,
-    "volatilidad_bps": 27.7206347204155,
-    "curtosis": 1.3293546636312348,
-    "spread_mediano_bps": 1.037950712414963,
-    "spread_medio_bps": 1.6666512041935668,
-    "volumen_mediano_vela": 3814.4,
-    "participacion_volumen": 0.3778433516127616
+    "volatilidad_bps": 18.354802960956928,
+    "curtosis": 2.3879649780683776,
+    "spread_mediano_bps": 0.32660122665528335,
+    "spread_medio_bps": 0.9343770048647618,
+    "volumen_mediano_vela": 3799.4,
+    "participacion_volumen": 0.37499190734073773
    },
    "momentos_vs_objetivo": {
     "volatilidad_bps": {
-     "sim": 27.7206347204155,
+     "sim": 18.354802960956928,
      "objetivo": 21.435615290004787,
-     "ln_sim_sobre_objetivo": 0.257123267061402
+     "ln_sim_sobre_objetivo": -0.15516252256633448
     },
     "spread_vs_roll_bps": {
-     "sim": 1.037950712414963,
+     "sim": 0.32660122665528335,
      "objetivo": 20.770321107588966,
-     "ln_sim_sobre_objetivo": -2.9962767975379263
+     "ln_sim_sobre_objetivo": -4.1525404405508155
     },
     "spread_vs_cs_bps": {
-     "sim": 1.037950712414963,
+     "sim": 0.32660122665528335,
      "objetivo": 2.683462692704201,
-     "ln_sim_sobre_objetivo": -0.9498597096678107
+     "ln_sim_sobre_objetivo": -2.1061233526806995
     },
     "participacion_volumen": {
-     "sim": 0.3778433516127616,
+     "sim": 0.37499190734073773,
      "objetivo": 0.35811311430295933,
-     "ln_sim_sobre_objetivo": 0.05363079776822544
+     "ln_sim_sobre_objetivo": 0.04605554707743926
     },
     "volumen_mediano_vela": {
-     "sim": 3814.4,
+     "sim": 3799.4,
      "objetivo": 5525.0,
-     "ln_sim_sobre_objetivo": -0.3704998689549776
+     "ln_sim_sobre_objetivo": -0.37444008787500477
     }
    },
    "curtosis": {
-    "sim": 1.3293546636312348,
+    "sim": 2.3879649780683776,
     "real": 4.215935376348931
    },
    "n_corridas": 10,
@@ -311,68 +328,69 @@
     "end_time": "16:00:00",
     "starting_cash": 1000000,
     "r_bar": 61300,
-    "fund_vol": 0.00027706026979585567,
+    "fund_vol": 0.0004100491992978664,
     "mm_window_size": 90,
     "mm_level_spacing": 0.1,
     "mm_pov": 0.025,
-    "num_noise_agents": 250,
-    "lambda_a": 1.425e-12
+    "num_noise_agents": 500,
+    "lambda_a": 2.85e-12,
+    "num_momentum_agents": 3
    },
    "ks": {
     "n_sim": 230,
     "n_real": 1072,
     "alpha": 0.05,
-    "D": 0.31000162232316675,
-    "p": 1.2882294337033037e-16,
+    "D": 0.15957981829980533,
+    "p": 0.00011050049719214268,
     "D_crit": 0.09869074226085622,
-    "D_ratio": 3.1411418662125405,
+    "D_ratio": 1.616968467802269,
     "rechaza": true,
     "estandarizado": {
-     "D": 0.1896658014276444,
-     "p": 1.9336896035215172e-06,
-     "D_ratio": 1.9218195859377143,
+     "D": 0.15004866969500325,
+     "p": 0.0003433825729014719,
+     "D_ratio": 1.5203925541303498,
      "rechaza": true
     }
    },
    "momentos_sim": {
     "n_corridas": 10,
     "n_retornos": 230,
-    "volatilidad_bps": 28.864773214719254,
-    "curtosis": 1.4613501927649803,
-    "spread_mediano_bps": 1.0160648709094189,
-    "spread_medio_bps": 1.7368458897035577,
-    "volumen_mediano_vela": 4077.8,
-    "participacion_volumen": 0.3181962632772296
+    "volatilidad_bps": 18.362925308198303,
+    "curtosis": 0.6468567042658813,
+    "spread_mediano_bps": 0.3439238276483376,
+    "spread_medio_bps": 0.8419897855450408,
+    "volumen_mediano_vela": 4348.3,
+    "participacion_volumen": 0.3286575041169081
    },
    "momentos_vs_objetivo": {
     "volatilidad_bps": {
-     "sim": 28.864773214719254,
+     "sim": 18.362925308198303,
      "objetivo": 24.75503397119305,
-     "ln_sim_sobre_objetivo": 0.153593070616711
+     "ln_sim_sobre_objetivo": -0.2986951580961932
     },
     "spread_vs_roll_bps": {
-     "sim": 1.0160648709094189,
+     "sim": 0.3439238276483376,
      "objetivo": 22.413105312758702,
-     "ln_sim_sobre_objetivo": -3.093708649947929
+     "ln_sim_sobre_objetivo": -4.176980923769324
     },
     "spread_vs_cs_bps": {
-     "sim": 1.0160648709094189,
+     "sim": 0.3439238276483376,
      "objetivo": 3.0758998945057363,
-     "ln_sim_sobre_objetivo": -1.107660310626675
+     "ln_sim_sobre_objetivo": -2.190932584448069
     },
     "participacion_volumen": {
-     "sim": 0.3181962632772296,
+     "sim": 0.3286575041169081,
      "objetivo": 0.35911547757539536,
-     "ln_sim_sobre_objetivo": -0.12097562880081597
+     "ln_sim_sobre_objetivo": -0.08862781371525918
     },
     "volumen_mediano_vela": {
-     "sim": 4077.8,
+     "sim": 4348.3,
      "objetivo": 7472.0,
-     "ln_sim_sobre_objetivo": -0.6056050736258045
+     "ln_sim_sobre_objetivo": -0.5413777368076682
     }
    },
    "curtosis": {
-    "sim": 1.4613501927649803,
+    "sim": 0.6468567042658813,
     "real": 47.05515264773153
    },
    "n_corridas": 10,

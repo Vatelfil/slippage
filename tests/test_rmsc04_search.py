@@ -384,3 +384,11 @@ def test_config_calibrada_versionada_es_cargable_y_coherente_con_la_grilla():
     assert len(grid["resultados"]) == 27 and rs.best_config(grid["resultados"]) == grid["mejor"]
     assert ipsa["seleccion"]["id"] == grid["mejor"] and ipsa["seleccion"]["origen"] == "grilla"
     assert set(ipsa["metadata"]["semillas_validacion"]).isdisjoint(ipsa["metadata"]["semillas_busqueda"])
+
+
+def test_refine_no_mueve_el_numero_de_agentes_de_momentum():
+    """3 o 6 agentes de momentum no se multiplican por el factor (daria 4,5 o 2,0)."""
+    best = {"mm_window_size": 90, "mm_level_spacing": 0.1, "mm_pov": 0.025,
+            "num_noise_agents": 500, "lambda_a": 2.85e-12, "num_momentum_agents": 3}
+    for c in rs.refine_candidates(best):
+        assert c["params"]["num_momentum_agents"] == 3
