@@ -1,0 +1,371 @@
+{
+ "metadata": {
+  "ticker": "ECL",
+  "snapshot": "2026-08-23",
+  "semillas": 30,
+  "fecha": "2026-10-19"
+ },
+ "despues": {
+  "alpha": 0.05,
+  "por_tramo": {
+   "apertura": {
+    "ks": {
+     "n_sim": 690,
+     "n_real": 245,
+     "alpha": 0.05,
+     "D": 0.16776101745045843,
+     "p": 6.393023194810212e-05,
+     "D_crit": 0.10100211121686917,
+     "D_ratio": 1.6609654533878628,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.16950606329488316,
+      "p": 5.150122472561096e-05,
+      "D_ratio": 1.6782427738656278,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 111618.0,
+     "p": 8.529100979428423e-14,
+     "g": 0.2808990212415991,
+     "efecto": "pequeno",
+     "rank_biserial": -0.3205323868677905,
+     "mediana_abs_sim": 0.0025320412343910028,
+     "mediana_abs_real": 0.0010014616
+    },
+    "brown_forsythe": {
+     "W": 14.25353101184034,
+     "p": 0.00016986081068270348,
+     "razon_desvios": 1.051906331917249
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 41.786333914197094,
+     "media": 40.971640688438804,
+     "mediana": 39.350827859106815,
+     "sesgo_pct": -1.9496642788313496,
+     "ic95": [
+      37.41382511432717,
+      44.52945626255044
+     ],
+     "p": 0.5027610473334789
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 5001.0,
+     "media": 4007.766666666667,
+     "mediana": 4023.25,
+     "sesgo_pct": -19.86069452776111,
+     "ic95": [
+      3925.0478308498746,
+      4090.485502483459
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.17164809492687155,
+     "media": 0.2967147368562014,
+     "mediana": 0.2974467264730007,
+     "sesgo_pct": 72.86223711519368,
+     "ic95": [
+      0.29119960321288574,
+      0.3022298704995171
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "spread": {
+     "simulado_bps": 1.0970633088664234,
+     "rango_real_bps": [
+      0.40956826086170167,
+      27.11071825384446
+     ],
+     "dentro": true,
+     "veces_bajo_el_minimo": null
+    },
+    "n_semillas": 30
+   },
+   "media_jornada": {
+    "ks": {
+     "n_sim": 900,
+     "n_real": 478,
+     "alpha": 0.05,
+     "D": 0.1708972570897257,
+     "p": 1.922882641881421e-08,
+     "D_crit": 0.0768637625371236,
+     "D_ratio": 2.2233787606635294,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.15220827522082753,
+      "p": 8.752626327759017e-07,
+      "D_ratio": 1.980234510993579,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 266565.5,
+     "p": 2.464921195464346e-13,
+     "g": 0.20256905784158136,
+     "efecto": "pequeno",
+     "rank_biserial": -0.23926313342631333,
+     "mediana_abs_sim": 0.00214394410509535,
+     "mediana_abs_real": 0.0012334713
+    },
+    "brown_forsythe": {
+     "W": 12.79886487015632,
+     "p": 0.0003588600413209051,
+     "razon_desvios": 1.0384515870421571
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 35.15569345615728,
+     "media": 34.51632681023194,
+     "mediana": 34.18068214725123,
+     "sesgo_pct": -1.8186716945939283,
+     "ic95": [
+      31.29660554061259,
+      37.73604807985129
+     ],
+     "p": 0.46454504504799843
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 6629.0,
+     "media": 4019.3,
+     "mediana": 4043.75,
+     "sesgo_pct": -39.367928797707044,
+     "ic95": [
+      3953.666692484764,
+      4084.9333075152363
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.33215362679083593,
+     "media": 0.3774526163324267,
+     "mediana": 0.37919408976537694,
+     "sesgo_pct": 13.637963245879744,
+     "ic95": [
+      0.3731468681171045,
+      0.3817583645477489
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "spread": {
+     "simulado_bps": 1.0625312076785303,
+     "rango_real_bps": [
+      2.698130839463929,
+      31.769652346632068
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 2.5393426752696855
+    },
+    "n_semillas": 30
+   },
+   "cierre": {
+    "ks": {
+     "n_sim": 690,
+     "n_real": 525,
+     "alpha": 0.05,
+     "D": 0.14559006211180126,
+     "p": 5.536275567082152e-06,
+     "D_crit": 0.07865316002191718,
+     "D_ratio": 1.8510389419984106,
+     "rechaza": true,
+     "estandarizado": {
+      "D": 0.15718426501035196,
+      "p": 6.660410414592354e-07,
+      "D_ratio": 1.9984481865261563,
+      "rechaza": true
+     }
+    },
+    "mannwhitney_abs": {
+     "U": 229736.5,
+     "p": 1.0137721640918477e-15,
+     "g": 0.22042518852678425,
+     "efecto": "pequeno",
+     "rank_biserial": -0.2683864734299517,
+     "mediana_abs_sim": 0.0021368234999400264,
+     "mediana_abs_real": 0.0011370098
+    },
+    "brown_forsythe": {
+     "W": 14.504136722663855,
+     "p": 0.00014685012060655143,
+     "razon_desvios": 1.0107925009147474
+    },
+    "volatilidad_vs_objetivo": {
+     "n": 30,
+     "objetivo": 36.205856331941575,
+     "media": 34.8961159556385,
+     "mediana": 34.281890447076435,
+     "sesgo_pct": -3.617482111996326,
+     "ic95": [
+      32.36127701952956,
+      37.43095489174744
+     ],
+     "p": 0.12413446232676506
+    },
+    "volumen_vela_vs_objetivo": {
+     "n": 30,
+     "objetivo": 7998.5,
+     "media": 4558.0,
+     "mediana": 4578.0,
+     "sesgo_pct": -43.014315184097015,
+     "ic95": [
+      4458.893442198655,
+      4657.106557801345
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "participacion_vs_objetivo": {
+     "n": 30,
+     "objetivo": 0.4378648286453899,
+     "media": 0.3258326468113718,
+     "mediana": 0.3252661825226756,
+     "sesgo_pct": -25.586019818172858,
+     "ic95": [
+      0.32153204894482906,
+      0.33013324467791455
+     ],
+     "p": 1.862645149230957e-09
+    },
+    "spread": {
+     "simulado_bps": 0.5889030521038183,
+     "rango_real_bps": [
+      2.8445831348454895,
+      31.019664142407194
+     ],
+     "dentro": false,
+     "veces_bajo_el_minimo": 4.8303080187535095
+    },
+    "n_semillas": 30
+   }
+  },
+  "p_ajustados_holm": {
+   "apertura:ks": 0.0004475116236367148,
+   "apertura:ks_estandarizado": 0.00041200979780488766,
+   "apertura:mannwhitney": 1.7058201958856846e-12,
+   "apertura:brown_forsythe": 0.0008811007236393085,
+   "apertura:volatilidad": 0.9290900900959969,
+   "apertura:volumen_vela": 3.3527612686157227e-08,
+   "apertura:participacion": 3.3527612686157227e-08,
+   "media_jornada:ks": 2.3074591702577054e-07,
+   "media_jornada:ks_estandarizado": 8.752626327759017e-06,
+   "media_jornada:mannwhitney": 4.683350271382257e-12,
+   "media_jornada:brown_forsythe": 0.0014354401652836204,
+   "media_jornada:volatilidad": 0.9290900900959969,
+   "media_jornada:volumen_vela": 3.3527612686157227e-08,
+   "media_jornada:participacion": 3.3527612686157227e-08,
+   "cierre:ks": 4.9826480103739364e-05,
+   "cierre:ks_estandarizado": 7.3264514560515896e-06,
+   "cierre:mannwhitney": 2.12892154459288e-14,
+   "cierre:brown_forsythe": 0.0008811007236393085,
+   "cierre:volatilidad": 0.3724033869802952,
+   "cierre:volumen_vela": 3.3527612686157227e-08,
+   "cierre:participacion": 3.3527612686157227e-08
+  },
+  "p_crudos": {
+   "apertura:ks": 6.393023194810212e-05,
+   "apertura:ks_estandarizado": 5.150122472561096e-05,
+   "apertura:mannwhitney": 8.529100979428423e-14,
+   "apertura:brown_forsythe": 0.00016986081068270348,
+   "apertura:volatilidad": 0.5027610473334789,
+   "apertura:volumen_vela": 1.862645149230957e-09,
+   "apertura:participacion": 1.862645149230957e-09,
+   "media_jornada:ks": 1.922882641881421e-08,
+   "media_jornada:ks_estandarizado": 8.752626327759017e-07,
+   "media_jornada:mannwhitney": 2.464921195464346e-13,
+   "media_jornada:brown_forsythe": 0.0003588600413209051,
+   "media_jornada:volatilidad": 0.46454504504799843,
+   "media_jornada:volumen_vela": 1.862645149230957e-09,
+   "media_jornada:participacion": 1.862645149230957e-09,
+   "cierre:ks": 5.536275567082152e-06,
+   "cierre:ks_estandarizado": 6.660410414592354e-07,
+   "cierre:mannwhitney": 1.0137721640918477e-15,
+   "cierre:brown_forsythe": 0.00014685012060655143,
+   "cierre:volatilidad": 0.12413446232676506,
+   "cierre:volumen_vela": 1.862645149230957e-09,
+   "cierre:participacion": 1.862645149230957e-09
+  },
+  "patron_entre_tramos": {
+   "real": {
+    "H": 0.49714706756755134,
+    "p": 0.7799125088087161,
+    "significativo": false,
+    "medianas_abs": {
+     "apertura": 0.0010014616,
+     "media_jornada": 0.0012334713,
+     "cierre": 0.0011370098
+    },
+    "post_hoc": []
+   },
+   "simulado": {
+    "H": 12.568379281363697,
+    "p": 0.0018655681379252207,
+    "significativo": true,
+    "medianas_abs": {
+     "apertura": 0.0025320412343910028,
+     "media_jornada": 0.00214394410509535,
+     "cierre": 0.0021368234999400264
+    },
+    "post_hoc": [
+     {
+      "group_a": "apertura",
+      "group_b": "media_jornada",
+      "p_value": 0.0008839933791235681,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.19462337129330212
+     },
+     {
+      "group_a": "apertura",
+      "group_b": "cierre",
+      "p_value": 0.0046058140189771685,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": true,
+      "cohens_d": -0.1781683660214953
+     },
+     {
+      "group_a": "media_jornada",
+      "group_b": "cierre",
+      "p_value": 0.9268548949112528,
+      "alpha_corregido": 0.016666666666666666,
+      "significant": false,
+      "cohens_d": 0.019982678715802414
+     }
+    ]
+   }
+  },
+  "rankings": {
+   "volatilidad_sim_bps": {
+    "apertura": 40.971640688438804,
+    "media_jornada": 34.51632681023194,
+    "cierre": 34.8961159556385
+   },
+   "ranking_volatilidad_desc": [
+    "apertura",
+    "cierre",
+    "media_jornada"
+   ],
+   "volatilidad_maxima_en_apertura": true,
+   "volumen_vela_sim": {
+    "apertura": 4007.766666666667,
+    "media_jornada": 4019.3,
+    "cierre": 4558.0
+   },
+   "volumen_vela_creciente": true
+  },
+  "veredicto": {
+   "A_literal_plan": false,
+   "B_forma": false,
+   "C_efecto_pequeno": true,
+   "D_patron": true,
+   "simulador_valido": false,
+   "texto": "NO VÁLIDO según el criterio del plan"
+  }
+ },
+ "antes": null,
+ "comparacion": null
+}

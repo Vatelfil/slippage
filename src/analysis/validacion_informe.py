@@ -152,7 +152,7 @@ def render_markdown(despues: Dict, antes: Optional[Dict], comparacion: Optional[
     ap("- Los retornos reales y simulados vienen agrupados de varios días: no son estrictamente independientes.")
     ap("- El valor real de volatilidad, volumen por vela y participación es un único número (no hay muestra diaria real versionada), por eso se usa una prueba de 1 muestra.")
     ap("- El spread no admite prueba de hipótesis (magnitudes distintas) y el simulador queda decenas de veces por debajo de los proxies reales; el IS absoluto en ABIDES queda subestimado, aunque la comparación entre políticas sigue siendo válida.")
-    ap("- Un solo activo (FALABELLA) y un solo régimen (previo a la transición del IPSA a MSCI, 1 de septiembre de 2026).")
+    ap(f"- Un solo activo ({metadata.get('ticker', 'FALABELLA')}) y un solo régimen (previo a la transición del IPSA a MSCI, 1 de septiembre de 2026).")
     ap("")
     ap("🤖 Generado con [Claude Code](https://claude.com/claude-code)")
     return "\n".join(L) + "\n"

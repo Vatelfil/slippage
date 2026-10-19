@@ -2,6 +2,10 @@
 
 **Elaborado por:** PS con apoyo de Claude Code. **Para:** BF (responsable de la 2.2.3), con MR y PS. **Fecha límite de la decisión:** miércoles 14 de octubre, 18:00. **Si no hay respuesta rige la propuesta de PS (opción 0, abajo).**
 
+## Resolución (14 de octubre de 2026, 18:00)
+
+No hubo respuesta de BF dentro del plazo. Por lo acordado, **rige la opción 0**: se mantiene la fórmula del Título I, β = 0,0061796 y la regla de vigilancia (si en la 2.3.5 el cumplimiento de la orden baja del 95 %, se pasa a la opción A). No hay cambios de código. La revisión final es el viernes 23 de octubre. BF puede objetar antes del congelamiento del simulador (lunes 19, 18:00); pasada esa fecha queda firme para el sprint.
+
 ## Qué dice el Título I
 
 §4.2.4: `R_E = (P_mid − P_ejec)·q_ejec − β·σ²·q_ejec`, con `q_ejec` la cantidad **ejecutada en el paso**, el segundo término como penalización de "riesgo temporal" y β como "coeficiente de aversión al riesgo (calibrar en el Sprint 4)". Es decir: la fórmula incluye el riesgo sobre lo ejecutado y pide **calibrar β**. Que la orden se complete es trabajo del Maestro (penalización λ·Q_pendiente al final), no del Ejecutor.
