@@ -92,7 +92,7 @@ Valores por tramo: apertura / media jornada / cierre.
 - **Retornos en cero** (10–22 % en los datos reales) y **colas pesadas** (curtosis real hasta 47 en el cierre de COPEC) no se reproducen.
 - **COPEC, media jornada:** la volatilidad queda 7,4 % bajo la real (p = 0,031), el único tramo donde la diferencia es significativa.
 - **El ajuste de `fund_vol` se calculó con las mismas semillas (201–230) con las que se validó** (números aleatorios comunes), así que la cercanía de la volatilidad es en parte por construcción. Una comprobación independiente con otras semillas (por ejemplo `--seed-base 300`) queda recomendada y no se hizo.
-- **No se probó la integración con `EjecutorEnvAbides`** más allá de `rmsc04.build_config`: las validaciones llaman directamente a `build_config` con estos parámetros (incluido `num_momentum_agents`), pero no se corrió el entorno de ejecución con ellos.
+- **Integración con `EjecutorEnvAbides`:** las validaciones llaman directamente a `rmsc04.build_config` con estos parámetros (incluido `num_momentum_agents`). Después se probó el entorno de ejecución (`make_calibrated_env_factory`) en Colab para COPEC y ECL en los tres tramos: crea el entorno, hace reset y avanza 4 pasos sin errores. Es una prueba de humo con la acción de esperar, no un test de ejecución de órdenes.
 
 ## 6. Desviaciones respecto de la configuración estándar de `rmsc04`
 
