@@ -96,12 +96,13 @@ def lectura(estado: Dict, filas: List[Dict[str, float]]) -> List[str]:
                      f"(EE {_f(est.get('slippage_bps_ee'))}), frente a {_f(estado['evaluacion_sin_entrenar'].get('slippage_bps_medio'))} bps de la red sin entrenar"
                      + (f" (diferencia pareada {_f(ctrl_m['dif_media'])} bps, p = {_f(ctrl_m['p_wilcoxon'], 3)})." if ctrl_m else ".")
                      + " La evaluación con argmax y la política que se entrena son cosas distintas: el argmax puede caer en una acción que no hace nada."]
-        return extra + [f"- **La red entrenada no ejecutó la orden en la evaluación:** cumplimiento medio {_f(ev.get('cumplimiento_medio'), 3)} y sin slippage medible en las {ev.get('n')} semillas. "
+        base = [f"- **La red entrenada no ejecutó la orden en la evaluación:** cumplimiento medio {_f(ev.get('cumplimiento_medio'), 3)} y sin slippage medible en las {ev.get('n')} semillas. "
                 "Con la política determinista (argmax) la red no llega a ejecutar nada; por eso no hay comparación pareada.",
                 f"- **Entropía de la política:** {_f(filas[-1]['entropia'], 4)} frente a {_f(math.log(N_ACCIONES), 4)} de una política uniforme "
                 f"({_f(100 * filas[-1]['entropia'] / math.log(N_ACCIONES), 1)} % del máximo): la política se concentró.",
                 "- **D3:** el cumplimiento de la red entrenada es " + _f(estado.get("vigilancia_D3", {}).get("cumplimiento_medio"), 3)
                 + ", por debajo del 95 %; la regla del plan indica pasar a la opción A (riesgo sobre lo pendiente). La decisión es de BF."]
+        return base[:1] + extra + base[1:]
     ctrl = comp["Red sin entrenar (control)"]
     ent_rel = filas[-1]["entropia"] / math.log(N_ACCIONES)
     sig = lambda c: c["p_wilcoxon"] is not None and c["p_wilcoxon"] < 0.05
@@ -145,7 +146,47 @@ def seccion_diagnostico(diag: Optional[Dict]) -> List[str]:
     return L
 
 
-def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str, diag: Optional[Dict] = None) -> str:
+def _slip(e: Optional[Dict]) -> str:
+    if not e:
+        return "—"
+    return f"{_f(e.get('slippage_bps_medio'))} ({_f(e.get('slippage_bps_ee'))})" if e.get("slippage_bps_medio") is not None else "sin ejecuciones"
+
+
+def _p_contra_control(estado: Dict, clave: str) -> str:
+    c = {x["contra"]: x for x in comparacion_pareada(estado, clave)}.get("Red sin entrenar (control)")
+    return "—" if not c else f"{_f(c['dif_media'])} (p = {_f(c['p_wilcoxon'], 3)})"
+
+
+def seccion_corridas(corridas: Dict[str, Dict]) -> List[str]:
+    """Una fila por corrida (etiqueta -> estado): cumplimiento y slippage con politica determinista y muestreada."""
+    L = ["", "### Comparación de corridas", "",
+         "Misma evaluación (15 semillas nuevas, FALABELLA, apertura). Slippage en bps, con el error estándar entre paréntesis; "
+         "la diferencia es contra la red sin entrenar, pareada por semilla.", "",
+         "| Corrida | Episodios | Riesgo sobre | Argmax: cumplimiento | Argmax: slippage | Argmax: dif. vs control | Muestreada: cumplimiento | Muestreada: slippage | Muestreada: dif. vs control |",
+         "|---|---:|---|---:|---|---|---:|---|---|"]
+    for etiqueta, e in corridas.items():
+        ent, est = e.get("evaluacion_entrenada"), e.get("evaluacion_entrenada_estocastica")
+        L.append(f"| {etiqueta} | {e.get('episodios_entrenados', e['firma']['episodios'])} | {e['firma'].get('riesgo_sobre', 'ejecutado')} | "
+                 f"{_f(ent.get('cumplimiento_medio'), 3)} | {_slip(ent)} | {_p_contra_control(e, 'evaluacion_entrenada')} | "
+                 f"{_f(est.get('cumplimiento_medio'), 3) if est else '—'} | {_slip(est)} | {_p_contra_control(e, 'evaluacion_entrenada_estocastica') if est else '—'} |")
+    return L + [""]
+
+
+def lectura_corridas(corridas: Dict[str, Dict]) -> List[str]:
+    """Frases sobre la opcion A de D3 cuando hay una corrida con riesgo sobre lo pendiente."""
+    a = next((e for e in corridas.values() if e["firma"].get("riesgo_sobre") == "pendiente"), None)
+    if not a:
+        return []
+    ent, est = a["evaluacion_entrenada"], a.get("evaluacion_entrenada_estocastica")
+    return [f"- **Con la opción A de D3 (riesgo sobre lo pendiente), la política determinista sí ejecuta (en esta corrida):** cumplimiento {_f(ent.get('cumplimiento_medio'), 3)} y "
+            f"{_f(ent.get('slippage_bps_medio'))} bps (EE {_f(ent.get('slippage_bps_ee'))}); muestreada, {_f(est.get('cumplimiento_medio'), 3) if est else '—'} y "
+            f"{_f(est.get('slippage_bps_medio')) if est else '—'} bps. Esto es lo que la regla de vigilancia de D3 buscaba: que penalizar lo que falta por ejecutar evite que la red aprenda a esperar. "
+            "Fue una corrida exploratoria con el mismo β, sin recalcular β* (el plan lo pide si se adopta la opción A).",
+            "- **Ninguna corrida se distingue de la red sin entrenar en slippage** (ver la tabla de corridas): con 15 semillas y una sola red por corrida no se puede afirmar que entrenar mejore el costo; lo que sí cambia es si la política determinista ejecuta la orden."]
+
+
+def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str, diag: Optional[Dict] = None,
+            corridas: Optional[Dict[str, Dict]] = None) -> str:
     f = estado["firma"]
     n = len(filas)
     nan = sum(1 for r in filas for v in r.values() if not math.isfinite(v))
@@ -198,13 +239,15 @@ def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str, diag: Opt
         for c in pareada:
             L.append(f"| {c['contra']} | {_f(c['dif_media'])} | {_f(c['ee'])} | {_f(c['p_wilcoxon'], 3)} |")
     L += seccion_diagnostico(diag)
+    if corridas:
+        L += seccion_corridas({"Esta corrida": estado, **corridas})
     L += ["", "## 4. Regla de vigilancia de D3", "",
           f"Cumplimiento medio de la red entrenada: **{_f(vig.get('cumplimiento_medio'), 3)}** (umbral {_f(vig.get('umbral'), 2)}). {vig.get('texto', '')} "
           "La decisión final de R_E se revisa el viernes 23 de octubre y es de BF.", "",
-          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + [""]
+          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + lectura_corridas(corridas or {}) + [""]
     L += [
           "## 6. Limitaciones", "",
-          "- Entrenamiento corto (100 episodios) y una sola semilla de red: el resultado es indicativo, no concluyente.",
+          "- Entrenamiento corto (100 a 1.000 episodios) y una sola red por corrida: el resultado es indicativo, no concluyente.",
           "- Solo FALABELLA y un tramo; no incluye a COPEC ni a ECL.",
           "- La evaluación usa 15 semillas: el error estándar es grande frente a las diferencias entre políticas.", "",
           "## 7. Cómo reproducir", "",
@@ -224,6 +267,8 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--estado", required=True)
     ap.add_argument("--csv", required=True)
     ap.add_argument("--diagnostico", default=None, help="opcional: diagnostico_politica.json del diagnostico de la politica")
+    ap.add_argument("--otras-corridas", nargs="*", default=[], metavar="ETIQUETA=ARCHIVO",
+                    help="otros estados (p. ej. otra cantidad de episodios u opcion A de D3) para la tabla de comparacion")
     ap.add_argument("--out-md", default=str(REPO_ROOT / "docs/entrenamiento_inicial_2.3.5.md"))
     ap.add_argument("--out-png", default=str(REPO_ROOT / "data/analysis/entrenamiento_inicial_2.3.5.png"))
     args = ap.parse_args(argv)
@@ -236,13 +281,18 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     if args.diagnostico:
         with open(args.diagnostico, "r", encoding="utf-8-sig") as fh:
             diag = json.load(fh)
+    corridas: Dict[str, Dict] = {}
+    for item in args.otras_corridas:
+        etiqueta, _, ruta = item.rpartition("=")
+        with open(ruta, "r", encoding="utf-8-sig") as fh:
+            corridas[etiqueta] = json.load(fh)
     png = figura(filas, Path(args.out_png), f"Entrenamiento inicial del Ejecutor ({estado['firma']['ticker']}, {estado['firma']['tramo']})")
     try:
         png_rel = Path(png).resolve().relative_to(Path(args.out_md).resolve().parent.parent).as_posix()
         png_rel = "../" + png_rel
     except ValueError:
         png_rel = Path(png).name
-    Path(args.out_md).write_text(informe(estado, filas, png_rel, diag), encoding="utf-8")
+    Path(args.out_md).write_text(informe(estado, filas, png_rel, diag, corridas), encoding="utf-8")
     print(f"Informe: {args.out_md}\nFigura: {png}")
 
 

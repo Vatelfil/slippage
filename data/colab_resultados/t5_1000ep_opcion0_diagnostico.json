@@ -1,0 +1,122 @@
+{
+ "checkpoint": "/content/drive/MyDrive/slippage_colab/resultados/t5_entrenamiento_1000/checkpoints_apertura/checkpoint_last.pt",
+ "episodio_checkpoint": 1000,
+ "parametros_no_finitos": [],
+ "determinista": {
+  "episodios": [
+   {
+    "seed": 5001,
+    "pasos": 30,
+    "q_ejecutado": 0.0,
+    "cumplimiento": 0.0,
+    "acciones": {
+     "LIMIT_SELL|bucket5|nivel4": 30
+    }
+   },
+   {
+    "seed": 5002,
+    "pasos": 30,
+    "q_ejecutado": 0.0,
+    "cumplimiento": 0.0,
+    "acciones": {
+     "LIMIT_SELL|bucket5|nivel4": 30
+    }
+   },
+   {
+    "seed": 5003,
+    "pasos": 30,
+    "q_ejecutado": 0.0,
+    "cumplimiento": 0.0,
+    "acciones": {
+     "LIMIT_SELL|bucket5|nivel4": 29,
+     "LIMIT_SELL|bucket3|nivel0": 1
+    }
+   }
+  ],
+  "cumplimiento_medio": 0.0
+ },
+ "estocastico": {
+  "episodios": [
+   {
+    "seed": 5001,
+    "pasos": 30,
+    "q_ejecutado": 992.0,
+    "cumplimiento": 0.992,
+    "acciones": {
+     "LIMIT_SELL|bucket3|nivel0": 4,
+     "LIMIT_BUY|bucket7|nivel1": 3,
+     "LIMIT_SELL|bucket5|nivel4": 3,
+     "LIMIT_SELL|bucket5|nivel7": 2,
+     "LIMIT_BUY|bucket6|nivel3": 2,
+     "LIMIT_SELL|bucket8|nivel1": 2,
+     "LIMIT_SELL|bucket3|nivel4": 2,
+     "LIMIT_SELL|bucket9|nivel2": 1,
+     "LIMIT_BUY|bucket6|nivel5": 1,
+     "LIMIT_BUY|bucket2|nivel1": 1,
+     "LIMIT_BUY|bucket6|nivel1": 1,
+     "LIMIT_SELL|bucket0|nivel6": 1,
+     "LIMIT_BUY|bucket9|nivel1": 1,
+     "LIMIT_BUY|bucket4|nivel3": 1,
+     "LIMIT_BUY|bucket3|nivel7": 1,
+     "LIMIT_BUY|bucket3|nivel6": 1,
+     "LIMIT_BUY|bucket0|nivel5": 1,
+     "MARKET|bucket2|nivel2": 1,
+     "LIMIT_SELL|bucket6|nivel7": 1
+    }
+   },
+   {
+    "seed": 5002,
+    "pasos": 24,
+    "q_ejecutado": 1000.0,
+    "cumplimiento": 1.0,
+    "acciones": {
+     "LIMIT_SELL|bucket5|nivel4": 4,
+     "LIMIT_SELL|bucket8|nivel1": 3,
+     "LIMIT_SELL|bucket3|nivel0": 2,
+     "LIMIT_BUY|bucket7|nivel1": 2,
+     "LIMIT_SELL|bucket2|nivel7": 1,
+     "LIMIT_SELL|bucket7|nivel0": 1,
+     "LIMIT_BUY|bucket9|nivel5": 1,
+     "MARKET|bucket3|nivel5": 1,
+     "LIMIT_BUY|bucket7|nivel6": 1,
+     "LIMIT_BUY|bucket3|nivel2": 1,
+     "LIMIT_SELL|bucket5|nivel3": 1,
+     "LIMIT_SELL|bucket3|nivel3": 1,
+     "LIMIT_BUY|bucket6|nivel4": 1,
+     "LIMIT_SELL|bucket8|nivel2": 1,
+     "LIMIT_BUY|bucket3|nivel7": 1,
+     "MARKET|bucket0|nivel3": 1,
+     "LIMIT_BUY|bucket7|nivel5": 1
+    }
+   },
+   {
+    "seed": 5003,
+    "pasos": 30,
+    "q_ejecutado": 998.0,
+    "cumplimiento": 0.998,
+    "acciones": {
+     "LIMIT_SELL|bucket3|nivel0": 4,
+     "LIMIT_SELL|bucket5|nivel4": 4,
+     "LIMIT_SELL|bucket2|nivel1": 3,
+     "LIMIT_SELL|bucket9|nivel4": 2,
+     "LIMIT_BUY|bucket5|nivel6": 2,
+     "LIMIT_SELL|bucket8|nivel3": 2,
+     "LIMIT_SELL|bucket3|nivel3": 1,
+     "LIMIT_SELL|bucket6|nivel2": 1,
+     "LIMIT_BUY|bucket8|nivel1": 1,
+     "LIMIT_SELL|bucket0|nivel0": 1,
+     "MARKET|bucket0|nivel7": 1,
+     "LIMIT_SELL|bucket8|nivel1": 1,
+     "MARKET|bucket2|nivel7": 1,
+     "MARKET|bucket1|nivel2": 1,
+     "LIMIT_SELL|bucket8|nivel2": 1,
+     "LIMIT_BUY|bucket7|nivel3": 1,
+     "MARKET|bucket0|nivel2": 1,
+     "LIMIT_SELL|bucket8|nivel4": 1,
+     "LIMIT_BUY|bucket0|nivel4": 1
+    }
+   }
+  ],
+  "cumplimiento_medio": 0.9966666666666667
+ }
+}
