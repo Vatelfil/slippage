@@ -19,6 +19,7 @@ Semillas: entrenamiento 1001-1100 (--seed 1000), evaluacion 5001-5015. No se usa
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import sys
 import time
@@ -37,12 +38,13 @@ from src.experiments import beta_sweep as bs  # noqa: E402
 CUMPLIMIENTO_MIN = 0.95  # regla de vigilancia de D3
 
 
-def _factory(entorno: str, calibrated_json: str, ticker: str):
+def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str = "ejecutado"):
+    extra = {} if riesgo_sobre == "ejecutado" else {"riesgo_sobre": riesgo_sobre}   # opcion A de D3: riesgo sobre lo pendiente
     if entorno == "abides":
         from src.envs.abides_ejecutor_env import make_calibrated_env_factory  # requiere ABIDES
-        return make_calibrated_env_factory(calibrated_json, ticker=ticker)
+        return make_calibrated_env_factory(calibrated_json, ticker=ticker, **extra)
     from src.envs.fallback_poisson_env import EjecutorEnvPoissonFallback
-    return EjecutorEnvPoissonFallback
+    return functools.partial(EjecutorEnvPoissonFallback, **extra) if extra else EjecutorEnvPoissonFallback
 
 
 def _nuevo_trainer(seed: int):
@@ -57,6 +59,35 @@ def _resumen_eval(factory, net, tramo, seeds: Sequence[int], q_slice: int, venta
     return bp.resumen_evaluacion(eps, BETA_RIESGO_EJECUTOR)
 
 
+def _evaluar_estocastica(factory, net, tramo, seeds: Sequence[int], q_slice: int, ventana_min: int):
+    """Igual que `bp.evaluar_red`, pero MUESTREANDO la accion de la politica (como en el entrenamiento) en vez de
+    tomar el argmax. Con una politica de alta entropia el argmax puede ser una accion de espera y no ejecutar nada."""
+    import torch
+    from src.envs.spaces import EjecutorActionSpace
+
+    space, out = EjecutorActionSpace(), []
+    for seed in seeds:
+        torch.manual_seed(int(seed))
+        env = factory(executor_id=tramo, q_slice=q_slice, ventana_min=ventana_min, seed=int(seed), beta=0.0)
+        try:
+            obs, info = env.reset()
+            p_ref = info.get("p_referencia")
+            if p_ref is None:
+                p_ref = float(info["entry_price"]) / float(info.get("unidades_por_clp", 1.0))
+            pasos, done = [], False
+            while not done:
+                with torch.no_grad():
+                    logits, _ = net(torch.as_tensor(obs, dtype=torch.float32).unsqueeze(0))
+                idx = int(torch.distributions.Categorical(logits=logits.squeeze(0)).sample().item())
+                obs, _, done, trunc, info = env.step(space.decode_flat(idx))
+                done = bool(done or trunc)
+                pasos.append(bs.step_record(info))
+            out.append(bs.summarize_episode(pasos, float(q_slice), float(p_ref)))
+        finally:
+            env.close()
+    return out
+
+
 def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--calibrated-json", default=str(REPO_ROOT / "data/calibration/rmsc04_ipsa_FALABELLA_2026-08-23.json"))
@@ -69,6 +100,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--seed", type=int, default=1000, help="semilla del entrenador: episodio k usa la semilla seed + k")
     ap.add_argument("--eval-seeds", type=int, default=15)
     ap.add_argument("--eval-seed-base", type=int, default=5000)
+    ap.add_argument("--riesgo-sobre", choices=["ejecutado", "pendiente"], default="ejecutado",
+                    help="ejecutado = opcion 0 de D3 (Titulo I); pendiente = opcion A (riesgo sobre lo que falta ejecutar)")
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--max-minutes", type=float, default=None)
     args = ap.parse_args(argv)
@@ -79,11 +112,13 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     csv_path = out_dir / f"entrenamiento_{args.tramo}.csv"
     ckpt_dir = out_dir / f"checkpoints_{args.tramo}"
     estado_path = out_dir / f"entrenamiento_inicial_{args.tramo}.json"
-    factory = _factory(args.entorno, args.calibrated_json, args.ticker)
+    factory = _factory(args.entorno, args.calibrated_json, args.ticker, args.riesgo_sobre)
     firma = {"tarea": "2.3.5", "entorno": args.entorno, "ticker": args.ticker, "tramo": args.tramo,
              "episodios": args.episodes, "q_slice": args.q_slice, "ventana_min": args.ventana_min,
              "seed": args.seed, "eval_seeds": args.eval_seeds, "eval_seed_base": args.eval_seed_base,
              "beta": BETA_RIESGO_EJECUTOR, "calibrated_json": Path(args.calibrated_json).name}
+    if args.riesgo_sobre != "ejecutado":   # solo si no es la opcion por defecto, para no invalidar corridas anteriores
+        firma["riesgo_sobre"] = args.riesgo_sobre
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
     eval_seeds = [args.eval_seed_base + i for i in range(1, args.eval_seeds + 1)]
@@ -127,6 +162,12 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                                                        args.q_slice, args.ventana_min)
         save_json(estado_path, estado)
 
+    if "evaluacion_entrenada_estocastica" not in estado:
+        print("== Evaluando la red entrenada MUESTREANDO la politica (como en el entrenamiento)", flush=True)
+        eps = _evaluar_estocastica(factory, trainer.model, args.tramo, eval_seeds, args.q_slice, args.ventana_min)
+        estado["evaluacion_entrenada_estocastica"] = bp.resumen_evaluacion(eps, BETA_RIESGO_EJECUTOR)
+        save_json(estado_path, estado)
+
     # -- Etapa 3: politicas de referencia en las mismas semillas
     estado.setdefault("referencias", {})
     for nombre in bs.POLITICAS:
@@ -145,6 +186,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     cumpl = estado["evaluacion_entrenada"].get("cumplimiento_medio")
     estado["vigilancia_D3"] = {
         "cumplimiento_medio": cumpl, "umbral": CUMPLIMIENTO_MIN,
+        "cumplimiento_politica_muestreada": estado["evaluacion_entrenada_estocastica"].get("cumplimiento_medio"),
         "cumple": bool(cumpl is not None and cumpl >= CUMPLIMIENTO_MIN),
         "texto": ("El cumplimiento de la red entrenada es >= 95 %: se mantiene la opcion 0 de D3." if
                   (cumpl is not None and cumpl >= CUMPLIMIENTO_MIN) else
