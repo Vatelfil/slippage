@@ -65,6 +65,6 @@ def test_ejecutabilidad_por_orden_y_umbral():
     assert por["MO01"]["corridas_ok"] == 1 and por["MO01"]["corridas"] == 2 and por["MO01"]["ejecutable"] is False  # media 0,945
     assert por["MO02"]["corridas"] == 1 and por["MO02"]["ejecutable"] is False
     assert e["ordenes_ejecutables"] == 0 and e["corridas"] == 3 and e["corridas_ok"] == 1
-    md = an.informe(estado | {"firma": {"entorno": "abides"}}, [], {"n_ordenes": 0, "por_orden": [], "wilcoxon_p": None, "diferencia_media_bps": None, "n_ordenes_distintas": 0}, {"entorno": "abides", "fecha": "x"}, e, e)
-    assert "Ejecutabilidad" in md and "opción B" in md
+    md = an.informe(estado | {"firma": {"entorno": "abides"}}, [], {"n_ordenes": 0, "por_orden": [], "wilcoxon_p": None, "diferencia_media_bps": None, "n_ordenes_distintas": 0}, {"entorno": "abides", "fecha": "x"}, e, {"B 10 %": e})
+    assert "Ejecutabilidad" in md and "B 10 %" in md
 

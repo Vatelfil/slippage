@@ -132,7 +132,8 @@ def ejecutabilidad(estado: Dict) -> Dict:
             "ordenes_ejecutables": sum(r["ejecutable"] for r in filas)}
 
 
-def seccion_ejecutabilidad(ejec: Dict, ejec_b: Optional[Dict]) -> List[str]:
+def seccion_ejecutabilidad(ejec: Dict, alternativas: Optional[Dict[str, Dict]] = None) -> List[str]:
+    """`alternativas`: {etiqueta: ejecutabilidad(...)} de otras corridas (otros tamanos de orden) para comparar."""
     u = f(100 * ejec["umbral"], 0)
     L = ["## 3. Ejecutabilidad de las meta-órdenes (criterio de T3)", "",
          f"Una orden es ejecutable si TWAP completa al menos el {u} % (`execution_rate`). Se informa el cumplimiento de cada semilla y su media.", "",
@@ -142,22 +143,29 @@ def seccion_ejecutabilidad(ejec: Dict, ejec_b: Optional[Dict]) -> List[str]:
                  + " · ".join(f(100 * x, 1) + " %" for x in r["cumplimiento_por_semilla"])
                  + f" | {f(100 * r['cumplimiento_medio'], 1)} % | {r['corridas_ok']}/{r['corridas']} | {'sí' if r['ejecutable'] else 'no'} |")
     L += ["", f"- **{ejec['ordenes_ejecutables']} de {len(ejec['ordenes'])} órdenes** son ejecutables en promedio; {ejec['corridas_ok']} de {ejec['corridas']} corridas llegan al umbral."]
-    if ejec_b:
-        L += ["", "**Comparación con la opción B de D1 (10 % del volumen del día):**", "",
-              "| Orden | Activo | Inicio | Acciones (A) | Media A | Acciones (B) | Media B | ¿Ejecutable B? |", "|---|---|---|---:|---:|---:|---:|:---:|"]
-        a = {r["orden"]: r for r in ejec["ordenes"]}
-        for r in ejec_b["ordenes"]:
-            x = a.get(r["orden"])
-            L.append(f"| {r['orden']} | {r['ticker']} | {r['tramo_inicio']} | {f(x['cantidad'], 0) if x else '—'} | "
-                     f"{f(100 * x['cumplimiento_medio'], 1) + ' %' if x else '—'} | {f(r['cantidad'], 0)} | "
-                     f"{f(100 * r['cumplimiento_medio'], 1)} % | {'sí' if r['ejecutable'] else 'no'} |")
-        L += ["", f"- Con la opción B, **{ejec_b['ordenes_ejecutables']} de {len(ejec_b['ordenes'])} órdenes** son ejecutables "
-                  f"({ejec_b['corridas_ok']} de {ejec_b['corridas']} corridas); con la A, {ejec['ordenes_ejecutables']} de {len(ejec['ordenes'])}. "
-                  f"Semillas por orden: A = {ejec['corridas'] // max(1, len(ejec['ordenes']))}, B = {ejec_b['corridas'] // max(1, len(ejec_b['ordenes']))}."]
+    if alternativas:
+        etiquetas = list(alternativas)
+        base = {r["orden"]: r for r in ejec["ordenes"]}
+        alt = {e: {r["orden"]: r for r in alternativas[e]["ordenes"]} for e in etiquetas}
+        L += ["", "**Comparación con otros tamaños de orden** (mismas órdenes y semillas; la base es la tabla de arriba):", "",
+              "| Orden | Activo | Inicio | Base: acciones | Base: media | "
+              + " | ".join(f"{e}: acciones | {e}: media | {e}: ¿ejecutable?" for e in etiquetas) + " |",
+              "|---|---|---|---:|---:|" + "---:|---:|:---:|" * len(etiquetas)]
+        for oid, r in base.items():
+            celdas = []
+            for e in etiquetas:
+                x = alt[e].get(oid)
+                celdas += [f(x["cantidad"], 0), f"{f(100 * x['cumplimiento_medio'], 1)} % ({len(x['cumplimiento_por_semilla'])} sem.)",
+                           "sí" if x["ejecutable"] else "no"] if x else ["—", "—", "—"]
+            L.append(f"| {oid} | {r['ticker']} | {r['tramo_inicio']} | {f(r['cantidad'], 0)} | {f(100 * r['cumplimiento_medio'], 1)} % | " + " | ".join(celdas) + " |")
+        L.append("")
+        for e in etiquetas:
+            a = alternativas[e]
+            L.append(f"- **{e}:** {a['ordenes_ejecutables']} de {len(a['ordenes'])} órdenes ejecutables en promedio ({a['corridas_ok']} de {a['corridas']} corridas).")
     return L + [""]
 
 
-def informe(estado: Dict, filas: Sequence[Dict], comp: Dict, meta: Dict, ejec: Optional[Dict] = None, ejec_b: Optional[Dict] = None) -> str:
+def informe(estado: Dict, filas: Sequence[Dict], comp: Dict, meta: Dict, ejec: Optional[Dict] = None, alternativas: Optional[Dict[str, Dict]] = None) -> str:
     ejec = ejec if ejec is not None else ejecutabilidad(estado)
     L = ["# Benchmarks TWAP y VWAP sobre las meta-órdenes (tarea 2.3.4)", "",
          "**Elaborado por:** PS con apoyo de Claude Code. **Pendiente de revisión por:** BF y MR.",
@@ -180,7 +188,7 @@ def informe(estado: Dict, filas: Sequence[Dict], comp: Dict, meta: Dict, ejec: O
           (f"- Wilcoxon pareado sobre las órdenes con calendarios distintos: p = {f(p, 3)}; "
            f"{'se rechaza' if comp['rechaza'] else 'no se rechaza'} la igualdad con α = 0,05." if p is not None else
            "- No hay suficientes órdenes con calendarios distintos (mínimo 6) para el Wilcoxon pareado."), "",
-          ] + seccion_ejecutabilidad(ejec, ejec_b) + [
+          ] + seccion_ejecutabilidad(ejec, alternativas) + [
           "## 4. Limitaciones", "",
           "- Las órdenes que empiezan en el cierre tienen un TWAP y un VWAP idénticos: el perfil de volumen se calcula por tramo y dentro de un tramo los periodos pesan igual.",
           "- Pocas semillas por orden (ver n): los errores estándar son amplios y el slippage absoluto en ABIDES está subestimado porque el spread simulado es mucho menor que el real (ver `docs/validacion_formal_2.2.5_PS.md`); la comparación entre estrategias sigue siendo válida.",
@@ -194,7 +202,8 @@ def informe(estado: Dict, filas: Sequence[Dict], comp: Dict, meta: Dict, ejec: O
 def main(argv: Optional[Sequence[str]] = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--resultados", required=True, help="benchmarks_meta_ordenes_<entorno>.json")
-    ap.add_argument("--resultados-b", default=None, help="opcional: corrida con la opcion B de D1 para comparar la ejecutabilidad")
+    ap.add_argument("--alternativas", nargs="*", default=[], metavar="ETIQUETA=ARCHIVO",
+                    help="otras corridas (otro tamano de orden) para comparar la ejecutabilidad, p. ej. 'B 10 %%=ruta.json'")
     ap.add_argument("--out-json", default=str(REPO_ROOT / "data/analysis/benchmarks_meta_ordenes.json"))
     ap.add_argument("--out-png", default=str(REPO_ROOT / "data/analysis/benchmarks_meta_ordenes.png"))
     ap.add_argument("--out-md", default=str(REPO_ROOT / "docs/benchmarks_2.3.4_PS.md"))
@@ -207,16 +216,17 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         raise SystemExit("El archivo no tiene corridas completas.")
     comp = comparar(filas)
     ejec = ejecutabilidad(estado)
-    ejec_b = None
-    if args.resultados_b:
-        with open(args.resultados_b, "r", encoding="utf-8") as fh:
-            ejec_b = ejecutabilidad(json.load(fh))
+    alternativas: Dict[str, Dict] = {}
+    for item in args.alternativas:
+        etiqueta, _, ruta = item.rpartition("=")
+        with open(ruta, "r", encoding="utf-8") as fh:
+            alternativas[etiqueta] = ejecutabilidad(json.load(fh))
     meta = {"entorno": estado.get("firma", {}).get("entorno"), "fecha": time.strftime("%Y-%m-%d")}
     Path(args.out_json).parent.mkdir(parents=True, exist_ok=True)
     with open(args.out_json, "w", encoding="utf-8") as fh:
-        json.dump({"metadata": meta, "tabla": filas, "comparacion": comp, "ejecutabilidad": ejec, "ejecutabilidad_opcion_b": ejec_b}, fh, indent=1, ensure_ascii=False)
+        json.dump({"metadata": meta, "tabla": filas, "comparacion": comp, "ejecutabilidad": ejec, "ejecutabilidad_alternativas": alternativas}, fh, indent=1, ensure_ascii=False)
     figura(filas, Path(args.out_png))
-    Path(args.out_md).write_text(informe(estado, filas, comp, meta, ejec, ejec_b), encoding="utf-8")
+    Path(args.out_md).write_text(informe(estado, filas, comp, meta, ejec, alternativas), encoding="utf-8")
     print(f"JSON: {args.out_json}\nFigura: {args.out_png}\nInforme: {args.out_md}")
 
 

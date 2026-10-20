@@ -349,127 +349,447 @@
    "P_promedio_ejecutado": 5984.743648199087,
    "IS_total": 2560139.135979395,
    "slippage_bps": 48.6817750897656
+  },
+  "MO-01|TWAP|2": {
+   "orden": "MO-01",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "segundos": 370.2,
+   "Q_total": 88300.0,
+   "Q_executed": 88296.0,
+   "execution_rate": 0.9999546998867497,
+   "P_referencia": 5970.0,
+   "P_promedio_ejecutado": 5979.542991755008,
+   "IS_total": 842646.171967223,
+   "slippage_bps": 15.984910812409025
+  },
+  "MO-01|VWAP|2": {
+   "orden": "MO-01",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "segundos": 371.3,
+   "Q_total": 88300.0,
+   "Q_executed": 86466.0,
+   "execution_rate": 0.9792298980747451,
+   "P_referencia": 5970.0,
+   "P_promedio_ejecutado": 5975.693788309857,
+   "IS_total": 502761.50776038674,
+   "slippage_bps": 9.537333852357044
+  },
+  "MO-02|TWAP|2": {
+   "orden": "MO-02",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 167.4,
+   "Q_total": 29100.000000000007,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329894,
+   "P_referencia": 6130.0,
+   "P_promedio_ejecutado": 6199.858170069432,
+   "IS_total": 2032872.7490204764,
+   "slippage_bps": 113.96112572501168
+  },
+  "MO-02|VWAP|2": {
+   "orden": "MO-02",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 167.3,
+   "Q_total": 29100.0,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329896,
+   "P_referencia": 6130.0,
+   "P_promedio_ejecutado": 6209.577098370798,
+   "IS_total": 2315693.5625902223,
+   "slippage_bps": 129.81582115953998
+  },
+  "MO-03|TWAP|2": {
+   "orden": "MO-03",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 147.4,
+   "Q_total": 29100.000000000007,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329894,
+   "P_referencia": 6132.25,
+   "P_promedio_ejecutado": 6137.164312229325,
+   "IS_total": 143006.48587336723,
+   "slippage_bps": 8.013881086591924
+  },
+  "MO-03|VWAP|2": {
+   "orden": "MO-03",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 145.0,
+   "Q_total": 29100.0,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329896,
+   "P_referencia": 6132.25,
+   "P_promedio_ejecutado": 6132.197594005637,
+   "IS_total": -1525.0144359558362,
+   "slippage_bps": -0.08545965080148968
+  },
+  "MO-04|TWAP|2": {
+   "orden": "MO-04",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "apertura",
+   "cantidad": 32100,
+   "segundos": 148.0,
+   "Q_total": 32100.000000000007,
+   "Q_executed": 32097.0,
+   "execution_rate": 0.9999065420560745,
+   "P_referencia": 1800.0,
+   "P_promedio_ejecutado": 1802.8269651369287,
+   "IS_total": 90745.58089541194,
+   "slippage_bps": 15.705361871826225
+  },
+  "MO-04|VWAP|2": {
+   "orden": "MO-04",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "apertura",
+   "cantidad": 32100,
+   "segundos": 146.2,
+   "Q_total": 32100.0,
+   "Q_executed": 32091.0,
+   "execution_rate": 0.9997196261682243,
+   "P_referencia": 1800.0,
+   "P_promedio_ejecutado": 1802.9588700881868,
+   "IS_total": 94979.72983079671,
+   "slippage_bps": 16.43816715659341
+  },
+  "MO-05|TWAP|2": {
+   "orden": "MO-05",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 29100,
+   "segundos": 160.0,
+   "Q_total": 29100.000000000004,
+   "Q_executed": 29100.0,
+   "execution_rate": 0.9999999999999999,
+   "P_referencia": 6116.35,
+   "P_promedio_ejecutado": 6154.7928281786935,
+   "IS_total": 1118686.2999999712,
+   "slippage_bps": 62.85256432135696
+  },
+  "MO-05|VWAP|2": {
+   "orden": "MO-05",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 29100,
+   "segundos": 159.2,
+   "Q_total": 29099.999999999996,
+   "Q_executed": 29096.0,
+   "execution_rate": 0.9998625429553266,
+   "P_referencia": 6116.35,
+   "P_promedio_ejecutado": 6163.150426175419,
+   "IS_total": 1361892.4017046804,
+   "slippage_bps": 76.51691969134954
+  },
+  "MO-06|TWAP|2": {
+   "orden": "MO-06",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "segundos": 157.6,
+   "Q_total": 32100.000000000004,
+   "Q_executed": 32100.0,
+   "execution_rate": 0.9999999999999999,
+   "P_referencia": 1751.75,
+   "P_promedio_ejecutado": 1811.7745919003116,
+   "IS_total": 1926789.4000000036,
+   "slippage_bps": 342.65501298879195
+  },
+  "MO-06|VWAP|2": {
+   "orden": "MO-06",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "segundos": 159.3,
+   "Q_total": 32100.0,
+   "Q_executed": 32094.0,
+   "execution_rate": 0.9998130841121495,
+   "P_referencia": 1751.75,
+   "P_promedio_ejecutado": 1816.3244033152616,
+   "IS_total": 2072838.3464198986,
+   "slippage_bps": 368.62796241051313
+  },
+  "MO-07|TWAP|2": {
+   "orden": "MO-07",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "segundos": 178.9,
+   "Q_total": 32100.000000000004,
+   "Q_executed": 32100.0,
+   "execution_rate": 0.9999999999999999,
+   "P_referencia": 1774.9,
+   "P_promedio_ejecutado": 1805.1373831775702,
+   "IS_total": 970620.0000000006,
+   "slippage_bps": 170.36105232728664
+  },
+  "MO-07|VWAP|2": {
+   "orden": "MO-07",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "segundos": 180.5,
+   "Q_total": 32100.0,
+   "Q_executed": 32094.0,
+   "execution_rate": 0.9998130841121495,
+   "P_referencia": 1774.9,
+   "P_promedio_ejecutado": 1806.2167539103882,
+   "IS_total": 1005267.8005234585,
+   "slippage_bps": 176.442356811021
+  },
+  "MO-08|TWAP|2": {
+   "orden": "MO-08",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 88300,
+   "segundos": 212.8,
+   "Q_total": 88300.0,
+   "Q_executed": 88300.0,
+   "execution_rate": 1.0,
+   "P_referencia": 5862.05,
+   "P_promedio_ejecutado": 5965.525152887882,
+   "IS_total": 9136855.999999931,
+   "slippage_bps": 176.517008363766
+  },
+  "MO-08|VWAP|2": {
+   "orden": "MO-08",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 88300,
+   "segundos": 212.6,
+   "Q_total": 88300.0,
+   "Q_executed": 88300.0,
+   "execution_rate": 1.0,
+   "P_referencia": 5862.05,
+   "P_promedio_ejecutado": 5965.525152887882,
+   "IS_total": 9136855.999999931,
+   "slippage_bps": 176.517008363766
+  },
+  "MO-09|TWAP|2": {
+   "orden": "MO-09",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 88300,
+   "segundos": 229.8,
+   "Q_total": 88300.0,
+   "Q_executed": 81110.0,
+   "execution_rate": 0.9185730464326161,
+   "P_referencia": 5993.15,
+   "P_promedio_ejecutado": 6043.659897669831,
+   "IS_total": 4460023.964246072,
+   "slippage_bps": 84.27938174387582
+  },
+  "MO-09|VWAP|2": {
+   "orden": "MO-09",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 88300,
+   "segundos": 228.7,
+   "Q_total": 88300.0,
+   "Q_executed": 81110.0,
+   "execution_rate": 0.9185730464326161,
+   "P_referencia": 5993.15,
+   "P_promedio_ejecutado": 6043.659897669831,
+   "IS_total": 4460023.964246072,
+   "slippage_bps": 84.27938174387582
+  },
+  "MO-10|TWAP|2": {
+   "orden": "MO-10",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 88300,
+   "segundos": 276.0,
+   "Q_total": 88300.0,
+   "Q_executed": 84855.0,
+   "execution_rate": 0.9609852774631936,
+   "P_referencia": 5990.45,
+   "P_promedio_ejecutado": 6043.256079193919,
+   "IS_total": 4662776.792823028,
+   "slippage_bps": 88.15043810384658
+  },
+  "MO-10|VWAP|2": {
+   "orden": "MO-10",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 88300,
+   "segundos": 274.2,
+   "Q_total": 88300.0,
+   "Q_executed": 84855.0,
+   "execution_rate": 0.9609852774631936,
+   "P_referencia": 5990.45,
+   "P_promedio_ejecutado": 6043.256079193919,
+   "IS_total": 4662776.792823028,
+   "slippage_bps": 88.15043810384658
   }
  },
  "resumen": {
   "MO-01": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": -1651614.0183019363,
-    "EE": null
+    "n": 2,
+    "IS_medio": -404483.92316735664,
+    "EE": 1247130.0951345796
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": -2141626.723899724,
-    "EE": null
+    "n": 2,
+    "IS_medio": -819432.6080696686,
+    "EE": 1322194.1158300554
    }
   },
   "MO-02": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 1321433.1604454443,
-    "EE": null
+    "n": 2,
+    "IS_medio": 1677152.9547329603,
+    "EE": 355719.79428751604
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 1619342.7851103118,
-    "EE": null
+    "n": 2,
+    "IS_medio": 1967518.1738502672,
+    "EE": 348175.38873995526
    }
   },
   "MO-03": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 1258732.4324602976,
-    "EE": null
+    "n": 2,
+    "IS_medio": 700869.4591668324,
+    "EE": 557862.9732934652
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 1087221.9694782167,
-    "EE": null
+    "n": 2,
+    "IS_medio": 542848.4775211305,
+    "EE": 544373.4919570863
    }
   },
   "MO-04": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 536210.0130853474,
-    "EE": null
+    "n": 2,
+    "IS_medio": 313477.79699037963,
+    "EE": 222732.2160949677
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 542580.0252407261,
-    "EE": null
+    "n": 2,
+    "IS_medio": 318779.8775357614,
+    "EE": 223800.14770496465
    }
   },
   "MO-05": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 2404106.199999996,
-    "EE": null
+    "n": 2,
+    "IS_medio": 1761396.2499999837,
+    "EE": 642709.9500000123
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 2785591.199133923,
-    "EE": null
+    "n": 2,
+    "IS_medio": 2073741.8004193017,
+    "EE": 711849.3987146212
    }
   },
   "MO-06": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 1582181.3999999973,
-    "EE": null
+    "n": 2,
+    "IS_medio": 1754485.4000000004,
+    "EE": 172304.00000000314
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 1892733.4819592347,
-    "EE": null
+    "n": 2,
+    "IS_medio": 1982785.9141895666,
+    "EE": 90052.43223033192
    }
   },
   "MO-07": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 602873.7999999946,
-    "EE": null
+    "n": 2,
+    "IS_medio": 786746.8999999976,
+    "EE": 183873.100000003
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 655681.3572630351,
-    "EE": null
+    "n": 2,
+    "IS_medio": 830474.5788932468,
+    "EE": 174793.2216302117
    }
   },
   "MO-08": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": -4632892.400000152,
-    "EE": null
+    "n": 2,
+    "IS_medio": 2251981.7999998895,
+    "EE": 6884874.200000041
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": -4632892.400000152,
-    "EE": null
+    "n": 2,
+    "IS_medio": 2251981.7999998895,
+    "EE": 6884874.200000041
    }
   },
   "MO-09": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 9319490.996547764,
-    "EE": null
+    "n": 2,
+    "IS_medio": 6889757.480396918,
+    "EE": 2429733.516150846
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 9319490.996547764,
-    "EE": null
+    "n": 2,
+    "IS_medio": 6889757.480396918,
+    "EE": 2429733.516150846
    }
   },
   "MO-10": {
    "TWAP": {
-    "n": 1,
-    "IS_medio": 2560139.135979395,
-    "EE": null
+    "n": 2,
+    "IS_medio": 3611457.9644012116,
+    "EE": 1051318.8284218165
    },
    "VWAP": {
-    "n": 1,
-    "IS_medio": 2560139.135979395,
-    "EE": null
+    "n": 2,
+    "IS_medio": 3611457.9644012116,
+    "EE": 1051318.8284218165
    }
   }
  }

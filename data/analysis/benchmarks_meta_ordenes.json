@@ -492,142 +492,204 @@
   "corridas": 20,
   "ordenes_ejecutables": 5
  },
- "ejecutabilidad_opcion_b": {
-  "umbral": 0.95,
-  "ordenes": [
-   {
-    "orden": "MO-01",
-    "ticker": "FALABELLA",
-    "tramo_inicio": "apertura",
-    "cantidad": 88300,
-    "cumplimiento_por_semilla": [
-     0.9999546998867497
-    ],
-    "cumplimiento_medio": 0.9999546998867497,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-02",
-    "ticker": "COPEC",
-    "tramo_inicio": "apertura",
-    "cantidad": 29100,
-    "cumplimiento_por_semilla": [
-     0.9997938144329894
-    ],
-    "cumplimiento_medio": 0.9997938144329894,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-03",
-    "ticker": "COPEC",
-    "tramo_inicio": "apertura",
-    "cantidad": 29100,
-    "cumplimiento_por_semilla": [
-     0.9997938144329894
-    ],
-    "cumplimiento_medio": 0.9997938144329894,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-04",
-    "ticker": "ECL",
-    "tramo_inicio": "apertura",
-    "cantidad": 32100,
-    "cumplimiento_por_semilla": [
-     0.9999065420560745
-    ],
-    "cumplimiento_medio": 0.9999065420560745,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-05",
-    "ticker": "COPEC",
-    "tramo_inicio": "media_jornada",
-    "cantidad": 29100,
-    "cumplimiento_por_semilla": [
-     0.9999999999999999
-    ],
-    "cumplimiento_medio": 0.9999999999999999,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-06",
-    "ticker": "ECL",
-    "tramo_inicio": "media_jornada",
-    "cantidad": 32100,
-    "cumplimiento_por_semilla": [
-     0.9999999999999999
-    ],
-    "cumplimiento_medio": 0.9999999999999999,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-07",
-    "ticker": "ECL",
-    "tramo_inicio": "media_jornada",
-    "cantidad": 32100,
-    "cumplimiento_por_semilla": [
-     0.9999999999999999
-    ],
-    "cumplimiento_medio": 0.9999999999999999,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-08",
-    "ticker": "FALABELLA",
-    "tramo_inicio": "cierre",
-    "cantidad": 88300,
-    "cumplimiento_por_semilla": [
-     1.0
-    ],
-    "cumplimiento_medio": 1.0,
-    "corridas_ok": 1,
-    "corridas": 1,
-    "ejecutable": true
-   },
-   {
-    "orden": "MO-09",
-    "ticker": "FALABELLA",
-    "tramo_inicio": "cierre",
-    "cantidad": 88300,
-    "cumplimiento_por_semilla": [
-     0.9447678369195923
-    ],
-    "cumplimiento_medio": 0.9447678369195923,
-    "corridas_ok": 0,
-    "corridas": 1,
-    "ejecutable": false
-   },
-   {
-    "orden": "MO-10",
-    "ticker": "FALABELLA",
-    "tramo_inicio": "cierre",
-    "cantidad": 88300,
-    "cumplimiento_por_semilla": [
-     0.7863759909399773
-    ],
-    "cumplimiento_medio": 0.7863759909399773,
-    "corridas_ok": 0,
-    "corridas": 1,
-    "ejecutable": false
-   }
-  ],
-  "corridas_ok": 8,
-  "corridas": 10,
-  "ordenes_ejecutables": 8
+ "ejecutabilidad_alternativas": {
+  "B 10 %": {
+   "umbral": 0.95,
+   "ordenes": [
+    {
+     "orden": "MO-01",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "apertura",
+     "cantidad": 88300,
+     "cumplimiento_por_semilla": [
+      0.9999546998867497,
+      0.9999546998867497
+     ],
+     "cumplimiento_medio": 0.9999546998867497,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-02",
+     "ticker": "COPEC",
+     "tramo_inicio": "apertura",
+     "cantidad": 29100,
+     "cumplimiento_por_semilla": [
+      0.9997938144329894,
+      0.9997938144329894
+     ],
+     "cumplimiento_medio": 0.9997938144329894,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-03",
+     "ticker": "COPEC",
+     "tramo_inicio": "apertura",
+     "cantidad": 29100,
+     "cumplimiento_por_semilla": [
+      0.9997938144329894,
+      0.9997938144329894
+     ],
+     "cumplimiento_medio": 0.9997938144329894,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-04",
+     "ticker": "ECL",
+     "tramo_inicio": "apertura",
+     "cantidad": 32100,
+     "cumplimiento_por_semilla": [
+      0.9999065420560745,
+      0.9999065420560745
+     ],
+     "cumplimiento_medio": 0.9999065420560745,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-05",
+     "ticker": "COPEC",
+     "tramo_inicio": "media_jornada",
+     "cantidad": 29100,
+     "cumplimiento_por_semilla": [
+      0.9999999999999999,
+      0.9999999999999999
+     ],
+     "cumplimiento_medio": 0.9999999999999999,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-06",
+     "ticker": "ECL",
+     "tramo_inicio": "media_jornada",
+     "cantidad": 32100,
+     "cumplimiento_por_semilla": [
+      0.9999999999999999,
+      0.9999999999999999
+     ],
+     "cumplimiento_medio": 0.9999999999999999,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-07",
+     "ticker": "ECL",
+     "tramo_inicio": "media_jornada",
+     "cantidad": 32100,
+     "cumplimiento_por_semilla": [
+      0.9999999999999999,
+      0.9999999999999999
+     ],
+     "cumplimiento_medio": 0.9999999999999999,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-08",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "cierre",
+     "cantidad": 88300,
+     "cumplimiento_por_semilla": [
+      1.0,
+      1.0
+     ],
+     "cumplimiento_medio": 1.0,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-09",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "cierre",
+     "cantidad": 88300,
+     "cumplimiento_por_semilla": [
+      0.9447678369195923,
+      0.9185730464326161
+     ],
+     "cumplimiento_medio": 0.9316704416761041,
+     "corridas_ok": 0,
+     "corridas": 2,
+     "ejecutable": false
+    },
+    {
+     "orden": "MO-10",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "cierre",
+     "cantidad": 88300,
+     "cumplimiento_por_semilla": [
+      0.7863759909399773,
+      0.9609852774631936
+     ],
+     "cumplimiento_medio": 0.8736806342015855,
+     "corridas_ok": 1,
+     "corridas": 2,
+     "ejecutable": false
+    }
+   ],
+   "corridas_ok": 17,
+   "corridas": 20,
+   "ordenes_ejecutables": 8
+  },
+  "C 5 % solo cierre": {
+   "umbral": 0.95,
+   "ordenes": [
+    {
+     "orden": "MO-08",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "cierre",
+     "cantidad": 44100,
+     "cumplimiento_por_semilla": [
+      1.0,
+      1.0
+     ],
+     "cumplimiento_medio": 1.0,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-09",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "cierre",
+     "cantidad": 44100,
+     "cumplimiento_por_semilla": [
+      1.0,
+      1.0
+     ],
+     "cumplimiento_medio": 1.0,
+     "corridas_ok": 2,
+     "corridas": 2,
+     "ejecutable": true
+    },
+    {
+     "orden": "MO-10",
+     "ticker": "FALABELLA",
+     "tramo_inicio": "cierre",
+     "cantidad": 44100,
+     "cumplimiento_por_semilla": [
+      0.9017233560090703,
+      1.0
+     ],
+     "cumplimiento_medio": 0.9508616780045351,
+     "corridas_ok": 1,
+     "corridas": 2,
+     "ejecutable": true
+    }
+   ],
+   "corridas_ok": 5,
+   "corridas": 6,
+   "ordenes_ejecutables": 3
+  }
  }
 }

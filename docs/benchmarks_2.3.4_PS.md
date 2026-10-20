@@ -67,22 +67,23 @@ Una orden es ejecutable si TWAP completa al menos el 95 % (`execution_rate`). Se
 
 - **5 de 10 órdenes** son ejecutables en promedio; 11 de 20 corridas llegan al umbral.
 
-**Comparación con la opción B de D1 (10 % del volumen del día):**
+**Comparación con otros tamaños de orden** (mismas órdenes y semillas; la base es la tabla de arriba):
 
-| Orden | Activo | Inicio | Acciones (A) | Media A | Acciones (B) | Media B | ¿Ejecutable B? |
-|---|---|---|---:|---:|---:|---:|:---:|
-| MO-01 | FALABELLA | apertura | 100.000 | 99,8 % | 88.300 | 100,0 % | sí |
-| MO-02 | COPEC | apertura | 100.000 | 92,5 % | 29.100 | 100,0 % | sí |
-| MO-03 | COPEC | apertura | 100.000 | 98,3 % | 29.100 | 100,0 % | sí |
-| MO-04 | ECL | apertura | 100.000 | 96,6 % | 32.100 | 100,0 % | sí |
-| MO-05 | COPEC | media_jornada | 100.000 | 96,2 % | 29.100 | 100,0 % | sí |
-| MO-06 | ECL | media_jornada | 100.000 | 94,0 % | 32.100 | 100,0 % | sí |
-| MO-07 | ECL | media_jornada | 100.000 | 94,1 % | 32.100 | 100,0 % | sí |
-| MO-08 | FALABELLA | cierre | 100.000 | 100,0 % | 88.300 | 100,0 % | sí |
-| MO-09 | FALABELLA | cierre | 100.000 | 89,6 % | 88.300 | 94,5 % | no |
-| MO-10 | FALABELLA | cierre | 100.000 | 84,5 % | 88.300 | 78,6 % | no |
+| Orden | Activo | Inicio | Base: acciones | Base: media | B 10 %: acciones | B 10 %: media | B 10 %: ¿ejecutable? | C 5 % solo cierre: acciones | C 5 % solo cierre: media | C 5 % solo cierre: ¿ejecutable? |
+|---|---|---|---:|---:|---:|---:|:---:|---:|---:|:---:|
+| MO-01 | FALABELLA | apertura | 100.000 | 99,8 % | 88.300 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-02 | COPEC | apertura | 100.000 | 92,5 % | 29.100 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-03 | COPEC | apertura | 100.000 | 98,3 % | 29.100 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-04 | ECL | apertura | 100.000 | 96,6 % | 32.100 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-05 | COPEC | media_jornada | 100.000 | 96,2 % | 29.100 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-06 | ECL | media_jornada | 100.000 | 94,0 % | 32.100 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-07 | ECL | media_jornada | 100.000 | 94,1 % | 32.100 | 100,0 % (2 sem.) | sí | — | — | — |
+| MO-08 | FALABELLA | cierre | 100.000 | 100,0 % | 88.300 | 100,0 % (2 sem.) | sí | 44.100 | 100,0 % (2 sem.) | sí |
+| MO-09 | FALABELLA | cierre | 100.000 | 89,6 % | 88.300 | 93,2 % (2 sem.) | no | 44.100 | 100,0 % (2 sem.) | sí |
+| MO-10 | FALABELLA | cierre | 100.000 | 84,5 % | 88.300 | 87,4 % (2 sem.) | no | 44.100 | 95,1 % (2 sem.) | sí |
 
-- Con la opción B, **8 de 10 órdenes** son ejecutables (8 de 10 corridas); con la A, 5 de 10. Semillas por orden: A = 2, B = 1.
+- **B 10 %:** 8 de 10 órdenes ejecutables en promedio (17 de 20 corridas).
+- **C 5 % solo cierre:** 3 de 3 órdenes ejecutables en promedio (5 de 6 corridas).
 
 ## 4. Limitaciones
 
