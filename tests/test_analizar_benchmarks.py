@@ -50,3 +50,21 @@ def test_informe_y_figura(tmp_path):
     png = tmp_path / "f.png"
     an.figura(filas, png)
     assert png.exists() and png.stat().st_size > 1000
+
+
+def test_ejecutabilidad_por_orden_y_umbral():
+    estado = {"corridas": {
+        "MO01|TWAP|1": {"orden": "MO01", "estrategia": "TWAP", "seed": 1, "ticker": "COPEC", "tramo_inicio": "apertura", "cantidad": 1000, "execution_rate": 0.99},
+        "MO01|TWAP|2": {"orden": "MO01", "estrategia": "TWAP", "seed": 2, "ticker": "COPEC", "tramo_inicio": "apertura", "cantidad": 1000, "execution_rate": 0.90},
+        "MO01|VWAP|1": {"orden": "MO01", "estrategia": "VWAP", "seed": 1, "execution_rate": 0.10},   # solo cuenta TWAP
+        "MO02|TWAP|1": {"orden": "MO02", "estrategia": "TWAP", "seed": 1, "ticker": "ECL", "tramo_inicio": "cierre", "cantidad": 1000, "execution_rate": 0.80},
+        "MO02|TWAP|2": {"orden": "MO02", "estrategia": "TWAP", "seed": 2, "error": "boom"},           # se ignora
+    }}
+    e = an.ejecutabilidad(estado)
+    por = {r["orden"]: r for r in e["ordenes"]}
+    assert por["MO01"]["corridas_ok"] == 1 and por["MO01"]["corridas"] == 2 and por["MO01"]["ejecutable"] is False  # media 0,945
+    assert por["MO02"]["corridas"] == 1 and por["MO02"]["ejecutable"] is False
+    assert e["ordenes_ejecutables"] == 0 and e["corridas"] == 3 and e["corridas_ok"] == 1
+    md = an.informe(estado | {"firma": {"entorno": "abides"}}, [], {"n_ordenes": 0, "por_orden": [], "wilcoxon_p": None, "diferencia_media_bps": None, "n_ordenes_distintas": 0}, {"entorno": "abides", "fecha": "x"}, e, {"B 10 %": e})
+    assert "Ejecutabilidad" in md and "B 10 %" in md
+
