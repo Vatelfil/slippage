@@ -134,3 +134,13 @@ En [`tests/test_ppo_trainer.py`](../tests/test_ppo_trainer.py):
 - `test_parada_temprana_por_kl`: Se constató que `early_stopped=True` cuando la divergencia excede el target configurado (`PASSED`).
 - `test_checkpoint_y_reanudacion`: Guardado y reanudación sin pérdida de estado ni salto de episodio (`PASSED`).
 - `test_corrida_20_episodios_sin_nans_y_csv_valido`: Corrida de 20 episodios continuos verificando cero valores NaN y comprobando el formato estricto del archivo CSV (`PASSED`).
+
+### 5.1 Corrida corta con ABIDES calibrado (Colab, 20 oct 2026)
+
+*Borrador de PS con apoyo de Claude Code, pendiente de revisión por MR.* Los tests de arriba usan el simulador de Poisson. Para comprobar la integración antes de la 2.3.5 se corrió el entrenador sobre `EjecutorEnvAbides` calibrado (FALABELLA, apertura, `q_slice` = 1 000, ventana de 5 minutos, `make_calibrated_env_factory`) con `epochs` = 2, `minibatch_size` = 32 y `episodes_per_update` = 2:
+
+- 4 episodios (2 actualizaciones), sin NaN, CSV con las 8 columnas, checkpoint guardado, y reanudación desde el checkpoint en el episodio 5 que llega al episodio 6 sin saltos. Tiempos: 9,3 s el entrenamiento y 2,7 s la reanudación.
+- CSV: [`data/colab_resultados/entrenamiento_abides.csv`](../data/colab_resultados/entrenamiento_abides.csv); resumen: [`resumen_evidencia_abides.json`](../data/colab_resultados/resumen_evidencia_abides.json); script: `scripts/colab/evidencia_ctde_ppo_abides_ps.py`.
+
+Es una prueba de humo de la integración (episodios cortos de apertura, sin interés en el retorno), no un entrenamiento.
+
