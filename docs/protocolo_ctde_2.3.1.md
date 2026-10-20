@@ -3,9 +3,9 @@
 **Elaborado por:** Mauricio Reynoso (MR)  
 **Fecha:** Octubre 2026 (Sprint 5)  
 **Revisión:** Paolo Sepúlveda (PS) y Benjamín Farías (BF)  
-**Código fuente:** [`src/envs/ctde_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/src/envs/ctde_protocol.py), [`src/envs/maestro_ejecutor_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/src/envs/maestro_ejecutor_protocol.py)  
-**Esquemas formales:** [`docs/schemas/protocolo_asignar_schema.json`](file:///c:/Users/rokla/workspace/titulo/slippage/docs/schemas/protocolo_asignar_schema.json), [`docs/schemas/protocolo_reporte_schema.json`](file:///c:/Users/rokla/workspace/titulo/slippage/docs/schemas/protocolo_reporte_schema.json)  
-**Batería de pruebas:** [`tests/test_ctde_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/tests/test_ctde_protocol.py)
+**Código fuente:** [`src/envs/ctde_protocol.py`](../src/envs/ctde_protocol.py), [`src/envs/maestro_ejecutor_protocol.py`](../src/envs/maestro_ejecutor_protocol.py)  
+**Esquemas formales:** [`docs/schemas/protocolo_asignar_schema.json`](schemas/protocolo_asignar_schema.json), [`docs/schemas/protocolo_reporte_schema.json`](schemas/protocolo_reporte_schema.json)  
+**Batería de pruebas:** [`tests/test_ctde_protocol.py`](../tests/test_ctde_protocol.py)
 
 ---
 
@@ -83,7 +83,7 @@ Tras concluir los pasos tácticos de 30 segundos (o agotar el volumen asignado),
 
 ## 3. Ejemplo de Log de Auditoría Completo (Meta-Orden de 5.000 acciones)
 
-A continuación se muestra un extracto real generado por el canal en una corrida controlada de jornada completa:
+A continuación se muestra un extracto del log generado por el canal (`CanalComunicacionCTDE.guardar_log`) en una corrida controlada de jornada completa con el **simulador de Poisson** (`EjecutorEnvPoissonFallback`, el entorno por defecto del orquestador), no con ABIDES-Gym:
 
 ```json
 [
@@ -148,7 +148,7 @@ A continuación se muestra un extracto real generado por el canal en una corrida
 
 ## 4. Verificación y Resultados de Tests
 
-La suite [`tests/test_ctde_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/tests/test_ctde_protocol.py) valida:
+La suite [`tests/test_ctde_protocol.py`](../tests/test_ctde_protocol.py) valida:
 1. `test_mensaje_asignar_roundtrip`: Serialización JSON exacta y deserialización con tipos nativos (`PASSED`).
 2. `test_mensaje_reporte_roundtrip`: Validación y serialización completa del reporte táctico (`PASSED`).
 3. `test_mensaje_invalido_es_rechazado`: Rechazo estricto de tramos inexistentes, duraciones fuera de $\{1, 5, 10, 15\}$, razones de término inválidas o cantidades negativas (`PASSED`).

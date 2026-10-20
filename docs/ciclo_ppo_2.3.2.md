@@ -3,14 +3,14 @@
 **Elaborado por:** Mauricio Reynoso (MR)  
 **Fecha:** Octubre 2026 (Sprint 5)  
 **Revisión:** Paolo Sepúlveda (PS) y Benjamín Farías (BF)  
-**Código fuente:** [`src/training/ppo_trainer.py`](file:///c:/Users/rokla/workspace/titulo/slippage/src/training/ppo_trainer.py)  
-**Batería de pruebas:** [`tests/test_ppo_trainer.py`](file:///c:/Users/rokla/workspace/titulo/slippage/tests/test_ppo_trainer.py)
+**Código fuente:** [`src/training/ppo_trainer.py`](../src/training/ppo_trainer.py)  
+**Batería de pruebas:** [`tests/test_ppo_trainer.py`](../tests/test_ppo_trainer.py)
 
 ---
 
 ## 1. Propósito y Estructura del Entrenador
 
-La tarea 2.3.2 unifica los componentes dispersos de entrenamiento desarrollados en los Sprints 3 y 4 (`RolloutBuffer`, `ppo_update` en `test_ppo_short_run.py`, y `beta_phase2.py`) en un motor reutilizable y parametrizable: [`PPOTrainer`](file:///c:/Users/rokla/workspace/titulo/slippage/src/training/ppo_trainer.py).
+La tarea 2.3.2 unifica los componentes dispersos de entrenamiento desarrollados en los Sprints 3 y 4 (`RolloutBuffer`, `ppo_update` en `test_ppo_short_run.py`, y `beta_phase2.py`) en un motor reutilizable y parametrizable: [`PPOTrainer`](../src/training/ppo_trainer.py).
 
 El entrenador soporta tanto a los **Agentes Ejecutores** ($S_E \in \mathbb{R}^{27}$, $A_E \in \{0, \dots, 239\}$) como al **Agente Maestro** ($S_M \in \mathbb{R}^7$, $A_M \in \{0, \dots, 39\}$), implementando las mejores prácticas de estabilidad de RL en microestructura financiera:
 
@@ -32,7 +32,7 @@ flowchart TD
 ## 2. Componentes Clave de la Implementación
 
 ### 2.1 Buffer de Experiencias y Generalized Advantage Estimation (GAE)
-La clase [`RolloutBuffer`](file:///c:/Users/rokla/workspace/titulo/slippage/src/training/ppo_trainer.py#L42) almacena $(s_t, a_t, \log \pi(a_t|s_t), r_t, V(s_t), d_t)$ y calcula ventajas $A_t^{\text{GAE}(\gamma, \lambda)}$ mediante recursión invertida:
+La clase [`RolloutBuffer`](../src/training/ppo_trainer.py#L42) almacena $(s_t, a_t, \log \pi(a_t|s_t), r_t, V(s_t), d_t)$ y calcula ventajas $A_t^{\text{GAE}(\gamma, \lambda)}$ mediante recursión invertida:
 
 $$\delta_t = r_t + \gamma V(s_{t+1})(1 - d_t) - V(s_t)$$
 $$A_t = \delta_t + \gamma \lambda (1 - d_t) A_{t+1}$$
@@ -87,7 +87,12 @@ Los hiperparámetros por defecto provienen de la calibración de la fase 2 de $\
 ### 4.1 Entrenamiento de un Ejecutor (para Tarea 2.3.5 de BF)
 ```python
 from src.training.ppo_trainer import PPOTrainer, PPOConfig
-from src.envs.abides_ejecutor_env import EjecutorEnvAbides
+from src.envs.abides_ejecutor_env import make_calibrated_env_factory
+
+# 0. Entorno de ABIDES con la calibración del activo (config por tramo, 2.2.4).
+#    `EjecutorEnvAbides` solo, sin esto, corre `rmsc04` SIN calibrar.
+env_factory = make_calibrated_env_factory(
+    "data/calibration/rmsc04_ipsa_FALABELLA_2026-08-23.json", ticker="FALABELLA")
 
 # 1. Configurar entrenador
 cfg = PPOConfig(episodes_per_update=10, epochs=4, lr=3e-4)
@@ -95,7 +100,7 @@ trainer = PPOTrainer(role="ejecutor", cfg=cfg, seed=1000)
 
 # 2. Entrenar 100 episodios en apertura
 historial = trainer.train_executor_episodes(
-    env_factory=EjecutorEnvAbides,
+    env_factory=env_factory,
     n_episodes=100,
     tramo="apertura",
     q_slice=1000,
@@ -113,7 +118,7 @@ trainer_resumed.load_checkpoint("data/checkpoints/ejecutor_apertura/checkpoint_l
 
 # Continua entrenando sin discontinuidad de estado
 trainer_resumed.train_executor_episodes(
-    env_factory=EjecutorEnvAbides,
+    env_factory=env_factory,
     n_episodes=50,
     csv_path="data/training_logs/ejecutor_apertura_p5.csv",
 )
@@ -123,7 +128,7 @@ trainer_resumed.train_executor_episodes(
 
 ## 5. Resultados de Validación de Tests
 
-En [`tests/test_ppo_trainer.py`](file:///c:/Users/rokla/workspace/titulo/slippage/tests/test_ppo_trainer.py):
+En [`tests/test_ppo_trainer.py`](../tests/test_ppo_trainer.py):
 - `test_rollout_buffer_y_gae`: Validación matemática de cálculo de GAE en episodios particionados (`PASSED`).
 - `test_reproducibilidad_misma_semilla`: Dos corridas con la misma semilla reproducen exactamente los mismos losses y retornos (`PASSED`).
 - `test_parada_temprana_por_kl`: Se constató que `early_stopped=True` cuando la divergencia excede el target configurado (`PASSED`).
