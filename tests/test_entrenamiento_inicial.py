@@ -54,3 +54,4 @@ def test_el_analisis_genera_informe_y_figura(corrida, tmp_path):
     texto = md.read_text(encoding="utf-8")
     assert png.exists() and "Regla de vigilancia de D3" in texto and "Red sin entrenar" in texto
     assert "Poisson" in texto  # el ensayo se declara como tal
+    assert "Comparación pareada" in texto and "Lectura preliminar de PS" in texto

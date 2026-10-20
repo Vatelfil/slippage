@@ -22,6 +22,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
 import numpy as np
+from scipy import stats
+
+N_ACCIONES = 240  # tamano del espacio de acciones del Ejecutor (3 tipos x 10 volumenes x 8 niveles)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -60,6 +63,46 @@ def figura(filas: List[Dict[str, float]], out_png: Path, titulo: str) -> Path:
     return out_png
 
 
+def comparacion_pareada(estado: Dict) -> List[Dict]:
+    """Red entrenada frente a cada alternativa, pareado por semilla de evaluacion (misma jornada simulada)."""
+    tr = np.asarray(estado["evaluacion_entrenada"]["slippage_por_semilla"], dtype=float)
+    otras = {"Red sin entrenar (control)": estado["evaluacion_sin_entrenar"]}
+    otras.update({f"Referencia: {k}": v for k, v in estado.get("referencias", {}).items()})
+    filas = []
+    for nombre, e in otras.items():
+        x = np.asarray(e["slippage_por_semilla"], dtype=float)
+        d = tr - x
+        w = stats.wilcoxon(tr, x) if np.any(d != 0) else None
+        filas.append({"contra": nombre, "dif_media": float(d.mean()),
+                      "ee": float(d.std(ddof=1) / np.sqrt(len(d))), "p_wilcoxon": None if w is None else float(w.pvalue)})
+    return filas
+
+
+def lectura(estado: Dict, filas: List[Dict[str, float]]) -> List[str]:
+    """Frases de la seccion 5, armadas con las cifras de la corrida (no se transcriben a mano)."""
+    comp = {c["contra"]: c for c in comparacion_pareada(estado)}
+    ctrl = comp["Red sin entrenar (control)"]
+    ent_rel = filas[-1]["entropia"] / math.log(N_ACCIONES)
+    sig = lambda c: c["p_wilcoxon"] is not None and c["p_wilcoxon"] < 0.05
+    tr, sin = estado["evaluacion_entrenada"], estado["evaluacion_sin_entrenar"]
+    out = [
+        f"- **El ciclo completo funciona con ABIDES:** {estado.get('episodios_entrenados')} episodios en {_f(estado.get('segundos_entrenamiento', 0.0) / 60, 1)} min, "
+        "sin valores no finitos, con checkpoint, CSV y evaluación en semillas nuevas.",
+        f"- **No hay evidencia de que la red haya aprendido todavía.** La red entrenada tiene {_f(tr['slippage_bps_medio'])} bps frente a {_f(sin['slippage_bps_medio'])} bps de la red sin entrenar, "
+        f"pero la diferencia pareada ({_f(ctrl['dif_media'])} bps, p = {_f(ctrl['p_wilcoxon'], 3)}) "
+        + ("es significativa." if sig(ctrl) else "no es significativa con 15 semillas."),
+        f"- **Las actualizaciones fueron muy pequeñas:** KL máximo {_f(max(r['kl'] for r in filas), 5)}, fracción recortada {_f(max(r['clip_fraction'] for r in filas), 2)} y entropía al {_f(100 * ent_rel, 2)} % del máximo. "
+        "La política sigue siendo casi uniforme; con 10 actualizaciones PPO no se esperaba otra cosa.",
+        f"- **Frente a las referencias:** " + "; ".join(
+            f"{k.replace('Referencia: ', '')}: {_f(v['dif_media'])} bps (p = {_f(v['p_wilcoxon'], 3)}{', significativa' if sig(v) else ''})"
+            for k, v in comp.items() if k.startswith("Referencia")) + ".",
+        "- **Qué sugiere:** el resultado sirve para validar el pipeline, no para comparar políticas. Como el entrenamiento es barato "
+        f"({_f(estado.get('segundos_entrenamiento', 0.0) / 60, 1)} min por 100 episodios), conviene repetirlo con muchos más episodios (por ejemplo 1.000) antes de sacar conclusiones sobre R_E.",
+        "- **D3:** el cumplimiento de la red entrenada es " + _f(estado.get("vigilancia_D3", {}).get("cumplimiento_medio"), 3)
+        + "; la regla del plan no obliga a pasar a la opción A."]
+    return out
+
+
 def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str) -> str:
     f = estado["firma"]
     n = len(filas)
@@ -92,17 +135,23 @@ def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str) -> str:
         f"- **Actualizaciones registradas:** {n} (una cada 10 episodios). **Valores no finitos (NaN o infinito) en el CSV:** {nan}.",
         f"- **Retorno medio:** {_f(r_ini, 3)} en el primer tercio y {_f(r_fin, 3)} en el último. **Pérdida del crítico:** {_f(la_ini, 3)} y {_f(la_fin, 3)}.",
         f"- **KL máximo:** {_f(kl_max, 5)} (el objetivo del entrenador es 0,015; la actualización se corta si lo supera 1,5 veces).",
+        f"- **Entropía:** de {_f(filas[0]['entropia'], 4)} a {_f(filas[-1]['entropia'], 4)}; una política uniforme sobre las {N_ACCIONES} acciones tiene {_f(math.log(N_ACCIONES), 4)}. "
+        f"La política final conserva el {_f(100 * filas[-1]['entropia'] / math.log(N_ACCIONES), 2)} % de la entropía máxima, es decir, sigue siendo casi uniforme.",
         f"- **Tiempo de entrenamiento:** {_f(estado.get('segundos_entrenamiento', 0.0) / 60, 1)} min.", "",
         "## 3. Evaluación (semillas nuevas, política determinista)", "",
         "| Política | Slippage medio (bps) | Error estándar | Cumplimiento |", "|---|---:|---:|---:|",
         fila("Red entrenada", ev), fila("Red sin entrenar (control)", sin)]
     for nombre, e in refs.items():
         L.append(fila(f"Referencia: {nombre}", e))
+    L += ["", "Comparación pareada por semilla (red entrenada menos cada alternativa; negativo = la red entrenada tiene menos slippage):", "",
+          "| Contra | Diferencia media (bps) | Error estándar | p (Wilcoxon) |", "|---|---:|---:|---:|"]
+    for c in comparacion_pareada(estado):
+        L.append(f"| {c['contra']} | {_f(c['dif_media'])} | {_f(c['ee'])} | {_f(c['p_wilcoxon'], 3)} |")
     L += ["", "## 4. Regla de vigilancia de D3", "",
           f"Cumplimiento medio de la red entrenada: **{_f(vig.get('cumplimiento_medio'), 3)}** (umbral {_f(vig.get('umbral'), 2)}). {vig.get('texto', '')} "
           "La decisión final de R_E se revisa el viernes 23 de octubre y es de BF.", "",
-          "## 5. Hallazgos y problemas (a completar por BF tras revisar)", "",
-          "_Esta sección la escribe BF con lo que vea en las curvas y en la tabla. Los números de arriba son los que da la corrida._", "",
+          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + [""]
+    L += [
           "## 6. Limitaciones", "",
           "- Entrenamiento corto (100 episodios) y una sola semilla de red: el resultado es indicativo, no concluyente.",
           "- Solo FALABELLA y un tramo; no incluye a COPEC ni a ECL.",
