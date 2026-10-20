@@ -1,0 +1,633 @@
+{
+ "metadata": {
+  "entorno": "abides",
+  "fecha": "2026-10-20"
+ },
+ "tabla": [
+  {
+   "orden": "MO-01",
+   "estrategia": "TWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": -411893.9567953021,
+   "IS_ee": 1393614.1635294915,
+   "slippage_bps_medio": -6.901549546413104,
+   "slippage_bps_ee": 23.34577411482499,
+   "cumplimiento_medio": 0.998205
+  },
+  {
+   "orden": "MO-01",
+   "estrategia": "VWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": -818120.8467545277,
+   "IS_ee": 1390419.3594515622,
+   "slippage_bps_medio": -13.706500729139627,
+   "slippage_bps_ee": 23.292740472808543,
+   "cumplimiento_medio": 0.9847549999999998
+  },
+  {
+   "orden": "MO-02",
+   "estrategia": "TWAP",
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 6771823.556964455,
+   "IS_ee": 988152.6377692804,
+   "slippage_bps_medio": 110.47020484444461,
+   "slippage_bps_ee": 16.119945151211752,
+   "cumplimiento_medio": 0.925135
+  },
+  {
+   "orden": "MO-02",
+   "estrategia": "VWAP",
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 7592982.681114746,
+   "IS_ee": 782115.0813219444,
+   "slippage_bps_medio": 123.86594912095832,
+   "slippage_bps_ee": 12.758810462021941,
+   "cumplimiento_medio": 0.9356449999999998
+  },
+  {
+   "orden": "MO-03",
+   "estrategia": "TWAP",
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 3340539.615613852,
+   "IS_ee": 2047146.407614127,
+   "slippage_bps_medio": 54.4910658149994,
+   "slippage_bps_ee": 33.399407647120974,
+   "cumplimiento_medio": 0.98291
+  },
+  {
+   "orden": "MO-03",
+   "estrategia": "VWAP",
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 2765230.8171500866,
+   "IS_ee": 1910755.045447377,
+   "slippage_bps_medio": 45.107244015856985,
+   "slippage_bps_ee": 31.17311263336753,
+   "cumplimiento_medio": 0.9675099999999999
+  },
+  {
+   "orden": "MO-04",
+   "estrategia": "TWAP",
+   "ticker": "ECL",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 1136934.662084434,
+   "IS_ee": 558778.0848875467,
+   "slippage_bps_medio": 63.16303678246855,
+   "slippage_bps_ee": 31.04322693819704,
+   "cumplimiento_medio": 0.96583
+  },
+  {
+   "orden": "MO-04",
+   "estrategia": "VWAP",
+   "ticker": "ECL",
+   "tramo_inicio": "apertura",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 1194227.1597493347,
+   "IS_ee": 765644.0232596197,
+   "slippage_bps_medio": 66.34595331940747,
+   "slippage_bps_ee": 42.535779069978865,
+   "cumplimiento_medio": 0.9708699999999999
+  },
+  {
+   "orden": "MO-05",
+   "estrategia": "TWAP",
+   "ticker": "COPEC",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 6589759.5333614405,
+   "IS_ee": 2126457.104475549,
+   "slippage_bps_medio": 107.69175278710101,
+   "slippage_bps_ee": 34.718452879707044,
+   "cumplimiento_medio": 0.9619149999999999
+  },
+  {
+   "orden": "MO-05",
+   "estrategia": "VWAP",
+   "ticker": "COPEC",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 7246069.286947977,
+   "IS_ee": 2274181.823977005,
+   "slippage_bps_medio": 118.41771134292858,
+   "slippage_bps_ee": 37.129239248117614,
+   "cumplimiento_medio": 0.9547450000000002
+  },
+  {
+   "orden": "MO-06",
+   "estrategia": "TWAP",
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 5543718.298240004,
+   "IS_ee": 807199.717882975,
+   "slippage_bps_medio": 314.7605088787959,
+   "slippage_bps_ee": 47.78654498864969,
+   "cumplimiento_medio": 0.9400149999999998
+  },
+  {
+   "orden": "MO-06",
+   "estrategia": "VWAP",
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 5931967.530149586,
+   "IS_ee": 770690.7230154686,
+   "slippage_bps_medio": 336.7709432015997,
+   "slippage_bps_ee": 45.855473419782065,
+   "cumplimiento_medio": 0.91266
+  },
+  {
+   "orden": "MO-07",
+   "estrategia": "TWAP",
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 2558571.709761941,
+   "IS_ee": 710081.6385950793,
+   "slippage_bps_medio": 143.73248719475393,
+   "slippage_bps_ee": 40.427372423084805,
+   "cumplimiento_medio": 0.9414999999999998
+  },
+  {
+   "orden": "MO-07",
+   "estrategia": "VWAP",
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 2839437.7408682085,
+   "IS_ee": 689303.8339632651,
+   "slippage_bps_medio": 159.48819511836507,
+   "slippage_bps_ee": 39.32534788864793,
+   "cumplimiento_medio": 0.9532900000000002
+  },
+  {
+   "orden": "MO-08",
+   "estrategia": "TWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 2507019.8999998863,
+   "IS_ee": 7699806.90000002,
+   "slippage_bps_medio": 44.314949208666725,
+   "slippage_bps_ee": 129.8020712875745,
+   "cumplimiento_medio": 1.0
+  },
+  {
+   "orden": "MO-08",
+   "estrategia": "VWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 2507019.8999998863,
+   "IS_ee": 7699806.90000002,
+   "slippage_bps_medio": 44.314949208666725,
+   "slippage_bps_ee": 129.8020712875745,
+   "cumplimiento_medio": 1.0
+  },
+  {
+   "orden": "MO-09",
+   "estrategia": "TWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 7653878.219414219,
+   "IS_ee": 2849533.612416417,
+   "slippage_bps_medio": 129.3079210419079,
+   "slippage_bps_ee": 49.143990437838205,
+   "cumplimiento_medio": 0.896355
+  },
+  {
+   "orden": "MO-09",
+   "estrategia": "VWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 7653878.219414219,
+   "IS_ee": 2849533.612416417,
+   "slippage_bps_medio": 129.3079210419079,
+   "slippage_bps_ee": 49.143990437838205,
+   "cumplimiento_medio": 0.896355
+  },
+  {
+   "orden": "MO-10",
+   "estrategia": "TWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 3898367.792562658,
+   "IS_ee": 1026287.5529462688,
+   "slippage_bps_medio": 65.21604547962342,
+   "slippage_bps_ee": 16.99239204191382,
+   "cumplimiento_medio": 0.844585
+  },
+  {
+   "orden": "MO-10",
+   "estrategia": "VWAP",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 100000,
+   "n": 2,
+   "IS_medio": 3898367.792562658,
+   "IS_ee": 1026287.5529462688,
+   "slippage_bps_medio": 65.21604547962342,
+   "slippage_bps_ee": 16.99239204191382,
+   "cumplimiento_medio": 0.844585
+  }
+ ],
+ "comparacion": {
+  "por_orden": [
+   {
+    "orden": "MO-01",
+    "TWAP_bps": -6.901549546413104,
+    "VWAP_bps": -13.706500729139627,
+    "diferencia_bps": 6.804951182726523,
+    "identicas": false
+   },
+   {
+    "orden": "MO-02",
+    "TWAP_bps": 110.47020484444461,
+    "VWAP_bps": 123.86594912095832,
+    "diferencia_bps": -13.39574427651371,
+    "identicas": false
+   },
+   {
+    "orden": "MO-03",
+    "TWAP_bps": 54.4910658149994,
+    "VWAP_bps": 45.107244015856985,
+    "diferencia_bps": 9.383821799142417,
+    "identicas": false
+   },
+   {
+    "orden": "MO-04",
+    "TWAP_bps": 63.16303678246855,
+    "VWAP_bps": 66.34595331940747,
+    "diferencia_bps": -3.1829165369389187,
+    "identicas": false
+   },
+   {
+    "orden": "MO-05",
+    "TWAP_bps": 107.69175278710101,
+    "VWAP_bps": 118.41771134292858,
+    "diferencia_bps": -10.725958555827575,
+    "identicas": false
+   },
+   {
+    "orden": "MO-06",
+    "TWAP_bps": 314.7605088787959,
+    "VWAP_bps": 336.7709432015997,
+    "diferencia_bps": -22.010434322803803,
+    "identicas": false
+   },
+   {
+    "orden": "MO-07",
+    "TWAP_bps": 143.73248719475393,
+    "VWAP_bps": 159.48819511836507,
+    "diferencia_bps": -15.75570792361114,
+    "identicas": false
+   },
+   {
+    "orden": "MO-08",
+    "TWAP_bps": 44.314949208666725,
+    "VWAP_bps": 44.314949208666725,
+    "diferencia_bps": 0.0,
+    "identicas": true
+   },
+   {
+    "orden": "MO-09",
+    "TWAP_bps": 129.3079210419079,
+    "VWAP_bps": 129.3079210419079,
+    "diferencia_bps": 0.0,
+    "identicas": true
+   },
+   {
+    "orden": "MO-10",
+    "TWAP_bps": 65.21604547962342,
+    "VWAP_bps": 65.21604547962342,
+    "diferencia_bps": 0.0,
+    "identicas": true
+   }
+  ],
+  "n_ordenes": 10,
+  "diferencia_media_bps": -4.888198863382621,
+  "n_ordenes_distintas": 7,
+  "wilcoxon_p": 0.15625,
+  "rechaza": false
+ },
+ "ejecutabilidad": {
+  "umbral": 0.95,
+  "ordenes": [
+   {
+    "orden": "MO-01",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "apertura",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.99996,
+     0.99645
+    ],
+    "cumplimiento_medio": 0.998205,
+    "corridas_ok": 2,
+    "corridas": 2,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-02",
+    "ticker": "COPEC",
+    "tramo_inicio": "apertura",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.95551,
+     0.89476
+    ],
+    "cumplimiento_medio": 0.925135,
+    "corridas_ok": 1,
+    "corridas": 2,
+    "ejecutable": false
+   },
+   {
+    "orden": "MO-03",
+    "ticker": "COPEC",
+    "tramo_inicio": "apertura",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.9988,
+     0.96702
+    ],
+    "cumplimiento_medio": 0.98291,
+    "corridas_ok": 2,
+    "corridas": 2,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-04",
+    "ticker": "ECL",
+    "tramo_inicio": "apertura",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.94697,
+     0.98469
+    ],
+    "cumplimiento_medio": 0.96583,
+    "corridas_ok": 1,
+    "corridas": 2,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-05",
+    "ticker": "COPEC",
+    "tramo_inicio": "media_jornada",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.9423099999999999,
+     0.9815199999999998
+    ],
+    "cumplimiento_medio": 0.9619149999999999,
+    "corridas_ok": 1,
+    "corridas": 2,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-06",
+    "ticker": "ECL",
+    "tramo_inicio": "media_jornada",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.8864199999999999,
+     0.9936099999999999
+    ],
+    "cumplimiento_medio": 0.9400149999999998,
+    "corridas_ok": 1,
+    "corridas": 2,
+    "ejecutable": false
+   },
+   {
+    "orden": "MO-07",
+    "ticker": "ECL",
+    "tramo_inicio": "media_jornada",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.8978899999999999,
+     0.9851099999999998
+    ],
+    "cumplimiento_medio": 0.9414999999999998,
+    "corridas_ok": 1,
+    "corridas": 2,
+    "ejecutable": false
+   },
+   {
+    "orden": "MO-08",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "cierre",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     1.0,
+     1.0
+    ],
+    "cumplimiento_medio": 1.0,
+    "corridas_ok": 2,
+    "corridas": 2,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-09",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "cierre",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.89386,
+     0.89885
+    ],
+    "cumplimiento_medio": 0.896355,
+    "corridas_ok": 0,
+    "corridas": 2,
+    "ejecutable": false
+   },
+   {
+    "orden": "MO-10",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "cierre",
+    "cantidad": 100000,
+    "cumplimiento_por_semilla": [
+     0.75287,
+     0.9363
+    ],
+    "cumplimiento_medio": 0.844585,
+    "corridas_ok": 0,
+    "corridas": 2,
+    "ejecutable": false
+   }
+  ],
+  "corridas_ok": 11,
+  "corridas": 20,
+  "ordenes_ejecutables": 5
+ },
+ "ejecutabilidad_opcion_b": {
+  "umbral": 0.95,
+  "ordenes": [
+   {
+    "orden": "MO-01",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "apertura",
+    "cantidad": 88300,
+    "cumplimiento_por_semilla": [
+     0.9999546998867497
+    ],
+    "cumplimiento_medio": 0.9999546998867497,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-02",
+    "ticker": "COPEC",
+    "tramo_inicio": "apertura",
+    "cantidad": 29100,
+    "cumplimiento_por_semilla": [
+     0.9997938144329894
+    ],
+    "cumplimiento_medio": 0.9997938144329894,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-03",
+    "ticker": "COPEC",
+    "tramo_inicio": "apertura",
+    "cantidad": 29100,
+    "cumplimiento_por_semilla": [
+     0.9997938144329894
+    ],
+    "cumplimiento_medio": 0.9997938144329894,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-04",
+    "ticker": "ECL",
+    "tramo_inicio": "apertura",
+    "cantidad": 32100,
+    "cumplimiento_por_semilla": [
+     0.9999065420560745
+    ],
+    "cumplimiento_medio": 0.9999065420560745,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-05",
+    "ticker": "COPEC",
+    "tramo_inicio": "media_jornada",
+    "cantidad": 29100,
+    "cumplimiento_por_semilla": [
+     0.9999999999999999
+    ],
+    "cumplimiento_medio": 0.9999999999999999,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-06",
+    "ticker": "ECL",
+    "tramo_inicio": "media_jornada",
+    "cantidad": 32100,
+    "cumplimiento_por_semilla": [
+     0.9999999999999999
+    ],
+    "cumplimiento_medio": 0.9999999999999999,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-07",
+    "ticker": "ECL",
+    "tramo_inicio": "media_jornada",
+    "cantidad": 32100,
+    "cumplimiento_por_semilla": [
+     0.9999999999999999
+    ],
+    "cumplimiento_medio": 0.9999999999999999,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-08",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "cierre",
+    "cantidad": 88300,
+    "cumplimiento_por_semilla": [
+     1.0
+    ],
+    "cumplimiento_medio": 1.0,
+    "corridas_ok": 1,
+    "corridas": 1,
+    "ejecutable": true
+   },
+   {
+    "orden": "MO-09",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "cierre",
+    "cantidad": 88300,
+    "cumplimiento_por_semilla": [
+     0.9447678369195923
+    ],
+    "cumplimiento_medio": 0.9447678369195923,
+    "corridas_ok": 0,
+    "corridas": 1,
+    "ejecutable": false
+   },
+   {
+    "orden": "MO-10",
+    "ticker": "FALABELLA",
+    "tramo_inicio": "cierre",
+    "cantidad": 88300,
+    "cumplimiento_por_semilla": [
+     0.7863759909399773
+    ],
+    "cumplimiento_medio": 0.7863759909399773,
+    "corridas_ok": 0,
+    "corridas": 1,
+    "ejecutable": false
+   }
+  ],
+  "corridas_ok": 8,
+  "corridas": 10,
+  "ordenes_ejecutables": 8
+ }
+}

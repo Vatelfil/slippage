@@ -51,6 +51,13 @@ Una orden de 100 000 que parte en el cierre en COPEC o ECL sería el 96–104 % 
 
 El plan pide correr cada orden con TWAP en el simulador congelado y verificar que se completa al menos el 95 %. Esto lo hace el runner de la 2.3.4 (`execution_rate` de cada corrida de TWAP), así que **se valida con la corrida de benchmarks** y su resultado se informa en `docs/benchmarks_2.3.4_PS.md`. Si alguna orden no llega al 95 % no se cambia en silencio: se reporta como límite demostrado con su porcentaje, y BF decide si baja el tamaño (sección 5).
 
+**Resultado de la validación (corrida de benchmarks en Colab con ABIDES, 20 oct 2026):**
+
+- **Opción A (100 000 acciones), 2 semillas:** solo **5 de 10 órdenes** llegan en promedio al 95 % (11 de 20 corridas). Fallan MO-02 (92,5 %), MO-06 (94,0 %), MO-07 (94,1 %), MO-09 (89,6 %) y MO-10 (84,5 %). El cumplimiento varía mucho entre semillas (MO-10: 75,3 % y 93,6 %), así que con 2 semillas el promedio es aproximado.
+- **Opción B (10 % del volumen del día), 1 semilla:** **8 de 10 órdenes** llegan al 95 %. Las 7 órdenes de COPEC, ECL y FALABELLA en apertura cumplen con más de 99,9 %. Fallan las órdenes de FALABELLA en el cierre MO-09 (94,5 %) y MO-10 (78,6 %): en el cierre, 88 300 acciones siguen siendo el 31 % del volumen que queda.
+- **Lectura:** con A, las órdenes superan la liquidez del simulador; con B, el problema queda solo en FALABELLA al cierre. Una salida posible es un porcentaje menor para esas tres órdenes (por ejemplo 5 % del día, ~44 100 acciones, 15 % de lo que queda). Esa prueba está pendiente. **La decisión de D1 es de BF.**
+- Detalle completo en `docs/benchmarks_2.3.4_PS.md` (sección 3).
+
 ## 5. Cómo cambiar algo
 
 ```bash
