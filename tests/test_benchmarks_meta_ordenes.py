@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import pytest
 
 from src.analysis import benchmarks as bm
@@ -30,14 +31,17 @@ def test_schedule_desde_suma_q_y_deja_ceros_antes(kind):
     assert all(x == 0.0 for x in s[:4]) and all(x > 0 for x in s[4:])
 
 
+PERFIL = pd.read_csv(Path(__file__).resolve().parents[1] / "data/meta_ordenes/perfil_volumen_v1.csv", index_col=0)  # no depende del parquet de mercado
+
+
 def test_runner_poisson_reanuda_y_resume(tmp_path):
     ordenes = [{"id": "MO01", "ticker": "FALABELLA", "tramo_inicio": "cierre", "cantidad": 2000}]
     estado = {}
     guardados = []
-    ok = runner.correr(ordenes, [1], estado, lambda e: guardados.append(1), lambda t: None, log=lambda *_: None)
+    ok = runner.correr(ordenes, [1], estado, lambda e: guardados.append(1), lambda t: None, volume_profile=PERFIL, log=lambda *_: None)
     assert ok and len(estado["corridas"]) == 2 and guardados
     n = len(guardados)
-    runner.correr(ordenes, [1], estado, lambda e: guardados.append(1), lambda t: None, log=lambda *_: None)
+    runner.correr(ordenes, [1], estado, lambda e: guardados.append(1), lambda t: None, volume_profile=PERFIL, log=lambda *_: None)
     assert len(guardados) == n                       # nada pendiente: no recalcula
     res = runner.resumen(estado)
     assert set(res["MO01"]) == {"TWAP", "VWAP"}
@@ -46,5 +50,5 @@ def test_runner_poisson_reanuda_y_resume(tmp_path):
 
 def test_runner_presupuesto_corta():
     ordenes = [{"id": "MO01", "ticker": "FALABELLA", "tramo_inicio": "cierre", "cantidad": 2000}]
-    assert runner.correr(ordenes, [1], {}, lambda e: None, lambda t: None, presupuesto_s=-1, log=lambda *_: None) is False
+    assert runner.correr(ordenes, [1], {}, lambda e: None, lambda t: None, volume_profile=PERFIL, presupuesto_s=-1, log=lambda *_: None) is False
 
