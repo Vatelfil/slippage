@@ -34,6 +34,7 @@ from src.config.market_params import BETA_RIESGO_EJECUTOR  # noqa: E402
 from src.envs.rmsc04_search import load_resumable, save_json  # noqa: E402
 from src.experiments import beta_phase2 as bp  # noqa: E402
 from src.experiments import beta_sweep as bs  # noqa: E402
+from src.training.monitoreo import MonitorEntrenamiento  # noqa: E402
 
 CUMPLIMIENTO_MIN = 0.95  # regla de vigilancia de D3
 
@@ -102,6 +103,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--eval-seed-base", type=int, default=5000)
     ap.add_argument("--riesgo-sobre", choices=["ejecutado", "pendiente"], default="ejecutado",
                     help="ejecutado = opcion 0 de D3 (Titulo I); pendiente = opcion A (riesgo sobre lo que falta ejecutar)")
+    ap.add_argument("--sin-monitoreo", action="store_true",
+                    help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--max-minutes", type=float, default=None)
     args = ap.parse_args(argv)
@@ -119,6 +122,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
              "beta": BETA_RIESGO_EJECUTOR, "calibrated_json": Path(args.calibrated_json).name}
     if args.riesgo_sobre != "ejecutado":   # solo si no es la opcion por defecto, para no invalidar corridas anteriores
         firma["riesgo_sobre"] = args.riesgo_sobre
+    monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
+    factory_entrenamiento = monitor.envolver(factory) if monitor else factory
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
     eval_seeds = [args.eval_seed_base + i for i in range(1, args.eval_seeds + 1)]
@@ -147,7 +152,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
             return estado_path
         n = min(10, args.episodes - trainer.current_episode)
         t0 = time.time()
-        trainer.train_executor_episodes(env_factory=factory, n_episodes=n, tramo=args.tramo, q_slice=args.q_slice,
+        trainer.train_executor_episodes(env_factory=factory_entrenamiento, n_episodes=n, tramo=args.tramo, q_slice=args.q_slice,
                                         ventana_min=args.ventana_min, csv_path=csv_path, checkpoint_dir=ckpt_dir,
                                         checkpoint_freq=10)
         estado["segundos_entrenamiento"] = round(estado["segundos_entrenamiento"] + time.time() - t0, 1)
