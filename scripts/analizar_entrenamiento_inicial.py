@@ -63,9 +63,13 @@ def figura(filas: List[Dict[str, float]], out_png: Path, titulo: str) -> Path:
     return out_png
 
 
-def comparacion_pareada(estado: Dict) -> List[Dict]:
+def comparacion_pareada(estado: Dict, clave: str = "evaluacion_entrenada") -> List[Dict]:
     """Red entrenada frente a cada alternativa, pareado por semilla de evaluacion (misma jornada simulada)."""
-    tr = np.asarray(estado["evaluacion_entrenada"]["slippage_por_semilla"], dtype=float)
+    if clave not in estado:
+        return []
+    tr = np.asarray(estado[clave]["slippage_por_semilla"], dtype=float)
+    if not np.isfinite(tr).all():   # la red entrenada no ejecuto nada en alguna semilla: no hay slippage que comparar
+        return []
     otras = {"Red sin entrenar (control)": estado["evaluacion_sin_entrenar"]}
     otras.update({f"Referencia: {k}": v for k, v in estado.get("referencias", {}).items()})
     filas = []
@@ -81,6 +85,24 @@ def comparacion_pareada(estado: Dict) -> List[Dict]:
 def lectura(estado: Dict, filas: List[Dict[str, float]]) -> List[str]:
     """Frases de la seccion 5, armadas con las cifras de la corrida (no se transcriben a mano)."""
     comp = {c["contra"]: c for c in comparacion_pareada(estado)}
+    if not comp:
+        ev = estado["evaluacion_entrenada"]
+        est = estado.get("evaluacion_entrenada_estocastica")
+        extra = []
+        if est:
+            cm = {c["contra"]: c for c in comparacion_pareada(estado, "evaluacion_entrenada_estocastica")}
+            ctrl_m = cm.get("Red sin entrenar (control)")
+            extra = [f"- **Muestreando la política (como al entrenar) sí se ejecuta:** cumplimiento {_f(est.get('cumplimiento_medio'), 3)} y slippage {_f(est.get('slippage_bps_medio'))} bps "
+                     f"(EE {_f(est.get('slippage_bps_ee'))}), frente a {_f(estado['evaluacion_sin_entrenar'].get('slippage_bps_medio'))} bps de la red sin entrenar"
+                     + (f" (diferencia pareada {_f(ctrl_m['dif_media'])} bps, p = {_f(ctrl_m['p_wilcoxon'], 3)})." if ctrl_m else ".")
+                     + " La evaluación con argmax y la política que se entrena son cosas distintas: el argmax puede caer en una acción que no hace nada."]
+        base = [f"- **La red entrenada no ejecutó la orden en la evaluación:** cumplimiento medio {_f(ev.get('cumplimiento_medio'), 3)} y sin slippage medible en las {ev.get('n')} semillas. "
+                "Con la política determinista (argmax) la red no llega a ejecutar nada; por eso no hay comparación pareada.",
+                f"- **Entropía de la política:** {_f(filas[-1]['entropia'], 4)} frente a {_f(math.log(N_ACCIONES), 4)} de una política uniforme "
+                f"({_f(100 * filas[-1]['entropia'] / math.log(N_ACCIONES), 1)} % del máximo): la política se concentró.",
+                "- **D3:** el cumplimiento de la red entrenada es " + _f(estado.get("vigilancia_D3", {}).get("cumplimiento_medio"), 3)
+                + ", por debajo del 95 %; la regla del plan indica pasar a la opción A (riesgo sobre lo pendiente). La decisión es de BF."]
+        return base[:1] + extra + base[1:]
     ctrl = comp["Red sin entrenar (control)"]
     ent_rel = filas[-1]["entropia"] / math.log(N_ACCIONES)
     sig = lambda c: c["p_wilcoxon"] is not None and c["p_wilcoxon"] < 0.05
@@ -103,7 +125,68 @@ def lectura(estado: Dict, filas: List[Dict[str, float]]) -> List[str]:
     return out
 
 
-def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str) -> str:
+def seccion_diagnostico(diag: Optional[Dict]) -> List[str]:
+    if not diag:
+        return []
+    L = ["", f"### Diagnóstico de la política (checkpoint del episodio {diag.get('episodio_checkpoint')})", "",
+         "Tres episodios de evaluación; `scripts/colab/diagnostico_politica_entrenada_ps.py` imprime las acciones paso a paso.", "",
+         "| Modo | Cumplimiento medio | Acciones más usadas (todas las semillas) |", "|---|---:|---|"]
+    for modo in ("determinista", "estocastico"):
+        d = diag.get(modo)
+        if not d:
+            continue
+        cont: Dict[str, int] = {}
+        for e in d["episodios"]:
+            for k, v in e["acciones"].items():
+                cont[k] = cont.get(k, 0) + v
+        top = ", ".join(f"`{k.replace(chr(124), ' / ')}` ×{v}" for k, v in sorted(cont.items(), key=lambda kv: -kv[1])[:3])
+        L.append(f"| {modo} | {_f(d['cumplimiento_medio'], 3)} | {top} |")
+    L += ["", "En el puente de ABIDES, `LIMIT_SELL` se traduce a «esperar» (el proyecto solo modela compra): no envía ninguna orden "
+          "(`src/envs/abides_bridge.py`, `map_action_to_abides_orders`).", ""]
+    return L
+
+
+def _slip(e: Optional[Dict]) -> str:
+    if not e:
+        return "—"
+    return f"{_f(e.get('slippage_bps_medio'))} ({_f(e.get('slippage_bps_ee'))})" if e.get("slippage_bps_medio") is not None else "sin ejecuciones"
+
+
+def _p_contra_control(estado: Dict, clave: str) -> str:
+    c = {x["contra"]: x for x in comparacion_pareada(estado, clave)}.get("Red sin entrenar (control)")
+    return "—" if not c else f"{_f(c['dif_media'])} (p = {_f(c['p_wilcoxon'], 3)})"
+
+
+def seccion_corridas(corridas: Dict[str, Dict]) -> List[str]:
+    """Una fila por corrida (etiqueta -> estado): cumplimiento y slippage con politica determinista y muestreada."""
+    L = ["", "### Comparación de corridas", "",
+         "Misma evaluación (15 semillas nuevas, FALABELLA, apertura). Slippage en bps, con el error estándar entre paréntesis; "
+         "la diferencia es contra la red sin entrenar, pareada por semilla.", "",
+         "| Corrida | Episodios | Riesgo sobre | Argmax: cumplimiento | Argmax: slippage | Argmax: dif. vs control | Muestreada: cumplimiento | Muestreada: slippage | Muestreada: dif. vs control |",
+         "|---|---:|---|---:|---|---|---:|---|---|"]
+    for etiqueta, e in corridas.items():
+        ent, est = e.get("evaluacion_entrenada"), e.get("evaluacion_entrenada_estocastica")
+        L.append(f"| {etiqueta} | {e.get('episodios_entrenados', e['firma']['episodios'])} | {e['firma'].get('riesgo_sobre', 'ejecutado')} | "
+                 f"{_f(ent.get('cumplimiento_medio'), 3)} | {_slip(ent)} | {_p_contra_control(e, 'evaluacion_entrenada')} | "
+                 f"{_f(est.get('cumplimiento_medio'), 3) if est else '—'} | {_slip(est)} | {_p_contra_control(e, 'evaluacion_entrenada_estocastica') if est else '—'} |")
+    return L + [""]
+
+
+def lectura_corridas(corridas: Dict[str, Dict]) -> List[str]:
+    """Frases sobre la opcion A de D3 cuando hay una corrida con riesgo sobre lo pendiente."""
+    a = next((e for e in corridas.values() if e["firma"].get("riesgo_sobre") == "pendiente"), None)
+    if not a:
+        return []
+    ent, est = a["evaluacion_entrenada"], a.get("evaluacion_entrenada_estocastica")
+    return [f"- **Con la opción A de D3 (riesgo sobre lo pendiente), la política determinista sí ejecuta (en esta corrida):** cumplimiento {_f(ent.get('cumplimiento_medio'), 3)} y "
+            f"{_f(ent.get('slippage_bps_medio'))} bps (EE {_f(ent.get('slippage_bps_ee'))}); muestreada, {_f(est.get('cumplimiento_medio'), 3) if est else '—'} y "
+            f"{_f(est.get('slippage_bps_medio')) if est else '—'} bps. Esto es lo que la regla de vigilancia de D3 buscaba: que penalizar lo que falta por ejecutar evite que la red aprenda a esperar. "
+            "Fue una corrida exploratoria con el mismo β, sin recalcular β* (el plan lo pide si se adopta la opción A).",
+            "- **Ninguna corrida se distingue de la red sin entrenar en slippage** (ver la tabla de corridas): con 15 semillas y una sola red por corrida no se puede afirmar que entrenar mejore el costo; lo que sí cambia es si la política determinista ejecuta la orden."]
+
+
+def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str, diag: Optional[Dict] = None,
+            corridas: Optional[Dict[str, Dict]] = None) -> str:
     f = estado["firma"]
     n = len(filas)
     nan = sum(1 for r in filas for v in r.values() if not math.isfinite(v))
@@ -136,24 +219,35 @@ def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str) -> str:
         f"- **Retorno medio:** {_f(r_ini, 3)} en el primer tercio y {_f(r_fin, 3)} en el último. **Pérdida del crítico:** {_f(la_ini, 3)} y {_f(la_fin, 3)}.",
         f"- **KL máximo:** {_f(kl_max, 5)} (el objetivo del entrenador es 0,015; la actualización se corta si lo supera 1,5 veces).",
         f"- **Entropía:** de {_f(filas[0]['entropia'], 4)} a {_f(filas[-1]['entropia'], 4)}; una política uniforme sobre las {N_ACCIONES} acciones tiene {_f(math.log(N_ACCIONES), 4)}. "
-        f"La política final conserva el {_f(100 * filas[-1]['entropia'] / math.log(N_ACCIONES), 2)} % de la entropía máxima, es decir, sigue siendo casi uniforme.",
+        f"La política final conserva el {_f(100 * filas[-1]['entropia'] / math.log(N_ACCIONES), 2)} % de la entropía máxima"
+        + (", es decir, sigue siendo casi uniforme." if filas[-1]['entropia'] / math.log(N_ACCIONES) > 0.99 else ", es decir, se fue concentrando en algunas acciones."),
         f"- **Tiempo de entrenamiento:** {_f(estado.get('segundos_entrenamiento', 0.0) / 60, 1)} min.", "",
         "## 3. Evaluación (semillas nuevas, política determinista)", "",
         "| Política | Slippage medio (bps) | Error estándar | Cumplimiento |", "|---|---:|---:|---:|",
-        fila("Red entrenada", ev), fila("Red sin entrenar (control)", sin)]
+        fila("Red entrenada (política determinista, argmax)", ev)]
+    if estado.get("evaluacion_entrenada_estocastica"):
+        L.append(fila("Red entrenada (política muestreada, como al entrenar)", estado["evaluacion_entrenada_estocastica"]))
+    L += [fila("Red sin entrenar (control, argmax)", sin)]
     for nombre, e in refs.items():
         L.append(fila(f"Referencia: {nombre}", e))
-    L += ["", "Comparación pareada por semilla (red entrenada menos cada alternativa; negativo = la red entrenada tiene menos slippage):", "",
+    clave_par = "evaluacion_entrenada" if comparacion_pareada(estado) else "evaluacion_entrenada_estocastica"
+    pareada = comparacion_pareada(estado, clave_par)
+    if pareada:
+        cual = "política determinista" if clave_par == "evaluacion_entrenada" else "política muestreada"
+        L += ["", f"Comparación pareada por semilla (red entrenada con {cual} menos cada alternativa; negativo = la red entrenada tiene menos slippage):", "",
           "| Contra | Diferencia media (bps) | Error estándar | p (Wilcoxon) |", "|---|---:|---:|---:|"]
-    for c in comparacion_pareada(estado):
-        L.append(f"| {c['contra']} | {_f(c['dif_media'])} | {_f(c['ee'])} | {_f(c['p_wilcoxon'], 3)} |")
+        for c in pareada:
+            L.append(f"| {c['contra']} | {_f(c['dif_media'])} | {_f(c['ee'])} | {_f(c['p_wilcoxon'], 3)} |")
+    L += seccion_diagnostico(diag)
+    if corridas:
+        L += seccion_corridas({"Esta corrida": estado, **corridas})
     L += ["", "## 4. Regla de vigilancia de D3", "",
           f"Cumplimiento medio de la red entrenada: **{_f(vig.get('cumplimiento_medio'), 3)}** (umbral {_f(vig.get('umbral'), 2)}). {vig.get('texto', '')} "
           "La decisión final de R_E se revisa el viernes 23 de octubre y es de BF.", "",
-          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + [""]
+          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + lectura_corridas(corridas or {}) + [""]
     L += [
           "## 6. Limitaciones", "",
-          "- Entrenamiento corto (100 episodios) y una sola semilla de red: el resultado es indicativo, no concluyente.",
+          "- Entrenamiento corto (100 a 1.000 episodios) y una sola red por corrida: el resultado es indicativo, no concluyente.",
           "- Solo FALABELLA y un tramo; no incluye a COPEC ni a ECL.",
           "- La evaluación usa 15 semillas: el error estándar es grande frente a las diferencias entre políticas.", "",
           "## 7. Cómo reproducir", "",
@@ -172,6 +266,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--estado", required=True)
     ap.add_argument("--csv", required=True)
+    ap.add_argument("--diagnostico", default=None, help="opcional: diagnostico_politica.json del diagnostico de la politica")
+    ap.add_argument("--otras-corridas", nargs="*", default=[], metavar="ETIQUETA=ARCHIVO",
+                    help="otros estados (p. ej. otra cantidad de episodios u opcion A de D3) para la tabla de comparacion")
     ap.add_argument("--out-md", default=str(REPO_ROOT / "docs/entrenamiento_inicial_2.3.5.md"))
     ap.add_argument("--out-png", default=str(REPO_ROOT / "data/analysis/entrenamiento_inicial_2.3.5.png"))
     args = ap.parse_args(argv)
@@ -180,13 +277,22 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     filas = leer_csv(Path(args.csv))
     if not filas:
         raise SystemExit("El CSV no tiene filas.")
+    diag = None
+    if args.diagnostico:
+        with open(args.diagnostico, "r", encoding="utf-8-sig") as fh:
+            diag = json.load(fh)
+    corridas: Dict[str, Dict] = {}
+    for item in args.otras_corridas:
+        etiqueta, _, ruta = item.rpartition("=")
+        with open(ruta, "r", encoding="utf-8-sig") as fh:
+            corridas[etiqueta] = json.load(fh)
     png = figura(filas, Path(args.out_png), f"Entrenamiento inicial del Ejecutor ({estado['firma']['ticker']}, {estado['firma']['tramo']})")
     try:
         png_rel = Path(png).resolve().relative_to(Path(args.out_md).resolve().parent.parent).as_posix()
         png_rel = "../" + png_rel
     except ValueError:
         png_rel = Path(png).name
-    Path(args.out_md).write_text(informe(estado, filas, png_rel), encoding="utf-8")
+    Path(args.out_md).write_text(informe(estado, filas, png_rel, diag, corridas), encoding="utf-8")
     print(f"Informe: {args.out_md}\nFigura: {png}")
 
 
