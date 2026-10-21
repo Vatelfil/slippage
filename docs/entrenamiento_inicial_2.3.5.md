@@ -58,7 +58,8 @@ Misma evaluación (15 semillas nuevas, FALABELLA, apertura). Slippage en bps, co
 |---|---:|---|---:|---|---|---:|---|---|
 | Esta corrida | 1000 | ejecutado | 0,000 | sin ejecuciones | — | 1,000 | 5,43 (5,68) | -0,58 (p = 0,679) |
 | 1000 episodios, opción A de D3 | 1000 | pendiente | 1,000 | 5,91 (3,21) | -0,10 (p = 0,524) | 1,000 | 4,60 (3,06) | -1,42 (p = 0,804) |
-| 100 episodios, opción 0 | 100 | ejecutado | 1,000 | 3,28 (2,45) | -2,74 (p = 0,762) | — | — | — |
+| 100 episodios, opción 0 (primera, reanudada desde el episodio 30) | 100 | ejecutado | 1,000 | 3,28 (2,45) | -2,74 (p = 0,762) | — | — | — |
+| 100 episodios, opción 0 (repetición sin cortes) | 100 | ejecutado | 0,904 | 2,04 (4,11) | -3,97 (p = 0,359) | 1,000 | 2,71 (2,80) | -3,31 (p = 0,720) |
 
 
 ## 4. Regla de vigilancia de D3
@@ -71,6 +72,8 @@ Cumplimiento medio de la red entrenada: **0,000** (umbral 0,95). El cumplimiento
 - **Muestreando la política (como al entrenar) sí se ejecuta:** cumplimiento 1,000 y slippage 5,43 bps (EE 5,68), frente a 6,02 bps de la red sin entrenar (diferencia pareada -0,58 bps, p = 0,679). La evaluación con argmax y la política que se entrena son cosas distintas: el argmax puede caer en una acción que no hace nada.
 - **Entropía de la política:** 4,3901 frente a 5,4806 de una política uniforme (80,1 % del máximo): la política se concentró.
 - **D3:** el cumplimiento de la red entrenada es 0,000, por debajo del 95 %; la regla del plan indica pasar a la opción A (riesgo sobre lo pendiente). La decisión es de BF.
+- **La regla de vigilancia de D3 no es estable con la opción 0:** el cumplimiento con argmax fue 0,000, 1,000, 0,904 en 3 corridas; en 2 de 3 queda bajo el 95 % y la regla indica pasar a la opción A. Con una sola red por corrida, el resultado de la regla depende del azar del entrenamiento.
+- **Dos corridas de 100 episodios con la misma configuración y semilla dieron resultados distintos** (ver la tabla): el entrenamiento solo es reproducible si no se interrumpe. Ver Limitaciones.
 - **Con la opción A de D3 (riesgo sobre lo pendiente), la política determinista sí ejecuta (en esta corrida):** cumplimiento 1,000 y 5,91 bps (EE 3,21); muestreada, 1,000 y 4,60 bps. Esto es lo que la regla de vigilancia de D3 buscaba: que penalizar lo que falta por ejecutar evite que la red aprenda a esperar. Fue una corrida exploratoria con el mismo β, sin recalcular β* (el plan lo pide si se adopta la opción A).
 - **Ninguna corrida se distingue de la red sin entrenar en slippage** (ver la tabla de corridas): con 15 semillas y una sola red por corrida no se puede afirmar que entrenar mejore el costo; lo que sí cambia es si la política determinista ejecuta la orden.
 
@@ -79,6 +82,7 @@ Cumplimiento medio de la red entrenada: **0,000** (umbral 0,95). El cumplimiento
 - Entrenamiento corto (100 a 1.000 episodios) y una sola red por corrida: el resultado es indicativo, no concluyente.
 - Solo FALABELLA y un tramo; no incluye a COPEC ni a ECL.
 - La evaluación usa 15 semillas: el error estándar es grande frente a las diferencias entre políticas.
+- **Reproducibilidad:** con las mismas semillas, un entrenamiento sin cortes da curvas idénticas (la corrida de 1.000 episodios y la repetición de 100 coinciden en todas las actualizaciones hasta el episodio 100). Si el entrenamiento se interrumpe y se reanuda desde un checkpoint, los resultados cambian: la primera corrida de 100 episodios se reanudó desde el episodio 30 (consta en su registro de consola) y sus curvas coinciden con las de las otras corridas solo hasta ahí. Causa probable: el checkpoint guarda pesos, optimizador y episodio, pero no el estado del generador aleatorio (`save_checkpoint` en `src/training/ppo_trainer.py`).
 
 ## 7. Cómo reproducir
 
