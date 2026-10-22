@@ -1,0 +1,42 @@
+{
+ "entorno": "abides",
+ "calibrated_json": "rmsc04_ipsa_FALABELLA_2026-08-23.json",
+ "ticker": "FALABELLA",
+ "parte_a_t1": {
+  "mensajes": 2,
+  "asignar": 1,
+  "reporte": 1,
+  "todos_validos": true,
+  "alpha": 0.1,
+  "ventana_min": 5,
+  "q_total": 10000,
+  "q_ejecutado": 1000.0,
+  "jornada_terminada": false,
+  "log": "ctde_log_ventana_abides.json",
+  "segundos": 2.8
+ },
+ "parte_b_t2": {
+  "episodios": 4,
+  "actualizaciones": 2,
+  "sin_nan": true,
+  "filas_csv_tras_reanudar": 3,
+  "columnas_csv_ok": true,
+  "checkpoint_existe": true,
+  "reanudo_en_episodio": 5,
+  "episodio_final_tras_reanudar": 6,
+  "claves_checkpoint": [
+   "best_eval_return",
+   "cfg",
+   "current_episode",
+   "extra_info",
+   "model_state_dict",
+   "optimizer_state_dict",
+   "role",
+   "seed"
+  ],
+  "segundos_entrenar": 9.3,
+  "segundos_reanudar": 2.7,
+  "ultimo_retorno_medio": -1.3168137578992802
+ },
+ "resultado": "OK"
+}

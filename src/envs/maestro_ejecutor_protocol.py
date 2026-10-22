@@ -311,8 +311,16 @@ class MaestroEjecutorEnv:
         )
         s_e, info = env.reset()
 
+        # Unidad de cuenta: si el entorno entrega unidades_por_clp (ej. ABIDES en decimos = 10),
+        # se convierten los precios a CLP para mantener coherencia con Poisson y la recompensa.
+        unidades = float(info.get("unidades_por_clp", 1.0))
+        if unidades <= 0:
+            unidades = 1.0
+
         if self.P_referencia is None:
-            self.P_referencia = info.get("entry_price") or info.get("p_referencia")
+            raw_entry = info.get("entry_price") or info.get("p_referencia")
+            if raw_entry is not None:
+                self.P_referencia = float(raw_entry) / unidades
 
         q_ejecutado_acumulado = 0.0
         monto_acumulado = 0.0
@@ -347,12 +355,17 @@ class MaestroEjecutorEnv:
 
             if "q_ejecutado_step" in info:
                 q_paso = float(info["q_ejecutado_step"])
-                p_paso = float(info.get("p_ejecutado_step", self.P_referencia or 0.0))
+                p_raw = float(info.get("p_ejecutado_step", (self.P_referencia or 0.0) * unidades))
+                p_paso = p_raw / unidades
             else:
                 remaining_now = float(info.get("remaining", remaining_prev))
                 q_paso = max(remaining_prev - remaining_now, 0.0)
                 remaining_prev = remaining_now
-                p_paso = float(info.get("best_ask", self.P_referencia or 0.0))
+                if "p_fill_step_clp" in info and info["p_fill_step_clp"] is not None:
+                    p_paso = float(info["p_fill_step_clp"])
+                else:
+                    raw_p = float(info.get("best_ask", (self.P_referencia or 0.0) * unidades))
+                    p_paso = (raw_p / unidades) if raw_p > 0 else (self.P_referencia or 0.0)
 
             if q_paso > 0:
                 q_ejecutado_acumulado += q_paso
