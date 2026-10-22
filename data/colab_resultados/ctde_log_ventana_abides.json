@@ -16,8 +16,8 @@
     "payload": {
       "ejecutor_id": "apertura",
       "q_ejecutado": 1000.0,
-      "p_promedio": 59926.924,
-      "slippage_parcial": 225923.99999999907,
+      "p_promedio": 5992.6924,
+      "slippage_parcial": 22592.399999999907,
       "q_pendiente": 0.0,
       "pasos_usados": 7,
       "razon_termino": "inventario_agotado",

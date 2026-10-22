@@ -73,7 +73,7 @@ Tras concluir los pasos tácticos de 30 segundos (o agotar el volumen asignado),
 - `ejecutor_id`: Tramo del ejecutor que operó.
 - `q_ejecutado`: Volumen acumulado ejecutado en la ventana ($q_{\text{ejec}} \le q_{\text{slice}}$).
 - `p_promedio`: Precio promedio ponderado por volumen (VWAP táctico obtenido).
-- `slippage_parcial`: Costo de slippage acumulado en CLP frente al precio de referencia inicial ($IS_{\text{parcial}} = (P_{\text{promedio}} - P_{\text{ref}}) \cdot q_{\text{ejec}}$). Con el simulador de Poisson va en CLP; con ABIDES los precios van en décimos de CLP (ver §3.1).
+- `slippage_parcial`: Costo de slippage acumulado en CLP frente al precio de referencia inicial ($IS_{\text{parcial}} = (P_{\text{promedio}} - P_{\text{ref}}) \cdot q_{\text{ejec}}$). Se expresa siempre en CLP; si el simulador subyacente opera en otra unidad de cuenta (como ABIDES en décimos de CLP), el orquestador convierte automáticamente los precios dividiendo por `unidades_por_clp` (ver §3.1).
 - `q_pendiente`: Acciones no ejecutadas del slice ($q_{\text{slice}} - q_{\text{ejec}}$).
 - `pasos_usados`: Cantidad de pasos de 30 s ejecutados (máximo $2 \times \text{ventana\_min}$).
 - `razon_termino`: Causa de finalización (`"ventana_completada"` o `"inventario_agotado"`).
@@ -146,16 +146,25 @@ A continuación se muestra un extracto del log generado por el canal (`CanalComu
 
 ### 3.1 Log de una ventana con ABIDES-Gym (Colab, 20 oct 2026)
 
-*Borrador de PS con apoyo de Claude Code, pendiente de revisión por MR.* Una decisión del Maestro con el entorno `EjecutorEnvAbides` calibrado (FALABELLA, `rmsc04_ipsa_FALABELLA_2026-08-23.json`, vía `make_calibrated_env_factory`): tramo apertura, 10 % de una meta-orden de 10 000 acciones, ventana de 5 minutos. Se intercambiaron 2 mensajes (1 ASIGNAR y 1 REPORTE) y los dos pasaron la validación de esquema. Log completo: [`data/colab_resultados/ctde_log_ventana_abides.json`](../data/colab_resultados/ctde_log_ventana_abides.json); resumen de la corrida (también del entrenador): [`resumen_evidencia_abides.json`](../data/colab_resultados/resumen_evidencia_abides.json). Script: `scripts/colab/evidencia_ctde_ppo_abides_ps.py`.
+*Corrida en Colab revisada y ratificada por MR.* Una decisión del Maestro con el entorno `EjecutorEnvAbides` calibrado (FALABELLA, `rmsc04_ipsa_FALABELLA_2026-08-23.json`, vía `make_calibrated_env_factory`): tramo apertura, 10 % de una meta-orden de 10 000 acciones, ventana de 5 minutos. Se intercambiaron 2 mensajes (1 ASIGNAR y 1 REPORTE) y los dos pasaron la validación de esquema. Log completo: [`data/colab_resultados/ctde_log_ventana_abides.json`](../data/colab_resultados/ctde_log_ventana_abides.json); resumen de la corrida (también del entrenador): [`resumen_evidencia_abides.json`](../data/colab_resultados/resumen_evidencia_abides.json). Script: `scripts/colab/evidencia_ctde_ppo_abides_ps.py`.
 
 ```json
 {"direccion": "Ejecutor -> Maestro",
- "payload": {"ejecutor_id": "apertura", "q_ejecutado": 1000.0, "p_promedio": 59926.924,
-             "slippage_parcial": 225923.99999999907, "q_pendiente": 0.0, "pasos_usados": 7,
+ "payload": {"ejecutor_id": "apertura", "q_ejecutado": 1000.0, "p_promedio": 5992.6924,
+             "slippage_parcial": 22592.399999999907, "q_pendiente": 0.0, "pasos_usados": 7,
              "razon_termino": "inventario_agotado", "hora_fin": "09:35:00", "tipo": "reporte"}}
 ```
 
-**Observación de unidades (pendiente de decisión de MR).** El simulador calibrado trabaja en *décimos de CLP* (`unidad_cuenta = "decimos"`, 1 CLP = 10 unidades): el precio de referencia de FALABELLA es `r_bar` = 59 698, o sea unos 5 970 CLP. Por eso `p_promedio` = 59 926,9 y `slippage_parcial` = 225 924 están en décimos de CLP (el slippage, además, multiplicado por las acciones), mientras que este documento dice que `slippage_parcial` va en CLP y el protocolo no convierte unidades. Con ABIDES, el `IS_total` del Maestro y su recompensa R_M quedarían unas 10 veces mayores que con el simulador de Poisson, y el λ = 0,05 de la 2.2.2 se calibró por escala con una política sin entrenar (queda por revalidar, P10). Opciones: convertir en el protocolo con `unidades_por_clp` (que ya existe en `BridgeConfig` y en el JSON de calibración) o declarar la unidad en el esquema. Esta nota no cambia el código.
+**Resolución de la decisión de unidades (MR, 21 oct 2026):**
+Se adopta la opción de **convertir en el protocolo con `unidades_por_clp`** (parámetro ya existente en `BridgeConfig` y en los JSON de calibración de la tarea 2.2.4: 10 en la calibración oficial en décimos de CLP; 100 en la configuración cruda de ABIDES; 1 en Poisson).
+
+**Implementación en el orquestador (`src/envs/maestro_ejecutor_protocol.py`):**
+1. Al recibir `info` en `reset()`, el orquestador obtiene `unidades = float(info.get("unidades_por_clp", 1.0))`. Si `P_referencia` no estaba fijado, se calcula como `raw_entry / unidades`, quedando siempre en CLP (~5 969,8 CLP para FALABELLA).
+2. En cada paso de ejecución, el precio de ejecución `p_paso` se normaliza a CLP (directo desde `info["p_fill_step_clp"]` que ya viene convertido por `ExecutorRewardState`, o dividiendo por `unidades`).
+3. El mensaje `REPORTE` resultante publica `p_promedio` y `slippage_parcial` estrictamente en CLP.
+4. Consecuencias positivas:
+   - Coherencia total entre simuladores: `IS_total` y $R_M$ tienen la misma escala monetaria en CLP tanto sobre ABIDES como sobre el simulador Poisson.
+   - Preservación de la calibración: El hiperparámetro $\lambda = 0{,}05$ de la recompensa del Maestro (tarea 2.2.2) conserva el balance 1:1 entre penalización e `IS_total` para el cual fue diseñado, sin sufrir la distorsión de un factor $	imes 10$ que habría provocado operar en décimos.
 
 ---
 

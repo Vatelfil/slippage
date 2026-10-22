@@ -73,3 +73,16 @@ En la fase 2 de calibración de $\beta$ se observó que multiplicar el término 
 
 ### 4.3 Tratamiento en Sprint 5
 Se fijó $\beta = 0{,}1 \times \beta^*$ como valor provisional operativo seguro (cumplimiento del 100%), mientras se adopta la Decisión D3 sobre evaluar el riesgo respecto al inventario pendiente o mantener la regla de vigilancia en el entrenamiento formal.
+
+
+---
+
+## 5. Unidad de Cuenta en ABIDES frente al Protocolo CTDE [2.3.1 / Decisión de Unidades]
+
+### 5.1 Descripción
+El simulador ABIDES calibrado para el mercado chileno (tarea 2.2.4) opera internamente en **décimos de CLP** (`unidad_cuenta = "decimos"`, donde 1 CLP = 10 unidades de simulación) para aproximar el tick size mínimo, mientras que el Título I, el simulador Poisson y las recompensas del Maestro ($IS_{\text{total}}$ y $R_M$) están formuladas en **CLP**.
+
+### 5.2 Decisión y Solución Adoptada (MR, 21 oct 2026)
+Se acordó no alterar los esquemas JSON ni crear una nueva abstracción redundante, adoptando la solución canónica ya provista por `BridgeConfig.unidades_por_clp`:
+- El orquestador `MaestroEjecutorEnv` convierte automáticamente los precios de entrada (`entry_price`) y precios de ejecución de ABIDES a CLP dividiendo por `unidades_por_clp` (10 en la calibración oficial).
+- Como resultado, el mensaje `REPORTE`, el slippage acumulado, el $IS_{\text{total}}$ y la recompensa $R_M$ del Maestro se computan y registran estrictamente en **CLP**, manteniendo intacta la escala de calibración de $\lambda = 0{,}05$.
