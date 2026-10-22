@@ -1,0 +1,29 @@
+[
+  {
+    "direccion": "Maestro -> Ejecutor",
+    "payload": {
+      "ejecutor_id": "apertura",
+      "ventana_min": 5,
+      "fraccion_meta_orden": 0.1,
+      "q_asignado": 1000.0,
+      "hora_inicio": "09:30:00",
+      "timestamp_inicio": "2026-09-29 09:30:00",
+      "tipo": "asignar"
+    }
+  },
+  {
+    "direccion": "Ejecutor -> Maestro",
+    "payload": {
+      "ejecutor_id": "apertura",
+      "q_ejecutado": 1000.0,
+      "p_promedio": 5992.6924,
+      "slippage_parcial": 22592.399999999907,
+      "q_pendiente": 0.0,
+      "pasos_usados": 7,
+      "razon_termino": "inventario_agotado",
+      "timestamp_fin": "2026-09-29 09:35:00",
+      "hora_fin": "09:35:00",
+      "tipo": "reporte"
+    }
+  }
+]
