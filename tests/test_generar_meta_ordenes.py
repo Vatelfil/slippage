@@ -67,3 +67,15 @@ def test_el_runner_de_benchmarks_puede_leer_el_archivo():
     data = json.loads((ROOT / "data/meta_ordenes/meta_ordenes_v1.json").read_text(encoding="utf-8-sig"))
     ordenes = data["meta_ordenes"]
     assert runner.pendientes({}, ordenes, [1, 2]) and len(runner.pendientes({}, ordenes, [1])) == 20
+
+
+def test_fraccion_distinta_para_las_ordenes_de_cierre():
+    d = gen.generar(pct_dia=0.10, pct_dia_cierre=0.05)
+    por_tramo = {}
+    for o in d["meta_ordenes"]:
+        por_tramo.setdefault(o["tramo_inicio"], set()).add(round(o["pct_volumen_dia"]))
+    assert por_tramo["apertura"] == {10} and por_tramo["media_jornada"] == {10} and por_tramo["cierre"] == {5}
+    assert "cierre: 5%" in d["criterios"]["tamano"]
+    with pytest.raises(ValueError):
+        gen.generar(pct_dia_cierre=0.05)
+

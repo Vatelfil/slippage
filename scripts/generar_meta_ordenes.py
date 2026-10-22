@@ -89,11 +89,16 @@ def volumenes_simulados(ticker: str) -> Dict[str, float]:
     return out
 
 
-def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None) -> Dict:
+def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
+            pct_dia_cierre: Optional[float] = None) -> Dict:
     """Arma el diccionario con las 10 ordenes. `cantidad` fija el tamano; `pct_dia` lo calcula como
-    fraccion del volumen del dia simulado de cada activo (redondeado a 100 acciones)."""
+    fraccion del volumen del dia simulado de cada activo (redondeado a 100 acciones). `pct_dia_cierre` (solo con
+    `pct_dia`) usa otra fraccion para las ordenes que parten en el cierre: en el cierre queda poco volumen y
+    la misma fraccion pesa mucho mas sobre lo que queda (ver docs/benchmarks_2.3.4_PS.md)."""
     if cantidad is not None and pct_dia is not None:
         raise ValueError("usar `cantidad` o `pct_dia`, no los dos")
+    if pct_dia_cierre is not None and pct_dia is None:
+        raise ValueError("`pct_dia_cierre` solo se usa junto con `pct_dia`")
     cantidad_fija = CANTIDAD_POR_DEFECTO if (cantidad is None and pct_dia is None) else cantidad
     cache_vol: Dict[str, Dict[str, float]] = {}
     ordenes: List[Dict] = []
@@ -101,7 +106,8 @@ def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None) -> 
         if ticker not in cache_vol:
             cache_vol[ticker] = volumenes_simulados(ticker)
         v = cache_vol[ticker]
-        q = int(cantidad_fija) if cantidad_fija is not None else int(round(pct_dia * v["dia"], -2))
+        pct = pct_dia_cierre if (tramo == "cierre" and pct_dia_cierre is not None) else pct_dia
+        q = int(cantidad_fija) if cantidad_fija is not None else int(round(pct * v["dia"], -2))
         ordenes.append({
             "id": f"MO-{i:02d}",
             "ticker": ticker,
@@ -122,7 +128,8 @@ def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None) -> 
         "snapshot": SNAPSHOT,
         "criterios": {
             "tamano": (f"{cantidad_fija} acciones por orden (D1, opcion A del plan)" if cantidad_fija is not None
-                       else f"{pct_dia:.0%} del volumen del dia simulado de cada activo (D1, opcion B)"),
+                       else f"{pct_dia:.0%} del volumen del dia simulado de cada activo (D1, opcion B)"
+                       + (f", salvo las ordenes que parten en el cierre: {pct_dia_cierre:.0%}" if pct_dia_cierre is not None else "")),
             "reparto": "FALABELLA 4, COPEC 3, ECL 3; apertura 4, media jornada 3, cierre 3 (DECISION BF)",
             "semillas": f"semilla = {SEMILLA_BASE} + 10 * indice; el runner suma la semilla de la corrida (1, 2, ...)",
             "volumen": "mediana de 30 jornadas simuladas con la calibracion vigente de cada activo "
@@ -137,9 +144,11 @@ def main(argv: Optional[List[str]] = None) -> Path:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--cantidad", type=int, default=None, help="acciones por orden (por defecto 100000)")
     ap.add_argument("--pct-dia", type=float, default=None, help="fraccion del volumen del dia (ej. 0.10)")
+    ap.add_argument("--pct-dia-cierre", type=float, default=None,
+                    help="con --pct-dia: otra fraccion para las ordenes que parten en el cierre (ej. 0.05)")
     ap.add_argument("--salida", default=str(REPO_ROOT / "data/meta_ordenes/meta_ordenes_v1.json"))
     args = ap.parse_args(argv)
-    data = generar(cantidad=args.cantidad, pct_dia=args.pct_dia)
+    data = generar(cantidad=args.cantidad, pct_dia=args.pct_dia, pct_dia_cierre=args.pct_dia_cierre)
     out = Path(args.salida)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
