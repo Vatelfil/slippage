@@ -32,7 +32,7 @@ function coverCell(lines, w) {
 const teamTable = new Table({
   width: { size: L.CONTENT_W, type: WidthType.DXA }, columnWidths: [4300, 4726],
   rows: [new TableRow({ children: [
-    coverCell([['PROFESOR GUÍA', { bold: true, color: L.NAVY }], ['Juan Pablo Argerstein'], ['Master Computer Science / Senior Cloud Data Engineer', { italics: true, color: L.MUTED }], ['jangerstein@utem.cl', { color: L.MUTED }]], 4300),
+    coverCell([['PROFESORA GUÍA', { bold: true, color: L.NAVY }], ['Ana Rosa Moya Beltrán']], 4300),
     coverCell([['ESTUDIANTES', { bold: true, color: L.NAVY }], ['Paolo Sepúlveda Parraguez'], ['Mauricio Reynoso Ruiz'], ['Benjamín Farias'], ['psepulvedap@utem.cl · mreynoso@utem.cl · bfarias@utem.cl', { color: L.MUTED, size: 18 }]], 4726),
   ] })],
 });

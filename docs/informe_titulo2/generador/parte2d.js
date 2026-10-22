@@ -140,7 +140,7 @@ function anexoA() {
   k.push(GAP());
 
   k.push(H2('A.5 Uso de herramientas de apoyo'));
-  k.push(P('El equipo utilizó Claude Code (Anthropic) como asistente de programación, análisis y redacción. Los documentos del repositorio lo declaran en su encabezado y quedan sujetos a la revisión de quien corresponde; las cifras de este informe provienen de archivos versionados en el repositorio y se contrastaron contra ellos antes de entregar.'));
+  k.push(P('El equipo utilizó Claude Code (Anthropic) como asistente de programación, análisis y redacción, con la autorización de la universidad para el uso de herramientas de inteligencia artificial en el desarrollo del proyecto y en este informe. Los documentos del repositorio lo declaran en su encabezado y quedan sujetos a la revisión de quien corresponde; las cifras de este informe provienen de archivos versionados en el repositorio y se contrastaron contra ellos antes de entregar.'));
   return k;
 }
 
