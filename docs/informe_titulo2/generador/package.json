@@ -1,0 +1,1 @@
+{ "name": "generador-informe-titulo2", "private": true, "dependencies": { "docx": "9.8.1" } }

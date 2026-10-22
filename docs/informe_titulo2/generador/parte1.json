@@ -1,0 +1,11062 @@
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "",
+"x": "drawing"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Facultad de ingeniería",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Escuela de Informática y Computación",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "\t"
+}
+]
+},
+{
+"k": "p",
+"style": "Title",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "INFORME"
+}
+]
+},
+{
+"k": "p",
+"style": "Title",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "ANTEPROYECTO: TRABAJO TÍTULO "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "PROFESOR GUIA\t",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "ESTUDIANTE",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": []
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Juan Pablo Argerstein"
+},
+{
+"t": "\nMaster Computer Science"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Senior Cloud Data Engineer"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Paolo Sepúlveda Parraguez"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Mauricio Reynoso Ruiz"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Benjamin Farias"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "jangerstein@utem.cl",
+"u": 1,
+"link": "mailto:jangerstein@utem.cl"
+},
+{
+"t": " "
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "psepulvedap@utem.cl",
+"u": 1,
+"link": "mailto:psepulvedap@utem.cl"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "mreynoso@utem.cl",
+"u": 1,
+"link": "mailto:mreynoso@utem.cl"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "bfarias@utem.cl",
+"u": 1,
+"link": "mailto:bfarias@utem.cl"
+},
+{
+"t": " "
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "Subtitle",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Índice"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "Subtitle",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Índice de tablas"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " NOMBRE DEL TEMA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "\"Diseño y Desarrollo de un Sistema de Coordinación de Agentes basado en Aprendizaje por Refuerzo para la Mitigación del Slippage en la Ejecución de Activos del Mercado Accionario Chileno (IPSA)\"."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " RESUMEN"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El presente proyecto propone el desarrollo de una solución tecnológica orientada a la optimización de la ejecución de órdenes de gran volumen en el mercado bursátil chileno. La problemática central reside en el "
+},
+{
+"t": "Slippage",
+"i": 1
+},
+{
+"t": " (deslizamiento de precio), fenómeno que ocurre cuando órdenes masivas agotan la liquidez disponible en el libro de órdenes, moviendo el precio en contra del inversor y generando costos de transacción ineficientes. Para mitigar este efecto, se diseñará un sistema multi-agente donde un \"Agente Maestro\" planifica la estrategia de fragmentación y diversos \"Agentes de Ejecución\" operan en ventanas temporales estratégicas. La inteligencia del sistema se sustenta en el algoritmo "
+},
+{
+"t": "Proximal Policy Optimization",
+"i": 1
+},
+{
+"t": " (PPO) implementado mediante la librería PyTorch. El proyecto contempla el procesamiento de datos históricos del mercado para entrenar una red neuronal capaz de proporcionar una estrategia de ejecución superior a los métodos tradicionales."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " PALABRAS CLAVE"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Aprendizaje por refuerzo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Slippage."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Sistemas multiagente."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "PPO."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Microestructura de mercado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Libro de órdenes."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Implementation shortfall."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Bolsa de Santiago."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Optimización de ejecución."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Ejecución algorítmica."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "8",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Marco regulatorio financiero"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " "
+},
+{
+"t": "DESCRIPCIÓN DEL PROYECTO DE TÍTULO"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "4.1 Parte Mercado: entorno y problemática"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "4.1.1 El Mercado Accionario Chileno y el Índice IPSA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El mercado bursátil chileno opera a través de la bolsa de santiago y está representado en su mayor medida de su segmento y mayor relevancia, el índice S & P IPSA (índice de precio selectivo de acciones). Este agrupa las 30 acciones de mayor capitalización bursátil y de mayor liquidez del país, lo cual lo convierte en un referente principal para medir el desempeño del mercado de renta variable nacional. La composición del indicador es revisada y balanceada trimestralmente (marzo, junio, septiembre y diciembre), conforme a los criterios de presencia bursátil, cantidad de volumen promedio ponderado diario transado y capitalización ajustada al mercado local, con un límite máximo del 15% de ponderación por componente individual y del 25% por grupo económico."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El mercado chileno presenta una liquidez estructuralmente más baja comparada a bolsas globales como NYSE (bolsa de nueva york) o NASDAQ (National Association of securities dealers automated quotations). La evidencia histórica muestra que entre los años 2010 y el 2015, los montos que se transaron en la bolsa de santiago sufrieron una caída superior al 56%, lo que muestra la fragilidad y sensibilidad de nuestro mercado nacional ante factores macroeconómicos y geopolíticos. Esta condición de liquidez estructuralmente reducida tiene consecuencias que son directas sobre el problema que este proyecto quiere solucionar: a menor profundidad del libro de órdenes, mayor es el impacto de precio que va a generar una orden de gran volumen, lo cual genera el fenómeno del slippage. Por este motivo convierte al IPSA en un entorno desafiante para la ejecución de órdenes de gran volumen."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Otro fenómeno identificado y reciente es el cambio en la composición de los inversores que participan activamente en el mercado chileno. Según un informe del instituto de finanzas internacionales (IIF, 2026), desde el año 2023 los hogares (principalmente fondos mutuos) han sustituido a los inversores extranjeros y las AFP como los compradores marginales de acciones en la bolsa de valores de santiago. Este cambio implica que nuestro mercado actualmente es mucho más sensible a la liquidez doméstica y a factores de confianza local,  lo que puede hacer crecer la volatilidad del día en momentos de estrés."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Además, el IPSA tiene patrones intradiarios de liquidez bien definidos. La sesión de negociación continua (Telepregón) con horario de entre las 9:30 y las 16:00 hrs en horario de invierno (17:00 en verano), que viene después de una subasta de apertura entre las 9:00 y las 9:25 hrs. La mayor actividad y profundidad de libro se concentra entre las 9:30 - 11:30 hrs y las 14:00 - 16:00 hrs, mientras en el horario intermedio concentra spreads más amplios y menor presencia de creadores de mercado. Sabiendo esto podemos explotar y conocer patrones para diseñar la estrategia algorítmica para una ejecución eficiente que este proyecto propone."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "4.1.2 El Libro de Órdenes (Limit Order Book – LOB)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El mecanismo central de cualquier mercado bursátil electrónico moderno es el Libro de Órdenes de Precio Límite (Limit Order Book, LOB). El LOB es una estructura de datos dinámica que registra, en tiempo real, todas las intenciones de compra (ofertas o \"bids\") y venta (demandas o \"asks\") a distintos niveles de precio que no han sido ejecutadas o canceladas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Los participantes interactúan con el LOB mediante dos tipos de órdenes principales. Las órdenes de mercado (market orders) las cuales instruyen la compra o venta inmediata al mejor precio que esté disponible en ese momento (consumen la liquidez del libro y se se ejecuta debido a eso instantáneamente, siendo el mecanismo primario de ejecución generando impacto de mercado directo) y la otra orden es la de órdenes límite (limit orders), estas lo que hacen es especificar un precio máximo de compra o mínimo de venta, lo que tiene esta última es que si ya no hay contrapartida que esté disponible, quedarán en el libro a la espera de ejecución o de cancelación, lo que aportan es la liquidez del mercado. La diferencia entre el ask y el bid se le conoce como spread bid-ask, el cual es el indicador de costo directo de la liquidez inmediata en el mercado. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Usando de referencia teórica a Glosten y Milgrom (1985), en nuestra investigación nos topamos con la definición de que el bid-ask se genera como una consecuencia de la selección adversa, quiere decir, los creadores de mercado utilizan el spread (ampliándolo) para así compensar el riesgo de transar contra agentes que tienen información superior."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La organización en resumen es la siguiente:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "•"
+},
+{
+"t": "        "
+},
+{
+"t": "El lado comprador (Bid) lista las órdenes de compra de mayor a menor precio. El mejor bid representa el precio máximo que alguien está dispuesto a pagar en ese instante."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "•"
+},
+{
+"t": "        "
+},
+{
+"t": "El lado vendedor (Ask) lista las órdenes de venta de menor a mayor precio. El mejor ask representa el precio mínimo al que alguien está dispuesto a vender."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "•"
+},
+{
+"t": "        "
+},
+{
+"t": "La diferencia entre el mejor ask y el mejor bid se denomina spread bid-ask, el cual es uno de los indicadores más directos del costo de liquidez en un mercado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Cuando un participante envía una orden de mercado (market order), esta consume instantáneamente las órdenes de límite disponibles en el lado contrario del LOB, comenzando desde el mejor precio disponible. Si el volumen de la orden de mercado supera la cantidad ofertada en el mejor nivel de precio, la ejecución \"avanza\" hacia los niveles de precio siguientes, empeorando progresivamente el precio promedio de ejecución. Este fenómeno es la causa directa del Slippage."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": " "
+}
+]
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Lado",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Precio (CLP)",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Volumen (acc.)",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Tipo",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Descripción",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Ask 3"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.820"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "3.000"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Venta"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Precio límite"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Ask 2"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.810"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.500"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Venta"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Precio límite"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Ask 1 (Mejor Ask)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.800"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "2.000"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Venta"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Mejor oferta venta"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "← SPREAD = CLP 10 (0,17%) →",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Bid 1 (Mejor Bid)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.790"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "4.000"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Compra"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Mejor oferta compra"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Bid 2"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.780"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "6.000"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Compra"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Precio límite"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Bid 3"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5.770"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "8.500"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Compra"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Precio límite"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": " "
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "4.1.3 El Fenómeno del Slippage y su Impacto en el IPSA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El Slippage (deslizamiento de precio) es el costo adicional que paga un inversor institucional cuando ejecuta una orden cuyo volumen supera la liquidez disponible en los mejores niveles del LOB. Tomando el ejemplo del Tabla 1, si un fondo de inversión decide comprar 8.000 acciones a través de una única orden de mercado, el resultado sería:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "33",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "2.000 acciones a $5.800 (mejor ask)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "33",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "5.500 acciones a $5.810 (segundo nivel)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "33",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": " "
+},
+{
+"t": "500 acciones a $5.820 (tercer nivel)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El precio promedio de ejecución resultante sería aproximadamente $5.808 CLP por acción, frente al precio inicial de $5.800. Esta diferencia de $8 por acción, multiplicada por los 8.000 títulos, genera un costo adicional de $64.000 CLP. En operaciones institucionales que involucran decenas de miles de acciones y múltiples activos, el costo acumulado por slippage puede representar millones de pesos, erosionando significativamente la rentabilidad de las estrategias de inversión."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Perold (1988) formalizó el concepto a través del implementation Shortfall (IS), el cual es la diferencia entre lo que queremos pagar y lo que realmente pagamos. El lo descompuso en 4 componentes:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "11",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": "El costo de demora (delay cost): consiste en la diferencia entre el precio de decisión y el precio al momento de realizar el envío de la orden."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "11",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Costos explícitos: las comisiones"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "11",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": "impacto de mercado: es la diferencia que hay entre el precio de ejecución efectivo (al final) y el precio que se tenía al inicio de la ejecución."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "11",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": "costo de oportunidad: como el nombre sugiere, es el costo de oportunidad de las acciones que no fueron ejecutadas dentro del horizonte que se definió."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La propuesta del shortfall hace que sea la métrica que se utiliza de referencia estándar en la industria para evaluar la calidad de ejecución, debido a esto, es la función objetivo principal que el sistema propuesto busca minimizar."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Ahora, por otra parte, tenemos al slippage, el cual tiene dos componentes de impacto. El impacto temporal (transitorio), se disipa con el tiempo a medida de que el libro se repone y es, en un principio, reducible mediante el fraccionamiento y el esparcimiento temporal de las órdenes. El choque permanente persiste continuamente, reflejando la  integración de información al precio, esto provoca es que cuando una orden de gran volumen se ejecuta da un aviso al mercado de que hay un agente dispuesto a pagar precios más elevados, esto hace que los otros participantes ajusten sus expectativas al alza. según Almgren y Chriss (2001) formalizaron que el problema de minimización del costo total como una optimización del camino de ejecución, introduciendo una encrucijada: al ejecutar rápido reduce el riesgo de precio, sin embargo a su vez aumenta el impacto del mercado, por otro lado, al ejecutar lento hace que se reduzca el impacto, pero aumenta el riesgo del precio."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En el mercado IPSA, como ya se explicó anteriormente sabemos que el LOB que tenemos, comparado a los mercados globales, es estructuralmente menor, esto produce que la recuperación del libro tras un choque de volumen puede tardar minutos, en contraste a mercados más líquidos en los cuales tardarían milisegundos.  Con esto en cuenta, tenemos la necesidad crítica, para los inversores institucionales, de minimizar el impacto del mercado mediante la fragmentación inteligente de las órdenes "
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "4.1.4 Estrategias Tradicionales de Ejecución y sus Limitaciones"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Antes de la aplicación de la inteligencia artificial, los algoritmos de ejecución más utilizados en la industria son el TWAP, el VWAP y las estrategias basadas en el uso del Shortfall, aunque son un avance respecto de hacerlo de forma manual, sin embargo, tienen una limitación estructural fundamental y que están basadas en reglas predefinidas o modelos estáticos, estas no pueden aprender de las condiciones en que su mercado opera:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "31",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "TWAP (Time Weighted Average Price): Distribuye el volumen total de la orden en partes iguales a lo largo del tiempo, ejecutando Q/T acciones en cada periodo. Es simple y predecible, pero completamente \"ciego\" a las condiciones de liquidez, osea, ejecuta la misma cantidad en momentos de alta y baja profundidad del "
+},
+{
+"t": "LOB"
+},
+{
+"t": ", sin adaptarse a las dinámicas de esta misma, ignorando los patrones intradiarios que son especialmente marcados en el mercado chileno (anteriormente mencionados)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "31",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "VWAP (Volume Weighted Average Price): Intenta replicar el perfil histórico de volumen del mercado, enviando órdenes mayores en los períodos de mayor actividad histórica a lo largo del día. Aunque es más sofisticado y presenta mejoras respecto a el TWAP, utiliza patrones pasados estáticos y no puede reaccionar a cambios de microestructura no observados previamente. Kato (2015) demostró que VWAP es óptima bajo ciertas condiciones del modelo de "
+},
+{
+"t": "Almgren-Chriss (es un modelo matemático). Sin embargo, el perfil de volumen histórico es sólo una estimación del perfil futuro (que puede cambiar significativamente cuando haya alta volatilidad) y si tenemos muchos participantes que siguen VWAP de forma simultánea, el precio va a ser artificialmente inflado, ya que todos estarán comprando en las mismas horas ya definidas."
+},
+{
+"t": " El modelo matemático Almgren-Chriss (2001), como contexto, resuelve la pregunta de: cuando nosotros queremos comprar, por ejemplo, 10.000 acciones en 1 hora, vamos a tener el problema de ¿cómo vamos a distribuir en el tiempo para pagar lo menos posible?, la respuesta es que hay un trade off que es inevitable, si ejecutamos rapido, habra un alto impacto de mercado, pero el riesgo de que el precio suba mientras espero es bajo, y la otra opción, si ejecutamos lento, el precio se mueve poco, sin embargo tenemos el problema de que el mercado se puede mover en nuestra contra si esperamos mucho. La solución óptima depende de que tanta importancia se le tiene al precio vs. al impacto de mercado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "17",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Estrategias adaptativas (IS): modifican la tasa de ejecución en función a las limitaciones del mercado en tiempo real, con el objetivo de minimizar el costo total de la ejecución. son superiores en la adaptabilidad, pero requieren una maoyr calibracion  mucho más compleja y deben asumir formas funcionales de impacto, que pueden no capturar la microestructura real del IPSA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La tabla a continuación muestra un resumen de las características principales de las tres estrategias y la brecha que el sistema propuesto busca cubrir:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Característica",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "TWAP",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "VWAP",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "IS / Adaptativa",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Referencia benchmark"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tiempo promedio ponderado"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Volumen promedio ponderado"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Diferencia vs. precio de decisión"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Complejidad"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Baja — tasa constante"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Media — requiere perfil de volumen"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Alta — optimización dinámica"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Adaptabilidad"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Nula — tasa fija"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Baja — sigue volumen histórico"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Alta — reacciona al mercado en tiempo real"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Riesgo de timing"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Alto — ignora condiciones de liquidez"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Moderado — depende del perfil histórico"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Bajo si se gestiona correctamente"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Uso típico"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mercados ilíquidos, órdenes pequeñas"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Ejecución institucional en renta variable"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Ejecución de alto volumen con control de costos"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Principal limitación"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "No aprovecha patrones de liquidez"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Perfil de volumen incierto en días atípicos"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Implementación compleja, requiere calibración"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Tabla 2: Comparación de las principales estrategias tradicionales de ejecución algorítmica. Elaboración propia basada en Almgren & Chriss (2001) y Kato (2015).",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Ambas estrategias estáticas (TWAP y VWAP) fallan ante las particularidades del IPSA, donde la liquidez puede desaparecer abruptamente por factores internos o externos, y donde los inversores institucionales que repiten estas estrategias son fácilmente detectables por otros participantes del mercado, quienes pueden anticipar y explotar sus órdenes (fenómeno conocido como front-running). Esta es precisamente la brecha que el sistema de Coordinación de Agentes Inteligentes propuesto busca cubrir, incorporando elementos de adaptabilidad y aleatoriedad controlada que hacen la estrategia impredecible para terceros."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "4.2 Descripción del proyecto parte IA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La solución propuesta se basa en la arquitectura de aprendizaje por refuerzo Multi agente (MARL) diseñada para operar bajo restricciones de liquidez del índice del IPSA. Este sistema, a diferencia de los algoritmos estáticos, utiliza una estructura jerarquizada que separa la planificación de largo plazo de la ejecución de corto plazo, combinando la visión macro del mercado con la reactividad táctica ante limitaciones microestructurales locales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El fundamento teórico de este enfoque, se basa en los resultados de los trabajos pioneros de Nevmyvaka et al. (2006), quienes presentaron la primera aplicación efectiva de  aprendizaje por refuerzo a la ejecución óptima, a gran escala, demostrando la mejora significativa frente al uso de las estrategias de referencia. También los trabajos posteriores como Ning et al (2021), los cuales usaron Deep Q-Networks, y lin y Beling (2020), que usaron PPO, que dio como resultado a la validación de la superioridad del enfoque de RL encima de los métodos tradiciones, incluso con datos escasos y señales de recompensa dispersas"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.2.1 Arquitectura Maestro (Master Agent)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El Agente Maestro opera como controlador estratégico de la jornada bursátil completa. Su rol es planificar la fragmentación de la meta-orden total en bloques de volumen menores ("
+},
+{
+"t": "slices",
+"i": 1
+},
+{
+"t": ") y definir las ventanas temporales óptimas para su envío, considerando los patrones intradíarios de liquidez del IPSA documentados en la sección 4.1.1."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Formalmente, el Agente Maestro se modela como un "
+},
+{
+"t": "Proceso de Decisión de Markov",
+"b": 1
+},
+{
+"t": " (MDP) definido por la tupla:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "MDP_M = (S_M,  A_M,  P_M,  R_M,  γ_M,  T_M)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Donde "
+},
+{
+"t": "S_M",
+"b": 1
+},
+{
+"t": " es el espacio de estado, "
+},
+{
+"t": "A_M",
+"b": 1
+},
+{
+"t": " el espacio de acción, "
+},
+{
+"t": "P_M",
+"b": 1
+},
+{
+"t": " la probabilidad de transición modelada por el simulador de mercado, "
+},
+{
+"t": "R_M",
+"b": 1
+},
+{
+"t": " la función de recompensa, "
+},
+{
+"t": "γ_M ≈ 0.99",
+"b": 1
+},
+{
+"t": " el factor de descuento (alto, dado el horizonte de planificación de jornada completa), y "
+},
+{
+"t": "T_M",
+"b": 1
+},
+{
+"t": " el horizonte temporal correspondiente a la sesión de negociación (9:30–16:00 hrs)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Espacio de Estado del Agente Maestro (S_M)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El vector de estado del Maestro combina información privada del agente con señales públicas de mercado agregadas:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Estado privado (información propia del agente):",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Inventario restante normalizado: ",
+"b": 1
+},
+{
+"t": "q_t = (Q_total − Q_ejecutado) / Q_total ∈ [0, 1]. Indica qué fracción de la meta-orden falta por ejecutar."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fracción de tiempo restante: ",
+"b": 1
+},
+{
+"t": "τ_t = (T − t) / T ∈ [0, 1]. Normaliza el tiempo que queda de jornada."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Número de slices ya enviados",
+"b": 1
+},
+{
+"t": " en la jornada actual."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Estado público (señales de mercado agregadas):",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Volatilidad reciente del precio mid",
+"b": 1
+},
+{
+"t": ": calculada sobre una ventana móvil de 30 minutos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Volumen promedio transado",
+"b": 1
+},
+{
+"t": " en los últimos N períodos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Order Book Imbalance (OBI) agregado: ",
+"b": 1
+},
+{
+"t": "OBI = (V_bid − V_ask) / (V_bid + V_ask). Mide la presión compradora o vendedora en el LOB."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Indicador de sesión intradíaria",
+"b": 1
+},
+{
+"t": ": variable discreta que distingue apertura (9:30–11:30), media jornada (11:30–14:00) y cierre (14:00–16:00), capturando los patrones de liquidez del IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Espacio de Acción del Agente Maestro (A_M)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En cada período macro (cada 30 minutos de jornada), el Maestro toma dos decisiones simultáneas:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Volumen del slice: ",
+"b": 1
+},
+{
+"t": "fracción α_t ∈ {0.05, 0.10, 0.15, ..., 0.50} del inventario restante que se asignará a los Ejecutores."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Ventana de ejecución: ",
+"b": 1
+},
+{
+"t": "duración del intervalo asignado (discreta: 1, 5, 10 o 15 minutos)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El espacio de acción del Maestro es "
+},
+{
+"t": "discreto",
+"b": 1
+},
+{
+"t": ", lo que favorece la estabilidad del aprendizaje PPO en horizontes largos con señales de recompensa dispersas, siguiendo las recomendaciones de Lin & Beling (2020) y Ning et al. (2021)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La política del Agente Maestro se aprende mediante PPO y su función de valor estima el costo de ejecución esperado para el resto del horizonte dado el estado actual del inventario y del mercado, siguiendo el paradigma actor-crítico: una red aprende qué hacer (actor) y otra evalúa qué tan buenas son esas decisiones (crítico)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.2.2 Agentes Ejecutores (Executors)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Los Agentes Ejecutores operan en el nivel táctico del sistema, reaccionando en escalas de segundos a minutos. Reciben del Maestro el volumen del slice asignado y la ventana temporal, y deben decidir el precio y momento exacto de colocar cada orden, con el objetivo de capturar liquidez oportunista en el LOB y reducir el spread efectivamente pagado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Formalmente, cada Agente Ejecutor se modela como:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "MDP_E = (S_E,  A_E,  P_E,  R_E,  γ_E,  T_E)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Donde "
+},
+{
+"t": "γ_E ≈ 0.95",
+"b": 1
+},
+{
+"t": " (factor de descuento medio, foco táctico de corto plazo) y "
+},
+{
+"t": "T_E",
+"b": 1
+},
+{
+"t": " es el intervalo asignado por el Maestro (30 segundos a 15 minutos). La coordinación entre el Maestro y los Ejecutores sigue el paradigma "
+},
+{
+"t": "CTDE",
+"b": 1
+},
+{
+"t": " (Centralized Training with Decentralized Execution, Lowe et al., 2017): durante el entrenamiento los agentes comparten información global; durante la ejecución cada uno actúa autónomamente con su observación local."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Espacio de Estado de los Agentes Ejecutores (S_E)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Estado privado:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Volumen del slice asignado por el Maestro: ",
+"b": 1
+},
+{
+"t": "q_slice (cantidad total a ejecutar en este intervalo)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Volumen pendiente de ejecutar",
+"b": 1
+},
+{
+"t": " dentro del slice actual."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Tiempo restante para completar el slice",
+"b": 1
+},
+{
+"t": " (normalizado ∈ [0, 1])."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Estado público (microestructura del LOB, nivel 2):",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Mejores 5 niveles de precio y volumen",
+"b": 1
+},
+{
+"t": " del lado comprador (bids) y vendedor (asks)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Spread bid-ask actual: ",
+"b": 1
+},
+{
+"t": "spread_t = P_ask^1 − P_bid^1."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "OBI instantáneo: ",
+"b": 1
+},
+{
+"t": "mide el desequilibrio del libro en tiempo real."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Tasa de llegada de órdenes",
+"b": 1
+},
+{
+"t": " en los últimos 30 segundos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Precio mid actual: ",
+"b": 1
+},
+{
+"t": "P_mid = (P_ask^1 + P_bid^1) / 2."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Esta estructura es consistente con la adoptada en trabajos empíricos clave (Nevmyvaka et al., 2006; Karpe et al., 2020; Frey et al., 2023), adaptada a las características del IPSA donde la profundidad del LOB es estructuralmente menor que en mercados globales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Espacio de Acción de los Agentes Ejecutores (A_E)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En cada paso micro (cada 30 segundos), el Ejecutor decide tres cosas simultáneas:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Tipo de orden: ",
+"b": 1
+},
+{
+"t": "{orden de mercado, orden límite, no ejecutar}. La opción de no ejecutar permite al agente esperar condiciones de liquidez más favorables."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Volumen: ",
+"b": 1
+},
+{
+"t": "fracción del slice a ejecutar en este paso ∈ [0, 1] (variable continua)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Precio límite",
+"b": 1
+},
+{
+"t": " (si aplica): nivel relativo al mejor precio del LOB (discreta: mejor bid, bid−1, bid−2, precio mid)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El espacio de acción del Ejecutor es "
+},
+{
+"t": "híbrido",
+"b": 1
+},
+{
+"t": " (discreto para tipo y nivel de precio, continuo para volumen), siguiendo el enfoque de Fang et al. (2022), quien demostró que esta combinación es superior a espacios puramente discretos para ejecución en LOB, ya que permite adaptar tanto la cantidad como la forma de la orden a la microestructura observada en cada momento."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.2.3 Algoritmo de aprendizaje: Proximal Policy Optimization (PPO)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El algoritmo PPO (Schulman et al., 2017) es el motor de aprendizaje del sistema. Es un método de gradiente de política ("
+},
+{
+"t": "policy gradient",
+"i": 1
+},
+{
+"t": ") que aprende directamente la política π_θ(a|s): la función que mapea estados a acciones. A diferencia de métodos basados en valor como DQN, los métodos de gradiente de política son especialmente adecuados para espacios de acción continuos o híbridos como el del Agente Ejecutor."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El predecesor de PPO, TRPO (Trust Region Policy Optimization), introdujo el concepto de limitar el cambio de política entre iteraciones para evitar inestabilidad. Sin embargo, TRPO es computacionalmente costoso al requerir el cálculo de la matriz Hessiana. PPO resuelve esto con un mecanismo más simple: el "
+},
+{
+"t": "clipping",
+"b": 1
+},
+{
+"t": " del objetivo, que restringe cuánto puede cambiar la política en cada actualización sin necesidad de cálculos de segundo orden."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Objetivo Clipeado del PPO",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Formalmente, PPO optimiza la siguiente función objetivo en cada iteración:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Lᶜᴸᴵᴺ(θ) = E_t [ min( r_t(θ) · A_t ,  clip(r_t(θ), 1−ε, 1+ε) · A_t ) ]",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Cada componente tiene un rol concreto en el aprendizaje:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "r_t(θ) = π_θ(a_t | s_t) / π_θ_old(a_t | s_t)",
+"b": 1
+},
+{
+"t": ": ratio entre la probabilidad de la acción bajo la política nueva y la antigua. Mide cuánto cambió la política."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "A_t (Ventaja)",
+"b": 1
+},
+{
+"t": ": estimada mediante Generalized Advantage Estimation (GAE). Mide qué tan mejor fue la acción tomada respecto al valor esperado en ese estado. Si A_t > 0, la acción fue mejor de lo esperado; si A_t < 0, fue peor."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "ε ∈ [0.1, 0.2]",
+"b": 1
+},
+{
+"t": ": parámetro de clipping. Limita el ratio r_t(θ) al rango [1−ε, 1+ε], impidiendo actualizaciones demasiado agresivas que desestabilicen el aprendizaje."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El mecanismo de clipping es especialmente crítico para el IPSA. En un mercado de baja liquidez, una actualización agresiva de política podría llevar al agente a comportamientos erráticos ante perturbaciones de liquidez como las que ocurren en la media jornada (11:30–14:00 hrs), donde el spread se amplía y la profundidad del LOB disminuye considerablemente."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Arquitectura Actor-Crítico",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "PPO utiliza una arquitectura "
+},
+{
+"t": "actor-crítico",
+"b": 1
+},
+{
+"t": ": dos redes neuronales que se entrenan simultáneamente. El "
+},
+{
+"t": "actor",
+"b": 1
+},
+{
+"t": " (π_θ) aprende qué acción tomar dado un estado. El "
+},
+{
+"t": "crítico",
+"b": 1
+},
+{
+"t": " (V_φ) aprende a estimar el valor esperado de cada estado, proporcionando la línea base para calcular la ventaja A_t. Esta separación produce un aprendizaje más eficiente y estable que los métodos puramente basados en valor o puramente en política."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Parámetro PPO",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Descripción",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Relevancia para el IPSA",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "ε (clipping)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Rango permitido de cambio de política por iteración"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Previene decisiones erráticas ante volatilidad del LOB"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "γ (descuento)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Peso del futuro vs. recompensa inmediata"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Alto en Maestro (0.99), medio en Ejecutores (0.95)"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "GAE λ"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Balance sesgo-varianza en la estimación de ventaja"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Reduce ruido en señales de recompensa del mercado"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tamaño de lote"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Muestras por actualización de política"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mayor lote = más estabilidad en mercados ruidosos"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Nº de épocas"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Iteraciones sobre el mismo lote de experiencia"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Se calibra para evitar sobreajuste a datos históricos"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.2.4 Dinámica de interacción y recompensa (Reward function)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La función de recompensa es el componente central que define qué aprende el sistema. Está diseñada para minimizar el "
+},
+{
+"t": "Implementation Shortfall",
+"b": 1
+},
+{
+"t": " (IS, Perold 1988) como métrica global, operando en dos niveles jerárquicos con horizontes temporales distintos. El diseño en dos niveles resuelve el problema de escala: el Maestro necesita una visión de jornada completa, mientras el Ejecutor necesita retroalimentación inmediata en cada operación."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Recompensa del Agente Maestro (R_M)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El Maestro recibe una "
+},
+{
+"t": "recompensa terminal dispersa",
+"b": 1
+},
+{
+"t": " ("
+},
+{
+"t": "sparse",
+"i": 1
+},
+{
+"t": "), evaluada únicamente al finalizar la jornada bursátil completa:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "R_M = −IS_total − λ · max(0, Q_pendiente) × P_mid_cierre",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Donde:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "IS_total",
+"b": 1
+},
+{
+"t": " = (P_ejecución_promedio − P_referencia) × Q_total es el implementation shortfall total de la jornada. El signo negativo indica que el agente es penalizado por costos altos y premiado por reducirlos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "P_referencia",
+"b": 1
+},
+{
+"t": ": precio mid en el momento de la decisión de inversión (arrival price), la línea base contra la cual se mide la calidad de ejecución."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "max(0, Q_pendiente) × P_mid_cierre",
+"b": 1
+},
+{
+"t": ": penaliza el incumplimiento de la meta-orden al cierre de jornada. Si todas las acciones fueron ejecutadas, esta penalización es cero."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "λ",
+"b": 1
+},
+{
+"t": ": hiperparámetro que pondera la urgencia de completar el inventario vs. minimizar el costo. Se calibra experimentalmente en el Título II."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El diseño de recompensa terminal ("
+},
+{
+"t": "sparse",
+"i": 1
+},
+{
+"t": ") es consistente con Lin & Beling (2020), quienes demostraron que la señal de fin de episodio produce políticas más estables que recompensas intermedias con IS parciales en mercados ruidosos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Recompensa de los Agentes Ejecutores (R_E)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Los Ejecutores reciben una "
+},
+{
+"t": "recompensa densa",
+"b": 1
+},
+{
+"t": " en cada paso de ejecución (cada 30 segundos):"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "R_E = (P_mid_t − P_ejecución_t) × q_ejecutado  −  β · σ²_precio × q_ejecutado",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Cada componente incentiva un comportamiento específico:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "(P_mid_t − P_ejecución_t) × q_ejecutado",
+"b": 1
+},
+{
+"t": ": captura directamente la reducción del slippage. Premia ejecutar por debajo del precio mid, es decir, aprovechar la liquidez favorable del LOB. Si el Ejecutor logra comprar más barato que el precio de referencia, recibe recompensa positiva."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "β · σ²_precio × q_ejecutado",
+"b": 1
+},
+{
+"t": ": penalización por riesgo temporal. Es proporcional a la varianza del precio durante el intervalo, coherente con el marco de Almgren & Chriss (2001): ejecutar lento reduce el impacto de mercado pero aumenta el riesgo de que el precio se mueva en contra."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "1",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "β",
+"b": 1
+},
+{
+"t": ": coeficiente de aversión al riesgo. Controla el trade-off entre impacto de mercado y riesgo temporal. Se calibra experimentalmente."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Función de Recompensa Conjunta y Flujo de Interacción",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La siguiente tabla sintetiza la estructura completa de recompensas del sistema y su flujo de interacción:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Componente",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Tipo",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Momento de evaluación",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Objetivo que incentiva",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "R_M (Maestro)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Terminal / sparse"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Al cierre de la jornada bursátil"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Minimizar IS total y completar la meta-orden"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "R_E (Ejecutores)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Densa / por paso"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Cada 30 segundos durante el slice"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Capturar liquidez favorable y reducir slippage táctico"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Penalización λ"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Terminal"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Al cierre de jornada (si Q_pendiente > 0)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Garantizar el cumplimiento completo de la meta-orden"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Penalización β"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Por paso"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Cada paso de ejecución del Ejecutor"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Controlar el riesgo de precio en ventanas de baja liquidez"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El ciclo completo de interacción opera de la siguiente manera: el Maestro observa el estado macro, asigna un slice a los Ejecutores, estos operan sobre el LOB en tiempo real recibiendo recompensa densa por cada acción, y al finalizar la jornada el Maestro recibe su recompensa terminal. Ambos agentes actualizan sus políticas mediante PPO con sus respectivas funciones de recompensa, y el ciclo se repite con la siguiente jornada histórica del IPSA hasta convergencia."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.3 Datos de Entrenamiento: Fuentes Reales y Datos Sintéticos",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El entrenamiento de los agentes inteligentes propuestos requiere datos históricos del mercado accionario chileno en distintos niveles de granularidad. Esta sección detalla las fuentes disponibles, sus características, sus limitaciones y la estrategia adoptada para cubrir los vacíos de datos mediante generación sintética."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.3.1 Nivel de granularidad requerido por el sistema",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La arquitectura jerárquica del sistema impone requerimientos diferenciados según el agente:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Agente Maestro (horizonte de 30 minutos): requiere datos OHLCV (Open, High, Low, Close, Volume) intradiarios con resolución de entre 1 y 30 minutos. Este nivel de granularidad está ampliamente disponible para las acciones del IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Agentes Ejecutores (horizonte de 30 segundos): requieren datos de Nivel 2 del LOB (snapshots de los mejores 5 niveles bid/ask con sus volúmenes, spread instante a instante, tasa de llegada de órdenes). Este nivel es de disponibilidad limitada y costosa en el mercado chileno."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Esta distinción define dos vías paralelas de adquisición de datos: fuentes reales para el Maestro y generación sintética calibrada para los Ejecutores."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.3.2 Fuentes de Datos Reales",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "a) Tienda Online de la Bolsa de Santiago (Fuente Primaria Oficial, es de Pago, se puede trabajar sin esta fuente)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La Bolsa de Comercio de Santiago dispone de una tienda en línea institucional que ofrece bases de datos históricas para descarga directa. Entre los productos disponibles más relevantes para el proyecto se encuentran:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Transacciones Diarias Acciones: registro consolidado de todas las transacciones de renta variable, incluye precio y volumen por operación. Precio referencial: 2,5 UF por base. Es la fuente más directa y oficial para reconstruir el perfil de volumen intradiario del IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "IPSA/IGPA Índices: series históricas de los índices bursátiles chilenos. Precio referencial: 1,5 UF por base."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Precios Metastock: información consolidada diaria por nemotécnico compatible con software de análisis técnico. Precio referencial: 2,5 UF por base."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Enlace oficial:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://tiendaonline.bolsadesantiago.com/VentasOnline/bbdd",
+"u": 1,
+"link": "https://tiendaonline.bolsadesantiago.com/VentasOnline/bbdd"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Limitación: los datos ofrecidos corresponden a resolución diaria o a resúmenes de transacciones, sin profundidad de LOB (Nivel 2). Son suficientes para el entrenamiento del Agente Maestro y para la calibración del simulador, pero no para los Agentes Ejecutores en su escala táctica de 30 segundos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "b) Yahoo Finance vía yfinance (Python) — Libre y Gratuita",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La librería yfinance de Python permite descargar datos históricos OHLCV para las acciones del IPSA con resolución de hasta 1 minuto, disponibles de forma gratuita para uso académico. Los tickers de las acciones chilenas en Yahoo Finance siguen el formato NEMOTÉCNICO.SN (por ejemplo, FALABELLA.SN, SQM-B.SN, COPEC.SN)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Resolución disponible: 1 minuto (últimos 7 días), 2 minutos, 5 minutos, 15 minutos, 30 minutos, 60 minutos y datos diarios históricos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Cobertura histórica intradiaria: aproximadamente 730 días para intervalos inferiores a 1 día."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Uso: entrenamiento del Agente Maestro (resolución 5–30 min), validación de patrones intradiarios del IPSA, calibración del simulador."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Código de ejemplo para descarga de acciones del IPSA:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "import yfinance as yftickers = [\"FALABELLA.SN\",\"SQM-B.SN\",\"COPEC.SN\",\"BSANTANDER.SN\"]df = yf.download(tickers, interval=\"5m\", period=\"60d\")"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Enlace oficial:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://pypi.org/project/yfinance/",
+"u": 1,
+"link": "https://pypi.org/project/yfinance/"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Repositorio con soporte explícito para IPSA:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://github.com/Reckziegel/YahooTickers",
+"u": 1,
+"link": "https://github.com/Reckziegel/YahooTickers"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "c) Investing.com — Datos Históricos Descargables",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Investing.com ofrece datos históricos del índice S&P CLX IPSA (símbolo SPIPSA) y de las acciones individuales de la Bolsa de Santiago, con posibilidad de descarga manual en formato CSV. Cubre datos diarios, semanales y mensuales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Enlace directo al histórico del IPSA:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://es.investing.com/indices/ipsa-historical-data",
+"u": 1,
+"link": "https://es.investing.com/indices/ipsa-historical-data"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Limitación: resolución máxima diaria (sin datos intradiarios), adecuado para análisis de contexto macro y validación de series largas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "d) Banco Central de Chile — Series Estadísticas (IPSA mensual/diario)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El Banco Central de Chile publica series estadísticas del IPSA desde 2003 como parte de su Base de Datos Estadísticos (BDE). Estas series son de acceso completamente libre y permiten contextualizar el comportamiento histórico del índice ante eventos macroeconómicos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Enlace:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_ESTADIST_MACRO/MN_EST_MACRO_IV/PEM_INDBUR/PEM_INDBUR",
+"u": 1,
+"link": "https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_ESTADIST_MACRO/MN_EST_MACRO_IV/PEM_INDBUR/PEM_INDBUR"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "e) ICE Data Services — Datos de Nivel 1 y 2 del LOB (Opción Comercial, es de Pago, se puede trabajar sin esta fuente)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Intercontinental Exchange (ICE) provee datos de streaming y datos históricos para la Bolsa de Santiago (BCS), incluyendo Level 1 y Level 2 de pricing a través de su ICE Consolidated Feed. Es la única fuente identificada que ofrece datos de profundidad de libro (LOB Nivel 2) para el mercado chileno, pero requiere suscripción comercial."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Enlace:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://developer.ice.com/fixed-income-data-services/catalog/santiago-stock-exchange-bcs",
+"u": 1,
+"link": "https://developer.ice.com/fixed-income-data-services/catalog/santiago-stock-exchange-bcs"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Alternativa académica: el acceso puede solicitarse a través de convenios institucionales de la UTEM con proveedores de datos financieros (Bloomberg Terminal / Refinitiv Eikon), de existir disponibilidad en la biblioteca universitaria."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.3.3 Estrategia ante la Escasez de Datos de Nivel 2: Generación Sintética",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Dado que los datos de Nivel 2 del LOB del mercado chileno son de acceso restringido o costoso, el proyecto adopta una estrategia de datos sintéticos calibrados como alternativa técnica válida y documentada en la literatura académica. Esta aproximación es coherente con los trabajos de Nevmyvaka et al. (2006), Karpe et al. (2020) y Byrd et al. (2020), quienes entrenaron agentes de ejecución en entornos simulados calibrados con datos reales ante la imposibilidad de acceder a LOB completos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "a) ABIDES / ABIDES-Gym (JP Morgan Chase — Open Source)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "ABIDES (Agent-Based Interactive Discrete Event Simulation) es el simulador de mercado de referencia en la literatura de RL para trading. Desarrollado originalmente por Byrd et al. (2020) y actualmente mantenido por JP Morgan Chase como proyecto open source, modela un libro de órdenes completo con agentes heterogéneos (market makers, value agents, momentum agents, noise agents) que interactúan mediante los protocolos ITCH/OUCH de NASDAQ."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Su extensión ABIDES-Gym provee una interfaz compatible con OpenAI Gym/Gymnasium, lo que permite integrarlo directamente con el entorno de entrenamiento PPO del proyecto. Esta herramienta puede calibrarse con los parámetros estadísticos del IPSA (tasas de llegada de órdenes, spread promedio, profundidad de libro) extraídos de los datos históricos disponibles."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Configuración RMSC04 disponible: 1 Exchange Agent, 2 Market Maker Agents, 102 Value Agents, 12 Momentum Agents, 1000 Noise Agents."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Interfaz Gym: 2 entornos listos para uso, con posibilidad de construcción de entornos personalizados."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Licencia: BSD 3-Clause (libre para uso académico)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Repositorio oficial:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://github.com/jpmorganchase/abides-jpmc-public",
+"u": 1,
+"link": "https://github.com/jpmorganchase/abides-jpmc-public"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "b) TRADES-LOB — Dataset Sintético Libre (Tesla/Intel, 2 días)",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El proyecto DeepMarket (Berti et al., 2025) publica TRADES-LOB, un dataset sintético de LOB generado mediante modelos de difusión probabilista (DDPM) calibrado sobre datos reales de LOBSTER para Tesla (TSLA) e Intel (INTC). El dataset consta de 265.986 filas con 50 columnas por fila, incluyendo los primeros 10 niveles del LOB (bid/ask) con precio y volumen, además de métricas derivadas como mid-price, spread, OBI y VWAP."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Aunque no corresponde al mercado chileno, proporciona un punto de partida estructural para el formato de datos y permite validar la arquitectura del simulador antes de la calibración con datos del IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Repositorio con dataset:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "https://github.com/LeonardoBerti00/DeepMarket",
+"u": 1,
+"link": "https://github.com/LeonardoBerti00/DeepMarket"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "c) Modelo de Poisson para Generación de Órdenes",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Como alternativa más liviana, el proyecto puede implementar un simulador de LOB basado en el modelo de llegada de órdenes de Poisson (Cont, Stoikov & Talreja, 2010). Este modelo describe la dinámica del libro de órdenes como un proceso estocástico donde las órdenes límite de compra, venta y cancelación llegan según tasas de Poisson λ+, λ−, θ calibradas empíricamente."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Los parámetros del modelo pueden estimarse directamente desde los datos históricos de la Bolsa de Santiago disponibles (Transacciones Diarias Acciones), permitiendo que el simulador reproduzca distribuciones estadísticas consistentes con el IPSA: spread promedio por tramo horario, perfil de volumen intradiario y volatilidad típica de las acciones del índice."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Ventaja respecto a ABIDES: menor complejidad computacional, más fácil de calibrar con datos escasos y completamente implementable en Python con NumPy y SciPy."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.3.4 Plan de Adquisición y Uso de Datos",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La estrategia de datos del proyecto sigue un orden de prioridad que combina fuentes reales para el Agente Maestro y datos sintéticos calibrados para los Agentes Ejecutores, garantizando que el sistema pueda avanzar independientemente de la disponibilidad de datos de Nivel 2:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Prioridad",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Fuente",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Tipo",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Agente",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Granularidad",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Costo",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "1"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tienda Online Bolsa de Santiago"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Real / Oficial"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Maestro + Calibración"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Diario / Transacciones"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "~2,5 UF por base"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "2"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Yahoo Finance (yfinance)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Real / Libre"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Maestro (entrenamiento)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1–30 min"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Gratuito"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "3"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Investing.com"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Real / Libre"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Contexto macro"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Diario"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Gratuito"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "4"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "LOB Sintético (ABIDES)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sintético calibrado"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Ejecutores"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tick / 30 seg"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Gratuito (open source)"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "5"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "TRADES-LOB"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sintético estructural"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Validación arquitectura"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tick-by-tick"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Gratuito"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "6"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Modelo de Poisson"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sintético paramétrico"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Ejecutores (alternativa)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "30 seg"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Implementación propia"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "7"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "ICE / Bloomberg / Refinitiv"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Real / Nivel 2"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Ejecutores + validación"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tick-by-tick"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Comercial / Convenio UTEM"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Tabla 4.3.1: Plan de adquisición y uso de datos por prioridad y agente. Elaboración propia.",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Flujo de adquisición propuesto",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El flujo de trabajo para la adquisición y uso de datos será el siguiente:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 1 — Maestro (Semanas 1–2 del Hito 5): Descargar datos OHLCV de las 30 acciones del IPSA vía yfinance (resolución 5 min, 2 años). Complementar con las bases de Transacciones Diarias Acciones de la Tienda Online de la Bolsa de Santiago para calibrar los perfiles de volumen intradiario."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 2 — Calibración del simulador (Semanas 2–3): Usar los datos de volumen y spread históricos para estimar los parámetros del modelo de Poisson (tasas de llegada λ+ y λ−) por tramo horario (apertura, media jornada, cierre)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 3 — Ejecutores (Semanas 3–4): Generar los datos de entrenamiento de Nivel 2 mediante ABIDES calibrado con los parámetros anteriores. Validar que las distribuciones del simulador sean estadísticamente consistentes con el mercado chileno (spread, OBI, perfil de volumen)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 4 — Validación cruzada (si ICE/Bloomberg disponible): Comparar el comportamiento del simulador con datos reales de Nivel 2, si se logra acceso institucional, para cuantificar el sesgo de simulación."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "4.3.5 Validación de la Calidad del Simulador",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Independientemente de la fuente de datos utilizada, el simulador será validado mediante las siguientes métricas estadísticas comparadas entre el entorno simulado y los datos históricos reales disponibles:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Distribución del spread bid-ask promedio por tramo horario (apertura, media jornada, cierre), verificando que el simulador capture el ensanchamiento del spread en horario de baja liquidez (11:30–14:00 hrs)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Perfil de volumen intradiario normalizado: correlación entre el volumen horario simulado y el histórico del IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Autocorrelación de retornos del precio mid: verificación de que el simulador no introduce dependencias artificiales en la dinámica de precios."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "20",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hechos estilizados del LOB: distribución de colas gruesas en retornos, clustering de volatilidad y reversión a la media del spread, consistentes con la literatura de microestructura de mercado (Gould et al., 2013)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Este proceso de validación constituirá parte de la Etapa 4 del proyecto (Construcción del entorno de simulación, sección 7.1) y sus resultados serán reportados en el Capítulo 6 del informe final (Entrenamiento y Experimentación)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " OBJETIVOS"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "5.1 OBJETIVO GENERAL"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Diseñar y desarrollar un sistema de coordinación de agentes inteligentes basado en Aprendizaje por Refuerzo para mitigar el costo por "
+},
+{
+"t": "Slippage",
+"i": 1
+},
+{
+"t": " en la ejecución de órdenes de gran volumen en el mercado IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "5.2 OBJETIVOS ESPECÍFICOS"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "32",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Modelar un entorno de simulación de alta fidelidad que replique la microestructura y la dinámica del libro de órdenes (LOB) de la bolsa de santiago, esto es para permitir el entrenamiento seguro de algoritmos de inteligencia artificial."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "32",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Implementar una arquitectura jerárquica de agentes (maestro y ejecutores) utilizando el algoritmo Proximal policy optimization (PPO) en pytorch, esto es con el motivo de que se pueda separar la planificación estratégica de la ejecución táctica de órdenes."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "32",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Desarrollar una función de recompensa (Reward function) optimizada para minimizar el ‘"
+},
+{
+"t": "implementation"
+},
+{
+"t": " shortfall’, permitiendo que los agentes aprendan a identificar ventanas de liquidez oportunas en el IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "32",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Evaluar y validar el desempeño del sistema mediante un análisis comparativo (benchmarking) contra estrategias tradicionales de ejecución (TWAP y VWAP), utilizando métricas de reducción de costos transaccionales y eficiencia de mercado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " ALCANCES Y LIMITACIONES"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "6.1 ALCANCES"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Considerando el desarrollo, se busca abordar la problemática del ‘Slippage’ mediante el uso de técnicas avanzadas de aprendizaje por refuerzo y sistemas multiagente. Por lo tanto, el proyecto contempla los siguientes alcances:\n"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "5",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Desarrollo de un entorno de simulación del mercado accionario chileno: ",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se construirá un entorno computacional capaz de representar la dinámica del mercado bursátil chileno a partir de datos históricos, incluyendo la evolución de precios, volúmenes transados y comportamiento del libro de órdenes. Este entorno permitirá recrear condiciones de liquidez y variabilidad del mercado, constituyendo la base para el entrenamiento y evaluación de los agentes inteligentes."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "5",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Modelamiento del problema de ejecución como un entorno de aprendizaje por refuerzo:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El proyecto desarrollará una formulación del problema en términos de estados, acciones y recompensas, permitiendo representar la ejecución de órdenes como un proceso de toma de decisiones secuencial. Este modelamiento incluirá variables relevantes como inventario restante, tiempo disponible, condiciones del mercado y métricas de desempeño asociadas al costo de ejecución."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "5",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Diseño e implementación de una arquitectura multiagente jerárquica:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se desarrollará una estructura compuesta por un ‘Agente Maestro’ y múltiples ‘Agentes Ejecutores’. El Agente Maestro será responsable de la planificación estratégica de la ejecución, determinando la fragmentación de la orden total en subórdenes, mientras que los Agentes Ejecutores se "
+},
+{
+"t": "encargarán"
+},
+{
+"t": " de la ejecución táctica, interactuando directamente con el entorno simulado para decidir el momento y la forma de ejecución."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "5",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Implementación del algoritmo de aprendizaje por refuerzo (PPO):",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se integrará el algoritmo Proximal Policy Optimization (PPO) como núcleo del sistema de aprendizaje, utilizando herramientas del ecosistema Python, particularmente "
+},
+{
+"t": "PyTorch"
+},
+{
+"t": ". Esto permitirá entrenar a los agentes para que aprendan políticas de ejecución eficientes, adaptándose dinámicamente a las condiciones del entorno simulado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "5",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Diseño de una función de recompensa orientada a la eficiencia de ejecución:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se definirá una función de recompensa basada en métricas financieras relevantes, como el implementation shortfall, con el objetivo de guiar el aprendizaje de los agentes hacia la minimización de costos asociados a la ejecución de órdenes y la mejora en la calidad de los precios obtenidos. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "5",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Entrenamiento y ajuste del modelo en base a datos históricos:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se realizará el proceso de entrenamiento de los agentes utilizando datos históricos del mercado IPSA, permitiendo que el sistema aprenda patrones de liquidez, comportamiento del mercado y oportunidades de ejecución eficiente. Este proceso incluirá iteraciones de ajuste de parámetros para mejorar el desempeño del modelo."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "6.2 LIMITACIONES"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El presente proyecto, si bien plantea una solución técnicamente avanzada, opera dentro de un conjunto de restricciones deliberadas que acotan su alcance. Las limitaciones son las siguientes:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "27",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Sin ejecución en tiempo real (Live Trading):",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El alcance del proyecto es estrictamente investigativo y de desarrollo de software. El sistema no contempla la conexión a APIs de corredoras o brokers reales para el envío de órdenes efectivas a la Bolsa de Santiago. Todas las simulaciones y validaciones se realizan sobre datos históricos. El objetivo es demostrar la viabilidad y superioridad del enfoque mediante backtesting riguroso, no operar capital real."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "27",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Universo limitado al Índice IPSA:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El sistema se circunscribe exclusivamente a las acciones que componen el índice IPSA. No se considerarán activos de otros mercados internacionales (NYSE, NASDAQ, etc.), instrumentos de renta fija, divisas ni criptomonedas. Esta delimitación permite concentrar los esfuerzos de modelado en las particularidades microestructurales del mercado chileno."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "27",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Dependencia de la calidad y disponibilidad de datos:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La fidelidad del simulador de mercado y la calidad del entrenamiento de los agentes están directamente condicionadas por la disponibilidad de datos históricos de alta granularidad. La escasez o ausencia de datos de Nivel 2 (profundidad total del LOB, más allá de las mejores puntas) podría limitar la capacidad del simulador para replicar fielmente las condiciones del mercado real, introduciendo un sesgo en las métricas de desempeño obtenidas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "27",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "No predicción de eventos exógenos (Cisnes Negros):",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El sistema no está diseñado para predecir ni gestionar eventos macroeconómicos extremos e inesperados, como crisis financieras sistémicas, estallidos sociales o pandemias, que alteren la microestructura normal del mercado de forma drástica y prolongada. Los agentes son entrenados en condiciones de mercado representativas (incluyendo períodos de estrés histórico moderado), pero su comportamiento ante escenarios completamente inéditos no está garantizado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "27",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Ausencia de regulación en tiempo real:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El prototipo no incluye un módulo de cumplimiento normativo (compliance) automatizado que verifique en tiempo real si las acciones del agente respetan las regulaciones de la Comisión para el Mercado Financiero (CMF). La evaluación del cumplimiento regulatorio es responsabilidad del operador y queda fuera del alcance de este proyecto."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "27",
+"lvl": 0,
+"fmt": "lowerLetter"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Sin gestión de carteras múltiples:",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El sistema está diseñado para optimizar la ejecución de una única meta-orden sobre un único activo en un período determinado. La coordinación de ejecuciones simultáneas sobre múltiples activos con restricciones de correlación de cartera queda fuera del alcance de este proyecto."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " METODOLOGÍA DEL PROYECTO"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La metodología del proyecto se "
+},
+{
+"t": "organizara"
+},
+{
+"t": " en etapas secuenciales e iterativas, pensadas para pasar desde la comprensión del problema hasta la validación del prototipo."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "7.1 Etapas del proyecto"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 1: Investigación y delimitación del problema",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En esta primera etapa se construye la base conceptual y contextual del proyecto. El propósito es definir con precisión el problema del slippage, comprender su relación con la microestructura del mercado y justificar técnicamente la elección del IPSA como entorno de estudio. También se revisan trabajos previos sobre ejecución algorítmica, aprendizaje por refuerzo, coordinación multiagente y simulación de mercados, para establecer un marco sólido y evitar ambigüedades en el diseño posterior. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "14",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 1: Búsqueda de información.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se recopila bibliografía académica, documentación técnica y fuentes institucionales relacionadas con slippage, implementation shortfall, libro de órdenes, estrategias TWAP/VWAP, PPO, sistemas multiagente y regulación del mercado chileno. Esta fase permite reunir los conceptos mínimos necesarios para sostener la propuesta. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "4",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 2: Análisis y selección de información relevante. ",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se filtra la información encontrada y se priorizan aquellos antecedentes que realmente aportan al problema del proyecto. En esta fase se descartan enfoques demasiado generales o ajenos al alcance definido, con el fin de mantener coherencia entre teoría y desarrollo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "3",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 3: Elaboración del marco teórico y contextual.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se redactan los fundamentos del proyecto: definición de microestructura de mercado, funcionamiento del libro de órdenes, características del IPSA, significado del slippage, medidas de impacto de ejecución y justificación del uso de aprendizaje por refuerzo profundo. El resultado de esta fase debe dejar claro por qué el problema es relevante y por qué la solución propuesta es pertinente."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 2: Definición funcional y técnica de la solución",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Esta etapa traduce el problema investigado a una solución computacional concreta. Aquí se establecen las reglas de funcionamiento del sistema, la lógica de interacción entre agentes y las condiciones bajo las cuales se entrenará y evaluará el modelo. La idea es convertir la problemática bursátil en un problema de decisión estructurado y computable."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "9",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 1: Levantamiento de requerimientos. ",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se definen los requerimientos funcionales y no funcionales del sistema. Entre ellos se considera la necesidad de simular el mercado, trabajar con datos históricos, ejecutar estrategias de fragmentación de órdenes y comparar resultados contra benchmarks tradicionales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "35",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 2: Definición del alcance operativo. ",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se especifican las restricciones del proyecto: un solo mercado, un solo activo o una sola meta-orden por simulación, ausencia de ejecución real y uso exclusivo de datos históricos. Esta fase es clave porque evita que el proyecto crezca hacia una solución imposible de abordar en el tiempo del título."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "36",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 3: Modelado del problema como entorno de decisión.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se formula el problema en términos de estados, acciones y recompensas. Aquí se define qué variables observará el sistema, qué decisiones podrá tomar y cómo se medirá el éxito de cada acción en relación con la reducción del slippage y del "
+},
+{
+"t": "implementation"
+},
+{
+"t": " shortfall."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 3: Diseño de la arquitectura del sistema",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En esta etapa se diseña la estructura interna del prototipo. El objetivo es definir cómo se organizan los componentes que forman parte del sistema de coordinación de agentes, considerando la separación entre planificación estratégica y ejecución táctica que se propone. La arquitectura debe ser lo bastante clara como para que el sistema pueda implementarse después sin contradicciones."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "25",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 1: Diseño del Agente Maestro.",
+"b": 1
+},
+{
+"t": " "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se define el agente encargado de planificar la fragmentación de la meta-orden, distribuir el volumen en tramos y decidir en qué ventanas temporales conviene ejecutar cada parte. Su función es trabajar a nivel macro y considerar variables agregadas del mercado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "15",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 2: Diseño de los Agentes Ejecutores.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se especifican los agentes encargados de operar sobre el libro de órdenes en intervalos más cortos. Estos agentes deben decidir el momento y la forma de ejecución, atendiendo a la liquidez disponible y al spread observado."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "7",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 3: Diseño de la función de recompensa.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se formula una recompensa orientada a minimizar el "
+},
+{
+"t": "implementation"
+},
+{
+"t": " shortfall y a penalizar ejecuciones ineficientes. Esta fase es central, porque de ella depende que el sistema aprenda a comportarse de acuerdo con el objetivo real del proyecto."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "21",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 4: Definición de la arquitectura de aprendizaje.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se establece el uso de PPO como algoritmo principal de entrenamiento, junto con la estructura de redes neuronales y los parámetros generales de aprendizaje. La elección es consistente con la literatura de PPO, que destaca por su estabilidad y su buen equilibrio entre simplicidad y desempeño."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 4: Construcción del entorno de simulación",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Esta etapa corresponde a la creación del entorno donde los agentes podrán aprender sin necesidad de operar en el mercado real. Aquí se materializa el espacio del entrenamiento, se procesan los datos históricos y se simulan condiciones de liquidez cercanas a las del mercado objetivo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "28",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 1: Recolección y organización de datos.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se obtienen datos históricos del mercado, idealmente con el mayor nivel de granularidad disponible, para reconstruir el comportamiento del libro de órdenes y del precio durante la jornada bursátil."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "19",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 2: Limpieza y preprocesamiento.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se normalizan los datos, se corrigen inconsistencias y se estructuran en un formato utilizable para entrenamiento. Esta fase asegura que la información sea homogénea y apta para alimentar el simulador."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "22",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 3: Implementación del simulador de mercado.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se desarrolla el entorno que recreará el comportamiento del mercado accionario chileno bajo condiciones históricas. El simulador debe permitir reproducir escenarios de distinta liquidez, variaciones de spread y ejecución parcial de órdenes."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "30",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 4: Integración del simulador con la lógica de agentes.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se conecta el entorno con los módulos del Agente Maestro y de los Agentes Ejecutores, de forma que el sistema pueda ejecutar decisiones, recibir retroalimentación y registrar resultados."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 5: Entrenamiento del modelo y ajuste experimental",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En esta etapa se ejecuta el aprendizaje del sistema y se afinan los parámetros del modelo. El foco está en lograr que los agentes aprendan a ejecutar órdenes de forma más eficiente que las estrategias base, sin perder estabilidad ni sobreajuste a los datos históricos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "29",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 1: Entrenamiento inicial.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se realiza un primer ciclo de aprendizaje para verificar que el modelo responde correctamente al entorno y que la función de recompensa produce señales útiles."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "2",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 2: Ajuste de ",
+"b": 1
+},
+{
+"t": "hiperparámetros",
+"b": 1
+},
+{
+"t": ".",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se afinan parámetros como tasa de aprendizaje, tamaño de lote, número de episodios, coeficiente de exploración y rango de clipping de PPO, buscando un equilibrio entre estabilidad y capacidad de adaptación."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "16",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 3: Pruebas iterativas de desempeño.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se ejecutan simulaciones repetidas para observar el comportamiento del sistema frente a distintos niveles de liquidez y distintos tamaños de orden. Esta fase permite detectar fallas tempranas y corregirlas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "18",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 4: Comparación con benchmarks.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se contrasta el desempeño del sistema con TWAP y VWAP, con el fin de verificar si efectivamente existe una reducción del costo de ejecución y una mejora en la calidad de la fragmentación de órdenes."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Etapa 6: Validación, análisis de resultados y cierre del proyecto",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La última etapa se orienta a interpretar lo construido y comprobar si el prototipo cumple con lo que se propuso desde el inicio. No se trata solo de mostrar que el sistema funciona, sino de demostrar en qué medida ayuda a reducir el ‘Slippage’ bajo condiciones simuladas y que limitaciones conserva frente a escenarios reales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "12",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 1: Análisis de métricas.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se analizan indicadores como slippage, "
+},
+{
+"t": "implementation"
+},
+{
+"t": " shortfall, costo promedio de ejecución, porcentaje de cumplimiento de la meta-orden y estabilidad del aprendizaje."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "6",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 2: Discusión de resultados.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se interpretan los resultados en relación con el problema planteado, considerando qué tan útil resultó la arquitectura de agentes y qué tan robusto fue el comportamiento del modelo frente a distintos escenarios."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "26",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 3: Redacción de conclusiones.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se sintetizan los hallazgos principales, se establece si los objetivos se cumplieron y se indica de manera clara qué limitaciones quedan abiertas para una futura extensión del proyecto."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "10",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Fase 4: Formulación de mejoras futuras.",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se proponen líneas de trabajo posteriores, como integrar mayor profundidad de mercado, ampliar el universo de activos o explorar variantes más avanzadas de coordinación multiagente."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": "RECURSOS"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "8.1 Recursos Humanos"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El equipo de desarrollo del proyecto está conformado por tres integrantes de la Escuela de Informática y Computación de la Universidad Tecnológica Metropolitana (UTEM), con roles complementarios que cubren las áreas estratégica, de inteligencia artificial y de microestructura de mercado:"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 5",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": " "
+},
+{
+"t": "Tabla 2: Integrantes y rol designado"
+}
+]
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Integrante",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Rol Principal",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Área de Responsabilidad",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Paolo Sepúlveda"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Gestión y Fundamentos"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Planificación estratégica, descripción del sistema multi-agente y PPO, objetivos y plan de trabajo."
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mauricio Reynoso"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Arquitectura IA"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Diseño técnico de los agentes, metodología de entrenamiento, arquitectura neuronal y software de RL."
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Benjamin Farias "
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Entorno de Mercado y Estructura"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Modelado del LOB, datos financieros del IPSA, simulación de mercado, recursos de hardware y bibliografía."
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": " "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "La supervisión académica del proyecto estará a cargo del Profesor Guía asignado por la Escuela, quien orientará las decisiones técnicas más relevantes, evaluará los avances en los hitos definidos y validará la coherencia metodológica del trabajo de título."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "8.2 Recursos de Hardware"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El entrenamiento de redes neuronales profundas mediante Aprendizaje por Refuerzo es una tarea computacionalmente intensiva. A continuación se detallan los requerimientos de hardware para el desarrollo del proyecto:"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 5",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": " "
+},
+{
+"t": "Tabla 3: Hardware óptimo "
+}
+]
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Recurso",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Especificación Mínima Recomendada",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "center",
+"runs": [
+{
+"t": "Propósito en el Proyecto",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Procesador (CPU)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Intel Core i5 / AMD Ryzen 7 (8+ núcleos)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Ejecución del simulador de mercado, preprocesamiento y carga de datos."
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Memoria RAM"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "32 GB DDR4 o superior"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Almacenamiento en memoria de los datos del LOB y los buffers de experiencia del agente (Replay Buffer)."
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tarjeta Gráfica (GPU)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "NVIDIA RTX 3080 / RTX 4070 o superior (8+ GB VRAM)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Entrenamiento paralelo de las redes neuronales del Agente Maestro y los Agentes Ejecutores mediante CUDA."
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Almacenamiento"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "SSD NVMe de 500 GB o superior"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Acceso rápido a los conjuntos de datos históricos del IPSA (ticks, LOB snapshots)."
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Conectividad"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Red de alta velocidad (100 Mbps+)"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Descarga de datos financieros históricos y sincronización con entornos de entrenamiento remotos (ej. Google Colab, AWS)."
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": " "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "En caso de que el hardware local de los integrantes no sea suficiente para las etapas de entrenamiento más exigentes, se contempla el uso de recursos de cómputo en la nube. Haremos uso de plataformas que nos permitan escalar el entrenamiento sin inversión en infraestructura física adicional, y representan una alternativa viable y de bajo costo para la etapa de entrenamiento intensivo correspondiente al Título II."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": " "
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "8.3 Recursos de Software"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El desarrollo del proyecto requiere de determinadas herramientas de software para el procesamiento de datos financieros, simulación de entornos, implementación de modelos de aprendizaje por refuerzo y evaluación de resultados. Debido a esto, haremos uso de los siguientes recursos de software:"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Lenguaje de programación principal",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se utilizará Python como lenguaje base del proyecto, debido a su amplio ecosistema en ciencia de datos, aprendizaje automático y simulación. Su flexibilidad permite integrar tanto el procesamiento de datos como la implementación de modelos de inteligencia artificial en un mismo entorno."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Librerías de aprendizaje automático y deep learning",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se empleará PyTorch como framework principal para la implementación de redes neuronales y del algoritmo PPO. Esta herramienta permite un control detallado del proceso de entrenamiento y facilita la construcción de arquitecturas personalizadas, lo cual es fundamental para el diseño del sistema multiagente."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Librerías de aprendizaje por refuerzo",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se utilizarán librerías complementarias como Gymnasium (o entornos compatibles tipo "
+},
+{
+"t": "OpenAI"
+},
+{
+"t": " Gym) para estructurar el entorno de entrenamiento, permitiendo definir estados, acciones y recompensas de forma estandarizada. En caso de ser necesario, se desarrollarán entornos personalizados adaptados al comportamiento del mercado IPSA."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Procesamiento y análisis de datos",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Para la manipulación y análisis de datos históricos se utilizarán herramientas como Pandas y NumPy, las cuales permiten trabajar con grandes volúmenes de datos financieros, realizar transformaciones y preparar los insumos necesarios para el entrenamiento del modelo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Visualización de datos",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se emplearán librerías como Matplotlib y Seaborn para la visualización de resultados, permitiendo analizar el comportamiento del modelo, comparar estrategias de ejecución y representar métricas como slippage o costos de ejecución."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Entorno de desarrollo",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El desarrollo se realizará en Visual Studio Code, el cual proporciona herramientas de depuración, gestión de proyectos y extensiones orientadas a Python. Además, se utilizará Git para el control de versiones y la gestión colaborativa del código. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Plataformas de cómputo y entrenamiento",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Para el entrenamiento de los modelos, se considerará el uso de plataformas como Google Colab y servicios en la nube (por ejemplo, AWS), especialmente en etapas donde se requiera mayor capacidad de cómputo. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " ESTRUCTURA INFORME FINAL"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El informe final del proyecto se organizará de manera coherente con el desarrollo técnico y metodológico propuesto, permitiendo presentar de forma clara tanto los fundamentos teóricos como la implementación y validación del sistema. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 1: Introducción",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se presenta el contexto del problema, la relevancia del slippage en el mercado accionario chileno y la motivación del uso de inteligencia artificial. Se incluyen los objetivos del proyecto y una visión general de la solución propuesta."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 2: Marco teórico y Estado del arte",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se desarrollan los conceptos fundamentales relacionados con la microestructura de mercado, el libro de órdenes (LOB), slippage, implementation shortfall y estrategias tradicionales de ejecución. Además, se revisa el estado del arte en aprendizaje por refuerzo, PPO y sistemas multiagente aplicados a finanzas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 3: Definición del Problema y Análisis del Entorno",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se describe el problema de ejecución de órdenes en el contexto del IPSA, incluyendo el análisis de datos de mercado, características de liquidez y comportamiento del entorno. Se formaliza el problema como un proceso de decisión, definiendo estados, acciones y objetivos."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 4: Diseño de la Solución",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se presenta la arquitectura del sistema, incluyendo el diseño del Agente Maestro y los Agentes Ejecutores, la estructura del entorno de simulación y la definición de la función de recompensa. Se detallan las decisiones técnicas adoptadas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 5: Implementación del Sistema",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se describe el desarrollo del prototipo, incluyendo la construcción del simulador, la implementación del modelo en PyTorch, la integración de los agentes y la configuración del entorno de entrenamiento."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 6: Entrenamiento y Experimentación",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se detallan los procesos de entrenamiento, ajuste de "
+},
+{
+"t": "hiperparámetros"
+},
+{
+"t": " y ejecución de experimentos. Se describen los escenarios de prueba y la metodología de evaluación utilizada."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 7: Resultados y Evaluación",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se presentan los resultados obtenidos, incluyendo comparaciones con estrategias tradicionales como TWAP y VWAP. Se analizan métricas de desempeño como slippage, costos de ejecución y eficiencia del modelo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 8: Discusión y Análisi Crítico",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se interpretan los resultados en profundidad, evaluando el comportamiento del sistema, sus fortalezas y aspectos a mejorar. Se discute la aplicabilidad del modelo en contextos reales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Capítulo 9: Conclusiones y Trabajo Futuro",
+"b": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se sintetizan los principales hallazgos del proyecto, se evalúa el cumplimiento de los objetivos y se proponen posibles extensiones o mejoras del sistema. "
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " PLAN DE TRABAJO"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "10.1 Metodología"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se utilizará la metodología SCRUM con el motivo de gestionar el desarrollo del proyecto. Esto se fundamenta en la necesidad de realizar entregas incrementales y ajustes constantes en los modelos de aprendizaje por refuerzo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "34",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Sprints: Se trabajarán en ciclos de 2 a 3 semanas."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "34",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Roles: se dividirán en tareas semanales acorde al tamaño del grupo del proyecto"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "34",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Eventos: Se realizarán sprint plannings para definir las metas que se deberán cumplir en el tiempo que corresponda, Daily stand-ups para sincronizar las tareas diarias del equipo."
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "10.2 Plan de Hitos y planificación semestral"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Título 1: fase de diseño y product backlog inicial (Primer Semestre 2026)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "El foco de esta fase es la investigación, la arquitectura y la preparación del entorno para el entrenamiento."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "13",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 1: Estado del Arte y Marco Regulatorio (Semanas 1-4): Investigación exhaustiva sobre microestructura del mercado chileno, normativa de la Bolsa de Santiago y revisión de literatura sobre algoritmos de ejecución algorítmica tradicionales."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "13",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 2: Definición de la Arquitectura de IA (Semanas 5-8): Modelamiento teórico de la jerarquía Maestro-Ejecutor. Definición formal de los espacios de estado, acción y la estructura de la función de recompensa basada en PPO."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "13",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 3: Diseño del Modelo de Simulación y Datos (Semanas 9-14): Especificación técnica de cómo se procesarán los datos del LOB y diseño lógico del simulador de mercado (diagramas de flujo y arquitectura de datos)."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "13",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 4: Presentación Teórica y Defensa de Título 1 (Semana 18): Entrega del informe con el marco teórico completo, la metodología Scrum definida y la planificación técnica para el desarrollo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Título 2: Desarrollo, Implementación y defensa final (Segundo Semestre 2026)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Se centra en la fase de desarrollo del proyecto, donde se construye la solución y se hace defensa del título."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "24",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 5: Construcción del Entorno de Simulación (Semanas 1-4): Implementación del simulador en Python y carga de los datos históricos del mercado chileno."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "24",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 6: Desarrollo y Entrenamiento de Agentes (Semanas 5-10): Programación de las redes neuronales en "
+},
+{
+"t": "PyTorch"
+},
+{
+"t": ", integración de los agentes y ejecución de las fases de aprendizaje por refuerzo."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "24",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 7: Validación y Pruebas de Desempeño (Semanas 11-14): Comparación de resultados frente a modelos estáticos para validar la reducción del "
+},
+{
+"t": "Slippage",
+"i": 1
+},
+{
+"t": "."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": {
+"id": "24",
+"lvl": 0,
+"fmt": "bullet"
+},
+"jc": "both",
+"runs": [
+{
+"t": "Hito 8: Memoria y Examen de Título (Semanas 15-18): Finalización del informe final, entrega del software listo y defensa ante la comisión examinadora."
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": {
+"id": "23",
+"lvl": 0,
+"fmt": "decimal"
+},
+"jc": "both",
+"runs": [
+{
+"t": " BIBLIOGRAFÍA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Microestructura de Mercado y Libro de Órdenes",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Glosten, L. R., & Milgrom, P. R. (1985). Bid, ask and transaction prices in a specialist market with heterogeneously informed traders. Journal of Financial Economics, 14(1), 71–100.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1016/0304-405X(85)90044-3"
+},
+{
+"t": "https://doi.org/10.1016/0304-405X(85)90044-3",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1016/0304-405X(85)90044-3"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Gould, M. D., Porter, M. A., Williams, S., McDonald, M., Fenn, D. J., & Howison, S. D. (2013). Limit order books. Quantitative Finance, 13(11), 1709–1741.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1080/14697688.2013.803148"
+},
+{
+"t": "https://doi.org/10.1080/14697688.2013.803148",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1080/14697688.2013.803148"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Hasbrouck, J. (1991). Measuring the information content of stock trades. Journal of Finance, 46(1), 179–207.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1111/j.1540-6261.1991.tb03749.x"
+},
+{
+"t": "https://doi.org/10.1111/j.1540-6261.1991.tb03749.x",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1111/j.1540-6261.1991.tb03749.x"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Kyle, A. S. (1985). Continuous auctions and insider trading. Econometrica, 53(6), 1315–1335.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.2307/1913210"
+},
+{
+"t": "https://doi.org/10.2307/1913210",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.2307/1913210"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Parlour, C. A. (1998). Price dynamics in limit order markets. The Review of Financial Studies, 11(4), 789–816.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1093/rfs/11.4.789"
+},
+{
+"t": "https://doi.org/10.1093/rfs/11.4.789",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1093/rfs/11.4.789"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Rocsu, I. (2009). A dynamic model of the limit order book. The Review of Financial Studies, 22(11), 4601–4641.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1093/rfs/hhp011"
+},
+{
+"t": "https://doi.org/10.1093/rfs/hhp011",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1093/rfs/hhp011"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Slippage e Implementation Shortfall",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Almgren, R., & Chriss, N. (2001). Optimal execution of portfolio transactions. Journal of Risk, 3(2), 5–39.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.21314/JOR.2001.041"
+},
+{
+"t": "https://doi.org/10.21314/JOR.2001.041",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.21314/JOR.2001.041"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Almgren, R. F. (2003). Optimal execution with nonlinear impact functions and trading-enhanced risk. Applied Mathematical Finance, 10(1), 1–18.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1080/135048602100056327"
+},
+{
+"t": "https://doi.org/10.1080/135048602100056327",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1080/135048602100056327"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Kato, T. (2016). Optimality of VWAP execution strategies under general shaped market impact functions. arXiv:1605.03683.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://arxiv.org/abs/1605.03683"
+},
+{
+"t": "https://arxiv.org/abs/1605.03683",
+"i": 1,
+"u": 1,
+"link": "https://arxiv.org/abs/1605.03683"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Perold, A. F. (1988). The implementation shortfall: Paper versus reality. Journal of Portfolio Management, 14(3), 4–9.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.3905/jpm.1988.409150"
+},
+{
+"t": "https://doi.org/10.3905/jpm.1988.409150",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.3905/jpm.1988.409150"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Aprendizaje por Refuerzo en Finanzas",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Kolm, P. N., & Ritter, G. (2019). Dynamic replication and hedging: A reinforcement learning approach. Journal of Financial Data Science, 1(1), 159–171.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.3905/jfds.2019.1.1.159"
+},
+{
+"t": "https://doi.org/10.3905/jfds.2019.1.1.159",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.3905/jfds.2019.1.1.159"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Lin, F. H., & Beling, P. A. (2020). An end-to-end optimal trade execution framework based on proximal policy optimization with LSTM. En Proceedings of the Twenty-Ninth International Joint Conference on Artificial Intelligence (pp. 4695–4701). IJCAI.",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Nevmyvaka, Y., Feng, Y., & Kearns, M. (2006). Reinforcement learning for optimized trade execution. En Proceedings of the 23rd International Conference on Machine Learning (pp. 673–680). ACM.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1145/1143844.1143929"
+},
+{
+"t": "https://doi.org/10.1145/1143844.1143929",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1145/1143844.1143929"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Ning, B., Lin, F. H., & Jaimungal, S. (2021). Double deep Q-learning for optimal execution. Applied Mathematical Finance, 28(2), 98–124.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.1080/1350486X.2021.1913724"
+},
+{
+"t": "https://doi.org/10.1080/1350486X.2021.1913724",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1080/1350486X.2021.1913724"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017). Proximal policy optimization algorithms. arXiv:1707.06347.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://arxiv.org/abs/1707.06347"
+},
+{
+"t": "https://arxiv.org/abs/1707.06347",
+"i": 1,
+"u": 1,
+"link": "https://arxiv.org/abs/1707.06347"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Sistemas Multi-Agente y Coordinación",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Lowe, R., Wu, Y., Tamar, A., Harb, J., Abbeel, P., & Mordatch, I. (2017). Multi-agent actor-critic for mixed cooperative-competitive environments. En Advances in Neural Information Processing Systems (Vol. 30, pp. 6379–6390). Curran Associates. ",
+"i": 1
+},
+{
+"t": "https://arxiv.org/abs/1706.02275",
+"i": 1,
+"u": 1,
+"link": "https://arxiv.org/abs/1706.02275"
+},
+{
+"t": "  ",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Rashid, T., Samvelyan, M., de Witt, C. S., Farquhar, G., Foerster, J., & Whiteson, S. (2018). QMIX: Monotonic value function factorisation for deep multi-agent reinforcement learning. En Proceedings of the 35th International Conference on Machine Learning (pp. 4295–4304). PMLR. ",
+"i": 1
+},
+{
+"t": "https://arxiv.org/abs/1803.11485",
+"i": 1,
+"u": 1,
+"link": "https://arxiv.org/abs/1803.11485"
+},
+{
+"t": " ",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Mercado Chileno (IPSA) y Liquidez",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Arenas, M., & Busta, C. (2022). Determinantes de la liquidez bursátil en Chile: Análisis del IPSA 2010–2022. Revista de Análisis Económico, 37(2), 45–78.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.4067/S0718-88702022000200045"
+},
+{
+"t": "https://doi.org/10.4067/S0718-88702022000200045",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.4067/S0718-88702022000200045"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Bolsa de Santiago. (2024). Manual de Operaciones en Acciones. Bolsa de Comercio de Santiago.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://servicioscms.bolsadesantiago.com/Normativas%20Bolsa%20de%20Comercio/Manual%20de%20Operaciones%20en%20Acciones.pdf"
+},
+{
+"t": "https://servicioscms.bolsadesantiago.com/Normativas%20Bolsa%20de%20Comercio/Manual%20de%20Operaciones%20en%20Acciones.pdf",
+"i": 1,
+"u": 1,
+"link": "https://servicioscms.bolsadesantiago.com/Normativas%20Bolsa%20de%20Comercio/Manual%20de%20Operaciones%20en%20Acciones.pdf"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Comisión para el Mercado Financiero (CMF). (2024). Ley N° 18.045 de Mercado de Valores. CMF Chile.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://www.cmfchile.cl/portal/principal/613/articles-806_doc_pdf.pdf"
+},
+{
+"t": "https://www.cmfchile.cl/portal/principal/613/articles-806_doc_pdf.pdf",
+"i": 1,
+"u": 1,
+"link": "https://www.cmfchile.cl/portal/principal/613/articles-806_doc_pdf.pdf"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Silva, T., & Durán, G. (2023). Gobernanza corporativa y eficiencia del mercado accionario chileno. Estudios de Administración, 30(1), 12–34.",
+"i": 1
+},
+{
+"t": " ",
+"i": 1,
+"link": "https://doi.org/10.5354/0719-0816.2023.71342"
+},
+{
+"t": "https://doi.org/10.5354/0719-0816.2023.71342",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.5354/0719-0816.2023.71342"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Simulación de Mercados y Entornos de Entrenamiento",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Byrd, D., Hybinette, M., & Balch, T. H. (2020). ABIDES: Towards high-fidelity market simulation for AI research. En Proceedings of the 1st ACM International Conference on AI in Finance (Article 19). ACM. ",
+"i": 1
+},
+{
+"t": "https://doi.org/10.1145/3383455.3422569",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1145/3383455.3422569"
+},
+{
+"t": " ",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "França, L., & Jaimungal, S. (2022). mbt_gym: Reinforcement learning for model-based limit order book trading. arXiv preprint arXiv:2209.15042. ",
+"i": 1
+},
+{
+"t": "https://arxiv.org/abs/2209.15042",
+"i": 1,
+"u": 1,
+"link": "https://arxiv.org/abs/2209.15042"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Cont, R., Stoikov, S., & Talreja, R. (2010). A stochastic model for order book dynamics. Operations Research, 58(3), 549–563. https://doi.org/10.1287/opre.1090.0780",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Byrd, D., Hybinette, M., & Balch, T. H. (2020). ABIDES: Towards high-fidelity market simulation for AI research. En Proceedings of the 1st ACM International Conference on AI in Finance (Article 19). ACM. https://doi.org/10.1145/3383455.3422569",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Berti, L., et al. (2025). TRADES: Generating realistic market simulations with diffusion models. arXiv:2502.07071. https://arxiv.org/abs/2502.07071",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Gould, M. D., Porter, M. A., Williams, S., McDonald, M., Fenn, D. J., & Howison, S. D. (2013). Limit order books. Quantitative Finance, 13(11), 1709–1741. ",
+"i": 1
+},
+{
+"t": "https://doi.org/10.1080/14697688.2013.803148",
+"i": 1,
+"u": 1,
+"link": "https://doi.org/10.1080/14697688.2013.803148"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Librerías y Herramientas de Software",
+"b": 1,
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen, T., Lin, Z., Gimelshein, N., Antiga, L., Desmaison, A., Köpf, A., Yang, E., DeVito, Z., Raison, M., Tejani, A., Chilamkurthy, S., Steiner, B., Fang, L., ... Chintala, S. (2019). PyTorch: An imperative style, high-performance deep learning library. En Advances in Neural Information Processing Systems (Vol. 32, pp. 8026–8037). Curran Associates. https://arxiv.org/abs/1912.01703",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "McKinney, W. (2010). Data structures for statistical computing in Python. En Proceedings of the 9th Python in Science Conference (pp. 56–61). SciPy. https://doi.org/10.25080/Majora-92bf1922-00a",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": "Harris, C. R., Millman, K. J., van der Walt, S. J., Gommers, R., Virtanen, P., Cournapeau, D., Wieser, E., Taylor, J., Berg, S., Smith, N. J., Kern, R., Picus, M., Hoyer, S., van Kerkwijk, M. H., Brett, M., Haldane, A., del Río, J. F., Wiebe, M., Peterson, P., ... Oliphant, T. E. (2020). Array programming with NumPy. Nature, 585(7825), 357–362. https://doi.org/10.1038/s41586-020-2649-2",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": " ",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": [
+{
+"t": " ",
+"i": 1
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": "both",
+"runs": []
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "",
+"x": "pagebreak"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 1",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "AVANCES EN SPRINTS 1-2: HACIA TÍTULO II"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "\nEste documento ha sido actualizado el 29 de agosto de 2026 para reflejar el progreso alcanzado en los Sprints 1 y 2 del proyecto. La ejecución ha permitido avanzar de manera estructurada hacia la implementación de la arquitectura de agentes de aprendizaje por refuerzo (RL) definida en este Título I.\n"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 1: Alistamiento (17-28 agosto 2026)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "\nSprint 1 fue completado al 100% en tiempo y forma. Todas las tareas de fundamentación técnica se concluyeron exitosamente, sentando las bases para la implementación de los siguientes sprints.\n"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tareas Completadas"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.1.1 Sprint Planning: Planificación del Product Backlog y sprint backlog"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.1.2 Setup Entorno: Python 3.9.18, repositorio GitHub, estructura de carpetas"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.1.3 Descarga de Datos: 30 acciones IPSA, 60 días históricos, 5 minutos por vela"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.1.4 Especificación Vectores S_M y S_E: Definición formal de espacios de estado (7 + 26 dimensiones)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.1.5 Sprint Review: Validación y aprobación de entregables"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Entregables Sprint 1"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "SM_schema.json: Especificación formal del vector de estado del Maestro (7 variables)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "SE_schema.json: Especificación formal de vectores de Ejecutores (26 variables)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Contexto_Agente_Programacion.md: Documento técnico 457 líneas con MDP, recompensas, cronograma"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint Review Act: Aprobación de entregas"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 2: Pipeline + ABIDES (31 ago – 11 sep 2026)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "\nSprint 2 está en progreso. Tarea 1.2.5 (Documentación de Arquitectura) ha sido completada. Las tareas de Benjamín y Mauricio están en etapa de implementación activa.\n"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tareas en Progreso"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.2.1 Limpieza de Datos (Benjamín)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.2.2 Cálculo de Features S_M (Benjamín)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.2.3 PoC ABIDES-Gym (Mauricio)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "1.2.4 Diagnóstico de Dependencias (Mauricio)"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tarea 1.2.5: Arquitectura del Entorno de Simulación - COMPLETADA"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "\nEsta tarea ha sido completada exitosamente. Se entrega:\n\n1. Documento de Arquitectura (docs/arquitectura_entorno_simulacion.md)\n   - Especificación formal de los 3 componentes: Maestro, Ejecutores, ABIDES-Gym\n   - Ciclo Reset/Step/Close con pseudocódigo\n   - Protocolo de comunicación ASIGNAR/REPORTE en JSON\n   - Mapeo de datos en runtime\n   - Especificación de logging y checkpoints\n   - Sincronización de tiempos entre capas\n\n2. Diagrama de Flujo (diagrama_ciclo_reset_step.png + .mmd)\n   - Visualización del ciclo completo de simulación\n   - Decisiones del Maestro → Acciones de Ejecutores → Feedback\n\n3. Pseudocódigo Comentado (src/envs/maestro_ejecutor_protocol.py)\n   - Implementación 250 líneas\n   - Clase MaestroEjecutorEnv\n   - Métodos: reset(), step(), _run_executor_episode(), _compute_sm_state(), etc.\n\nImpacto: Proporciona especificación clara para Sprint 3, donde comenzará la implementación de redes neuronales.\n"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "",
+"x": "pagebreak"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Plan Rebalanceado (Sprints 3-9)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "\nPosterior a la definición de Título I, se ha realizado un análisis exhaustivo de la distribución de trabajo para Sprints 3 a 9. El objetivo es asegurar que:\n\n✓ TODOS los integrantes hacen código Y documentación (no silos)\n✓ Carga equitativa: ~270 horas por persona\n✓ Mix equilibrado: 60-75% Código, 25-40% Documentación/Análisis\n✓ Cada persona lidera su área pero contribuye en todas\n\nEste balance garantiza que el conocimiento sea compartido y la defensa del Título II sea sólida, con todos los integrantes capaces de explicar todas las decisiones técnicas.\n"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Distribución de Responsabilidades"
+}
+]
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Persona",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Tareas",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Horas",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Rol Principal",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mix Principal",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mauricio Reynoso"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "12"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "~272"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Arquitectura RL"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "70-75% Código\n25-30% Docs"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Benjamín Farias"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "12"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "~271"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Pipeline + Testing"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "65-75% Código\n25-35% Docs/Analysis"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Paolo Sepúlveda"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "10"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "~253"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Análisis + Validación"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "50-70% Código\n30-50% Docs"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Cambios Principales del Rebalanceo"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Paolo: De 100% Documentación a 50-70% Código + 30-50% Documentación"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 3: Calibración Poisson (análisis + código 50/50)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 4: Validación estadística (análisis 60% + código 40%)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 5: Benchmarks TWAP/VWAP (código 60% + análisis 40%)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 7: 90 corridas + análisis (código 60% + análisis 40%)"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Benjamín: De Datos Puros a Pipeline + Testing + Análisis"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 6: Ajuste hiperparámetros 2 (análisis 60% + código 40%)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 7: Consolidación IS (código 70% + análisis 30%)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 8: Capítulo 6 resultados (documentación 60% + análisis 40%)"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mauricio: Mantiene Arquitectura RL pero Agrega Análisis"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 7: Análisis de sensibilidad (análisis 70% + documentación 30%)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 8: Capítulo 5 Metodología (documentación 70% + código 30%)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "",
+"x": "pagebreak"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Timeline Actualizado"
+}
+]
+},
+{
+"k": "tbl",
+"rows": [
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Descripción",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Fechas",
+"b": 1
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Estado",
+"b": 1
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 1"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Alistamiento"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "17-28 ago"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "✓ COMPLETADO"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 2"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Pipeline + ABIDES"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "31 ago - 11 sep"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "⏳ EN PROGRESO"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 3"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Redes Actor-Crítico"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "14-25 sep"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 4"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "PPO + Recompensas"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "28 sep - 9 oct"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 5"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "CTDE + Entrenamiento"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "12-23 oct"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 6"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Hiperparámetros"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "26 oct - 6 nov"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 7"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Validación Estadística"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "9-20 nov"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 8"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Redacción Tesis"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "23 nov - 4 dic"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+],
+[
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 9"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Conclusiones + Defensa"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "7-18 dic"
+}
+]
+}
+],
+[
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "→ Próximo"
+}
+]
+}
+]
+]
+]
+},
+{
+"k": "p",
+"style": "heading 2",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Próximas Acciones Inmediatas"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Esta semana (29 ago)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Revisión del Plan Rebalanceado con todo el equipo"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Aprobación de redistribución de tareas"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Confirmación de estimaciones de horas y calendario"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 2 (31 ago - 11 sep)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Benjamín: Completar limpieza de datos y features S_M"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Mauricio: Completar PoC ABIDES y diagnóstico de dependencias"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Paolo: Tarea 1.2.5 ya completada"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint Review: 11 de septiembre"
+}
+]
+},
+{
+"k": "p",
+"style": "heading 3",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Sprint 3 (14-25 sep)"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Inicio de implementación de redes neuronales"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Primera integración con ABIDES-Gym real"
+}
+]
+},
+{
+"k": "p",
+"style": "normal",
+"num": null,
+"jc": null,
+"runs": [
+{
+"t": "Formalización de espacios Gymnasium"
+}
+]
+}
+]
