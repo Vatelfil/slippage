@@ -90,7 +90,7 @@ def volumenes_simulados(ticker: str) -> Dict[str, float]:
 
 
 def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
-            pct_dia_cierre: Optional[float] = None) -> Dict:
+            pct_dia_cierre: Optional[float] = None, version: str = "v1") -> Dict:
     """Arma el diccionario con las 10 ordenes. `cantidad` fija el tamano; `pct_dia` lo calcula como
     fraccion del volumen del dia simulado de cada activo (redondeado a 100 acciones). `pct_dia_cierre` (solo con
     `pct_dia`) usa otra fraccion para las ordenes que parten en el cierre: en el cierre queda poco volumen y
@@ -123,7 +123,7 @@ def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
             "pct_volumen_disponible": round(100.0 * q / v[f"disp_{tramo}"], 1),
         })
     return {
-        "version": "v1",
+        "version": version,
         "estado": "BORRADOR de PS con apoyo de Claude Code, pendiente de decision y revision de BF (2.3.3)",
         "snapshot": SNAPSHOT,
         "criterios": {
@@ -146,9 +146,10 @@ def main(argv: Optional[List[str]] = None) -> Path:
     ap.add_argument("--pct-dia", type=float, default=None, help="fraccion del volumen del dia (ej. 0.10)")
     ap.add_argument("--pct-dia-cierre", type=float, default=None,
                     help="con --pct-dia: otra fraccion para las ordenes que parten en el cierre (ej. 0.05)")
+    ap.add_argument("--version", default="v1", help="etiqueta de version del archivo (ej. v2-candidata)")
     ap.add_argument("--salida", default=str(REPO_ROOT / "data/meta_ordenes/meta_ordenes_v1.json"))
     args = ap.parse_args(argv)
-    data = generar(cantidad=args.cantidad, pct_dia=args.pct_dia, pct_dia_cierre=args.pct_dia_cierre)
+    data = generar(cantidad=args.cantidad, pct_dia=args.pct_dia, pct_dia_cierre=args.pct_dia_cierre, version=args.version)
     out = Path(args.salida)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")

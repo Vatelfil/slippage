@@ -95,6 +95,22 @@
 - **Quién:** PS con apoyo de Claude Code. **Qué:** `docs/plan_ejecucion_PS_sprint6.md` (qué se puede hacer, qué está bloqueado y qué correr en Colab), esta bitácora y `docs/guia_graficos.md`.
 - **Por qué:** pedido de PS el 22 de octubre: dejar trazabilidad de cada PR y los gráficos explicados.
 
+### `feature/ps-sprint6-ejecucion-parte-ps`: ejecución de la parte de PS sin Colab (23 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Los borradores para BF y MR están marcados en cada documento; nada de lo que es de ellos se modificó.
+- **Qué:**
+  - `docs/sprint5_que_se_hizo.md` (A2): cierre del Sprint 5 en el formato del Sprint 4 (tareas T1 a T5 y P1 a P10, con estado, PR y quién confirma).
+  - `docs/decision_RE_final_D3_para_BF.md` (A3): memo para BF con la evidencia de D3, tres opciones, recomendación de PS, costo de pasar a la opción A y el formato de respuesta.
+  - E1, archivo candidato de D1: `data/meta_ordenes/meta_ordenes_v2_candidata.json` (10 % del día y 5 % en el cierre; `generar_meta_ordenes.py` ahora acepta `--version`), `scripts/ensamblar_benchmarks_meta_ordenes.py` (une tandas de benchmarks con tamaños distintos, validando cantidades y semillas) y el resultado `data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json` con su análisis `docs/benchmarks_2.3.4_v2_PS.md`. **No se corrió nada en Colab:** se ensamblaron las corridas que ya existían.
+  - C1/C2, estabilidad de D3: `scripts/colab/d3_estabilidad_ps.py` (5 semillas de red por opción de R_E, 100 episodios cada una, reanudable) y `scripts/analizar_estabilidad_D3.py` (tabla, Fisher, Wilcoxon contra la red sin entrenar y figura). Probados con Poisson; **falta correrlo en Colab (C-2).**
+  - D1/D2, evaluador del sistema: `scripts/colab/evaluar_sistema_ps.py` corre Maestro + 3 Ejecutores sobre las 10 meta-órdenes y deja el resultado en el formato de los benchmarks (`estrategia = "PPO"` o `"PPO_sin_entrenar"`), con las mismas semillas de mercado que TWAP/VWAP para que el pareo sea válido. Probado con Poisson; **falta correrlo con ABIDES (C-3).**
+  - B2: `scripts/monitorear_entrenamiento.py` ahora acepta `--dir` (descubre una corrida por subcarpeta) y `--out-json` (resumen por corrida con métricas y alertas).
+  - G1: esqueleto de `docs/sprint6_que_se_hizo.md`.
+- **Por qué:** orden de PS del 23 de octubre ("adelanta mi parte") a partir de `docs/plan_ejecucion_PS_sprint6.md`: dejar listo todo lo que no depende de Colab ni de decisiones de BF y MR, y que las corridas de Colab queden en celdas simples.
+- **Archivos clave:** los listados arriba y las pruebas `tests/test_ensamblar_benchmarks.py`, `tests/test_evaluar_sistema.py`, `tests/test_estabilidad_d3.py` y `tests/test_monitoreo.py`.
+- **Resultado:** con 10 % del día (apertura y media jornada) y 5 % en el cierre, las 10 órdenes son ejecutables (19 de 20 corridas llegan al 95 %; MO-10 con 90,2 % en una semilla y 100 % en la otra). TWAP − VWAP = −6,59 bps, sin diferencia significativa (Wilcoxon p = 0,297).
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests -q`; el archivo v2 se regenera con `scripts/ensamblar_benchmarks_meta_ordenes.py` (ver su docstring) y su análisis con `scripts/analizar_benchmarks_meta_ordenes.py --resultados data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json --out-json data/analysis/benchmarks_meta_ordenes_v2.json --out-png data/analysis/benchmarks_meta_ordenes_v2.png --out-md docs/benchmarks_2.3.4_v2_PS.md`.
+- **Gráficos:** `data/analysis/benchmarks_meta_ordenes_v2.png` y, cuando se corra C-2, `data/analysis/estabilidad_D3.png` (entradas en `docs/guia_graficos.md`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

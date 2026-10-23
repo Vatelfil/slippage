@@ -106,3 +106,25 @@ def test_el_panel_genera_figura_e_informe(tmp_path):
                      "--out-png", str(tmp_path / "p.png"), "--out-md", str(tmp_path / "p.md")])
     texto = Path(md).read_text(encoding="utf-8")
     assert (tmp_path / "p.png").stat().st_size > 1000 and "Resumen por corrida" in texto and "prueba" in texto
+
+
+def test_el_panel_descubre_corridas_y_deja_resumen_json(tmp_path):
+    import json
+    import shutil
+    _entrenar(tmp_path)
+    for nombre in ("corrida_a", "corrida_b"):
+        sub = tmp_path / "corridas" / nombre
+        sub.mkdir(parents=True)
+        shutil.copy(tmp_path / "ppo.csv", sub / "entrenamiento_apertura.csv")
+        shutil.copy(tmp_path / "monitoreo_episodios.csv", sub / "monitoreo_episodios.csv")
+    (tmp_path / "corridas" / "sin_entrenamiento").mkdir()   # una subcarpeta sin CSV se ignora
+    spec = importlib.util.spec_from_file_location("panel", ROOT / "scripts/monitorear_entrenamiento.py")
+    panel = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(panel)
+    assert [e for e, *_ in panel.descubrir(tmp_path / "corridas")] == ["corrida_a", "corrida_b"]
+    panel.main(["--dir", str(tmp_path / "corridas"), "--out-png", str(tmp_path / "p.png"), "--out-md", str(tmp_path / "p.md"),
+                "--out-json", str(tmp_path / "p.json")])
+    datos = json.loads((tmp_path / "p.json").read_text(encoding="utf-8"))
+    assert set(datos) == {"corrida_a", "corrida_b"} and datos["corrida_a"]["episodios_registrados"] > 0
+    assert datos["corrida_a"]["criticas"] + datos["corrida_a"]["avisos"] == len(datos["corrida_a"]["alertas"]) - \
+        sum(a["nivel"] == "INFO" for a in datos["corrida_a"]["alertas"])

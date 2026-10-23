@@ -13,6 +13,10 @@ episodio (`src/training/monitoreo.py`: costo, cumplimiento y fraccion de pasos e
         --estado "opcion 0=data/colab_resultados/t5_1000ep_opcion0.json" \
         --out-png docs/monitoreo.png --out-md docs/monitoreo.md
 
+Para varias corridas guardadas en subcarpetas (por ejemplo las de `scripts/colab/d3_estabilidad_ps.py`), `--dir CARPETA` las
+descubre solas: cada subcarpeta con un `entrenamiento_<tramo>.csv` es una corrida, y se usan su `monitoreo_episodios.csv` y su
+`entrenamiento_inicial_<tramo>.json` si existen. `--out-json` deja el resumen por corrida (metricas y alertas) para la Sprint Review.
+
 Formato de `--corrida`: ETIQUETA=actualizaciones.csv[,episodios.csv]. `--estado` (opcional, repetible): ETIQUETA=estado.json
 de `entrenamiento_inicial_ps.py`, para comparar el cumplimiento con argmax y con la politica muestreada.
 """
@@ -151,22 +155,63 @@ def informe(corridas: Dict[str, Dict], alertas: Dict[str, List[Alerta]], png_rel
     return "\n".join(L)
 
 
+def descubrir(carpeta: Path) -> List[Tuple[str, str, Optional[str], Optional[str]]]:
+    """(etiqueta, actualizaciones.csv, episodios.csv | None, estado.json | None) de cada subcarpeta con un entrenamiento."""
+    out = []
+    for sub in sorted(p for p in Path(carpeta).iterdir() if p.is_dir()):
+        csvs = sorted(sub.glob("entrenamiento_*.csv"))
+        if not csvs:
+            continue
+        ep, est = sub / "monitoreo_episodios.csv", sorted(sub.glob("entrenamiento_inicial_*.json"))
+        out.append((sub.name, str(csvs[0]), str(ep) if ep.exists() else None, str(est[0]) if est else None))
+    return out
+
+
+def resumen_json(corridas: Dict[str, Dict], alertas: Dict[str, List[Alerta]]) -> Dict:
+    """Metricas finales y alertas por corrida, en un diccionario serializable."""
+    out: Dict = {}
+    for etiqueta, c in corridas.items():
+        ups, eps = c.get("actualizaciones") or [], c.get("episodios") or []
+        n = max(1, min(50, len(eps) // 2)) if eps else 0
+        out[etiqueta] = {
+            "actualizaciones": len(ups), "episodios_registrados": len(eps),
+            "entropia_final_pct_max": round(100 * ups[-1]["entropia"] / ENTROPIA_MAXIMA, 2) if ups and "entropia" in ups[-1] else None,
+            "kl_maximo": float(max(f["kl"] for f in ups)) if ups and "kl" in ups[0] else None,
+            "cumplimiento_final": float(np.nanmean([f["cumplimiento"] for f in eps[-n:]])) if eps else None,
+            "pct_espera_final": float(np.nanmean([f["pct_espera"] for f in eps[-n:]])) if eps else None,
+            "alertas": [{"nivel": a.nivel, "codigo": a.codigo, "mensaje": a.mensaje} for a in alertas[etiqueta]],
+            "criticas": sum(a.nivel == "CRITICA" for a in alertas[etiqueta]),
+            "avisos": sum(a.nivel == "AVISO" for a in alertas[etiqueta])}
+    return out
+
+
 def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--corrida", action="append", type=_par, required=True, metavar="ETIQUETA=ACTUALIZACIONES.csv[,EPISODIOS.csv]")
+    ap.add_argument("--corrida", action="append", type=_par, default=[], metavar="ETIQUETA=ACTUALIZACIONES.csv[,EPISODIOS.csv]")
+    ap.add_argument("--dir", default=None, help="carpeta con una subcarpeta por corrida (se descubren sus CSV y su estado)")
+    ap.add_argument("--out-json", default=None, help="resumen por corrida (metricas y alertas) en JSON")
     ap.add_argument("--estado", action="append", type=_par, default=[], metavar="ETIQUETA=ESTADO.json")
     ap.add_argument("--ventana", type=int, default=20, help="ventana de la media movil de las curvas por episodio")
     ap.add_argument("--out-png", default=str(REPO_ROOT / "data/analysis/monitoreo_entrenamiento.png"))
     ap.add_argument("--out-md", default=str(REPO_ROOT / "docs/monitoreo_entrenamiento.md"))
     args = ap.parse_args(argv)
 
+    corridas_args = list(args.corrida)
+    estados_args = list(args.estado)
+    if args.dir:
+        for etiqueta, act, ep, est in descubrir(Path(args.dir)):
+            corridas_args.append((etiqueta, act + ("," + ep if ep else "")))
+            if est:
+                estados_args.append((etiqueta, est))
+    if not corridas_args:
+        ap.error("falta --corrida o --dir con corridas")
     estados: Dict[str, Dict] = {}
-    for etiqueta, ruta in args.estado:
+    for etiqueta, ruta in estados_args:
         with open(ruta, "r", encoding="utf-8-sig") as fh:
             estados[etiqueta] = json.load(fh)
     corridas: Dict[str, Dict] = {}
     alertas: Dict[str, List[Alerta]] = {}
-    for etiqueta, ruta in args.corrida:
+    for etiqueta, ruta in corridas_args:
         partes = ruta.split(",")
         c: Dict = {"actualizaciones": leer_actualizaciones(partes[0])}
         if len(partes) > 1 and partes[1]:
@@ -180,6 +225,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         png_rel = Path(png).name
     Path(args.out_md).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out_md).write_text(informe(corridas, alertas, png_rel), encoding="utf-8")
+    if args.out_json:
+        Path(args.out_json).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out_json).write_text(json.dumps(resumen_json(corridas, alertas), indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     for etiqueta, lista in alertas.items():
         print(f"== {etiqueta}")
         print("\n".join(f"  [{a.nivel}] {a.codigo}: {a.mensaje}" for a in lista) or "  Sin alertas.")

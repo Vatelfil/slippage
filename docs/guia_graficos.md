@@ -63,6 +63,18 @@
 - **Datos y script:** `data/colab_resultados/benchmarks_meta_ordenes_abides.json`; `scripts/analizar_benchmarks_meta_ordenes.py`.
 - **Conclusión:** con solo 2 semillas, TWAP y VWAP no se distinguen de forma clara; lo más informativo es el cumplimiento de las órdenes (ver `docs/benchmarks_2.3.4_PS.md`).
 
+### `data/analysis/benchmarks_meta_ordenes_v2.png` (rama `feature/ps-sprint6-ejecucion-parte-ps`)
+- **Qué muestra:** lo mismo que `benchmarks_meta_ordenes.png`, pero para el archivo candidato v2 (10 % del volumen del día en apertura y media jornada, 5 % en el cierre): slippage medio (bps) de TWAP y VWAP por meta-orden, con el error estándar entre semillas.
+- **Cómo leerlo:** las órdenes de ECL en media jornada son las más caras (MO-06, 310 bps con TWAP), como con 100.000 acciones; COPEC y ECL cuestan más que FALABELLA en apertura. En las tres órdenes de cierre (MO-08 a MO-10) TWAP y VWAP coinciden porque queda un solo tramo. Las barras de MO-08 son muy anchas: con 2 semillas el ruido es grande.
+- **Datos y script:** `data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json` (ensamblado con `scripts/ensamblar_benchmarks_meta_ordenes.py`); `scripts/analizar_benchmarks_meta_ordenes.py`. Análisis completo en `docs/benchmarks_2.3.4_v2_PS.md`.
+- **Conclusión:** las 10 órdenes son ejecutables (19 de 20 corridas llegan al 95 %), TWAP − VWAP = −6,59 bps y no es significativo (p = 0,297). Es la base de comparación si BF elige la opción de D1 con 10 % y 5 %.
+
+### `data/analysis/estabilidad_D3.png` (se genera al correr C-2)
+- **Qué muestra:** el cumplimiento de la orden de cada red entrenada (un punto por semilla de red), separado por opción de R_E: punto lleno = evaluación con argmax, punto vacío = evaluación muestreando la política. La línea punteada es el umbral de 95 % de la regla de D3.
+- **Cómo leerlo:** si los puntos llenos de la opción 0 quedan bajo la línea en varias semillas y los de la opción A quedan arriba, la regla se dispara por la opción y no por una red en particular. Un punto vacío arriba con el lleno abajo significa "la red ejecuta al muestrearla, pero con argmax elige esperar".
+- **Datos y script:** `d3_opcion*_s*/entrenamiento_inicial_apertura.json` que deja `scripts/colab/d3_estabilidad_ps.py`; `scripts/analizar_estabilidad_D3.py` (informe en `docs/estabilidad_D3_PS.md`).
+- **Límite:** 5 redes por opción; la comparación entre opciones es descriptiva.
+
 ## 4. Validación del simulador (sprint 4)
 
 ### `data/analysis/validacion_formal_2_2_5.png` (FALABELLA), `..._COPEC.png` y `..._ECL.png`
