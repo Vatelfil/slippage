@@ -1,6 +1,6 @@
 # Entrenamiento inicial de validación del Ejecutor (tarea 2.3.5)
 
-**Borrador elaborado por:** Paolo Sepúlveda (PS) con apoyo de Claude Code. **Pendiente de revisión por:** Benjamín Farias (BF), responsable de la 2.3.5, y Mauricio Reynoso (MR, entrenador PPO). Lo que BF no acepte se cambia o se descarta; nada aquí está cerrado hasta su revisión.
+**Responsable:** Benjamín Farias (BF). **Apoyo:** Paolo Sepúlveda (PS), Colab y análisis estadístico. **Entrenador:** Mauricio Reynoso (MR), `PPOTrainer` (2.3.2). **Estado:** **Hecho con límite demostrado**, aprobado por BF el 22 de octubre de 2026. La red entrena sin NaN, con KL estable y con un retorno que sube de forma significativa. Pero con la opción 0 de D3 la política determinista no ejecuta la orden de forma estable, y ninguna corrida se distingue de la red sin entrenar en slippage (sección 5).
 
 ## 1. Qué se hizo
 
@@ -8,17 +8,26 @@ Se entrenó un Ejecutor con el entrenador PPO de MR (`PPOTrainer`, 2.3.2) durant
 
 Hiperparámetros (los mismos de la fase 2 de β): γ 0,95; λ GAE 0,95; lr 3e-4; clip 0,2; entropía 0,01; coeficiente de valor 0,5; 4 épocas; minilote 64; 10 episodios por actualización.
 
-## 2. Curvas de entrenamiento
+Además de la corrida principal hay tres corridas de comparación, todas en `data/colab_resultados/`:
+
+| Corrida | Archivos | Qué es |
+|---|---|---|
+| **`t5_1000ep_opcion0`** (principal) | `.json`, `.csv`, `_diagnostico.json` | 1000 episodios, opción 0 (riesgo sobre lo ejecutado) |
+| `t5_1000ep_opcionA` | `.json` (sin CSV) | 1000 episodios, opción A (riesgo sobre lo pendiente), exploratoria, con el mismo β (sin recalcular β\*) |
+| `t5_100ep_opcion0` | `.json`, `.csv` | 100 episodios, opción 0. Primera corrida, **reanudada desde el episodio 30** |
+| `t5_100ep_opcion0_repeticion` | `.json` (sin CSV) | 100 episodios, opción 0, repetida sin cortes |
+
+## 2. Curvas de entrenamiento (corrida principal)
 
 ![Curvas del entrenamiento](../data/analysis/entrenamiento_inicial_2.3.5.png)
 
-- **Actualizaciones registradas:** 100 (una cada 10 episodios). **Valores no finitos (NaN o infinito) en el CSV:** 0.
+- **Actualizaciones registradas:** 100 (una cada 10 episodios). **Valores no finitos (NaN o infinito) en el CSV:** 0. El checkpoint del episodio 1000 tampoco tiene parámetros no finitos (diagnóstico de PS).
 - **Retorno medio:** -2,002 en el primer tercio y -1,002 en el último. **Pérdida del crítico:** 2,195 y 1,813.
-- **KL máximo:** 0,00438 (el objetivo del entrenador es 0,015; la actualización se corta si lo supera 1,5 veces).
-- **Entropía:** de 5,4793 a 4,3901; una política uniforme sobre las 240 acciones tiene 5,4806. La política final conserva el 80,10 % de la entropía máxima, es decir, se fue concentrando en algunas acciones.
+- **KL máximo:** 0,00438 y mediano 0,00111. El objetivo del entrenador es 0,015; la actualización se corta si lo supera 1,5 veces.
+- **Entropía:** de 5,4793 a 4,3901. Una política uniforme sobre las 240 acciones tiene 5,4806, así que la política final conserva el 80,10 % de la entropía máxima: se fue concentrando en algunas acciones.
 - **Tiempo de entrenamiento:** 38,8 min.
 
-## 3. Evaluación (semillas nuevas, política determinista)
+## 3. Evaluación (15 semillas nuevas)
 
 | Política | Slippage medio (bps) | Error estándar | Cumplimiento |
 |---|---:|---:|---:|
@@ -45,10 +54,9 @@ Tres episodios de evaluación; `scripts/colab/diagnostico_politica_entrenada_ps.
 | Modo | Cumplimiento medio | Acciones más usadas (todas las semillas) |
 |---|---:|---|
 | determinista | 0,000 | `LIMIT_SELL / bucket5 / nivel4` ×89, `LIMIT_SELL / bucket3 / nivel0` ×1 |
-| estocastico | 0,997 | `LIMIT_SELL / bucket5 / nivel4` ×11, `LIMIT_SELL / bucket3 / nivel0` ×10, `LIMIT_SELL / bucket8 / nivel1` ×6 |
+| estocástico | 0,997 | `LIMIT_SELL / bucket5 / nivel4` ×11, `LIMIT_SELL / bucket3 / nivel0` ×10, `LIMIT_SELL / bucket8 / nivel1` ×6 |
 
-En el puente de ABIDES, `LIMIT_SELL` se traduce a «esperar» (el proyecto solo modela compra): no envía ninguna orden (`src/envs/abides_bridge.py`, `map_action_to_abides_orders`).
-
+**Por qué el argmax no ejecuta.** El espacio de acciones del Ejecutor es `MultiDiscrete([3, 10, 8])` = 240 acciones (tipo de orden × bucket de volumen × nivel de precio), con tipos `LIMIT_BUY`, `LIMIT_SELL` y `MARKET`. El proyecto solo modela compra, y el puente de ABIDES traduce **las 80 acciones `LIMIT_SELL` (un tercio del espacio) a «esperar»**: no envía ninguna orden (`src/envs/abides_bridge.py:170`, `if size <= 0 or order_type == ORDER_LIMIT_SELL: return []`). Ninguna otra acción queda vacía mientras haya inventario pendiente: el tamaño es al menos 1 acción. Con la opción 0, esperar no tiene costo en R_E y la red concentró el argmax en una de esas acciones. Muestreando, la masa que queda en las demás acciones alcanza para completar la orden. El conteo lo hace `scripts/criterios_convergencia_2_3_5.py` con el puente real, y lo fija un test.
 
 ### Comparación de corridas
 
@@ -56,35 +64,97 @@ Misma evaluación (15 semillas nuevas, FALABELLA, apertura). Slippage en bps, co
 
 | Corrida | Episodios | Riesgo sobre | Argmax: cumplimiento | Argmax: slippage | Argmax: dif. vs control | Muestreada: cumplimiento | Muestreada: slippage | Muestreada: dif. vs control |
 |---|---:|---|---:|---|---|---:|---|---|
-| Esta corrida | 1000 | ejecutado | 0,000 | sin ejecuciones | — | 1,000 | 5,43 (5,68) | -0,58 (p = 0,679) |
-| 1000 episodios, opción A de D3 | 1000 | pendiente | 1,000 | 5,91 (3,21) | -0,10 (p = 0,524) | 1,000 | 4,60 (3,06) | -1,42 (p = 0,804) |
+| Principal (opción 0) | 1000 | ejecutado | 0,000 | sin ejecuciones | — | 1,000 | 5,43 (5,68) | -0,58 (p = 0,679) |
+| Opción A de D3 | 1000 | pendiente | 1,000 | 5,91 (3,21) | -0,10 (p = 0,524) | 1,000 | 4,60 (3,06) | -1,42 (p = 0,804) |
 | 100 episodios, opción 0 (primera, reanudada desde el episodio 30) | 100 | ejecutado | 1,000 | 3,28 (2,45) | -2,74 (p = 0,762) | — | — | — |
 | 100 episodios, opción 0 (repetición sin cortes) | 100 | ejecutado | 0,904 | 2,04 (4,11) | -3,97 (p = 0,359) | 1,000 | 2,71 (2,80) | -3,31 (p = 0,720) |
 
-
 ## 4. Regla de vigilancia de D3
 
-Cumplimiento medio de la red entrenada: **0,000** (umbral 0,95). El cumplimiento de la red entrenada es < 95 %: segun la regla de D3 corresponde pasar a la opcion A (riesgo sobre lo pendiente) y recalcular beta*. La decisión final de R_E se revisa el viernes 23 de octubre y es de BF.
+La regla se fijó antes de ver datos (`docs/decision_RE_para_BF.md`): si en la 2.3.5 el cumplimiento de la orden baja del 95 %, se pasa a la opción A (riesgo sobre lo pendiente).
 
-## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)
+- Con la opción 0, el cumplimiento con argmax fue **0,000** (1000 episodios), **1,000** (100 episodios, primera) y **0,904** (100 episodios, repetición): **2 de 3 corridas quedan bajo el 95 %**. Las dos corridas sin cortes quedan ambas bajo el umbral. La de 1,000 es la que se reanudó desde un checkpoint y no es reproducible (sección 6).
+- **Decisión de BF (revisión final de D3):** se activa la opción A por la regla de vigilancia. Es una desviación del Título I justificada con datos. Recalcular β\* (PS) y reentrenar con la opción A pasan al Sprint 6 (sección 8).
 
-- **La red entrenada no ejecutó la orden en la evaluación:** cumplimiento medio 0,000 y sin slippage medible en las 15 semillas. Con la política determinista (argmax) la red no llega a ejecutar nada; por eso no hay comparación pareada.
-- **Muestreando la política (como al entrenar) sí se ejecuta:** cumplimiento 1,000 y slippage 5,43 bps (EE 5,68), frente a 6,02 bps de la red sin entrenar (diferencia pareada -0,58 bps, p = 0,679). La evaluación con argmax y la política que se entrena son cosas distintas: el argmax puede caer en una acción que no hace nada.
-- **Entropía de la política:** 4,3901 frente a 5,4806 de una política uniforme (80,1 % del máximo): la política se concentró.
-- **D3:** el cumplimiento de la red entrenada es 0,000, por debajo del 95 %; la regla del plan indica pasar a la opción A (riesgo sobre lo pendiente). La decisión es de BF.
-- **La regla de vigilancia de D3 no es estable con la opción 0:** el cumplimiento con argmax fue 0,000, 1,000, 0,904 en 3 corridas; en 2 de 3 queda bajo el 95 % y la regla indica pasar a la opción A. Con una sola red por corrida, el resultado de la regla depende del azar del entrenamiento.
-- **Dos corridas de 100 episodios con la misma configuración y semilla dieron resultados distintos** (ver la tabla): el entrenamiento solo es reproducible si no se interrumpe. Ver Limitaciones.
-- **Con la opción A de D3 (riesgo sobre lo pendiente), la política determinista sí ejecuta (en esta corrida):** cumplimiento 1,000 y 5,91 bps (EE 3,21); muestreada, 1,000 y 4,60 bps. Esto es lo que la regla de vigilancia de D3 buscaba: que penalizar lo que falta por ejecutar evite que la red aprenda a esperar. Fue una corrida exploratoria con el mismo β, sin recalcular β* (el plan lo pide si se adopta la opción A).
-- **Ninguna corrida se distingue de la red sin entrenar en slippage** (ver la tabla de corridas): con 15 semillas y una sola red por corrida no se puede afirmar que entrenar mejore el costo; lo que sí cambia es si la política determinista ejecuta la orden.
+## 5. Lectura de BF
 
-## 6. Limitaciones
+### Criterios de convergencia (fijados antes de correr), corrida principal
 
-- Entrenamiento corto (100 a 1.000 episodios) y una sola red por corrida: el resultado es indicativo, no concluyente.
+Calculados con `scripts/criterios_convergencia_2_3_5.py` (lógica en `src/experiments/criterios_2_3_5.py`), que escribe `data/analysis/criterios_2.3.5.json`.
+
+| Criterio | Valor | ¿Cumple? |
+|---|---|:---:|
+| 1. Sin NaN | 0 valores no finitos en 100 actualizaciones (checkpoint sin parámetros no finitos) | **cumple** |
+| 2. Retorno final > inicial (Mann-Whitney unilateral, α 0,05, primeras 10 contra últimas 10 actualizaciones) | -1,931 → -1,131; U = 80; p = 0,013 | **cumple** |
+| 3. KL mediano < 0,015 | 0,00111 (máximo 0,00438) | **cumple** |
+| 4. Cumplimiento medio ≥ 95 % (argmax, regla de D3) | 0,000 | **no cumple** |
+| 5. Menos slippage que la TWAP heurística (Wilcoxon pareado, mismas semillas) | No evaluable con argmax: la red no ejecutó en 15 de 15 semillas. Con la política muestreada: +3,66 bps (EE 2,47), p = 0,277 | **no cumple** |
+
+**3 de 5 criterios se cumplen.** Los que fallan son los de resultado (cumplimiento y slippage), no los de estabilidad del entrenamiento.
+
+### Los mismos criterios en las corridas de comparación
+
+| Corrida | 1. Sin NaN | 2. Retorno sube | 3. KL mediano | 4. Cumplimiento argmax | 5. Slippage vs TWAP (argmax) |
+|---|---|---|---|---|---|
+| Opción A, 1000 ep | sin CSV | sin CSV | sin CSV | 1,000 · cumple | +4,13 bps, p = 0,208 · no cumple |
+| 100 ep, primera (reanudada) | 0 · cumple | no evaluable (10 actualizaciones) | 0,000073 · cumple | 1,000 · cumple | +1,50 bps, p = 0,421 · no cumple |
+| 100 ep, repetición | sin CSV | sin CSV | sin CSV | 0,904 · no cumple | +0,26 bps, p = 0,847 · no cumple |
+
+En ninguna corrida la red tiene menos slippage que la TWAP heurística: la diferencia es positiva en todas.
+
+### Lectura
+
+- **El entrenamiento es estable.** Sin NaN, KL muy por debajo del objetivo y un retorno medio que sube de forma significativa entre el principio y el final (p = 0,013). El ciclo completo (entrenador de MR, ABIDES calibrado, checkpoint, CSV y evaluación en semillas nuevas) funciona.
+- **Con la opción 0, la política determinista no ejecuta de forma estable.** El argmax cae en una acción `LIMIT_SELL`, que el puente traduce a esperar, y con la opción 0 esperar no cuesta nada en R_E. El cumplimiento con argmax fue 0,000 / 1,000 / 0,904 en 3 corridas: depende del azar del entrenamiento. Por la regla de D3, corresponde pasar a la opción A.
+- **Con la opción A, el argmax sí ejecuta** (cumplimiento 1,000 en la corrida exploratoria): penalizar lo pendiente evita que la red aprenda a esperar. Fue una sola corrida, con el β de la opción 0 sin recalcular.
+- **Ninguna corrida se distingue de la red sin entrenar en slippage** (diferencias de -0,10 a -3,97 bps, todas con p ≥ 0,35), y ninguna supera a la TWAP heurística. Con 15 semillas y una sola red por corrida no se puede afirmar que entrenar mejore el costo.
+- Que el retorno de entrenamiento suba sin que mejore el slippage de evaluación es coherente con lo anterior: con la opción 0, la red aprende a evitar el término de riesgo (que solo cobra al ejecutar), no a ejecutar mejor.
+
+## 6. Desviaciones
+
+1. **Evaluación con 15 semillas en vez de 30.** Por costo de Colab, igual que P5. El error estándar (2–6 bps) es grande frente a las diferencias entre políticas.
+2. **Mann-Whitney sobre actualizaciones.** El criterio original comparaba los primeros 20 episodios con los últimos 20. El CSV del entrenador trae `reward_mean` por actualización (10 episodios cada una), no por episodio, así que se comparan las primeras 10 actualizaciones con las últimas 10 (100 episodios en cada grupo). Para las corridas de 100 episodios (10 actualizaciones) el criterio no se puede evaluar.
+3. **1000 episodios en la corrida principal.** El plan pedía 100. Se hicieron ambas, y los criterios se aplican a la de 1000 porque es la única con suficientes actualizaciones para el criterio 2.
+4. **Criterio 5 con la política determinista**, la misma de la regla de D3. Como la red no ejecutó, se informa además la política muestreada. El Wilcoxon es bilateral, el mismo cálculo del informe de PS. Como la diferencia es positiva en todas las corridas, el veredicto no cambia si se usa la prueba unilateral.
+5. **Opción A probada sin recalcular β\*.** La corrida `t5_1000ep_opcionA` usó el β de la opción 0. El plan pide recalcular β\* y repetir la fase 2 si se adopta la opción A (sección 8).
+6. **Responsable de β\*.** La ficha P2 del plan decía «BF recalcula β\*». Se acuerda que lo recalcula PS (está en su plan del Sprint 6) y BF decide.
+
+## 7. Hallazgos para MR
+
+**(a) `save_checkpoint` no guarda el estado de los generadores aleatorios, y por eso reanudar cambia los resultados.**
+
+- **Qué guarda y qué no.** El checkpoint guarda pesos, optimizador, episodio, configuración y semilla (`src/training/ppo_trainer.py:283-299`). No guarda el estado de torch (`torch.get_rng_state()`), de numpy (`np.random.get_state()`, que usa `RolloutBuffer.get_batches` en la línea 113) ni de `random`.
+- **Qué pasa al reanudar.** Se crea un `PPOTrainer(seed=…)` nuevo, que vuelve a sembrar con la semilla inicial (líneas 152 y 177-179). Desde ese punto, el muestreo de acciones y los minilotes repiten la secuencia del episodio 0, no la que seguía.
+- **Evidencia.** La primera corrida de 100 episodios se reanudó en el episodio 30. Su CSV coincide con el de la corrida de 1000 episodios hasta el episodio 30 y se separa desde el 40 (retorno -0,629 contra -4,129). La repetición sin cortes coincide con la de 1000 en todas las actualizaciones (PS).
+- **El test no lo detecta.** La ficha T2 pedía «un checkpoint reanuda sin cambiar el resultado». `test_checkpoint_y_reanudacion` (`tests/test_ppo_trainer.py:92`) solo comprueba el contador de episodios.
+- **Propuesta (no implementada, el archivo es de MR):** guardar los tres estados en `save_checkpoint`, restaurarlos en `load_checkpoint` y agregar un test que compare entrenar 4+2 episodios con reanudación contra 6 seguidos.
+
+**(b) El espacio de acciones incluye acciones que no hacen nada.**
+
+- **Qué pasa.** 80 de las 240 acciones (todas las `LIMIT_SELL`) se traducen a `[]` en `map_action_to_abides_orders` (`src/envs/abides_bridge.py:170`). Con la red sin entrenar, un tercio de la probabilidad está en «esperar». Con la opción 0, esperar es gratis, y el argmax de la política entrenada terminó en `LIMIT_SELL / bucket5 / nivel4`.
+- **Propuesta para decidir en el Sprint 6 (MR, con BF):**
+  - enmascarar los logits de `LIMIT_SELL` en el Ejecutor;
+  - o reducir el espacio a compra (160 acciones);
+  - o mantenerlo y declarar «esperar» como acción explícita, con una sola entrada en vez de 80.
+- **Qué afecta.** Toca `src/models/actor_critic.py` y el puente, que son de MR. No se cambia en este sprint.
+
+## 8. Pasa al Sprint 6
+
+- **Evaluación con 30 semillas** (en vez de 15) para las corridas que se comparen.
+- **Opción A con β\* recalculado por PS** (barrido y fase 2 con `riesgo_sobre="pendiente"`) y reentrenamiento del Ejecutor con ese β.
+  - Costo medido: fase 2 en apertura ≈ 1–2 h de Colab; ~47 min por β en media jornada y ~108 min en el cierre; un entrenamiento de 1000 episodios ≈ 31–39 min.
+- **Varias redes por configuración** (al menos 3 semillas de entrenamiento), para que la regla de D3 y la comparación de slippage no dependan de una sola red.
+- **Hallazgos para MR** (sección 7): estado de los generadores aleatorios en el checkpoint y decisión sobre las acciones `LIMIT_SELL`.
+
+## 9. Limitaciones
+
+- Entrenamiento corto (100 a 1000 episodios) y una sola red por corrida: el resultado es indicativo, no concluyente.
 - Solo FALABELLA y un tramo; no incluye a COPEC ni a ECL.
 - La evaluación usa 15 semillas: el error estándar es grande frente a las diferencias entre políticas.
-- **Reproducibilidad:** con las mismas semillas, un entrenamiento sin cortes da curvas idénticas (la corrida de 1.000 episodios y la repetición de 100 coinciden en todas las actualizaciones hasta el episodio 100). Si el entrenamiento se interrumpe y se reanuda desde un checkpoint, los resultados cambian: la primera corrida de 100 episodios se reanudó desde el episodio 30 (consta en su registro de consola) y sus curvas coinciden con las de las otras corridas solo hasta ahí. Causa probable: el checkpoint guarda pesos, optimizador y episodio, pero no el estado del generador aleatorio (`save_checkpoint` en `src/training/ppo_trainer.py`).
+- La opción A y la repetición de 100 episodios no tienen CSV versionado: sus criterios de curva (1 a 3) no se pueden evaluar.
+- **Reproducibilidad:** con las mismas semillas, un entrenamiento sin cortes da curvas idénticas. Si se interrumpe y se reanuda desde un checkpoint, los resultados cambian (sección 7a).
 
-## 7. Cómo reproducir
+## 10. Cómo reproducir
 
 En Colab, con el entorno preparado (`docs/dependencias_resueltas.md`, con `torch==1.13.1+cpu`):
 
@@ -94,6 +164,15 @@ PYTHONPATH=. python scripts/colab/entrenamiento_inicial_ps.py \
     --tramo apertura --episodes 1000 --ventana-min 15 --max-minutes 150
 ```
 
-El script es reanudable. Luego `python scripts/analizar_entrenamiento_inicial.py --estado <json> --csv <csv>` regenera este informe.
+El script es reanudable, pero reanudar cambia los resultados (sección 7a). En local, sin Colab:
 
-🤖 Generado con [Claude Code](https://claude.com/claude-code)
+```bash
+python scripts/criterios_convergencia_2_3_5.py      # tabla de criterios (sección 5) -> data/analysis/criterios_2.3.5.json
+python -m pytest tests/test_criterios_2_3_5.py -q
+```
+
+`scripts/analizar_entrenamiento_inicial.py` genera el borrador de PS (secciones 1 a 3 y la figura). Si se corre con la ruta por defecto de `--out-md`, **sobrescribe este documento aprobado**: usar otra ruta.
+
+---
+
+Borrador de PS con apoyo de Claude Code; revisado, completado y aprobado por BF con apoyo de Claude Code.
