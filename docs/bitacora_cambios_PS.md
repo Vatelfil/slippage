@@ -111,6 +111,21 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests -q`; el archivo v2 se regenera con `scripts/ensamblar_benchmarks_meta_ordenes.py` (ver su docstring) y su análisis con `scripts/analizar_benchmarks_meta_ordenes.py --resultados data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json --out-json data/analysis/benchmarks_meta_ordenes_v2.json --out-png data/analysis/benchmarks_meta_ordenes_v2.png --out-md docs/benchmarks_2.3.4_v2_PS.md`.
 - **Gráficos:** `data/analysis/benchmarks_meta_ordenes_v2.png` y, cuando se corra C-2, `data/analysis/estabilidad_D3.png` (entradas en `docs/guia_graficos.md`).
 
+### `feature/ps-sprint6-d3-estabilidad-resultados`: resultados de la estabilidad de D3 (C-2) y control muestreado (23 de octubre)
+- **Quién:** PS con apoyo de Claude Code. La decisión de D3 es de BF; el memo le deja la evidencia.
+- **Qué:**
+  - `data/colab_resultados/d3_estabilidad/`: las 10 corridas de Colab (5 semillas de red × opción 0 y A, 100 episodios; JSON y CSV, sin checkpoints).
+  - `docs/estabilidad_D3_PS.md` y `data/analysis/estabilidad_D3.{json,png}`: tabla, Fisher, Wilcoxon y figura (informe generado por `scripts/analizar_estabilidad_D3.py`).
+  - `docs/monitoreo_d3_estabilidad.md` y `data/analysis/monitoreo_d3_estabilidad.{json,png}`: panel de monitoreo con las 10 corridas (valida el monitoreo con ABIDES real).
+  - `docs/decision_RE_final_D3_para_BF.md`: nueva sección 7 con la evidencia y la recomendación revisada ("D3: esperar", con 1.000 episodios × 3 semillas por opción).
+  - `scripts/colab/control_muestreado_ps.py` (nuevo) y su integración en el analizador: evalúa la red sin entrenar muestreando la política, para comparar entrenada y control en igualdad de condiciones.
+  - `scripts/colab/entrenamiento_inicial_ps.py`: el mensaje de vigilancia ya no dice "se mantiene la opción 0" en corridas con la opción A (solo cambia el texto).
+- **Por qué:** continuar el plan de PS (C1 y C2) con los resultados que trajo PS desde Colab, y dar a BF evidencia para decidir D3.
+- **Archivos clave:** los listados arriba y `tests/test_estabilidad_d3.py`.
+- **Resultado:** la regla (cumplimiento con argmax < 95 %) se dispara en 2 de 5 redes con la opción 0 y en 1 de 5 con la A (Fisher p = 1,0); con muestreo las 10 cumplen. Las 10 redes siguen con entropía de 99,6 % a 99,9 % del máximo: con 100 episodios el argmax mide el azar de una política casi uniforme (la red sin entrenar de la semilla 2000 ya cumple 0,000). La opción 0 con la semilla 1000 reproduce 0,904 de la repetición del Sprint 5.
+- **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_estabilidad` y `python scripts/monitorear_entrenamiento.py --dir data/colab_resultados/d3_estabilidad --out-json data/analysis/monitoreo_d3_estabilidad.json --out-png data/analysis/monitoreo_d3_estabilidad.png --out-md docs/monitoreo_d3_estabilidad.md`.
+- **Gráficos:** entradas en `docs/guia_graficos.md` (`estabilidad_D3.png` y `monitoreo_d3_estabilidad.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

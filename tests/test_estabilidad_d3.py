@@ -72,3 +72,24 @@ def test_resumen_cuenta_las_que_disparan():
     r = anal.resumen_por_opcion(filas)
     assert r["0"]["dispara"] == 2 and r["A"]["dispara"] == 0 and r["0"]["semillas_disparan"] == [1, 2]
     assert anal.fisher(r) is not None
+
+
+ctrl = _cargar("d3_control", "scripts/colab/control_muestreado_ps.py")
+
+
+def test_control_muestreado_escribe_un_json_por_semilla_y_reanuda(tmp_path):
+    ctrl.main(["--entorno", "poisson", "--semillas", "1000", "2000", "--eval-seeds", "5", "--out-dir", str(tmp_path)])
+    for s in (1000, 2000):
+        d = json.loads(ctrl.archivo(tmp_path, s).read_text(encoding="utf-8"))
+        assert d["semilla_red"] == s and len(d["slippage_por_semilla"]) == 5 and d["cumplimiento_medio"] is not None
+    assert ctrl.main(["--entorno", "poisson", "--semillas", "1000", "2000", "--eval-seeds", "5", "--out-dir", str(tmp_path)]) == []
+
+
+def test_analizador_usa_el_control_muestreado(tmp_path):
+    lanz.main(["--entorno", "poisson", "--episodes", "10", "--eval-seeds", "7", "--semillas", "1000", "--out-dir", str(tmp_path)])
+    ctrl.main(["--entorno", "poisson", "--semillas", "1000", "--eval-seeds", "7", "--out-dir", str(tmp_path)])
+    filas = anal.cargar(tmp_path)
+    assert all("ctrl_slip_muestreo" in r for r in filas) and len(filas) == 2
+    md = anal.main(["--dir", str(tmp_path), "--out-json", str(tmp_path / "e.json"), "--out-png", str(tmp_path / "e.png"),
+                    "--out-md", str(tmp_path / "e.md")])
+    assert "Control justo" in md.read_text(encoding="utf-8")

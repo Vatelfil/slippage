@@ -198,6 +198,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                   "El cumplimiento de la red entrenada es < 95 %: segun la regla de D3 corresponde pasar a la opcion A "
                   "(riesgo sobre lo pendiente) y recalcular beta*."),
     }
+    if args.riesgo_sobre != "ejecutado":   # el texto de arriba habla de la opcion 0; en una corrida con la A solo se informa el dato
+        estado["vigilancia_D3"]["texto"] = (f"Corrida con la opcion A de R_E (riesgo sobre lo pendiente): cumplimiento con argmax "
+                                            f"{'>=' if estado['vigilancia_D3']['cumple'] else '<'} 95 %; la regla de D3 se aplica a la opcion 0.")
     estado["segundos_totales_esta_ejecucion"] = round(time.time() - t_ini, 1)
     save_json(estado_path, estado)
     print(f"\nGuardado: {estado_path}\n{estado['vigilancia_D3']['texto']}")

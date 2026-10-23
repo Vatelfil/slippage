@@ -1,6 +1,6 @@
 # Decisión final de R_E (D3) para BF: revisión del 23 de octubre
 
-**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan).
+**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan). **Actualizado el 23 de octubre por la tarde con 10 redes de 100 episodios: ver la sección 7, que cambia la recomendación.**
 
 ## 1. Qué se había acordado
 
@@ -53,5 +53,30 @@ Lo que muestra:
 ## 6. Qué se pide a BF
 
 Responder en el grupo con una línea: **"D3: 0"** (mantener la opción 0), **"D3: A"** (pasar a la opción A) o **"D3: esperar"** (hacer la comparación de 5 semillas y decidir el lunes 26).
+
+## 7. Actualización del 23 de octubre (tarde): 10 redes de 100 episodios
+
+Se repitió el entrenamiento inicial (100 episodios, apertura, FALABELLA, evaluación con las 15 semillas 5001 a 5015) con 5 semillas de red por opción: 1000, 2000, 3000, 4000 y 6000. Detalle completo en `docs/estabilidad_D3_PS.md`; datos en `data/colab_resultados/d3_estabilidad/`.
+
+| Opción | Redes | Disparan la regla (cumplimiento con argmax < 95 %) | Cumplimiento con argmax | Cumplimiento muestreando |
+|---|---:|---:|---|---:|
+| 0 (riesgo sobre lo ejecutado) | 5 | **2** (semilla 1000: 0,904; semilla 4000: 0,646) | 0,646 a 0,996 | 1,000 en las 5 |
+| A (riesgo sobre lo pendiente) | 5 | **1** (semilla 2000: 0,115) | 0,115 a 1,000 | 1,000 en las 5 |
+
+Lo que muestra:
+
+1. **La regla no distingue entre las dos opciones.** Se dispara en 2 de 5 redes con la opción 0 y en 1 de 5 con la A (prueba exacta de Fisher, p = 1,000). La opción A **también** incumple en una red, así que pasar a la A no garantiza el cumplimiento.
+2. **Ninguna de las 10 redes aprendió una política concentrada.** Tras 100 episodios la entropía queda entre el 99,6 % y el 99,9 % del máximo en todas. El argmax de una distribución casi uniforme depende de diferencias mínimas, así que el resultado con argmax es sensible a los pesos iniciales. Lo confirma la red **sin entrenar**: con la semilla 2000 ya cumplía 0,000 y con la 4000 cumplía 0,893, antes de entrenar.
+3. **Muestreando la política, las 10 redes ejecutan la orden completa** (cumplimiento 1,000).
+4. **La corrida es reproducible.** La opción 0 con la semilla 1000 dio 0,904 de cumplimiento y 2,04 bps, igual que la repetición sin cortes del Sprint 5, en otra sesión de Colab. Un entrenamiento sin cortes da el mismo resultado.
+5. **Costo (slippage).** Ninguna red se distingue de la red sin entrenar (p entre 0,15 y 0,89 por red). Esa comparación usa un control evaluado con argmax; falta el control muestreado (`scripts/colab/control_muestreado_ps.py`, unos minutos de Colab) para que sea una comparación justa.
+6. **Dónde sí aparece el problema de esperar:** en la corrida de 1.000 episodios con la opción 0 (una sola red), la entropía bajó al 80 % del máximo y el cumplimiento con argmax fue 0,000; con la opción A fue 1,000 (una sola red). Es el régimen en que las dos opciones podrían diferir, y solo hay una red por opción.
+
+### Qué cambia en la recomendación de PS
+
+- **Ya no se recomienda pasar a la opción A por la regla de 100 episodios**, porque con 100 episodios la regla mide el azar del argmax sobre una política casi uniforme y la propia opción A la incumple.
+- **Recomendación: "D3: esperar", con una comparación dirigida:** 3 semillas de red por opción con **1.000 episodios** (6 corridas de ≈ 40 minutos; ≈ 2 horas repartidas en dos cuadernos de Colab), evaluando siempre con argmax y con muestreo, con el control muestreado de la red sin entrenar y con el monitoreo del Sprint 6 activo. Decisión propuesta: dentro de la primera semana del Sprint 6.
+- **Mientras tanto rige la opción 0 con vigilancia**, y la vigilancia se informa con las dos evaluaciones (argmax y muestreada).
+- Respuesta pedida a BF: **"D3: esperar"** (propuesta), **"D3: 0"** o **"D3: A"**.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

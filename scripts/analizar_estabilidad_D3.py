@@ -61,6 +61,12 @@ def cargar(dir_: Path) -> List[Dict]:
                       "por_semilla_sin_entrenar": sin.get("slippage_por_semilla", []),
                       "dispara_regla": not e["vigilancia_D3"]["cumple"],
                       "segundos": e.get("segundos_entrenamiento")})
+        ctrl = Path(dir_) / f"control_sin_entrenar_muestreado_s{int(m.group(2))}.json"
+        if ctrl.exists():   # `scripts/colab/control_muestreado_ps.py`: la red inicial evaluada muestreando
+            with open(ctrl, "r", encoding="utf-8-sig") as fh:
+                cj = json.load(fh)
+            filas[-1].update({"ctrl_slip_muestreo": cj.get("slippage_bps_medio"), "ctrl_cumpl_muestreo": cj.get("cumplimiento_medio"),
+                              "ctrl_por_semilla": cj.get("slippage_por_semilla", [])})
     return sorted(filas, key=lambda r: (r["opcion"], r["semilla"]))
 
 
@@ -124,6 +130,21 @@ def informe(filas: Sequence[Dict], res: Dict[str, Dict], p_fisher: Optional[floa
     for r in filas:
         L.append(f"| {r['opcion']} | {r['semilla']} | {_f(wilcoxon_pareado(r['por_semilla_argmax'], r['por_semilla_sin_entrenar']), 3)} | "
                  f"{_f(wilcoxon_pareado(r['por_semilla_muestreo'], r['por_semilla_sin_entrenar']), 3)} |")
+    con_ctrl = [r for r in filas if r.get("ctrl_por_semilla")]
+    if con_ctrl:
+        L += ["", "### Control justo: la red sin entrenar también muestreando la política", "",
+              "La comparación anterior pone la red entrenada muestreando frente a la red sin entrenar con argmax. Aquí ambas muestrean "
+              "(`scripts/colab/control_muestreado_ps.py`), en las mismas semillas de evaluación.", "",
+              "| Opción | Semilla de red | Slippage entrenada muestreada (bps) | Slippage sin entrenar muestreada (bps) | Diferencia (bps) | p (Wilcoxon pareado) |",
+              "|---|---:|---:|---:|---:|---:|"]
+        for r in con_ctrl:
+            d = None if r["slip_muestreo"] is None or r["ctrl_slip_muestreo"] is None else r["slip_muestreo"] - r["ctrl_slip_muestreo"]
+            L.append(f"| {r['opcion']} | {r['semilla']} | {_f(r['slip_muestreo'])} | {_f(r['ctrl_slip_muestreo'])} | {_f(d)} | "
+                     f"{_f(wilcoxon_pareado(r['por_semilla_muestreo'], r['ctrl_por_semilla']), 3)} |")
+        difs = [r["slip_muestreo"] - r["ctrl_slip_muestreo"] for r in con_ctrl if r["slip_muestreo"] is not None and r["ctrl_slip_muestreo"] is not None]
+        if difs:
+            L += ["", f"En {sum(d < 0 for d in difs)} de {len(difs)} redes la entrenada muestreando cuesta menos que la inicial muestreando "
+                  f"(diferencia media {_f(float(np.mean(difs)))} bps)."]
     L += ["", "## 4. Cómo leerlo", ""]
     r0, rA = res.get("0"), res.get("A")
     if r0 and rA:

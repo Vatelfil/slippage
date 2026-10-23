@@ -69,11 +69,17 @@
 - **Datos y script:** `data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json` (ensamblado con `scripts/ensamblar_benchmarks_meta_ordenes.py`); `scripts/analizar_benchmarks_meta_ordenes.py`. Análisis completo en `docs/benchmarks_2.3.4_v2_PS.md`.
 - **Conclusión:** las 10 órdenes son ejecutables (19 de 20 corridas llegan al 95 %), TWAP − VWAP = −6,59 bps y no es significativo (p = 0,297). Es la base de comparación si BF elige la opción de D1 con 10 % y 5 %.
 
-### `data/analysis/estabilidad_D3.png` (se genera al correr C-2)
+### `data/analysis/estabilidad_D3.png` (rama `feature/ps-sprint6-d3-estabilidad-resultados`)
 - **Qué muestra:** el cumplimiento de la orden de cada red entrenada (un punto por semilla de red), separado por opción de R_E: punto lleno = evaluación con argmax, punto vacío = evaluación muestreando la política. La línea punteada es el umbral de 95 % de la regla de D3.
 - **Cómo leerlo:** si los puntos llenos de la opción 0 quedan bajo la línea en varias semillas y los de la opción A quedan arriba, la regla se dispara por la opción y no por una red en particular. Un punto vacío arriba con el lleno abajo significa "la red ejecuta al muestrearla, pero con argmax elige esperar".
 - **Datos y script:** `d3_opcion*_s*/entrenamiento_inicial_apertura.json` que deja `scripts/colab/d3_estabilidad_ps.py`; `scripts/analizar_estabilidad_D3.py` (informe en `docs/estabilidad_D3_PS.md`).
 - **Límite:** 5 redes por opción; la comparación entre opciones es descriptiva.
+- **Resultado (23 de octubre):** con la opción 0 dos de cinco redes incumplen (semillas 1000 y 4000: 0,904 y 0,646); con la A, una de cinco (semilla 2000: 0,115). Con muestreo, las diez cumplen. No hay diferencia entre opciones (Fisher p = 1,0).
+
+### `data/analysis/monitoreo_d3_estabilidad.png` (misma rama)
+- **Qué muestra:** el panel de monitoreo con las diez corridas juntas (cinco por opción): retorno, slippage, cumplimiento y pasos en espera por episodio, y entropía, KL, pérdida del crítico y fracción recortada por actualización.
+- **Cómo leerlo:** el cumplimiento queda en 1,0 durante todo el entrenamiento (política muestreada) y la entropía solo baja de 5,48 a ≈ 5,46 nats (99,6 % a 99,9 % del máximo): tras 100 episodios las redes siguen casi uniformes, por eso el argmax es inestable. La fracción recortada es 0 y la KL ronda 10⁻⁴: actualizaciones muy pequeñas.
+- **Datos y script:** `data/colab_resultados/d3_estabilidad/`; `scripts/monitorear_entrenamiento.py --dir …`; alertas en `docs/monitoreo_d3_estabilidad.md`. Es además la validación del monitoreo con ABIDES real.
 
 ## 4. Validación del simulador (sprint 4)
 
