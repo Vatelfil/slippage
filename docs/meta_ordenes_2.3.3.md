@@ -1,6 +1,6 @@
 # Meta-órdenes de prueba (tarea 2.3.3)
 
-**Responsable:** Benjamín Farias (BF). **Estado:** Hecho, aprobado por BF el 22 de octubre de 2026. Las 10 órdenes son ejecutables; MO-10 queda en el borde del criterio (sección 6). **Revisión cruzada (sección 8 del plan):** PS (método y números) y MR (que corra con el orquestador).
+**Responsable:** Benjamín Farias (BF). **Estado:** Hecho con límite demostrado, aprobado por BF el 22 de octubre de 2026. Las 10 órdenes son ejecutables en promedio, pero MO-10 queda en el borde del criterio: una de sus dos semillas completa solo el 90,2 % (media 95,1 %), y con 2 semillas por orden no se puede asegurar que su media siga sobre el 95 % con más semillas (sección 6). **Revisión cruzada (sección 8 del plan):** PS (método y números) y MR (que corra con el orquestador).
 
 ## 1. Qué hay
 
