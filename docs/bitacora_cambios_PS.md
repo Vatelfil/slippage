@@ -111,6 +111,15 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests -q`; el archivo v2 se regenera con `scripts/ensamblar_benchmarks_meta_ordenes.py` (ver su docstring) y su análisis con `scripts/analizar_benchmarks_meta_ordenes.py --resultados data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json --out-json data/analysis/benchmarks_meta_ordenes_v2.json --out-png data/analysis/benchmarks_meta_ordenes_v2.png --out-md docs/benchmarks_2.3.4_v2_PS.md`.
 - **Gráficos:** `data/analysis/benchmarks_meta_ordenes_v2.png` y, cuando se corra C-2, `data/analysis/estabilidad_D3.png` (entradas en `docs/guia_graficos.md`).
 
+### `feature/ps-figuras-cientificas`: cuatro figuras científicas del proyecto (23 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Resumen de lo que hacen MR y BF; ellos revisan los valores de su parte.
+- **Qué:** `docs/figuras_cientificas/`: cuatro figuras (PNG de 4000 × 2640 px y PDF vectorial), su generador (`generador/lib.py`, `fig1.py` a `fig4.py`) y un `README.md` que explica cómo leerlas y de dónde sale cada cifra.
+- **Por qué:** PS necesitaba material de formato artículo para presentaciones e informes que explique el proyecto completo (datos reales, calibración, simulación, agentes, variables y evaluación) y que sirva a quien no conoce el proyecto.
+- **Archivos clave:** `docs/figuras_cientificas/README.md`, `fig1_arquitectura`, `fig2_formulacion`, `fig3_espacios`, `fig4_diseno_experimental`.
+- **Resultado:** la figura 4 usa datos reales del repositorio (benchmarks v2: 10 de 10 órdenes ejecutables; TWAP − VWAP = −6,59 bps, p = 0,297). Las demás resumen la formulación del proyecto, con λ y β marcados como provisionales.
+- **Cómo reproducir o verificar:** `cd docs/figuras_cientificas/generador && python fig1.py && python fig2.py && python fig3.py && python fig4.py`.
+- **Gráficos:** explicados en `docs/figuras_cientificas/README.md` y en la sección 8 de `docs/guia_graficos.md`.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
