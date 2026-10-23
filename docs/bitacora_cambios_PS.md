@@ -121,3 +121,7 @@
 ```
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
+
+### `feature/ps-plan-borradores-mr-bf`: plan de borradores para MR y BF (22 de octubre)
+- **Quién:** PS con apoyo de Claude Code. **Qué:** `docs/plan_borradores_para_MR_y_BF_sprint6.md`: qué borradores de programación se pueden dejar listos para Mauricio (bucle del Maestro, checkpoint con estado aleatorio, barrido de hiperparámetros, revalidación de λ) y Benjamín (escenarios de liquidez, consolidador), más un evaluador compartido. **Estado:** solo plan, sin ejecutar.
+- **Por qué:** MR y BF tienen poco tiempo; así solo aceptan o modifican en lugar de programar y probar desde cero.
