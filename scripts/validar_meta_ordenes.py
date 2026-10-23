@@ -106,7 +106,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         if f["estado"] == SIN_VALIDAR:
             print(f"  {f['id']} {f['ticker']:9s} {f['tramo_inicio']:13s} {f['cantidad']:>7d}  {SIN_VALIDAR}")
             continue
-        por = " · ".join(f"{100 * c['execution_rate']:.1f} %" for c in f["corridas"])
+        por = " / ".join(f"{100 * c['execution_rate']:.1f} %" for c in f["corridas"])
         print(f"  {f['id']} {f['ticker']:9s} {f['tramo_inicio']:13s} {f['cantidad']:>7d}  {por}  media {100 * f['media']:.1f} %"
               f"  {'ejecutable' if f['ejecutable'] else 'NO ejecutable'}")
     for n, r in out["resumen_por_fuente"].items():
