@@ -121,4 +121,15 @@ Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de c
 - **Distancia D del KS antes y después de calibrar (diapositiva 11):** barras por tramo; valores de `docs/validacion_formal_2.2.5_PS.md`, sección 7.
 - **IS de TWAP y VWAP (diapositiva 12):** 36.932 y 35.569 pesos; `docs/benchmarks_2.3.4_PS.md`.
 
+## 8. Figuras científicas del proyecto (`docs/figuras_cientificas/`)
+
+Cuatro figuras de formato artículo para informes y presentaciones; la explicación detallada de cada una, las fuentes de las cifras y los límites están en `docs/figuras_cientificas/README.md`.
+
+| Archivo | Qué muestra | Cómo leerlo |
+|---|---|---|
+| `fig1_arquitectura` | Flujo completo: datos reales → calibración → simulador → agentes → entrenamiento y evaluación, y dónde corre cada pieza | De izquierda a derecha; los datos reales solo calibran el simulador, y los agentes aprenden dentro de él |
+| `fig2_formulacion` | La jornada, el ciclo Maestro–Ejecutor, la especificación de los dos procesos de decisión y los mensajes del protocolo | El zoom de la parte (a) muestra que el Ejecutor opera solo 2v pasos de cada decisión de 30 minutos |
+| `fig3_espacios` | Las 7 variables de S_M, las 27 de S_E, las 40 acciones del Maestro, las 240 del Ejecutor y las dos recompensas | El color de cada variable indica su origen: real, simulador, interno u hora |
+| `fig4_diseno_experimental` | Protocolo, las 10 meta-órdenes (v1 y v2), el reparto de TWAP y VWAP y el resultado actual de las referencias | Las barras de la parte (d) son el slippage medio por orden con su error estándar entre semillas |
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
