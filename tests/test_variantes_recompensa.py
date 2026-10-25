@@ -217,3 +217,17 @@ def test_el_script_de_colab_acepta_penalizacion_y_gamma(tmp_path):
     # sin las opciones nuevas la firma queda igual que antes (no invalida corridas anteriores)
     salida2 = ent.main(["--entorno", "poisson", "--episodes", "10", "--eval-seeds", "2", "--out-dir", str(tmp_path / "b")])
     assert "gamma" not in json.loads(Path(salida2).read_text(encoding="utf-8"))["firma"]
+
+
+def test_el_script_de_colab_acepta_la_recompensa_contra_el_precio_de_llegada(tmp_path):
+    import json
+    spec4 = importlib.util.spec_from_file_location("ent_ini2", ROOT / "scripts/colab/entrenamiento_inicial_ps.py")
+    ent = importlib.util.module_from_spec(spec4)
+    spec4.loader.exec_module(ent)
+    salida = ent.main(["--entorno", "poisson", "--episodes", "10", "--eval-seeds", "2", "--gamma", "1.0",
+                       "--penalizacion-bps", "30", "--recompensa", "is_llegada", "--out-dir", str(tmp_path)])
+    est = json.loads(Path(salida).read_text(encoding="utf-8"))
+    assert est["firma"]["recompensa"] == "is_llegada" and est["entrenamiento_completo"]
+    # la firma de las corridas con la recompensa original no cambia
+    salida2 = ent.main(["--entorno", "poisson", "--episodes", "10", "--eval-seeds", "2", "--out-dir", str(tmp_path / "b")])
+    assert "recompensa" not in json.loads(Path(salida2).read_text(encoding="utf-8"))["firma"]

@@ -186,6 +186,14 @@
 - **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/conf_pen30_g1 …` y `PYTHONPATH=. python -m pytest tests/test_estabilidad_d3.py`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`conf_pen30_g1.png`, `monitoreo_conf_pen30_g1.png`).
 
+### `feature/ps-abides-recompensa-is-llegada`: cuadernos y herramientas de la prueba V4 en ABIDES (26 de octubre)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
+- **Qué:** opción `--recompensa is_llegada` en `scripts/colab/entrenamiento_inicial_ps.py` (por defecto no cambia nada); cuadernos `notebooks/Colab_V4_ABIDES_A.ipynb` y `_B.ipynb`; `scripts/comparar_v4_vs_v2_ps.py` (V4 frente a V2 y al control por semilla de red) con sus tests; `docs/prueba_v4_abides_plan_PS.md` (para qué, cómo leer el resultado).
+- **Por qué:** la confirmación anterior evitó la espera pero no bajó el costo; se prueba si la recompensa contra el precio de llegada, que sí ve el costo de llenarse tarde, lo arregla.
+- **Resultado:** todavía no hay resultado: los cuadernos están listos y falta correrlos en Colab (≈ 120 min cada uno).
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_comparar_v4_vs_v2.py tests/test_variantes_recompensa.py`.
+- **Gráficos:** ninguno todavía; el comparador genera `data/analysis/v4_vs_v2_ABIDES.png` cuando lleguen los zip y se explicará en `docs/guia_graficos.md`.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

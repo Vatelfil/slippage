@@ -48,12 +48,13 @@ def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str 
     return functools.partial(EjecutorEnvPoissonFallback, **extra) if extra else EjecutorEnvPoissonFallback
 
 
-def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float):
-    """Aplica al entrenamiento la penalización por lo no comprado y/o el costo de espera (ver
-    `src/experiments/variantes_recompensa.py`). La evaluación sigue usando la fábrica original, así que el slippage y el
-    cumplimiento que se informan son los de siempre y se pueden comparar con corridas anteriores."""
+def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, recompensa: str = "original"):
+    """Aplica al entrenamiento la penalización por lo no comprado, el costo de espera y/o la recompensa de slippage contra el
+    precio de llegada (ver `src/experiments/variantes_recompensa.py`). La evaluación sigue usando la fábrica original, así que
+    el slippage y el cumplimiento que se informan son los de siempre y se pueden comparar con corridas anteriores."""
     from src.experiments.variantes_recompensa import EntornoVariante, Variante
-    variante = Variante("entrenamiento", penalizacion_bps=penalizacion_bps, costo_espera_bps=costo_espera_bps)
+    variante = Variante("entrenamiento", recompensa=recompensa, penalizacion_bps=penalizacion_bps,
+                        costo_espera_bps=costo_espera_bps)
     return lambda **kw: EntornoVariante(factory(**kw), variante)
 
 
@@ -118,6 +119,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                     help="castigo, en bps del precio de llegada, por cada acción del slice sin comprar al terminar la ventana")
     ap.add_argument("--costo-espera-bps", type=float, default=0.0,
                     help="costo denso por inventario pendiente (total en bps si no se compra nada en la ventana)")
+    ap.add_argument("--recompensa", choices=["original", "is_llegada"], default="original",
+                    help="original = R_E del Titulo I (compara con el precio medio de cada instante); is_llegada = lo que cuesta cada "
+                         "compra frente al precio de llegada de la orden (variante V4 con --penalizacion-bps 30 y --gamma 1)")
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -144,8 +148,11 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["penalizacion_bps"] = args.penalizacion_bps
     if args.costo_espera_bps:
         firma["costo_espera_bps"] = args.costo_espera_bps
+    if args.recompensa != "original":
+        firma["recompensa"] = args.recompensa
     monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
-    factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps)         if (args.penalizacion_bps or args.costo_espera_bps) else factory
+    usa_variante = args.penalizacion_bps or args.costo_espera_bps or args.recompensa != "original"
+    factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps, args.recompensa) if usa_variante else factory
     factory_entrenamiento = monitor.envolver(factory_variante) if monitor else factory_variante
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
