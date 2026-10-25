@@ -178,6 +178,14 @@
 - **Cómo reproducir o verificar:** `python scripts/calibrar_monitoreo_ps.py` (cruza alertas y etiquetas; `--generar` vuelve a entrenar las corridas de Poisson) y `PYTHONPATH=. python -m pytest tests/test_monitoreo.py tests/test_calibrar_monitoreo.py tests/test_sensibilidad_3_2_4.py`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`monitoreo_calibracion.png`, `sistema_sin_entrenar_v2_ajustado.png`).
 
+### `feature/ps-confirmacion-abides-penalizacion`: confirmación en ABIDES de la penalización terminal (26 de octubre)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
+- **Qué:** resultados de los dos cuadernos de Colab (`conf_pen30_g1_A` y `_B`: 4 semillas de red, 1.000 episodios, γ = 1 y penalización de 30 bps) en `data/colab_resultados/conf_pen30_g1/`; informes `docs/conf_pen30_g1_ABIDES_PS.md`, `docs/monitoreo_conf_pen30_g1.md` y `docs/confirmacion_abides_penalizacion_resultado_PS.md`; `scripts/analizar_estabilidad_D3.py` ahora compara red y control sobre las mismas semillas (40 frente a 15); se corrigieron los documentos que daban el arreglo de Poisson por probado.
+- **Por qué:** comprobar en ABIDES si lo que arreglaba el entrenamiento en Poisson también baja el costo.
+- **Resultado:** evita que la red se quede esperando (cumplimiento ≈ 1,0) pero no baja el costo: +3,0 bps sobre el control, 0 de 4 redes mejores (p individuales 0,055–0,49). El monitoreo avisa `RECOMPENSA_SUBE_COSTO_NO` en 2 de 4 redes, como se calibró.
+- **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/conf_pen30_g1 …` y `PYTHONPATH=. python -m pytest tests/test_estabilidad_d3.py`.
+- **Gráficos:** entradas en `docs/guia_graficos.md` (`conf_pen30_g1.png`, `monitoreo_conf_pen30_g1.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

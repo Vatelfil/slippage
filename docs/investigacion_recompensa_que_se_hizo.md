@@ -8,7 +8,8 @@
 - **Problema:** con 1.000 episodios, las redes entrenadas con la recompensa actual cuestan **más** que la misma red sin entrenar (+3 bps; 0 de 6 redes mejores).
 - **Causa encontrada:** la red hace lo que la recompensa le pide, no lo que se evalúa. Nada obliga a completar la orden, así que **esperar siempre** da la recompensa máxima (cero); además, el factor de descuento γ = 0,95 hace que un costo al final de la ventana se vea cuatro veces más barato (0,95²⁹ ≈ 0,23).
 - **Arreglo que funciona (en el simulador de Poisson):** una **penalización de 30 bps por cada acción sin comprar al terminar la ventana** y **γ = 1**. Con las dos cosas, 5 de 5 redes cumplen la orden y bajan el costo hasta el nivel de la mejor heurística (17,9 frente a 17,91 bps; la red inicial, 20,26). Cada cambio por separado no sirve (0 de 5).
-- **Falta:** confirmarlo en ABIDES (cuadernos de Colab listos) y que BF y MR revisen la propuesta.
+- **Confirmación en ABIDES (26 de octubre, resultado negativo en costo):** con la misma penalización y γ = 1 las 4 redes cumplen la orden (cumplimiento ≈ 1,0, espera 20–40 %) pero cuestan +3,0 bps sobre el control (0 de 4 mejores; 0 de 10 en total con las redes anteriores). El arreglo explica y corrige la espera, pero no basta para reducir el slippage en ABIDES. Detalle en `docs/confirmacion_abides_penalizacion_resultado_PS.md`.
+- **Falta:** probar en ABIDES la recompensa contra el precio de llegada y que BF y MR revisen la propuesta.
 
 ## 2. Por qué se hizo
 Al cerrar la comparación de D3 con el control muestreado (red sin entrenar muestreando la política, ≈ 3 bps) se vio que el entrenamiento no mejoraba el costo y que con 1.000 episodios lo empeoraba. Antes de seguir ajustando hiperparámetros (Sprint 6) había que saber **qué** estaba fallando. Se aprobó el plan de investigación el 26 de octubre (fases 0 a 3, todo en el PC, sin Colab).
@@ -82,7 +83,7 @@ Tres paneles con una fila por variante:
 - **Derecha:** de las 5 redes de cada variante, cuántas cumplen los tres criterios (cumplir la orden, no esperar y bajar el costo); la línea marca el mínimo de 4.
 
 ## 6. Qué falta
-1. **Confirmar en ABIDES (Colab).** Cuadernos listos (`notebooks/Colab_confirmacion_ABIDES_A.ipynb` y `_B.ipynb`): penalización de 30 bps y γ = 1, 4 semillas de 1.000 episodios, 40 semillas de evaluación, ≈ 110 minutos por cuaderno. Se compara con el control muestreado y con las redes anteriores.
+1. **Confirmación en ABIDES: hecha** (4 semillas, 1.000 episodios, 40 semillas de evaluación): cumplimiento ≈ 1,0 pero costo +3,0 bps sobre el control. Próxima prueba (Colab, ≈ 110 min por cuaderno): recompensa de slippage contra el precio de llegada con penalización 30 y γ = 1, y reevaluar con ≈ 75 semillas para saber si el +3 bps es real. Ver `docs/confirmacion_abides_penalizacion_resultado_PS.md`.
 2. **Revisión de BF y MR** de `docs/propuesta_cambio_RE_para_BF_y_MR.md`: la penalización va a R_E (2.2.3, BF) y γ = 1 al entrenador (2.3.2, MR); γ = 1 se aparta del Título I y hay que declararlo en `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md`.
 3. **Costo de espera denso con valores menores** (no se probó) y más episodios para los tamaños aleatorios.
 4. **Maestro:** entrenarlo sobre estos Ejecutores y repetir la evaluación del sistema completo (depende del bucle de entrenamiento del Maestro, de MR).

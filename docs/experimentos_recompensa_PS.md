@@ -47,7 +47,7 @@ Continúa a `docs/diagnostico_recompensa_PS.md` (qué falla y por qué). Los res
 
 ## 4. Límites
 
-- Es el simulador de Poisson: no tiene impacto de precio ni tendencia y una orden límite que se llena paga lo mismo que una de mercado. Los resultados explican **por qué** la red hacía lo que hacía; **no** garantizan el mismo tamaño de mejora en ABIDES. Falta la confirmación en ABIDES (cuadernos de Colab listos).
+- Es el simulador de Poisson: no tiene impacto de precio ni tendencia y una orden límite que se llena paga lo mismo que una de mercado. Los resultados explican **por qué** la red hacía lo que hacía; **no** garantizan el mismo tamaño de mejora en ABIDES. La confirmación en ABIDES ya se corrió (26 de octubre): el arreglo evita la espera pero **no baja el costo** (+3,0 bps sobre el control, 0 de 4 redes mejores); ver `docs/confirmacion_abides_penalizacion_resultado_PS.md`.
 - Cinco semillas de red por variante y 1.000 episodios.
 - Solo se probaron penalizaciones de 30 y 100 bps y un costo de espera de 100 bps.
 - No incluye al Maestro: el Ejecutor se entrenó solo, con tamaños fijos.
@@ -55,7 +55,7 @@ Continúa a `docs/diagnostico_recompensa_PS.md` (qué falla y por qué). Los res
 ## 5. Recomendación
 
 1. Entrenar el Ejecutor con **γ = 1** y una **penalización terminal de 30 bps por cada acción del slice sin comprar** (propuesta detallada en `docs/propuesta_cambio_RE_para_BF_y_MR.md`).
-2. **Confirmar en ABIDES** con 4 semillas de 1.000 episodios y 40 semillas de evaluación (`notebooks/Colab_confirmacion_ABIDES_A.ipynb` y `_B.ipynb`, ≈ 110 min cada uno).
+2. **Confirmación en ABIDES: hecha, resultado negativo en costo** (4 semillas de 1.000 episodios, 40 semillas de evaluación; cumplimiento ≈ 1,0 pero +3,0 bps sobre el control). Siguiente prueba propuesta: recompensa de slippage contra el precio de llegada (V4) también en ABIDES; detalle en `docs/confirmacion_abides_penalizacion_resultado_PS.md`.
 3. Medir todo contra la red inicial muestreando y contra la mejor heurística.
 4. Después de la confirmación, entrenar el Maestro sobre estos Ejecutores y repetir la evaluación del sistema completo.
 

@@ -158,4 +158,10 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **`sistema_sin_entrenar_v2_ajustado.png`:** igual que los gráficos de comparación con TWAP y VWAP (intervalos de la diferencia de costo), pero con el sistema sin entrenar y el costo del tramo de inicio; el informe `docs/sistema_sin_entrenar_v2_ajustado_PS.md` agrega la tabla del costo ajustado con 50, 100 y 300 bps de penalización por lo no comprado.
 - **Datos y script:** `data/calibracion_monitoreo/` y `scripts/monitorear_entrenamiento.py --dir …`; `scripts/comparar_sistema_vs_benchmarks.py`.
 
+### `data/analysis/conf_pen30_g1.png` y `monitoreo_conf_pen30_g1.png` (rama `feature/ps-confirmacion-abides-penalizacion`)
+- **`conf_pen30_g1.png`:** las 4 redes entrenadas en ABIDES con penalización de 30 bps y γ = 1, con su cumplimiento de la orden (punto lleno = política argmax, círculo vacío = política muestreada; misma figura que el análisis de estabilidad de D3). Con la política muestreada las cuatro cumplen (≈ 1,0); con argmax una red (semilla 2000) no compra nada (0,0) y otra queda en 0,93: el argmax de una política casi uniforme es arbitrario. El costo no está en esta figura: está en la tabla de `docs/conf_pen30_g1_ABIDES_PS.md`.
+- **`monitoreo_conf_pen30_g1.png`:** el panel de monitoreo de esas cuatro corridas (retorno, pasos en espera, entropía, slippage con su línea de partida). El retorno mejora cerca de 50 % pero el slippage casi no baja: es el patrón que avisa la alerta `RECOMPENSA_SUBE_COSTO_NO`. La entropía final de 80–87 % indica que la política sigue siendo casi uniforme.
+- **Cómo leerlos:** la mejora del retorno no es mejora del costo; lo que decide es la diferencia de slippage con el control sobre las mismas semillas (+3,0 bps de media, 0 de 4 redes mejores).
+- **Datos y script:** `data/colab_resultados/conf_pen30_g1/`; `scripts/analizar_estabilidad_D3.py` y `scripts/monitorear_entrenamiento.py`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

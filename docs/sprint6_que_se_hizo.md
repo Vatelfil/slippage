@@ -61,4 +61,7 @@ Estados (los mismos que en `docs/sprint5_que_se_hizo.md`): **Hecho** · **Hecho 
 | Plan de PS para el sprint y qué está bloqueado | `docs/plan_accion_PS_sprint6.md`, `docs/plan_ejecucion_PS_sprint6.md` |
 | Cierre del Sprint 5 | `docs/sprint5_que_se_hizo.md` |
 
+## Confirmación en ABIDES de la penalización terminal (26 de octubre)
+- Las 4 redes entrenadas con penalización de 30 bps y γ = 1 en ABIDES cumplen la orden (cumplimiento ≈ 1,0) pero cuestan +3,0 bps sobre la red sin entrenar muestreando (0 de 4 mejores). El cambio evita el colapso a esperar, no reduce el costo. Detalle y próximos pasos en `docs/confirmacion_abides_penalizacion_resultado_PS.md`; datos en `data/colab_resultados/conf_pen30_g1/`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

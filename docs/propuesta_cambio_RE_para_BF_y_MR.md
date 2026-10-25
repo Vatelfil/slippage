@@ -3,7 +3,7 @@
 **Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 25 de octubre de 2026. **Para:** BF (recompensa R_E, tarea 2.2.3) y MR (entrenador PPO, tarea 2.3.2). Es una propuesta para que la revisen, la modifiquen o la rechacen: **no se tocó ningún archivo de sus tareas**. Todo está en un envoltorio de pruebas.
 
 ## 1. Para qué
-Con la recompensa actual, las redes entrenadas con 1.000 episodios cuestan más que una red sin entrenar muestreando (+3 bps, 0 de 6 redes mejores). El diagnóstico está en `docs/diagnostico_recompensa_PS.md` y las pruebas de arreglo en `docs/experimentos_recompensa_PS.md`.
+Con la recompensa actual, las redes entrenadas con 1.000 episodios cuestan más que una red sin entrenar muestreando (+3 bps, 0 de 6 redes mejores). Aviso: la confirmación posterior en ABIDES con este cambio mantiene el cumplimiento pero no baja el costo (sección 6). El diagnóstico está en `docs/diagnostico_recompensa_PS.md` y las pruebas de arreglo en `docs/experimentos_recompensa_PS.md`.
 
 ## 2. Qué se propone (dos cambios pequeños)
 
@@ -36,7 +36,7 @@ Si deciden adoptarlo, lo correcto es llevar la penalización a la recompensa del
 Tamaños y ventanas aleatorios en el entrenamiento, hiperparámetros alternativos, arranque por imitación y costo de espera denso de 100 bps: ninguno mejora la base con este presupuesto de 1.000 episodios.
 
 ## 6. Riesgos y límites
-- Está probado solo en el simulador de Poisson (sin impacto de precio ni tendencia). **Falta confirmarlo en ABIDES** (cuadernos de Colab listos: 4 semillas de 1.000 episodios, ≈ 110 min cada cuaderno).
+- En el simulador de Poisson (sin impacto de precio ni tendencia) funciona. **En ABIDES (confirmado el 26 de octubre, 4 semillas de 1.000 episodios) evita que la red se quede esperando (cumplimiento ≈ 1,0) pero no baja el costo: +3,0 bps sobre la red sin entrenar muestreando, 0 de 4 mejores** (`docs/confirmacion_abides_penalizacion_resultado_PS.md`). El cambio es necesario para que el Ejecutor complete la orden, pero por sí solo no es suficiente para reducir el slippage.
 - La penalización de 30 bps es relativa al costo típico de comprar; con otro activo o spread habría que revisarla. Con 100 bps también funcionó.
 - γ = 1 se aparta del Título I; hay que declararlo.
 - El Ejecutor se entrenó solo; falta el Maestro.

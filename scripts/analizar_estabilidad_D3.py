@@ -89,6 +89,11 @@ def cargar(dir_: Path) -> List[Dict]:
                 cj = json.load(fh)
             filas[-1].update({"ctrl_slip_muestreo": cj.get("slippage_bps_medio"), "ctrl_cumpl_muestreo": cj.get("cumplimiento_medio"),
                               "ctrl_por_semilla": cj.get("slippage_por_semilla", [])})
+            # Si la red se evaluó con más semillas que el control (p. ej. 40 frente a 15), la media de la red se recalcula sobre
+            # las mismas semillas del control para que la diferencia sea pareada y la comparación justa.
+            n = len(filas[-1]["ctrl_por_semilla"])
+            comunes = [x for x in filas[-1]["por_semilla_muestreo"][:n] if x is not None]
+            filas[-1]["slip_muestreo_comun"] = float(np.mean(comunes)) if comunes else None
     return sorted(filas, key=lambda r: (r["opcion"], r["semilla"]))
 
 
@@ -170,10 +175,12 @@ def informe(filas: Sequence[Dict], res: Dict[str, Dict], p_fisher: Optional[floa
               "| Opción | Semilla de red | Slippage entrenada muestreada (bps) | Slippage sin entrenar muestreada (bps) | Diferencia (bps) | p (Wilcoxon pareado) |",
               "|---|---:|---:|---:|---:|---:|"]
         for r in con_ctrl:
-            d = None if r["slip_muestreo"] is None or r["ctrl_slip_muestreo"] is None else r["slip_muestreo"] - r["ctrl_slip_muestreo"]
-            L.append(f"| {r['opcion']} | {r['semilla']} | {_f(r['slip_muestreo'])} | {_f(r['ctrl_slip_muestreo'])} | {_f(d)} | "
+            ent = r.get("slip_muestreo_comun", r["slip_muestreo"])
+            d = None if ent is None or r["ctrl_slip_muestreo"] is None else ent - r["ctrl_slip_muestreo"]
+            L.append(f"| {r['opcion']} | {r['semilla']} | {_f(ent)} | {_f(r['ctrl_slip_muestreo'])} | {_f(d)} | "
                      f"{_f(wilcoxon_pareado(r['por_semilla_muestreo'], r['ctrl_por_semilla']), 3)} |")
-        difs = [r["slip_muestreo"] - r["ctrl_slip_muestreo"] for r in con_ctrl if r["slip_muestreo"] is not None and r["ctrl_slip_muestreo"] is not None]
+        difs = [r.get("slip_muestreo_comun", r["slip_muestreo"]) - r["ctrl_slip_muestreo"] for r in con_ctrl
+                if r.get("slip_muestreo_comun", r["slip_muestreo"]) is not None and r["ctrl_slip_muestreo"] is not None]
         if difs:
             n_menos = int(sum(d < 0 for d in difs))
             p_signos = float(stats.binomtest(n_menos, len(difs), 0.5).pvalue)
