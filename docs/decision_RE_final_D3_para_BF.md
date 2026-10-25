@@ -1,6 +1,6 @@
 # Decisión final de R_E (D3) para BF: revisión del 23 de octubre
 
-**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan). **Actualizado el 23 de octubre por la tarde con 10 redes de 100 episodios: ver la sección 7, que cambia la recomendación.**
+**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan). **Actualizado el 23 de octubre por la tarde con 10 redes de 100 episodios: ver la sección 7. Actualizado el 25 de octubre con 6 redes de 1.000 episodios: la sección 8 ajusta de nuevo la recomendación.**
 
 ## 1. Qué se había acordado
 
@@ -78,5 +78,32 @@ Lo que muestra:
 - **Recomendación: "D3: esperar", con una comparación dirigida:** 3 semillas de red por opción con **1.000 episodios** (6 corridas de ≈ 40 minutos; ≈ 2 horas repartidas en dos cuadernos de Colab), evaluando siempre con argmax y con muestreo, con el control muestreado de la red sin entrenar y con el monitoreo del Sprint 6 activo. Decisión propuesta: dentro de la primera semana del Sprint 6.
 - **Mientras tanto rige la opción 0 con vigilancia**, y la vigilancia se informa con las dos evaluaciones (argmax y muestreada).
 - Respuesta pedida a BF: **"D3: esperar"** (propuesta), **"D3: 0"** o **"D3: A"**.
+
+## 8. Actualización del 25 de octubre: 6 redes de 1.000 episodios (3 por opción)
+
+Con 1.000 episodios (semillas de red 1000, 2000 y 3000; la 1000 viene del Sprint 5) las políticas ya se concentran, a diferencia de los 100 episodios de la sección 7. Detalle en `docs/estabilidad_D3_1000ep_PS.md`; datos en `data/colab_resultados/d3_1000ep/`.
+
+| Opción | Semilla | Cumplimiento con argmax | Cumplimiento muestreando | Entropía final | Pasos en espera (primeros 100 → últimos 100 episodios) |
+|---|---:|---:|---:|---:|---|
+| 0 | 1000 | **0,000** | 0,9996 | 80 % | — |
+| 0 | 2000 | 1,000 | 1,000 | 35 % | 30 % → 11 % |
+| 0 | 3000 | 0,989 | 1,000 | 82 % | 31 % → **32 %** |
+| A | 1000 | 1,000 | 1,000 | — | — |
+| A | 2000 | 1,000 | 1,000 | 71 % | 30 % → 8 % |
+| A | 3000 | 1,000 | 1,000 | 39 % | 31 % → 6 % |
+
+Lo que muestra:
+
+1. **La regla de cumplimiento se dispara en 1 de 3 redes con la opción 0 y en 0 de 3 con la A.** Con 3 redes por opción (Fisher p = 1,000) es una tendencia, no una prueba.
+2. **La opción A reduce la conducta de esperar:** los pasos en espera bajan de ≈ 30 % a 6–8 % en las dos redes con A. Con la opción 0 bajan a 11 % en una red, pero en otra se quedan en 32 %: esperar no cuesta con la opción 0, y una de las dos redes lo conserva.
+3. **El entrenamiento corrige la conducta inicial.** La red sin entrenar de la semilla 2000 tenía cumplimiento 0,000 con argmax (elige esperar); tras 1.000 episodios queda en 1,000 con las dos opciones.
+4. **Costo:** el slippage muestreando promedia 6,61 bps con la opción 0 y 5,31 bps con la A, del orden del de la red sin entrenar (≈ 6 bps, evaluada con argmax); `twap_limit_medio` sigue siendo mucho mejor (≈ 1,8 bps). Con 1.000 episodios **no hay mejora de costo** con ninguna opción. Falta el control de la red sin entrenar muestreando la política (`control_muestreado_ps.py`) para una comparación justa.
+
+### Recomendación revisada de PS (la decide BF)
+
+- **Inclinación: "D3: A"**, porque la regla original solo se dispara con la opción 0 (1 de 3 frente a 0 de 3) y la opción A reduce la espera en las dos redes en que se midió. Con la salvedad de que son 3 redes por opción.
+- **Costo de adoptarla:** recalcular β∗ y repetir la fase 2 de β (varias horas de Colab; sección 5). Antes de hacerlo conviene esperar el control muestreado, que confirma si el costo no empeora.
+- **Si BF prefiere no cambiar:** "D3: 0", con la vigilancia informada con argmax y con muestreo y el monitoreo del Sprint 6 activo (la alerta de espera alta detecta la red que se queda esperando).
+- Respuesta pedida: **"D3: A"**, **"D3: 0"** o **"D3: esperar"** (esperar el control muestreado).
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

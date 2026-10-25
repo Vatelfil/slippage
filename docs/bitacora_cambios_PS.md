@@ -134,6 +134,14 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python scripts/comparar_sistema_vs_benchmarks.py --comparacion "v2=data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json,data/colab_resultados/c3_sistema/sistema_PPO_sin_entrenar_argmax_10ordenes_dos_redes.json" --nombre-sistema PPO_sin_entrenar`.
 - **Gráficos:** entrada en `docs/guia_graficos.md` (`sistema_sin_entrenar_vs_benchmarks.png`).
 
+### `feature/ps-sprint6-d3-1000ep-resultados`: D3 con 1.000 episodios (25 de octubre)
+- **Quién:** PS con apoyo de Claude Code. La decisión de D3 es de BF.
+- **Qué:** `data/colab_resultados/d3_1000ep/` (6 redes de 1.000 episodios: 3 semillas × opción 0 y A; la semilla 1000 viene del Sprint 5), `docs/estabilidad_D3_1000ep_PS.md` y `data/analysis/estabilidad_D3_1000ep.{json,png}` (informe y figura), `docs/monitoreo_d3_1000ep.md` y `data/analysis/monitoreo_d3_1000ep.{json,png}` (panel de monitoreo), sección 8 del memo `docs/decision_RE_final_D3_para_BF.md` y una extensión de `scripts/analizar_estabilidad_D3.py` (episodios, entropía final y fracción de pasos en espera por red).
+- **Por qué:** la comparación con 100 episodios no distinguía las opciones porque las políticas seguían casi uniformes; con 1.000 episodios ya se concentran y la evidencia es más informativa.
+- **Resultado:** la regla de cumplimiento se dispara en 1 de 3 redes con la opción 0 y en 0 de 3 con la A; la opción A baja los pasos en espera de ≈ 30 % a 6–8 %, mientras que la 0 los deja en 11 % y 32 %; el costo no mejora con ninguna opción. La recomendación de PS se inclina por «D3: A», con la salvedad de que son 3 redes por opción y falta el control muestreado.
+- **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_1000ep --out-json data/analysis/estabilidad_D3_1000ep.json --out-png data/analysis/estabilidad_D3_1000ep.png --out-md docs/estabilidad_D3_1000ep_PS.md`.
+- **Gráficos:** entradas en `docs/guia_graficos.md` (`estabilidad_D3_1000ep.png` y `monitoreo_d3_1000ep.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

@@ -126,4 +126,9 @@ Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de c
 - **Cómo leerlo:** todos los intervalos quedan a la izquierda del cero, es decir, el sistema parece costar menos. **No es una ventaja real:** el sistema sin entrenar ejecuta solo el 88,5 % de la orden y el slippage no cuenta lo que no se compró. Sirve para validar el flujo, no para concluir.
 - **Datos y script:** `data/colab_resultados/c3_sistema/` y `scripts/comparar_sistema_vs_benchmarks.py`; contexto en `docs/c3_sistema_sin_entrenar_PS.md`.
 
+### `data/analysis/estabilidad_D3_1000ep.png` y `monitoreo_d3_1000ep.png` (rama `feature/ps-sprint6-d3-1000ep-resultados`)
+- **`estabilidad_D3_1000ep.png`:** igual que la figura de 100 episodios, pero con redes de 1.000 episodios (3 por opción): punto lleno = cumplimiento con argmax, punto vacío = cumplimiento muestreando; la línea punteada es el 95 %. Se ve un solo punto bajo la línea, de la opción 0 (semilla 1000, cumplimiento 0,000).
+- **`monitoreo_d3_1000ep.png`:** panel de monitoreo con las redes de 1.000 episodios que tienen CSV (5 de 6; falta el de la opción A, semilla 1000). La entropía baja mucho más que en 100 episodios (de 5,48 a entre 1,9 y 4,7 nats) y la fracción de pasos en espera cae en casi todas las redes. Las alertas de entropía colapsada (por debajo del 60 % del máximo) aparecen en dos redes (opción 0 semilla 2000 y opción A semilla 3000); en ambas el cumplimiento sigue en 1,0, así que la política se concentró en acciones que ejecutan.
+- **Datos y script:** `data/colab_resultados/d3_1000ep/`; `scripts/analizar_estabilidad_D3.py` y `scripts/monitorear_entrenamiento.py --dir …`; alertas en `docs/monitoreo_d3_1000ep.md`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

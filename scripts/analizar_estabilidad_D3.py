@@ -38,6 +38,26 @@ def _f(x: Optional[float], d: int = 2) -> str:
     return "—" if x is None or (isinstance(x, float) and not np.isfinite(x)) else f"{x:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+def _curvas(carpeta: Path) -> Dict:
+    """Entropia final (% del maximo) y fraccion de pasos en espera (primeros y ultimos 100 episodios), si hay CSV."""
+    import csv
+    import math
+    out: Dict = {}
+    f = carpeta / "entrenamiento_apertura.csv"
+    if f.exists():
+        with open(f, "r", encoding="utf-8-sig") as fh:
+            rows = list(csv.DictReader(fh))
+        if rows and "entropia" in rows[-1]:
+            out["entropia_pct"] = 100.0 * float(rows[-1]["entropia"]) / math.log(240)
+    g = carpeta / "monitoreo_episodios.csv"
+    if g.exists():
+        with open(g, "r", encoding="utf-8-sig") as fh:
+            ep = [float(r["pct_espera"]) for r in csv.DictReader(fh) if r.get("pct_espera") not in (None, "", "nan")]
+        if len(ep) >= 200:
+            out["espera_ini"], out["espera_fin"] = float(np.mean(ep[:100])), float(np.mean(ep[-100:]))
+    return out
+
+
 def cargar(dir_: Path) -> List[Dict]:
     """Una fila por corrida terminada, ordenada por opcion y semilla de red."""
     filas = []
@@ -61,6 +81,8 @@ def cargar(dir_: Path) -> List[Dict]:
                       "por_semilla_sin_entrenar": sin.get("slippage_por_semilla", []),
                       "dispara_regla": not e["vigilancia_D3"]["cumple"],
                       "segundos": e.get("segundos_entrenamiento")})
+        filas[-1]["episodios"] = e.get("episodios_entrenados")
+        filas[-1].update(_curvas(carpeta))
         ctrl = Path(dir_) / f"control_sin_entrenar_muestreado_s{int(m.group(2))}.json"
         if ctrl.exists():   # `scripts/colab/control_muestreado_ps.py`: la red inicial evaluada muestreando
             with open(ctrl, "r", encoding="utf-8-sig") as fh:
@@ -102,10 +124,12 @@ def fisher(res: Dict[str, Dict]) -> Optional[float]:
 
 
 def informe(filas: Sequence[Dict], res: Dict[str, Dict], p_fisher: Optional[float]) -> str:
+    eps = sorted({r.get("episodios") for r in filas if r.get("episodios")})
+    txt_eps = " y ".join(str(x) for x in eps) if eps else "100"
     L = ["# Estabilidad de la regla de vigilancia de D3: varias semillas de red", "",
          f"**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad). **Pendiente de revisión por:** BF (decide D3) y MR. "
          f"**Fecha:** {time.strftime('%Y-%m-%d')}.", "",
-         "Mismo entrenamiento inicial de la 2.3.5 (100 episodios, apertura, FALABELLA, evaluación con 15 semillas nuevas) repetido con "
+         f"Mismo entrenamiento inicial de la 2.3.5 ({txt_eps} episodios, apertura, FALABELLA, evaluación con 15 semillas nuevas) repetido con "
          "varias semillas de red por opción de R_E. La regla fijada el 14 de octubre se dispara si el cumplimiento con argmax es menor a 95 %.", "",
          "## 1. Resultado por corrida", "",
          "| Opción | Semilla de red | Cumplimiento argmax | Cumplimiento muestreada | Cumplimiento sin entrenar | Slippage argmax (bps) | Slippage muestreada (bps) | Slippage sin entrenar (bps) | ¿Dispara la regla? |",
@@ -113,6 +137,14 @@ def informe(filas: Sequence[Dict], res: Dict[str, Dict], p_fisher: Optional[floa
     for r in filas:
         L.append(f"| {r['opcion']} | {r['semilla']} | {_f(r['cumpl_argmax'], 3)} | {_f(r['cumpl_muestreo'], 3)} | {_f(r['cumpl_sin_entrenar'], 3)} | "
                  f"{_f(r['slip_argmax'])} | {_f(r['slip_muestreo'])} | {_f(r['slip_sin_entrenar'])} | {'sí' if r['dispara_regla'] else 'no'} |")
+    if any(r.get("entropia_pct") is not None for r in filas):
+        L += ["", "Política al final del entrenamiento: entropía (100 % = uniforme sobre las 240 acciones) y fracción de pasos en espera "
+              "(promedio de los primeros 100 y de los últimos 100 episodios).", "",
+              "| Opción | Semilla de red | Episodios | Entropía final | Pasos en espera: primeros 100 → últimos 100 |", "|---|---:|---:|---:|---|"]
+        for r in filas:
+            esp = "—" if r.get("espera_ini") is None else f"{100 * r['espera_ini']:.0f} % → {100 * r['espera_fin']:.0f} %"
+            ent = "—" if r.get("entropia_pct") is None else f"{r['entropia_pct']:.1f} %".replace(".", ",")
+            L.append(f"| {r['opcion']} | {r['semilla']} | {r.get('episodios') or '—'} | {ent} | {esp} |")
     L += ["", "## 2. Resumen por opción", "",
           "| Opción | Redes | Disparan la regla | Cumplimiento argmax (media / mínimo) | Cumplimiento muestreada (media) | Slippage argmax medio (bps) | Slippage muestreada media (bps) |",
           "|---|---:|---:|---:|---:|---:|---:|"]
@@ -162,6 +194,8 @@ def informe(filas: Sequence[Dict], res: Dict[str, Dict], p_fisher: Optional[floa
 
 
 def figura(filas: Sequence[Dict], ruta: Path) -> Path:
+    eps = sorted({r.get("episodios") for r in filas if r.get("episodios")})
+    titulo_eps = " y ".join(str(x) for x in eps) if eps else "100"
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -180,7 +214,7 @@ def figura(filas: Sequence[Dict], ruta: Path) -> Path:
     ax.set_xlim(-0.5, 1.5)
     ax.set_ylim(-0.05, 1.08)
     ax.set_ylabel("Cumplimiento de la orden")
-    ax.set_title("Cumplimiento por semilla de red (cada punto = una red de 100 episodios)")
+    ax.set_title(f"Cumplimiento por semilla de red (cada punto = una red de {titulo_eps} episodios)")
     h, l = ax.get_legend_handles_labels()
     ax.legend(dict(zip(l, h)).values(), dict(zip(l, h)).keys(), loc="lower right", frameon=False, labelcolor="black")
     ax.spines[["top", "right"]].set_visible(False)
