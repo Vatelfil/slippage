@@ -63,7 +63,7 @@ def figura(corridas: Dict[str, Dict], ruta: Path, ventana: int = 20) -> Path:
 
     fig, ax = plt.subplots(2, 4, figsize=(18, 7.5))
     paneles_ep = [(ax[0, 0], "retorno", "Retorno (por episodio, media móvil; sin monitoreo: media por actualización)", None),
-                  (ax[0, 1], "slippage_bps", "Slippage por episodio, bps (media móvil)", None),
+                  (ax[0, 1], "slippage_bps", "Slippage por episodio, bps (media móvil; punteada: costo de partida)", None),
                   (ax[0, 2], "cumplimiento", "Cumplimiento (media móvil)", (0, 1.05)),
                   (ax[0, 3], "pct_espera", "Fracción de pasos en espera (media móvil)", (0, 1.05))]
     paneles_up = [(ax[1, 0], "entropia", "Entropía de la política (nats)"),
@@ -75,7 +75,14 @@ def figura(corridas: Dict[str, Dict], ruta: Path, ventana: int = 20) -> Path:
         if eps:
             x = [f["episodio"] for f in eps]
             for a, clave, titulo, lim in paneles_ep:
-                a.plot(x, _media_movil([f[clave] for f in eps], ventana), label=etiqueta)
+                linea, = a.plot(x, _media_movil([f[clave] for f in eps], ventana), label=etiqueta)
+                if clave == "slippage_bps" and len(eps) >= 20:
+                    # Línea de partida: el costo medio de los primeros episodios, cuando la política todavía es casi la inicial y se mide
+                    # con el mismo entorno y las mismas semillas de entrenamiento. Si la curva no baja de esa línea, el costo no mejoró.
+                    n0 = min(100, len(eps) // 2)
+                    inicio = np.nanmean([f["slippage_bps"] for f in eps[:n0]])
+                    if np.isfinite(inicio):
+                        a.axhline(inicio, color=linea.get_color(), ls=":", lw=0.9, alpha=0.7)
         if ups and not eps and "reward_mean" in ups[0]:   # sin monitoreo por episodio: al menos el retorno medio del entrenador
             ax[0, 0].plot([f["episodio"] for f in ups], [f["reward_mean"] for f in ups], marker="o", ms=2.5, lw=1, label=etiqueta)
         if ups:

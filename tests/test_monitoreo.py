@@ -73,8 +73,8 @@ def test_las_fracciones_de_acciones_usan_el_tipo_de_orden(tmp_path):
     assert (f["pct_espera"], f["pct_mercado"], f["pct_limite_compra"]) == (0.5, 0.25, 0.25)
 
 
-def _ep(i, cump, espera, ret=0.0):
-    return {"episodio": float(i), "cumplimiento": cump, "pct_espera": espera, "retorno": ret, "slippage_bps": 1.0}
+def _ep(i, cump, espera, ret=0.0, slip=1.0):
+    return {"episodio": float(i), "cumplimiento": cump, "pct_espera": espera, "retorno": ret, "slippage_bps": slip}
 
 
 def test_alerta_de_politica_que_aprende_a_esperar():
@@ -84,7 +84,7 @@ def test_alerta_de_politica_que_aprende_a_esperar():
 
 
 def test_sin_alertas_cuando_todo_esta_bien():
-    eps = [_ep(i, 1.0, 0.1, ret=-2.0 + 0.02 * i) for i in range(1, 201)]
+    eps = [_ep(i, 1.0, 0.1, ret=-2.0 + 0.02 * i, slip=10.0 - 0.03 * i) for i in range(1, 201)]   # el retorno y el costo mejoran
     ups = [{"episodio": float(i), "entropia": 5.4, "kl": 0.001, "clip_fraction": 0.01, "loss_critic": 1.0} for i in range(10, 210, 10)]
     assert mon.evaluar_alertas(eps, ups) == []
 
@@ -128,3 +128,47 @@ def test_el_panel_descubre_corridas_y_deja_resumen_json(tmp_path):
     assert set(datos) == {"corrida_a", "corrida_b"} and datos["corrida_a"]["episodios_registrados"] > 0
     assert datos["corrida_a"]["criticas"] + datos["corrida_a"]["avisos"] == len(datos["corrida_a"]["alertas"]) - \
         sum(a["nivel"] == "INFO" for a in datos["corrida_a"]["alertas"])
+
+
+# --- alerta «la recompensa sube y el costo no» y calibración de la entropía (3.1.4) --------------------------------
+
+def _corrida(n, ret_ini, ret_fin, slip_ini, slip_fin, cump=1.0, espera=0.1):
+    return [_ep(i, cump, espera, ret=ret_ini + (ret_fin - ret_ini) * i / n, slip=slip_ini + (slip_fin - slip_ini) * i / n)
+            for i in range(1, n + 1)]
+
+
+def test_avisa_si_la_recompensa_sube_y_el_costo_no():
+    codigos = {a.codigo for a in mon.evaluar_alertas(_corrida(400, -2.0, -0.2, 8.0, 7.8))}
+    assert "RECOMPENSA_SUBE_COSTO_NO" in codigos
+
+
+def test_no_avisa_si_el_costo_tambien_baja():
+    assert "RECOMPENSA_SUBE_COSTO_NO" not in {a.codigo for a in mon.evaluar_alertas(_corrida(400, -2.0, -0.2, 8.0, 5.0))}
+
+
+def test_no_avisa_si_la_recompensa_casi_no_cambia():
+    assert "RECOMPENSA_SUBE_COSTO_NO" not in {a.codigo for a in mon.evaluar_alertas(_corrida(400, -2.0, -1.8, 8.0, 8.0))}
+
+
+def test_no_avisa_con_pocos_episodios_porque_el_slippage_es_muy_ruidoso():
+    assert "RECOMPENSA_SUBE_COSTO_NO" not in {a.codigo for a in mon.evaluar_alertas(_corrida(150, -2.0, -0.2, 8.0, 8.0))}
+
+
+def _ups(entropia_rel, n=10):
+    import math
+    return [{"episodio": float(10 * i), "entropia": entropia_rel * math.log(240), "kl": 0.001, "clip_fraction": 0.0, "loss_critic": 1.0}
+            for i in range(1, n + 1)]
+
+
+def test_entropia_baja_sola_es_aviso_y_con_mala_conducta_es_critica():
+    buena = {a.codigo: a.nivel for a in mon.evaluar_alertas(_corrida(200, -2.0, -1.9, 8.0, 5.0), _ups(0.30))}
+    mala = {a.codigo: a.nivel for a in mon.evaluar_alertas(_corrida(200, -2.0, -1.9, 8.0, 5.0, cump=0.2, espera=0.9), _ups(0.30))}
+    assert buena["ENTROPIA_COLAPSADA"] == "AVISO" and mala["ENTROPIA_COLAPSADA"] == "CRITICA"
+
+
+def test_los_umbrales_anteriores_se_pueden_reproducir():
+    ups = _ups(0.50)
+    nuevos = {a.codigo for a in mon.evaluar_alertas(_corrida(200, -2.0, -1.9, 8.0, 5.0), ups)}
+    antes = {a.codigo: a.nivel for a in mon.evaluar_alertas(_corrida(200, -2.0, -1.9, 8.0, 5.0), ups, None, mon.UMBRALES_ANTERIORES)}
+    assert "ENTROPIA_COLAPSADA" not in nuevos            # 50 % ya no es «colapsada» (las corridas buenas quedan entre 50 y 69 %)
+    assert antes["ENTROPIA_COLAPSADA"] == "CRITICA"

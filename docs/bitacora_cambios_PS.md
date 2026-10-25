@@ -166,6 +166,18 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_variantes_recompensa.py` y los comandos de la sección 7 de `docs/investigacion_recompensa_que_se_hizo.md`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`diagnostico_recompensa.png` y `experimentos_recompensa_A/A2/B.png`).
 
+### `feature/ps-sprint6-monitoreo-sensibilidad`: monitoreo calibrado, costo ajustado y sensibilidad 3.2.4 (26 de octubre)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
+- **Qué:**
+  - **3.1.4 Monitoreo:** alertas calibradas con 27 corridas reales (`scripts/calibrar_monitoreo_ps.py`, `docs/calibracion_monitoreo_PS.md`, corridas de Poisson en `data/calibracion_monitoreo/`), alerta nueva `RECOMPENSA_SUBE_COSTO_NO`, línea de costo de partida en el panel y `docs/guia_alertas_monitoreo_PS.md`.
+  - **Costo ajustado por lo no ejecutado:** opción `--penalizaciones-no-ejecutado` en `scripts/comparar_sistema_vs_benchmarks.py` (`docs/sistema_sin_entrenar_v2_ajustado_PS.md` muestra el efecto con el sistema sin entrenar).
+  - **3.2.4 Sensibilidad:** `scripts/analizar_sensibilidad_3_2_4.py` (tamaño × tramo × liquidez, Spearman y Kruskal-Wallis, figura), listo para las 90 corridas.
+  - `docs/sprint6_que_se_hizo.md` actualizado y `docs/plan2_que_se_hizo.md`.
+- **Por qué:** Plan 2 de PS (desarrollo de su parte del Sprint 6) con lo que no depende de Colab ni de los demás.
+- **Resultado:** con los umbrales originales, `ENTROPIA_COLAPSADA` daba falsas alarmas en 2 de 4 corridas buenas y `PICO_PERDIDA_CRITICO` en las 4; con los calibrados, las buenas solo tienen avisos informativos y la alerta nueva avisa en 7 de 10 corridas malas y en ninguna buena. El costo ajustado muestra que el sistema sin entrenar parece igual a TWAP con 50–100 bps de penalización por lo no comprado y claramente peor con 300 bps.
+- **Cómo reproducir o verificar:** `python scripts/calibrar_monitoreo_ps.py` (cruza alertas y etiquetas; `--generar` vuelve a entrenar las corridas de Poisson) y `PYTHONPATH=. python -m pytest tests/test_monitoreo.py tests/test_calibrar_monitoreo.py tests/test_sensibilidad_3_2_4.py`.
+- **Gráficos:** entradas en `docs/guia_graficos.md` (`monitoreo_calibracion.png`, `sistema_sin_entrenar_v2_ajustado.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

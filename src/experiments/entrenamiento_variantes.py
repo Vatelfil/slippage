@@ -88,16 +88,18 @@ def imitar(net, heuristica: str, semilla: int, episodios: int = 200, q_slice: in
 
 
 def entrenar(variante: vr.Variante, semilla: int, episodios: int, q_slice: int = 5000, ventana_min: int = 15,
-             cfg: ConfigPPO = ConfigPPO(), arranque: Optional[str] = None):
+             cfg: ConfigPPO = ConfigPPO(), arranque: Optional[str] = None, csv_path=None):
     """Entrena una red con la variante. Devuelve (red entrenada, red inicial, registro por episodio, exactitud de la
-    imitación o None). La red inicial es la que el entrenador crea con esa semilla, antes de cualquier ajuste."""
+    imitación o None). La red inicial es la que el entrenador crea con esa semilla, antes de cualquier ajuste.
+    Si se pasa `csv_path`, el entrenador deja ahí su CSV de actualizaciones (entropía, KL, pérdidas), el mismo formato
+    que usa el panel de monitoreo."""
     trainer = nuevo_trainer(semilla, cfg)
     inicial = copy.deepcopy(trainer.model)
     exactitud = imitar(trainer.model, arranque, semilla, q_slice=q_slice, ventana_min=ventana_min) if arranque else None
     registro: List[Dict[str, float]] = []
     fabrica = vr.fabrica_entrenamiento(variante, registro=registro, semilla_sorteo=semilla)
     trainer.train_executor_episodes(env_factory=fabrica, n_episodes=episodios, tramo="apertura", q_slice=q_slice,
-                                    ventana_min=ventana_min, log_fn=lambda *_: None)
+                                    ventana_min=ventana_min, csv_path=csv_path, log_fn=lambda *_: None)
     fabrica.cerrar()
     return trainer.model, inicial, registro, exactitud
 

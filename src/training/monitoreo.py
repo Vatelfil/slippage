@@ -167,11 +167,21 @@ class Umbrales:
     espera_alta: float = 0.50            # fraccion de pasos que "esperan"
     espera_subida: float = 0.20          # aumento entre la primera y la ultima ventana
     entropia_aviso: float = 0.90         # fraccion de la entropia maxima
-    entropia_critica: float = 0.60
+    entropia_critica: float = 0.40       # calibrado (`docs/calibracion_monitoreo_PS.md`): las corridas buenas quedan entre 50 y 69 %
+    entropia_exige_conducta: bool = True  # la entropia baja sola es solo un aviso; es critica si ademas hay espera alta o incumplimiento
     kl_max: float = 0.02                 # el objetivo del entrenador es 0,015
     recorte_max: float = 0.30
-    pico_perdida_critico: float = 20.0   # veces la mediana de la perdida del critico
+    pico_perdida_critico: float = 1000.0  # veces la mediana de la perdida del critico (con penalizacion terminal los picos son normales)
     brecha_argmax: float = 0.20          # |cumplimiento argmax - muestreado|
+    # La recompensa mejora pero el costo no (la red puede estar optimizando la recompensa y no lo que se evalua)
+    ventana_costo: int = 100             # episodios de cada ventana; el slippage por episodio es muy ruidoso
+    mejora_retorno_rel: float = 0.40     # mejora del retorno medio, en fraccion del valor inicial
+    mejora_costo_bps: float = 1.5        # el costo debe bajar al menos esto para que no haya aviso
+
+
+# Umbrales con que se escribieron las alertas, antes de calibrarlas con corridas reales. Sirven para comparar en el informe.
+UMBRALES_ANTERIORES = Umbrales(entropia_critica=0.60, entropia_exige_conducta=False, pico_perdida_critico=20.0,
+                               mejora_retorno_rel=float("inf"))
 
 
 @dataclass
@@ -194,6 +204,7 @@ def evaluar_alertas(episodios: Sequence[Dict[str, float]] = (), actualizaciones:
     `evaluacion`: estado JSON de `entrenamiento_inicial_ps.py` (compara argmax y politica muestreada)."""
     u = umbrales or Umbrales()
     out: List[Alerta] = []
+    problema_de_conducta = False      # espera alta o incumplimiento al final de la corrida (lo fija el punto 2)
 
     # 1) valores no finitos en las actualizaciones (el slippage de un episodio sin ejecuciones es NaN a proposito)
     malos = [f.get("episodio") for f in actualizaciones if any(not math.isfinite(v) for v in f.values())]
@@ -206,6 +217,7 @@ def evaluar_alertas(episodios: Sequence[Dict[str, float]] = (), actualizaciones:
         n = min(u.ventana, max(1, len(episodios) // 2))
         ini, fin = episodios[:n], episodios[-n:]
         cump = _media(fin, "cumplimiento")
+        problema_de_conducta = cump < u.cumplimiento_min or _media(fin, "pct_espera") > u.espera_alta
         if cump < u.cumplimiento_critico:
             out.append(Alerta("CRITICA", "CUMPLIMIENTO_CRITICO", f"Cumplimiento medio {cump:.3f} en los ultimos {n} episodios (< {u.cumplimiento_critico}).", {"cumplimiento": cump}))
         elif cump < u.cumplimiento_min:
@@ -218,6 +230,20 @@ def evaluar_alertas(episodios: Sequence[Dict[str, float]] = (), actualizaciones:
         if len(episodios) >= 2 * u.ventana and math.isfinite(_media(fin, "retorno")) and _media(fin, "retorno") <= _media(ini, "retorno"):
             out.append(Alerta("INFO", "SIN_MEJORA", f"El retorno medio no mejora: {_media(ini, 'retorno'):.2f} (primeros {n}) frente a {_media(fin, 'retorno'):.2f} (ultimos {n}).", {}))
 
+    # 2b) la recompensa mejora y el costo no: lo que se entrena y lo que se evalua se estan separando. Se usa una ventana
+    # grande y se exige un minimo de episodios porque el slippage de un episodio es muy ruidoso.
+    if len(episodios) >= 2 * u.ventana_costo:
+        w = u.ventana_costo
+        r_ini, r_fin = _media(episodios[:w], "retorno"), _media(episodios[-w:], "retorno")
+        s_ini, s_fin = _media(episodios[:w], "slippage_bps"), _media(episodios[-w:], "slippage_bps")
+        if all(math.isfinite(x) for x in (r_ini, r_fin, s_ini, s_fin)) and abs(r_ini) > 1e-9:
+            mejora_r, mejora_s = (r_fin - r_ini) / abs(r_ini), s_ini - s_fin
+            if mejora_r >= u.mejora_retorno_rel and mejora_s < u.mejora_costo_bps:
+                out.append(Alerta("AVISO", "RECOMPENSA_SUBE_COSTO_NO",
+                                  f"El retorno medio mejora {100 * mejora_r:.0f} % ({r_ini:.2f} a {r_fin:.2f}) pero el slippage solo baja {mejora_s:.1f} bps "
+                                  f"({s_ini:.1f} a {s_fin:.1f}): la red puede estar optimizando la recompensa y no el costo.",
+                                  {"mejora_retorno": mejora_r, "mejora_slippage_bps": mejora_s}))
+
     # 3) estado de la optimizacion PPO
     if actualizaciones:
         ultimas = list(actualizaciones)[-max(1, min(u.ventana // 10, len(actualizaciones))):]
@@ -225,9 +251,13 @@ def evaluar_alertas(episodios: Sequence[Dict[str, float]] = (), actualizaciones:
         if math.isfinite(ent):
             rel = ent / ENTROPIA_MAXIMA
             if rel < u.entropia_critica:
-                out.append(Alerta("CRITICA", "ENTROPIA_COLAPSADA", f"Entropia al {100 * rel:.0f} % del maximo: la politica casi no explora.", {"relativa": rel}))
+                # una politica concentrada no es mala por si sola (las corridas buenas tambien lo estan): solo es critica si ademas
+                # espera de mas o no cumple la orden
+                nivel = "CRITICA" if (problema_de_conducta or not u.entropia_exige_conducta) else "AVISO"
+                out.append(Alerta(nivel, "ENTROPIA_COLAPSADA", f"Entropia al {100 * rel:.0f} % del maximo: la politica casi no explora.", {"relativa": rel}))
             elif rel < u.entropia_aviso:
-                out.append(Alerta("AVISO", "ENTROPIA_BAJA", f"Entropia al {100 * rel:.0f} % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax.", {"relativa": rel}))
+                # solo informativa: es normal que una politica que aprende se concentre (las 4 corridas buenas de la calibracion la tenian)
+                out.append(Alerta("INFO", "ENTROPIA_BAJA", f"Entropia al {100 * rel:.0f} % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax.", {"relativa": rel}))
         kl = max((f["kl"] for f in actualizaciones if "kl" in f and math.isfinite(f["kl"])), default=float("nan"))
         if kl > u.kl_max:
             out.append(Alerta("AVISO", "KL_ALTO", f"KL maximo {kl:.4f} (> {u.kl_max}).", {"kl_max": kl}))

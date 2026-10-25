@@ -17,6 +17,15 @@ Estadistica (diferencia = sistema - benchmark, en bps; negativa = el sistema cue
   - cumplimiento del sistema frente al del benchmark.
 Con varias comparaciones (ej. tamanos de orden distintos) se arma ademas la tabla de sensibilidad por tamano.
 
+Costo ajustado por lo no ejecutado (opcional, `--penalizaciones-no-ejecutado 50 100 300`): el slippage de una corrida solo cuenta
+lo que se compro, asi que un sistema que compra poco puede parecer barato. El costo ajustado reparte el costo por unidad de la
+orden completa y castiga lo no comprado con una penalizacion supuesta (en bps del precio de llegada):
+
+    costo_ajustado = slippage * cumplimiento + penalizacion * (1 - cumplimiento)
+
+La penalizacion es un supuesto del equipo (R_M usa lambda = 0,05, es decir 500 bps); por eso se piden varios valores y se mira si la
+conclusion cambia.
+
     python scripts/comparar_sistema_vs_benchmarks.py \
         --comparacion "100.000 acciones=bench_100k.json,sistema_100k.json" \
         --comparacion "10 % del dia=bench_10pct.json,sistema_10pct.json" \
@@ -62,8 +71,10 @@ def celdas(estado: Dict, estrategia: str) -> Dict[Tuple[str, int], Dict]:
     return out
 
 
-def ic_bootstrap(d: np.ndarray, rng: np.random.Generator, n: int = BOOTSTRAP) -> Tuple[float, float]:
-    """IC 95 % de la media por bootstrap percentil (remuestrea las diferencias)."""
+def ic_bootstrap(d: np.ndarray, rng: np.random.Generator, n: Optional[int] = None) -> Tuple[float, float]:
+    """IC 95 % de la media por bootstrap percentil (remuestrea las diferencias). `n` es el numero de replicas; si no se pasa
+    se usa BOOTSTRAP (las pruebas lo bajan para no tardar)."""
+    n = BOOTSTRAP if n is None else n
     if len(d) < 2:
         return float("nan"), float("nan")
     medias = rng.choice(d, size=(n, len(d)), replace=True).mean(axis=1)
@@ -86,8 +97,16 @@ def resumen_dif(d: Sequence[float], rng: np.random.Generator) -> Dict:
     return out
 
 
-def comparar(bench: Dict, sistema: Dict, nombre_sistema: str = "PPO", semilla: int = 0) -> Dict:
-    """Compara el sistema con TWAP y VWAP. Devuelve un dict por benchmark."""
+def costo_ajustado(slippage_bps: float, cumplimiento: float, penalizacion_bps: float) -> float:
+    """Costo por unidad de la orden completa: lo comprado cuesta su slippage y lo no comprado, la penalizacion."""
+    c = min(max(float(cumplimiento), 0.0), 1.0)
+    return float(slippage_bps) * c + float(penalizacion_bps) * (1.0 - c)
+
+
+def comparar(bench: Dict, sistema: Dict, nombre_sistema: str = "PPO", semilla: int = 0,
+             penalizaciones: Sequence[float] = ()) -> Dict:
+    """Compara el sistema con TWAP y VWAP. Devuelve un dict por benchmark. Con `penalizaciones` (bps) agrega, por cada una,
+    la comparacion del costo ajustado por lo no ejecutado (ver el docstring del modulo)."""
     rng = np.random.default_rng(semilla)
     cs = celdas(sistema, nombre_sistema)
     out: Dict = {"sistema": nombre_sistema, "celdas_sistema": len(cs), "benchmarks": {}}
@@ -102,6 +121,7 @@ def comparar(bench: Dict, sistema: Dict, nombre_sistema: str = "PPO", semilla: i
                 continue
             filas.append({"orden": k[0], "seed": k[1], "ticker": r.get("ticker"), "tramo": r.get("tramo_inicio"),
                           "dif": float(s["slippage_bps"]) - float(r["slippage_bps"]),
+                          "slip_sistema": float(s["slippage_bps"]), "slip_bench": float(r["slippage_bps"]),
                           "cumpl_sistema": float(s.get("execution_rate", np.nan)), "cumpl_bench": float(r.get("execution_rate", np.nan))})
         info: Dict = {"celdas_comunes": len(comunes), "celdas_sin_ejecucion": sin_ejecucion, "global": None, "por_orden": None,
                       "por_tramo": {}, "por_activo": {}, "cumplimiento": None, "filas": filas}
@@ -121,6 +141,16 @@ def comparar(bench: Dict, sistema: Dict, nombre_sistema: str = "PPO", semilla: i
             cb_v = np.array([f["cumpl_bench"] for f in filas], dtype=float)
             info["cumplimiento"] = {"sistema": float(np.nanmean(cs_v)), "benchmark": float(np.nanmean(cb_v)),
                                     "sistema_bajo_umbral": bool(np.nanmean(cs_v) < UMBRAL_CUMPLIMIENTO)}
+            if penalizaciones:
+                info["ajustado"] = {}
+                for pen in penalizaciones:
+                    d = [costo_ajustado(f["slip_sistema"], f["cumpl_sistema"], pen) - costo_ajustado(f["slip_bench"], f["cumpl_bench"], pen)
+                         for f in filas]
+                    por_t: Dict[str, List[float]] = {}
+                    for f, x in zip(filas, d):
+                        por_t.setdefault(str(f["tramo"]), []).append(x)
+                    info["ajustado"][f"{pen:g}"] = {"global": resumen_dif(d, rng),
+                                                    "por_tramo": {g: resumen_dif(v, rng) for g, v in sorted(por_t.items())}}
         out["benchmarks"][b] = info
     return out
 
@@ -155,6 +185,17 @@ def informe(resultados: Dict[str, Dict], meta: Dict) -> str:
             po = info["por_orden"]
             L.append(f"| {etiqueta} | {b} | {g['n']} | {_f(g['dif_media'])} | [{_f(g['ic95'][0])}; {_f(g['ic95'][1])}] | {_f(g['wilcoxon_p'], 3)} | "
                      f"{_f(po['wilcoxon_p'], 3)} | {_veredicto(g)} |")
+    if any(info.get("ajustado") for res in resultados.values() for info in res["benchmarks"].values()):
+        L += ["", "### Costo ajustado por lo no ejecutado", "",
+              "El slippage solo cuenta lo que se compró. Aquí el costo se reparte por unidad de la orden completa y lo no comprado se castiga con una "
+              "penalización supuesta: `costo ajustado = slippage × cumplimiento + penalización × (1 − cumplimiento)`. Como la penalización es un supuesto, "
+              "se muestran varios valores; si la conclusión no cambia con ellos, es robusta.", "",
+              "| Comparación | Benchmark | Penalización (bps) | Dif. media ajustada (bps) | IC 95 % | Wilcoxon p (celdas) | Lectura |", "|---|---|---:|---:|---|---:|---|"]
+        for etiqueta, res in resultados.items():
+            for b, info in res["benchmarks"].items():
+                for pen, a in (info.get("ajustado") or {}).items():
+                    g = a["global"]
+                    L.append(f"| {etiqueta} | {b} | {pen} | {_f(g['dif_media'])} | [{_f(g['ic95'][0])}; {_f(g['ic95'][1])}] | {_f(g['wilcoxon_p'], 3)} | {_veredicto(g)} |")
     for etiqueta, res in resultados.items():
         L += ["", f"## 2. Detalle: {etiqueta}", ""]
         for b, info in res["benchmarks"].items():
@@ -221,6 +262,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--comparacion", action="append", type=_par, required=True, metavar="ETIQUETA=BENCHMARKS.json,SISTEMA.json")
     ap.add_argument("--nombre-sistema", default="PPO", help="valor de `estrategia` del sistema en su archivo")
+    ap.add_argument("--penalizaciones-no-ejecutado", nargs="*", type=float, default=[], metavar="BPS",
+                    help="penalizaciones (bps) para el costo ajustado por lo no ejecutado; por defecto no se calcula")
     ap.add_argument("--out-json", default=str(REPO_ROOT / "data/analysis/sistema_vs_benchmarks.json"))
     ap.add_argument("--out-png", default=str(REPO_ROOT / "data/analysis/sistema_vs_benchmarks.png"))
     ap.add_argument("--out-md", default=str(REPO_ROOT / "docs/sistema_vs_benchmarks_3.2.3.md"))
@@ -228,7 +271,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
 
     resultados: Dict[str, Dict] = {}
     for etiqueta, bench, sis in args.comparacion:
-        resultados[etiqueta] = comparar(cargar(bench), cargar(sis), args.nombre_sistema)
+        resultados[etiqueta] = comparar(cargar(bench), cargar(sis), args.nombre_sistema, penalizaciones=args.penalizaciones_no_ejecutado)
     meta = {"sistema": args.nombre_sistema, "fecha": time.strftime("%Y-%m-%d")}
     for res in resultados.values():                       # las filas por celda no se guardan en el resumen JSON
         for info in res["benchmarks"].values():

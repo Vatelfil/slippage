@@ -152,4 +152,10 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Cómo leerlos:** en `_A2` cinco variantes con γ = 1 llegan a la línea verde (el nivel de la mejor heurística) y cumplen 5 de 5; la recompensa original y el costo de espera denso no. En `_B` ningún ajuste adicional mejora la base.
 - **Datos y script:** `data/experimentos_recompensa/` y `scripts/analizar_experimentos_recompensa.py`; contexto en `docs/experimentos_recompensa_PS.md`.
 
+### `data/analysis/monitoreo_calibracion.png` y `sistema_sin_entrenar_v2_ajustado.png` (rama `feature/ps-sprint6-monitoreo-sensibilidad`)
+- **`monitoreo_calibracion.png`:** el panel de monitoreo con 12 corridas de Poisson buenas y malas (variantes de recompensa con 2 semillas cada una). Las malas (recompensa actual, penalización con γ = 0,95) muestran el retorno subiendo hasta casi 0 y los pasos en espera yéndose a ≈ 100 %, con cumplimiento cayendo a 0; las buenas (penalización o liquidación con γ = 1) mantienen cumplimiento cercano a 1 y espera moderada. La línea punteada de cada corrida en el panel de slippage es su costo de partida.
+- **Cómo leerlo:** el retorno por sí solo engaña (las malas son las que más «mejoran»); hay que mirarlo junto con el cumplimiento, la espera y si el slippage baja de su línea de partida.
+- **`sistema_sin_entrenar_v2_ajustado.png`:** igual que los gráficos de comparación con TWAP y VWAP (intervalos de la diferencia de costo), pero con el sistema sin entrenar y el costo del tramo de inicio; el informe `docs/sistema_sin_entrenar_v2_ajustado_PS.md` agrega la tabla del costo ajustado con 50, 100 y 300 bps de penalización por lo no comprado.
+- **Datos y script:** `data/calibracion_monitoreo/` y `scripts/monitorear_entrenamiento.py --dir …`; `scripts/comparar_sistema_vs_benchmarks.py`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
