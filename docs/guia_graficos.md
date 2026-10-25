@@ -121,4 +121,9 @@ Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de c
 - **Distancia D del KS antes y después de calibrar (diapositiva 11):** barras por tramo; valores de `docs/validacion_formal_2.2.5_PS.md`, sección 7.
 - **IS de TWAP y VWAP (diapositiva 12):** 36.932 y 35.569 pesos; `docs/benchmarks_2.3.4_PS.md`.
 
+### `data/analysis/sistema_sin_entrenar_vs_benchmarks.png` (rama `feature/ps-sprint6-c3-sistema-sin-entrenar`)
+- **Qué muestra:** la diferencia de slippage (sistema sin entrenar − referencia, en bps) frente a TWAP y VWAP, con su intervalo de confianza del 95 %: el punto grueso es el total de las 20 celdas (orden × semilla) y los finos son los desgloses por tramo de inicio.
+- **Cómo leerlo:** todos los intervalos quedan a la izquierda del cero, es decir, el sistema parece costar menos. **No es una ventaja real:** el sistema sin entrenar ejecuta solo el 88,5 % de la orden y el slippage no cuenta lo que no se compró. Sirve para validar el flujo, no para concluir.
+- **Datos y script:** `data/colab_resultados/c3_sistema/` y `scripts/comparar_sistema_vs_benchmarks.py`; contexto en `docs/c3_sistema_sin_entrenar_PS.md`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

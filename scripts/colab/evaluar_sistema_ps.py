@@ -48,6 +48,7 @@ from src.analysis.execution_metrics import evaluate_episode  # noqa: E402
 from src.envs.rmsc04_search import load_resumable, save_json  # noqa: E402
 
 TRAMOS = ("apertura", "media_jornada", "cierre")
+SEED_RED = 1000          # semilla de los pesos iniciales cuando no hay checkpoint (misma para todas las sesiones)
 VOL_CONSTANTE = 0.002   # volatilidad y vol_promedio de S_M si no se pasan datos (constantes, no informan al Maestro)
 VOLP_CONSTANTE = 0.2
 
@@ -187,11 +188,13 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
     return True
 
 
-def cargar_redes(ckpt_maestro: Optional[str], ckpt_ejecutores: Dict[str, str]):
-    """(Maestro, {tramo: Ejecutor}); los que no tienen checkpoint quedan con pesos iniciales (aleatorios)."""
+def cargar_redes(ckpt_maestro: Optional[str], ckpt_ejecutores: Dict[str, str], seed_red: int = SEED_RED):
+    """(Maestro, {tramo: Ejecutor}); los que no tienen checkpoint quedan con pesos iniciales, FIJADOS por `seed_red`
+    (sin esa semilla cada proceso crea redes distintas y dos sesiones no serian comparables)."""
     import torch
     from src.models.networks_factory import make_hierarchy
 
+    torch.manual_seed(int(seed_red))
     maestro, redes = make_hierarchy()
     if ckpt_maestro:
         maestro.load_state_dict(torch.load(ckpt_maestro, map_location="cpu")["model"])
@@ -224,6 +227,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--ordenes", nargs="*", default=None, help="ids a correr (para repartir entre cuadernos)")
     ap.add_argument("--ckpt-maestro", default=None)
     ap.add_argument("--ckpt-ejecutor", action="append", default=[], metavar="TRAMO=ruta")
+    ap.add_argument("--seed-red", type=int, default=SEED_RED, help="semilla de los pesos iniciales de las redes sin checkpoint")
     ap.add_argument("--modo", choices=["argmax", "muestreo"], default="argmax")
     ap.add_argument("--nombre", default=None, help="nombre de la estrategia en el archivo (por defecto PPO o PPO_sin_entrenar)")
     ap.add_argument("--datos-sm", default=None, help="CSV con indice horario y columnas volatilidad, vol_promedio")
@@ -242,7 +246,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     if args.datos_sm:
         datos_sm = pd.read_csv(args.datos_sm, index_col=0, parse_dates=True)
 
-    maestro, redes = cargar_redes(args.ckpt_maestro, ckpts)
+    maestro, redes = cargar_redes(args.ckpt_maestro, ckpts, args.seed_red)
     factories: Dict[str, Callable] = {}
 
     def factory_por_ticker(ticker: str):
@@ -256,7 +260,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
 
     out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}.json"
     firma = {"tarea": "3.2.3-evaluador", "entorno": args.entorno, "snapshot": args.snapshot, "sistema": nombre,
-             "modo": args.modo, "ckpt_maestro": args.ckpt_maestro, "ckpt_ejecutores": ckpts,
+             "modo": args.modo, "ckpt_maestro": args.ckpt_maestro, "ckpt_ejecutores": ckpts, "seed_red": args.seed_red,
              "ordenes": sorted(o["id"] for o in ordenes), "cantidades": {o["id"]: o["cantidad"] for o in ordenes},
              "datos_sm": args.datos_sm}
     estado = load_resumable(out, firma)

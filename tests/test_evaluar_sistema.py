@@ -91,3 +91,24 @@ def test_main_escribe_y_reanuda(tmp_path):
     n1 = len(json.loads(out.read_text(encoding="utf-8"))["corridas"])
     ev.main(argv)
     assert n1 == 1 and len(json.loads(out.read_text(encoding="utf-8"))["corridas"]) == 1
+
+
+def test_redes_sin_checkpoint_son_reproducibles_con_la_misma_semilla():
+    import torch
+    m1, r1 = ev.cargar_redes(None, {}, seed_red=7)
+    m2, r2 = ev.cargar_redes(None, {}, seed_red=7)
+    m3, _ = ev.cargar_redes(None, {}, seed_red=8)
+    p1, p2, p3 = (next(m.parameters()) for m in (m1, m2, m3))
+    assert torch.equal(p1, p2) and not torch.equal(p1, p3)
+    assert all(torch.equal(next(r1[k].parameters()), next(r2[k].parameters())) for k in r1)
+
+
+def test_dos_procesos_dan_la_misma_corrida(tmp_path):
+    meta = tmp_path / "m.json"
+    meta.write_text(json.dumps({"meta_ordenes": [ORDEN]}), encoding="utf-8")
+    out = []
+    for i in (1, 2):
+        d = tmp_path / f"s{i}"
+        f = ev.main(["--meta-ordenes", str(meta), "--entorno", "poisson", "--seeds", "1", "--out-dir", str(d)])
+        out.append(json.loads(f.read_text(encoding="utf-8"))["corridas"]["MO-T1|PPO_sin_entrenar|1"])
+    assert out[0]["decisiones"] == out[1]["decisiones"] and out[0]["slippage_bps"] == out[1]["slippage_bps"]

@@ -126,6 +126,14 @@
 - **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_estabilidad` y `python scripts/monitorear_entrenamiento.py --dir data/colab_resultados/d3_estabilidad --out-json data/analysis/monitoreo_d3_estabilidad.json --out-png data/analysis/monitoreo_d3_estabilidad.png --out-md docs/monitoreo_d3_estabilidad.md`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`estabilidad_D3.png` y `monitoreo_d3_estabilidad.png`).
 
+### `feature/ps-sprint6-c3-sistema-sin-entrenar`: primera evaluación del sistema completo (25 de octubre)
+- **Quién:** PS con apoyo de Claude Code.
+- **Qué:** `data/colab_resultados/c3_sistema/` (resultados de las dos mitades de Colab y la prueba corta), `docs/c3_sistema_sin_entrenar_PS.md` (qué se validó, el error encontrado y qué sigue), `docs/sistema_sin_entrenar_vs_benchmarks_PS.md` y `data/analysis/sistema_sin_entrenar_vs_benchmarks.{json,png}` (comparación con TWAP y VWAP), y la corrección de `scripts/colab/evaluar_sistema_ps.py` (`--seed-red`) con sus pruebas.
+- **Por qué:** tarea C-3 / D2 del plan de PS: validar con ABIDES el flujo completo Maestro–Ejecutores y obtener un primer punto de comparación.
+- **Resultado:** el flujo funciona (20 de 20 corridas) y el pareo con los benchmarks es válido (mismo precio de referencia en 20 de 20). Se encontró que las redes sin entrenar se creaban sin semilla (dos sesiones daban resultados distintos), ya corregido. El «ahorro» de 43 bps frente a TWAP no es real: el sistema sin entrenar solo ejecuta el 88,5 % de la orden.
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python scripts/comparar_sistema_vs_benchmarks.py --comparacion "v2=data/colab_resultados/benchmarks_meta_ordenes_abides_v2.json,data/colab_resultados/c3_sistema/sistema_PPO_sin_entrenar_argmax_10ordenes_dos_redes.json" --nombre-sistema PPO_sin_entrenar`.
+- **Gráficos:** entrada en `docs/guia_graficos.md` (`sistema_sin_entrenar_vs_benchmarks.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
