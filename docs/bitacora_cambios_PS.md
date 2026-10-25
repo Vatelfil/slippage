@@ -125,6 +125,14 @@
 - **Resultado:** la regla (cumplimiento con argmax < 95 %) se dispara en 2 de 5 redes con la opción 0 y en 1 de 5 con la A (Fisher p = 1,0); con muestreo las 10 cumplen. Las 10 redes siguen con entropía de 99,6 % a 99,9 % del máximo: con 100 episodios el argmax mide el azar de una política casi uniforme (la red sin entrenar de la semilla 2000 ya cumple 0,000). La opción 0 con la semilla 1000 reproduce 0,904 de la repetición del Sprint 5.
 - **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_estabilidad` y `python scripts/monitorear_entrenamiento.py --dir data/colab_resultados/d3_estabilidad --out-json data/analysis/monitoreo_d3_estabilidad.json --out-png data/analysis/monitoreo_d3_estabilidad.png --out-md docs/monitoreo_d3_estabilidad.md`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`estabilidad_D3.png` y `monitoreo_d3_estabilidad.png`).
+### `feature/ps-figuras-cientificas`: cuatro figuras científicas del proyecto (23 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Resumen de lo que hacen MR y BF; ellos revisan los valores de su parte.
+- **Qué:** `docs/figuras_cientificas/`: cuatro figuras (PNG de 4000 × 2640 px y PDF vectorial), su generador (`generador/lib.py`, `fig1.py` a `fig4.py`) y un `README.md` que explica cómo leerlas y de dónde sale cada cifra.
+- **Por qué:** PS necesitaba material de formato artículo para presentaciones e informes que explique el proyecto completo (datos reales, calibración, simulación, agentes, variables y evaluación) y que sirva a quien no conoce el proyecto.
+- **Archivos clave:** `docs/figuras_cientificas/README.md`, `fig1_arquitectura`, `fig2_formulacion`, `fig3_espacios`, `fig4_diseno_experimental`.
+- **Resultado:** la figura 4 usa datos reales del repositorio (benchmarks v2: 10 de 10 órdenes ejecutables; TWAP − VWAP = −6,59 bps, p = 0,297). Las demás resumen la formulación del proyecto, con λ y β marcados como provisionales.
+- **Cómo reproducir o verificar:** `cd docs/figuras_cientificas/generador && python fig1.py && python fig2.py && python fig3.py && python fig4.py`.
+- **Gráficos:** explicados en `docs/figuras_cientificas/README.md` y en la sección 8 de `docs/guia_graficos.md`.
 
 ### `feature/ps-sprint6-c3-sistema-sin-entrenar`: primera evaluación del sistema completo (25 de octubre)
 - **Quién:** PS con apoyo de Claude Code.
