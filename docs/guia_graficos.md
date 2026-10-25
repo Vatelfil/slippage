@@ -146,4 +146,10 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Cómo leerlo:** los intervalos ahora incluyen el cero (frente a TWAP, +16,5 bps con IC de −15,9 a +49,8): no hay diferencia clara. Además el sistema ejecuta solo el 66 % de la orden, así que el costo no es comparable. Este gráfico reemplaza al del primer intento, cuyo «ahorro» de 43 bps era un artefacto.
 - **Datos y script:** `data/colab_resultados/c3_sistema_v2/` y `scripts/comparar_sistema_vs_benchmarks.py`.
 
+### `data/analysis/diagnostico_recompensa.png` y `experimentos_recompensa_A.png`, `_A2.png`, `_B.png` (rama `feature/ps-investigacion-recompensa`)
+- **`diagnostico_recompensa.png` (cuatro paneles):** (a) porcentaje de pasos en espera durante el entrenamiento con la recompensa actual en Poisson: sube de ≈ 30 % a ≈ 98 %; (b) corridas de ABIDES: la recompensa sube y el slippage no baja; (c) recompensa R_E que recibe cada estrategia simple (esperar siempre recibe 0, el máximo); (d) costo real de esas mismas estrategias (esperar es de las más caras). La recompensa y el costo ordenan distinto.
+- **`experimentos_recompensa_*.png` (tres paneles, una fila por variante):** costo en bps con 5.000 acciones (el eje no parte de cero; la línea gris es la red inicial y la verde, el TWAP con órdenes límite), porcentaje de pasos en espera (línea al 50 %) y cuántas de las 5 redes cumplen los tres criterios (línea en 4).
+- **Cómo leerlos:** en `_A2` cinco variantes con γ = 1 llegan a la línea verde (el nivel de la mejor heurística) y cumplen 5 de 5; la recompensa original y el costo de espera denso no. En `_B` ningún ajuste adicional mejora la base.
+- **Datos y script:** `data/experimentos_recompensa/` y `scripts/analizar_experimentos_recompensa.py`; contexto en `docs/experimentos_recompensa_PS.md`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

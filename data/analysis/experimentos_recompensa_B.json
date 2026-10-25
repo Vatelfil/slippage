@@ -1,0 +1,273 @@
+{
+ "resumen": {
+  "V2_penalizacion_g1+aleatorio": {
+   "n_redes": 5,
+   "descripcion": "recompensa original, penalización 30 bps por acción pendiente, tamaño y ventana aleatorios",
+   "q1000_v15": {
+    "slippage": 17.69158613876163,
+    "cumpl_vol": 0.9999953982966048,
+    "espera": 0.18838949714564066,
+    "slippage_inicial": 17.872330524533513,
+    "slippage_argmax": 17.672258911607592,
+    "cumpl_vol_argmax": 0.9997522811830821
+   },
+   "q5000_v15": {
+    "slippage": 20.03724377443981,
+    "cumpl_vol": 0.9999926991904902,
+    "espera": 0.19636969381739738,
+    "slippage_inicial": 20.261804050502867,
+    "slippage_argmax": 19.642899526182912,
+    "cumpl_vol_argmax": 0.9997522516162066
+   },
+   "q20000_v15": {
+    "slippage": 21.095071348748196,
+    "cumpl_vol": 0.9998003171732612,
+    "espera": 0.18754171040258802,
+    "slippage_inicial": 21.131723246314092,
+    "slippage_argmax": 21.051391163086265,
+    "cumpl_vol_argmax": 0.9996315869215847
+   },
+   "criterio": {
+    "cumple_orden": 5,
+    "no_espera": 5,
+    "mejora_costo": 1,
+    "todo": 1
+   },
+   "criterio_por_escenario": {
+    "q1000_v15": 2,
+    "q5000_v15": 1,
+    "q20000_v15": 1
+   },
+   "dif_vs_inicial": -0.2245602760630549,
+   "entrenamiento": {
+    "retorno": [
+     -12.860137654154425,
+     -12.452238093959
+    ],
+    "pct_espera": [
+     0.3251226050738919,
+     0.17458956082467658
+    ],
+    "pct_mercado": [
+     0.3319453294876205,
+     0.5163990774308724
+    ],
+    "pct_limite": [
+     0.34293206543848753,
+     0.30901136174445093
+    ],
+    "slippage_bps": [
+     19.782088257825414,
+     19.664302436905647
+    ],
+    "cumplimiento_voluntario": [
+     0.76640521874658,
+     0.8356531031417953
+    ]
+   },
+   "funciona": false
+  },
+  "V2_penalizacion_g1+hiper": {
+   "n_redes": 5,
+   "descripcion": "recompensa original, penalización 30 bps por acción pendiente",
+   "q1000_v15": {
+    "slippage": 17.737281061869997,
+    "cumpl_vol": 0.9982901298095586,
+    "espera": 0.30615771455937246,
+    "slippage_inicial": 17.872330524533513,
+    "slippage_argmax": 17.722431752393785,
+    "cumpl_vol_argmax": 0.9992175418831064
+   },
+   "q5000_v15": {
+    "slippage": 18.184112695092775,
+    "cumpl_vol": 0.998216441112376,
+    "espera": 0.3083242642999954,
+    "slippage_inicial": 20.261804050502867,
+    "slippage_argmax": 17.870281511071862,
+    "cumpl_vol_argmax": 0.9992185554827511
+   },
+   "q20000_v15": {
+    "slippage": 20.569046491384075,
+    "cumpl_vol": 0.9903380344128614,
+    "espera": 0.3095805297542438,
+    "slippage_inicial": 21.131723246314092,
+    "slippage_argmax": 19.973519451289544,
+    "cumpl_vol_argmax": 0.9989227606733853
+   },
+   "criterio": {
+    "cumple_orden": 5,
+    "no_espera": 5,
+    "mejora_costo": 5,
+    "todo": 5
+   },
+   "criterio_por_escenario": {
+    "q1000_v15": 0,
+    "q5000_v15": 5,
+    "q20000_v15": 5
+   },
+   "dif_vs_inicial": -2.0776913554100935,
+   "entrenamiento": {
+    "retorno": [
+     -11.69900149699867,
+     -10.620714542762135
+    ],
+    "pct_espera": [
+     0.3199287601768922,
+     0.32702089822119823
+    ],
+    "pct_mercado": [
+     0.35200265016525534,
+     0.3768687151781341
+    ],
+    "pct_limite": [
+     0.32806858965785235,
+     0.2961103866006677
+    ],
+    "slippage_bps": [
+     20.08198489567303,
+     18.232949325737643
+    ],
+    "cumplimiento_voluntario": [
+     0.9999531965291487,
+     0.9952087661226765
+    ]
+   },
+   "funciona": true
+  },
+  "V2_penalizacion_g1+imitacion": {
+   "n_redes": 5,
+   "descripcion": "recompensa original, penalización 30 bps por acción pendiente",
+   "q1000_v15": {
+    "slippage": 17.975024792348428,
+    "cumpl_vol": 0.9983447110743136,
+    "espera": 0.22859114262867278,
+    "slippage_inicial": 17.872330524533513,
+    "slippage_argmax": 17.928485711444512,
+    "cumpl_vol_argmax": 0.9971520327882647
+   },
+   "q5000_v15": {
+    "slippage": 18.12755653081884,
+    "cumpl_vol": 0.9983229391586029,
+    "espera": 0.22917243638738785,
+    "slippage_inicial": 20.261804050502867,
+    "slippage_argmax": 18.04879773333121,
+    "cumpl_vol_argmax": 0.9972307615906117
+   },
+   "q20000_v15": {
+    "slippage": 20.565340188424038,
+    "cumpl_vol": 0.9768282417133463,
+    "espera": 0.22092234394846094,
+    "slippage_inicial": 21.131723246314092,
+    "slippage_argmax": 20.516555514624493,
+    "cumpl_vol_argmax": 0.9753370156520879
+   },
+   "criterio": {
+    "cumple_orden": 5,
+    "no_espera": 5,
+    "mejora_costo": 5,
+    "todo": 5
+   },
+   "criterio_por_escenario": {
+    "q1000_v15": 0,
+    "q5000_v15": 5,
+    "q20000_v15": 3
+   },
+   "dif_vs_inicial": -2.134247519684028,
+   "entrenamiento": {
+    "retorno": [
+     -11.21865932342832,
+     -10.34665503846179
+    ],
+    "pct_espera": [
+     0.08234213571135754,
+     0.22128527640275766
+    ],
+    "pct_mercado": [
+     0.08792273680513012,
+     0.1183583359426456
+    ],
+    "pct_limite": [
+     0.8297351274835124,
+     0.6603563876545968
+    ],
+    "slippage_bps": [
+     19.197464765262943,
+     18.131019522197615
+    ],
+    "cumplimiento_voluntario": [
+     0.978776344669197,
+     0.99953352957952
+    ]
+   },
+   "funciona": true
+  },
+  "V2_penalizacion_g1+todo": {
+   "n_redes": 5,
+   "descripcion": "recompensa original, penalización 30 bps por acción pendiente, tamaño y ventana aleatorios",
+   "q1000_v15": {
+    "slippage": 17.85185220679586,
+    "cumpl_vol": 1.0,
+    "espera": 0.2881642967023355,
+    "slippage_inicial": 17.872330524533513,
+    "slippage_argmax": 17.936666660810424,
+    "cumpl_vol_argmax": 0.993792
+   },
+   "q5000_v15": {
+    "slippage": 19.66440246565194,
+    "cumpl_vol": 1.0,
+    "espera": 0.2844244473563359,
+    "slippage_inicial": 20.261804050502867,
+    "slippage_argmax": 18.793936778355707,
+    "cumpl_vol_argmax": 0.9842559999999999
+   },
+   "q20000_v15": {
+    "slippage": 20.99743902386387,
+    "cumpl_vol": 0.9844105316150514,
+    "espera": 0.2945972146707315,
+    "slippage_inicial": 21.131723246314092,
+    "slippage_argmax": 21.057223154801232,
+    "cumpl_vol_argmax": 0.8239049050613648
+   },
+   "criterio": {
+    "cumple_orden": 5,
+    "no_espera": 5,
+    "mejora_costo": 4,
+    "todo": 4
+   },
+   "criterio_por_escenario": {
+    "q1000_v15": 0,
+    "q5000_v15": 4,
+    "q20000_v15": 2
+   },
+   "dif_vs_inicial": -0.5974015848509291,
+   "entrenamiento": {
+    "retorno": [
+     -13.248229699564288,
+     -12.938755757588947
+    ],
+    "pct_espera": [
+     0.05073378272787647,
+     0.351734963690067
+    ],
+    "pct_mercado": [
+     0.05006597893136202,
+     0.19740987010925348
+    ],
+    "pct_limite": [
+     0.8992002383407616,
+     0.45085516620067956
+    ],
+    "slippage_bps": [
+     18.64958135451504,
+     19.43483654948033
+    ],
+    "cumplimiento_voluntario": [
+     0.6282307835456344,
+     0.72511097199592
+    ]
+   },
+   "funciona": true
+  }
+ },
+ "mejor": "V2_penalizacion_g1+imitacion"
+}

@@ -48,9 +48,18 @@ def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str 
     return functools.partial(EjecutorEnvPoissonFallback, **extra) if extra else EjecutorEnvPoissonFallback
 
 
-def _nuevo_trainer(seed: int):
+def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float):
+    """Aplica al entrenamiento la penalización por lo no comprado y/o el costo de espera (ver
+    `src/experiments/variantes_recompensa.py`). La evaluación sigue usando la fábrica original, así que el slippage y el
+    cumplimiento que se informan son los de siempre y se pueden comparar con corridas anteriores."""
+    from src.experiments.variantes_recompensa import EntornoVariante, Variante
+    variante = Variante("entrenamiento", penalizacion_bps=penalizacion_bps, costo_espera_bps=costo_espera_bps)
+    return lambda **kw: EntornoVariante(factory(**kw), variante)
+
+
+def _nuevo_trainer(seed: int, gamma: float = 0.95):
     from src.training.ppo_trainer import PPOConfig, PPOTrainer
-    cfg = PPOConfig(lr=3e-4, gamma=0.95, gae_lambda=0.95, clip_ratio=0.2, entropy_coef=0.01, value_coef=0.5,
+    cfg = PPOConfig(lr=3e-4, gamma=gamma, gae_lambda=0.95, clip_ratio=0.2, entropy_coef=0.01, value_coef=0.5,
                     epochs=4, minibatch_size=64, episodes_per_update=10)
     return PPOTrainer(role="ejecutor", cfg=cfg, seed=seed)
 
@@ -103,6 +112,12 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--eval-seed-base", type=int, default=5000)
     ap.add_argument("--riesgo-sobre", choices=["ejecutado", "pendiente"], default="ejecutado",
                     help="ejecutado = opcion 0 de D3 (Titulo I); pendiente = opcion A (riesgo sobre lo que falta ejecutar)")
+    ap.add_argument("--gamma", type=float, default=0.95,
+                    help="factor de descuento del Ejecutor; con 1,0 un costo al final de la ventana no se achica al verlo desde el principio")
+    ap.add_argument("--penalizacion-bps", type=float, default=0.0,
+                    help="castigo, en bps del precio de llegada, por cada acción del slice sin comprar al terminar la ventana")
+    ap.add_argument("--costo-espera-bps", type=float, default=0.0,
+                    help="costo denso por inventario pendiente (total en bps si no se compra nada en la ventana)")
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -122,8 +137,16 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
              "beta": BETA_RIESGO_EJECUTOR, "calibrated_json": Path(args.calibrated_json).name}
     if args.riesgo_sobre != "ejecutado":   # solo si no es la opcion por defecto, para no invalidar corridas anteriores
         firma["riesgo_sobre"] = args.riesgo_sobre
+    # igual que arriba: estos campos solo entran a la firma cuando se usan
+    if args.gamma != 0.95:
+        firma["gamma"] = args.gamma
+    if args.penalizacion_bps:
+        firma["penalizacion_bps"] = args.penalizacion_bps
+    if args.costo_espera_bps:
+        firma["costo_espera_bps"] = args.costo_espera_bps
     monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
-    factory_entrenamiento = monitor.envolver(factory) if monitor else factory
+    factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps)         if (args.penalizacion_bps or args.costo_espera_bps) else factory
+    factory_entrenamiento = monitor.envolver(factory_variante) if monitor else factory_variante
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
     eval_seeds = [args.eval_seed_base + i for i in range(1, args.eval_seeds + 1)]
@@ -139,7 +162,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         save_json(estado_path, estado)
 
     # -- Etapa 1: entrenamiento reanudable en bloques de 10 episodios (= una actualizacion PPO)
-    trainer = _nuevo_trainer(args.seed)
+    trainer = _nuevo_trainer(args.seed, args.gamma)
     ckpt = ckpt_dir / "checkpoint_last.pt"
     if ckpt.exists():
         trainer.load_checkpoint(ckpt)

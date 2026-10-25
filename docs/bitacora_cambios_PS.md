@@ -158,6 +158,14 @@
 - **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_1000ep --out-json data/analysis/estabilidad_D3_1000ep.json --out-png data/analysis/estabilidad_D3_1000ep.png --out-md docs/estabilidad_D3_1000ep_PS.md` y la comparación descrita en `docs/sistema_sin_entrenar_v2_vs_benchmarks_PS.md`.
 - **Gráficos:** entrada en `docs/guia_graficos.md` (`sistema_sin_entrenar_v2_vs_benchmarks.png`).
 
+### `feature/ps-investigacion-recompensa`: por qué el entrenamiento no baja el costo y cómo arreglarlo (25–26 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Lo que toca partes de BF (R_E) y de MR (entrenador PPO) quedó como **borrador de PS para ellos**; no se modificó ningún archivo de sus tareas.
+- **Qué:** diagnóstico (`docs/diagnostico_recompensa_PS.md`), envoltorio con variantes de recompensa y cierre de ventana (`src/experiments/variantes_recompensa.py`, `entrenamiento_variantes.py`), matriz de experimentos en el PC con Poisson (`scripts/experimentos_recompensa_ps.py`, resultados en `data/experimentos_recompensa/` e informes `docs/experimentos_recompensa_*_PS.md`), propuesta para BF y MR (`docs/propuesta_cambio_RE_para_BF_y_MR.md`), opciones `--gamma` y `--penalizacion-bps` en `scripts/colab/entrenamiento_inicial_ps.py` (apagadas por defecto) y dos cuadernos de Colab para confirmar en ABIDES (`notebooks/Colab_confirmacion_ABIDES_A.ipynb` y `_B.ipynb`). Resumen completo en `docs/investigacion_recompensa_que_se_hizo.md`.
+- **Por qué:** con 1.000 episodios las redes entrenadas costaban más que la red sin entrenar muestreando (+3 bps); había que saber qué fallaba antes de ajustar hiperparámetros en el Sprint 6.
+- **Resultado:** con la recompensa actual la red aprende a esperar (97–99 % de los pasos): nada obliga a completar la orden y el descuento γ = 0,95 hace que un costo al final de la ventana se vea cuatro veces más barato. Una penalización de 30 bps por acción sin comprar junto con γ = 1 hace que 5 de 5 redes cumplan la orden y bajen el costo al nivel de la mejor heurística (17,9 frente a 17,91 bps; red inicial, 20,26). Cada cambio por separado no funciona. Probado solo en Poisson; falta ABIDES.
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_variantes_recompensa.py` y los comandos de la sección 7 de `docs/investigacion_recompensa_que_se_hizo.md`.
+- **Gráficos:** entradas en `docs/guia_graficos.md` (`diagnostico_recompensa.png` y `experimentos_recompensa_A/A2/B.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
