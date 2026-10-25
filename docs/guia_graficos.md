@@ -131,4 +131,9 @@ Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de c
 - **`monitoreo_d3_1000ep.png`:** panel de monitoreo con las redes de 1.000 episodios que tienen CSV (5 de 6; falta el de la opción A, semilla 1000). La entropía baja mucho más que en 100 episodios (de 5,48 a entre 1,9 y 4,7 nats) y la fracción de pasos en espera cae en casi todas las redes. Las alertas de entropía colapsada (por debajo del 60 % del máximo) aparecen en dos redes (opción 0 semilla 2000 y opción A semilla 3000); en ambas el cumplimiento sigue en 1,0, así que la política se concentró en acciones que ejecutan.
 - **Datos y script:** `data/colab_resultados/d3_1000ep/`; `scripts/analizar_estabilidad_D3.py` y `scripts/monitorear_entrenamiento.py --dir …`; alertas en `docs/monitoreo_d3_1000ep.md`.
 
+### `data/analysis/sistema_sin_entrenar_v2_vs_benchmarks.png` (rama `feature/ps-sprint6-c3-v2-y-control`)
+- **Qué muestra:** igual que `sistema_sin_entrenar_vs_benchmarks.png`, pero con la red sin entrenar fija en las dos mitades: diferencia de slippage (sistema − referencia, en bps) frente a TWAP y VWAP, con el intervalo de confianza del 95 %.
+- **Cómo leerlo:** los intervalos ahora incluyen el cero (frente a TWAP, +16,5 bps con IC de −15,9 a +49,8): no hay diferencia clara. Además el sistema ejecuta solo el 66 % de la orden, así que el costo no es comparable. Este gráfico reemplaza al del primer intento, cuyo «ahorro» de 43 bps era un artefacto.
+- **Datos y script:** `data/colab_resultados/c3_sistema_v2/` y `scripts/comparar_sistema_vs_benchmarks.py`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

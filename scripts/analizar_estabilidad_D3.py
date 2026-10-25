@@ -175,8 +175,11 @@ def informe(filas: Sequence[Dict], res: Dict[str, Dict], p_fisher: Optional[floa
                      f"{_f(wilcoxon_pareado(r['por_semilla_muestreo'], r['ctrl_por_semilla']), 3)} |")
         difs = [r["slip_muestreo"] - r["ctrl_slip_muestreo"] for r in con_ctrl if r["slip_muestreo"] is not None and r["ctrl_slip_muestreo"] is not None]
         if difs:
-            L += ["", f"En {sum(d < 0 for d in difs)} de {len(difs)} redes la entrenada muestreando cuesta menos que la inicial muestreando "
-                  f"(diferencia media {_f(float(np.mean(difs)))} bps)."]
+            n_menos = int(sum(d < 0 for d in difs))
+            p_signos = float(stats.binomtest(n_menos, len(difs), 0.5).pvalue)
+            L += ["", f"En {n_menos} de {len(difs)} redes la entrenada muestreando cuesta menos que la inicial muestreando "
+                  f"(diferencia media {_f(float(np.mean(difs)))} bps; prueba de signos entre redes, p = {_f(p_signos, 3)}). "
+                  "Las redes comparten el diseño de la recompensa y el entorno, así que la prueba de signos es una guía y no una prueba independiente."]
     L += ["", "## 4. Cómo leerlo", ""]
     r0, rA = res.get("0"), res.get("A")
     if r0 and rA:

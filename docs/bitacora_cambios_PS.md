@@ -142,6 +142,14 @@
 - **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_1000ep --out-json data/analysis/estabilidad_D3_1000ep.json --out-png data/analysis/estabilidad_D3_1000ep.png --out-md docs/estabilidad_D3_1000ep_PS.md`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`estabilidad_D3_1000ep.png` y `monitoreo_d3_1000ep.png`).
 
+### `feature/ps-sprint6-c3-v2-y-control`: C-3 con semilla fija y control muestreado (25 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code.
+- **Qué:** `data/colab_resultados/c3_sistema_v2/` (evaluador del sistema con la semilla de red fija) y los 5 archivos `control_sin_entrenar_muestreado_s*.json` en `data/colab_resultados/d3_estabilidad/` y `d3_1000ep/`; informes regenerados (`docs/estabilidad_D3_PS.md`, `docs/estabilidad_D3_1000ep_PS.md`, con la tabla del control justo y la prueba de signos), `docs/sistema_sin_entrenar_v2_vs_benchmarks_PS.md` y `data/analysis/sistema_sin_entrenar_v2_vs_benchmarks.{json,png}`; secciones nuevas en `docs/c3_sistema_sin_entrenar_PS.md` y en el memo de D3 (sección 9).
+- **Por qué:** cerrar C-3 con una red coherente y completar el control que faltaba para comparar en igualdad de condiciones.
+- **Resultado:** el sistema sin entrenar cumple el 66,3 % de las órdenes (apertura 94,6 %, media jornada 76,3 %, cierre 18,5 %) y no se distingue de TWAP en costo (+16,5 bps, p = 0,43); el «ahorro» del primer intento era un artefacto. El control muestreado muestra que una política casi uniforme ya cumple y cuesta ≈ 3 bps: con 100 episodios el entrenamiento casi no cambia nada (−0,39 bps) y con 1.000 episodios las 6 redes cuestan más que el control (+3,08 bps de media, 0 de 6 mejores).
+- **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/d3_1000ep --out-json data/analysis/estabilidad_D3_1000ep.json --out-png data/analysis/estabilidad_D3_1000ep.png --out-md docs/estabilidad_D3_1000ep_PS.md` y la comparación descrita en `docs/sistema_sin_entrenar_v2_vs_benchmarks_PS.md`.
+- **Gráficos:** entrada en `docs/guia_graficos.md` (`sistema_sin_entrenar_v2_vs_benchmarks.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

@@ -1,6 +1,6 @@
 # Decisión final de R_E (D3) para BF: revisión del 23 de octubre
 
-**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan). **Actualizado el 23 de octubre por la tarde con 10 redes de 100 episodios: ver la sección 7. Actualizado el 25 de octubre con 6 redes de 1.000 episodios: la sección 8 ajusta de nuevo la recomendación.**
+**Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan). **Actualizado el 23 de octubre por la tarde con 10 redes de 100 episodios: ver la sección 7. Actualizado el 25 de octubre con 6 redes de 1.000 episodios: la sección 8 ajusta de nuevo la recomendación. Actualizado el 25 de octubre por la noche con el control muestreado: la sección 9 cambia la lectura del costo.**
 
 ## 1. Qué se había acordado
 
@@ -105,5 +105,28 @@ Lo que muestra:
 - **Costo de adoptarla:** recalcular β∗ y repetir la fase 2 de β (varias horas de Colab; sección 5). Antes de hacerlo conviene esperar el control muestreado, que confirma si el costo no empeora.
 - **Si BF prefiere no cambiar:** "D3: 0", con la vigilancia informada con argmax y con muestreo y el monitoreo del Sprint 6 activo (la alerta de espera alta detecta la red que se queda esperando).
 - Respuesta pedida: **"D3: A"**, **"D3: 0"** o **"D3: esperar"** (esperar el control muestreado).
+
+## 9. Actualización del 25 de octubre (noche): el control muestreado cambia la lectura
+
+Hasta aquí la red entrenada se comparaba con la red sin entrenar evaluada con argmax. Ahora se evaluó la red inicial **también muestreando la política** (misma condición que la red entrenada, mismas semillas de evaluación 5001 a 5015). Detalle en `docs/estabilidad_D3_PS.md` y `docs/estabilidad_D3_1000ep_PS.md`.
+
+| Qué se compara (slippage muestreando) | Red sin entrenar | Redes entrenadas | Diferencia media | Redes que cuestan menos que el control |
+|---|---:|---:|---:|---:|
+| 100 episodios (10 redes) | 2,6 a 3,1 bps | 1,8 a 3,1 bps | −0,39 bps | 9 de 10 (ninguna significativa por sí sola; prueba de signos p = 0,021) |
+| 1.000 episodios (6 redes) | 2,6 a 3,0 bps | 4,6 a 8,3 bps | **+3,08 bps** | **0 de 6** (prueba de signos p = 0,031) |
+
+Lo que muestra:
+
+1. **Una política casi uniforme ya cumple la orden y cuesta ≈ 3 bps.** La red inicial muestreando ejecuta el 100 % en las 5 semillas. Ese es el punto de partida real, y es mucho mejor que el 6 bps del control con argmax que se usaba antes.
+2. **Con 100 episodios el entrenamiento casi no cambia nada** (−0,39 bps de media).
+3. **Con 1.000 episodios las 6 redes cuestan más que la red sin entrenar** (+1,6 a +5,7 bps), con las dos opciones de R_E. Las políticas se concentran y cumplen de forma más decidida, pero **no bajan el costo**; lo empeoran. Como las redes comparten el diseño de la recompensa y el entorno, la prueba de signos es una guía, no una prueba independiente.
+4. **La diferencia entre las opciones 0 y A (6,61 frente a 5,31 bps) es menor que la diferencia de cualquiera de las dos con el control (≈ 3 bps).** La elección de R_E no es hoy el factor que más mueve el costo.
+
+### Qué cambia para D3 y para el Sprint 6
+
+- **D3 se decide por robustez del cumplimiento, no por costo.** Con ese criterio la opción A sigue siendo la más segura (la regla se dispara en 0 de 3 redes de 1.000 episodios, frente a 1 de 3 con la 0, y reduce los pasos en espera). Pero **no hay evidencia de que mejore el costo** frente a una política aleatoria.
+- **Conviene no gastar horas de Colab en recalcular β∗ y repetir la fase 2 todavía.** Antes hay que entender por qué el entrenamiento empeora el costo (escala y forma de R_E, tasa de aprendizaje, recorte, cantidad de episodios): es justo el trabajo del ajuste de hiperparámetros del Sprint 6 (tareas 3.1.1 y 3.1.2, MR).
+- **Todo análisis de entrenamiento debería incluir la red sin entrenar muestreando como línea base.** Los informes ya pueden hacerlo con `scripts/colab/control_muestreado_ps.py`.
+- Respuesta pedida a BF: **"D3: A"** (por robustez, manteniendo β = 0,0061796 provisional y sin recalcular β∗ hasta tener entrenamientos que bajen el costo), **"D3: 0"** o **"D3: esperar"**.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

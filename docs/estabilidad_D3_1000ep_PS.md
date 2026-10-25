@@ -48,6 +48,21 @@ Wilcoxon pareado por semilla de evaluación (misma semilla, red entrenada frente
 | A | 2000 | — | — |
 | A | 3000 | 0,804 | 0,804 |
 
+### Control justo: la red sin entrenar también muestreando la política
+
+La comparación anterior pone la red entrenada muestreando frente a la red sin entrenar con argmax. Aquí ambas muestrean (`scripts/colab/control_muestreado_ps.py`), en las mismas semillas de evaluación.
+
+| Opción | Semilla de red | Slippage entrenada muestreada (bps) | Slippage sin entrenar muestreada (bps) | Diferencia (bps) | p (Wilcoxon pareado) |
+|---|---:|---:|---:|---:|---:|
+| 0 | 1000 | 5,43 | 3,00 | 2,43 | 0,890 |
+| 0 | 2000 | 6,11 | 2,99 | 3,12 | 0,978 |
+| 0 | 3000 | 8,29 | 2,64 | 5,65 | 0,421 |
+| A | 1000 | 4,60 | 3,00 | 1,59 | 0,978 |
+| A | 2000 | 6,55 | 2,99 | 3,56 | 0,073 |
+| A | 3000 | 4,79 | 2,64 | 2,15 | 0,561 |
+
+En 0 de 6 redes la entrenada muestreando cuesta menos que la inicial muestreando (diferencia media 3,08 bps; prueba de signos entre redes, p = 0,031). Las redes comparten el diseño de la recompensa y el entorno, así que la prueba de signos es una guía y no una prueba independiente.
+
 ## 4. Cómo leerlo
 
 - Opción 0: la regla se dispara en 1 de 3 redes; opción A: en 0 de 3.
