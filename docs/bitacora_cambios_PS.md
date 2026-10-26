@@ -215,6 +215,14 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_reevaluar_ejecutores.py tests/test_analizar_reevaluacion.py`.
 - **Gráficos:** ninguno nuevo.
 
+### `feature/ps-reevaluacion-300-resultados`: resultado de la reevaluación con 300 semillas y cuaderno B de V4 (26 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
+- **Qué:** datos de `reeval_300` (8 redes, 4 controles, 3 heurísticas, 300 semillas) en `data/colab_resultados/reeval_300/`; resultados del cuaderno B de V4 en `data/colab_resultados/v4_pen30_g1_B/`; informes `docs/reeval_300_ABIDES_PS.md` (tabla generada por `scripts/analizar_reevaluacion_ps.py`) y `docs/reeval_300_resultado_PS.md` (lectura y límites); figura `data/analysis/reeval_300_ABIDES.png`. No cambia código.
+- **Por qué:** con 15 y 40 semillas el ruido del precio tapaba el efecto de entrenar; con 300 semillas el intervalo de confianza baja a ±1 bps.
+- **Resultado:** ninguna de las 8 redes cuesta distinto a su control (diferencias −0,6 a +1,0 bps, todos los IC con el 0; las 8 juntas −0,08 bps, IC [−0,98; +0,77]); V2 ≈ V4; redes y control cuestan ≈ 2 bps más que TWAP límite. Entrenar 1.000 episodios no cambió el costo de forma medible.
+- **Cómo reproducir o verificar:** `python scripts/analizar_reevaluacion_ps.py --dir data/colab_resultados/reeval_300 --out-md docs/reeval_300_ABIDES_PS.md --out-png data/analysis/reeval_300_ABIDES.png`.
+- **Gráficos:** entrada en `docs/guia_graficos.md` (`reeval_300_ABIDES.png`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

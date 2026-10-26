@@ -169,4 +169,9 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Cómo leerlo:** las dos variantes entrenadas quedan por debajo del control en la red 1000, y solo V2 en la 2000; entre V2 y V4 no hay un ganador claro. Son medias sobre 40 semillas en las que el movimiento del precio pesa mucho más que la diferencia entre barras, así que es orientativo; lo decide la reevaluación con 300 semillas (`docs/v4_abides_resultado_parcial_A_PS.md`).
 - **Datos y script:** `data/colab_resultados/v4_pen30_g1_A/` y `scripts/comparar_v4_vs_v2_ps.py`.
 
+### `data/analysis/reeval_300_ABIDES.png` (rama `feature/ps-reevaluacion-300-resultados`)
+- **Qué muestra:** una fila por red entrenada (grises: original sin arreglo; naranjas: V2; verdes: V4). El punto es la diferencia media de slippage entre la red y su control (la misma red sin entrenar muestreando) en 300 semillas de evaluación; la barra es el intervalo de confianza al 95 %. A la izquierda del 0 la red cuesta menos que el control.
+- **Cómo leerlo:** todas las barras cruzan el 0 y los puntos están entre −0,6 y +1 bps. Es decir, ninguna red se distingue del control: entrenar 1.000 episodios no cambió el costo de forma medible. Las barras de V4 son más cortas porque esas dos redes tienen menos variación entre semillas, no porque sean mejores.
+- **Datos y script:** `data/colab_resultados/reeval_300/` y `scripts/analizar_reevaluacion_ps.py`; lectura completa en `docs/reeval_300_resultado_PS.md`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
