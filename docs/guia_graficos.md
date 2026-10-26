@@ -161,7 +161,12 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 ### `data/analysis/conf_pen30_g1.png` y `monitoreo_conf_pen30_g1.png` (rama `feature/ps-confirmacion-abides-penalizacion`)
 - **`conf_pen30_g1.png`:** las 4 redes entrenadas en ABIDES con penalización de 30 bps y γ = 1, con su cumplimiento de la orden (punto lleno = política argmax, círculo vacío = política muestreada; misma figura que el análisis de estabilidad de D3). Con la política muestreada las cuatro cumplen (≈ 1,0); con argmax una red (semilla 2000) no compra nada (0,0) y otra queda en 0,93: el argmax de una política casi uniforme es arbitrario. El costo no está en esta figura: está en la tabla de `docs/conf_pen30_g1_ABIDES_PS.md`.
 - **`monitoreo_conf_pen30_g1.png`:** el panel de monitoreo de esas cuatro corridas (retorno, pasos en espera, entropía, slippage con su línea de partida). El retorno mejora cerca de 50 % pero el slippage casi no baja: es el patrón que avisa la alerta `RECOMPENSA_SUBE_COSTO_NO`. La entropía final de 80–87 % indica que la política sigue siendo casi uniforme.
-- **Cómo leerlos:** la mejora del retorno no es mejora del costo; lo que decide es la diferencia de slippage con el control sobre las mismas semillas (+3,0 bps de media, 0 de 4 redes mejores).
+- **Cómo leerlos:** la mejora del retorno no es mejora del costo; lo que decide es la diferencia de slippage con el control sobre las mismas semillas (con 15 semillas +3,0 bps y 0 de 4 redes mejores; con 40 semillas el signo se invierte, ver `docs/v4_abides_resultado_parcial_A_PS.md`).
 - **Datos y script:** `data/colab_resultados/conf_pen30_g1/`; `scripts/analizar_estabilidad_D3.py` y `scripts/monitorear_entrenamiento.py`.
+
+### `data/analysis/v4_vs_v2_ABIDES_A.png` (rama `feature/ps-abides-v4-resultados-A`)
+- **Qué muestra:** por cada red del cuaderno A (semillas 1000 y 2000), el slippage medio en 40 semillas de evaluación, política muestreada, de tres Ejecutores: la red sin entrenar (control, gris), V2 (recompensa original con penalización y γ = 1, naranja) y V4 (recompensa contra el precio de llegada con penalización y γ = 1, verde). Menos es mejor.
+- **Cómo leerlo:** las dos variantes entrenadas quedan por debajo del control en la red 1000, y solo V2 en la 2000; entre V2 y V4 no hay un ganador claro. Son medias sobre 40 semillas en las que el movimiento del precio pesa mucho más que la diferencia entre barras, así que es orientativo; lo decide la reevaluación con 150 semillas (`docs/v4_abides_resultado_parcial_A_PS.md`).
+- **Datos y script:** `data/colab_resultados/v4_pen30_g1_A/` y `scripts/comparar_v4_vs_v2_ps.py`.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

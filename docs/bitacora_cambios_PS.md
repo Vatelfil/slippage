@@ -182,7 +182,7 @@
 - **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
 - **Qué:** resultados de los dos cuadernos de Colab (`conf_pen30_g1_A` y `_B`: 4 semillas de red, 1.000 episodios, γ = 1 y penalización de 30 bps) en `data/colab_resultados/conf_pen30_g1/`; informes `docs/conf_pen30_g1_ABIDES_PS.md`, `docs/monitoreo_conf_pen30_g1.md` y `docs/confirmacion_abides_penalizacion_resultado_PS.md`; `scripts/analizar_estabilidad_D3.py` ahora compara red y control sobre las mismas semillas (40 frente a 15); se corrigieron los documentos que daban el arreglo de Poisson por probado.
 - **Por qué:** comprobar en ABIDES si lo que arreglaba el entrenamiento en Poisson también baja el costo.
-- **Resultado:** evita que la red se quede esperando (cumplimiento ≈ 1,0) pero no baja el costo: +3,0 bps sobre el control, 0 de 4 redes mejores (p individuales 0,055–0,49). El monitoreo avisa `RECOMPENSA_SUBE_COSTO_NO` en 2 de 4 redes, como se calibró.
+- **Resultado:** evita que la red se quede esperando (cumplimiento ≈ 1,0). Con 15 semillas de evaluación el costo parecía +3,0 bps sobre el control (0 de 4 redes mejores); **corregido después:** con 40 semillas es −2,2 bps (no significativo), ver la entrada de `feature/ps-abides-v4-resultados-A`. El monitoreo avisa `RECOMPENSA_SUBE_COSTO_NO` en 2 de 4 redes, como se calibró.
 - **Cómo reproducir o verificar:** `python scripts/analizar_estabilidad_D3.py --dir data/colab_resultados/conf_pen30_g1 …` y `PYTHONPATH=. python -m pytest tests/test_estabilidad_d3.py`.
 - **Gráficos:** entradas en `docs/guia_graficos.md` (`conf_pen30_g1.png`, `monitoreo_conf_pen30_g1.png`).
 
@@ -193,6 +193,14 @@
 - **Resultado:** todavía no hay resultado: los cuadernos están listos y falta correrlos en Colab (≈ 120 min cada uno).
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_comparar_v4_vs_v2.py tests/test_variantes_recompensa.py`.
 - **Gráficos:** ninguno todavía; el comparador genera `data/analysis/v4_vs_v2_ABIDES.png` cuando lleguen los zip y se explicará en `docs/guia_graficos.md`.
+
+### `feature/ps-abides-v4-resultados-A`: resultado parcial de V4 (cuaderno A), corrección del control y reevaluación con 150 semillas (26 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
+- **Qué:** datos del cuaderno A de V4 (`data/colab_resultados/v4_pen30_g1_A/`); `docs/v4_abides_resultado_parcial_A_PS.md` y `docs/v4_vs_v2_ABIDES_A_PS.md`; `scripts/colab/reevaluar_ejecutores_ps.py` y `notebooks/Colab_reevaluacion_150_ABIDES.ipynb` (reevalúan todas las redes con 150 semillas, sin entrenar); `scripts/analizar_reevaluacion_ps.py`; el comparador ahora incluye V2 − control; correcciones en los documentos que daban por cierto el «+3 bps, 0 de 4».
+- **Por qué:** el control con 15 semillas era demasiado corto: el slippage por semilla lo domina el movimiento del precio y las 15 primeras semillas eran las más tranquilas. Con las 40 del cuaderno A la conclusión cambió de signo.
+- **Resultado:** V4 no se distingue de V2 (−0,22 y +2,05 bps entre redes, no significativo). V2 frente al control: −2,2 bps con 40 semillas (24 y 26 de 40 mejores; p = 0,22 y 0,17). Sin conclusión firme hasta la reevaluación con 150 semillas.
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_comparar_v4_vs_v2.py tests/test_reevaluar_ejecutores.py tests/test_analizar_reevaluacion.py`.
+- **Gráficos:** `data/analysis/v4_vs_v2_ABIDES_A.png` explicado en `docs/guia_graficos.md`.
 
 ## 3. Ramas obsoletas (no usar)
 

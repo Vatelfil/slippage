@@ -4,7 +4,7 @@
 
 ## 1. Para qué
 
-La confirmación en ABIDES de la penalización con γ = 1 (`docs/confirmacion_abides_penalizacion_resultado_PS.md`) evitó que la red se quedara esperando (cumplimiento ≈ 1,0) pero no bajó el costo: +3,0 bps sobre la red sin entrenar, 0 de 4 redes mejores. La recompensa original (R_E) compara cada compra con el precio medio de ese instante, así que **no ve cuánto cuesta llenarse tarde** cuando el precio sube.
+La confirmación en ABIDES de la penalización con γ = 1 (`docs/confirmacion_abides_penalizacion_resultado_PS.md`) evitó que la red se quedara esperando (cumplimiento ≈ 1,0) y, con 15 semillas de evaluación, parecía no bajar el costo (+3,0 bps sobre la red sin entrenar, 0 de 4 redes mejores). **Corrección posterior:** con 40 semillas el signo se invierte (`docs/v4_abides_resultado_parcial_A_PS.md`). La recompensa original (R_E) compara cada compra con el precio medio de ese instante, así que **no ve cuánto cuesta llenarse tarde** cuando el precio sube.
 
 La variante **V4** cambia solo eso: la recompensa de cada compra es lo que cuesta frente al **precio de llegada** de la orden (el mismo punto de comparación con el que se mide el slippage), y mantiene la penalización de 30 bps por lo no comprado y γ = 1. Hipótesis: si la recompensa ve el costo real, la red dejará de preferir órdenes que se llenan tarde.
 

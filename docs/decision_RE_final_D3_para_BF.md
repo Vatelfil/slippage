@@ -115,6 +115,8 @@ Hasta aquí la red entrenada se comparaba con la red sin entrenar evaluada con a
 | 100 episodios (10 redes) | 2,6 a 3,1 bps | 1,8 a 3,1 bps | −0,39 bps | 9 de 10 (ninguna significativa por sí sola; prueba de signos p = 0,021) |
 | 1.000 episodios (6 redes) | 2,6 a 3,0 bps | 4,6 a 8,3 bps | **+3,08 bps** | **0 de 6** (prueba de signos p = 0,031) |
 
+> **Nota del 26 de octubre (noche):** los costos de esta tabla (≈ 3 bps de control, «+3,08 bps, 0 de 6») se midieron con solo 15 semillas de evaluación. Con 40 semillas el control cuesta ≈ 8,8 bps y la comparación cambia de signo para las redes con penalización (`docs/v4_abides_resultado_parcial_A_PS.md`). Las conclusiones de costo de esta sección están en revisión hasta reevaluar con 150 semillas; lo que no depende de las semillas (cumplimiento, colapso a esperar) no cambia.
+
 Lo que muestra:
 
 1. **Una política casi uniforme ya cumple la orden y cuesta ≈ 3 bps.** La red inicial muestreando ejecuta el 100 % en las 5 semillas. Ese es el punto de partida real, y es mucho mejor que el 6 bps del control con argmax que se usaba antes.

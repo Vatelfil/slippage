@@ -41,7 +41,7 @@ Wilcoxon pareado por semilla de evaluación (misma semilla, red entrenada frente
 
 ### Control justo: la red sin entrenar también muestreando la política
 
-La comparación anterior pone la red entrenada muestreando frente a la red sin entrenar con argmax. Aquí ambas muestrean (`scripts/colab/control_muestreado_ps.py`), en las mismas semillas de evaluación.
+La comparación anterior pone la red entrenada muestreando frente a la red sin entrenar con argmax. Aquí ambas muestrean (`scripts/colab/control_muestreado_ps.py`), en las mismas semillas de evaluación (si la red se evaluó con más semillas que el control, la comparación usa solo las del control: con pocas semillas el ruido del precio entre simulaciones puede invertir el resultado, ver `docs/v4_abides_resultado_parcial_A_PS.md`).
 
 | Opción | Semilla de red | Slippage entrenada muestreada (bps) | Slippage sin entrenar muestreada (bps) | Diferencia (bps) | p (Wilcoxon pareado) |
 |---|---:|---:|---:|---:|---:|

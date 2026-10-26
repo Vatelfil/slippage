@@ -4,6 +4,10 @@
 
 Continúa a `docs/experimentos_recompensa_PS.md` (que probó el arreglo en el simulador de Poisson) y a `docs/propuesta_cambio_RE_para_BF_y_MR.md`. Las tablas completas, generadas con `scripts/analizar_estabilidad_D3.py`, están en `docs/conf_pen30_g1_ABIDES_PS.md` y el panel de monitoreo en `docs/monitoreo_conf_pen30_g1.md`.
 
+> **Corrección del 26 de octubre (noche):** la comparación con el control usó solo 15 semillas de evaluación; con 40 la diferencia cambia de signo (V2 − control = −2,2 bps en las dos redes comparables, no significativo). Hoy no se puede afirmar ni que el entrenamiento mejora ni que empeora el costo; falta la reevaluación con 150 semillas. Ver `docs/v4_abides_resultado_parcial_A_PS.md`.
+>
+> Lo que sigue (secciones 2 a 5) está calculado con las primeras 15 semillas de evaluación, que es lo que tenía el control; léase con esa reserva.
+
 ## 1. Qué se corrió
 
 - **Dónde:** Colab, ABIDES (`rmsc04`), dos cuadernos (`Colab_confirmacion_ABIDES_A.ipynb` y `_B.ipynb`), unos 110 minutos cada uno.
@@ -23,7 +27,7 @@ Continúa a `docs/experimentos_recompensa_PS.md` (que probó el arreglo en el si
 
 Referencias en las mismas condiciones: red sin entrenar muestreando ≈ 2,6–3,0 bps, TWAP límite 2,80 bps, agresiva 10,42 bps y pasiva 10,19 bps.
 
-**En una frase:** el arreglo evita que la red se quede esperando, pero **no baja el costo respecto de la red sin entrenar** (0 de 4 redes mejores; sumando las 10 redes de 1.000 episodios que se han entrenado en ABIDES, 0 de 10).
+**En una frase (con 15 semillas):** el arreglo evita que la red se quede esperando y el costo parecía no bajar respecto de la red sin entrenar (0 de 4 redes mejores). Con 40 semillas esto se invierte (ver la corrección de arriba).
 
 ## 3. Qué sí funcionó y qué no
 

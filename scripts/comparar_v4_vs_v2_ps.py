@@ -77,9 +77,11 @@ def comparar(v2: Dict[int, Dict], v4: Dict[int, Dict]) -> List[Dict]:
         ctrl = v4[s]["ctrl"] if v4[s]["ctrl"] is not None else (v2.get(s) or {}).get("ctrl")
         d_ctrl, p_ctrl = _diff(v4[s]["slip"], ctrl)
         d_v2, p_v2 = _diff(v4[s]["slip"], (v2.get(s) or {}).get("slip"))
+        d2c, p2c = _diff((v2.get(s) or {}).get("slip"), ctrl)
         filas.append({"semilla": s, "cumpl_v4": v4[s]["cumpl"], "slip_v4": _media(v4[s]["slip"]),
                       "slip_v2": _media((v2.get(s) or {}).get("slip", [])), "slip_ctrl": _media(ctrl or []),
-                      "dif_v4_ctrl": d_ctrl, "p_v4_ctrl": p_ctrl, "dif_v4_v2": d_v2, "p_v4_v2": p_v2})
+                      "dif_v4_ctrl": d_ctrl, "p_v4_ctrl": p_ctrl, "dif_v4_v2": d_v2, "p_v4_v2": p_v2,
+                      "dif_v2_ctrl": d2c, "p_v2_ctrl": p2c})
     return filas
 
 
@@ -89,11 +91,12 @@ def informe(filas: Sequence[Dict]) -> str:
          "Política muestreando, mismas semillas de evaluación y misma semilla de red en las tres columnas. "
          "V2 = recompensa original + penalización 30 bps + γ = 1; V4 = recompensa contra el precio de llegada + penalización 30 bps + γ = 1. "
          "Diferencias: negativas = V4 cuesta menos.", "",
-         "| Semilla de red | Cumplimiento V4 | Slippage V4 (bps) | Slippage V2 (bps) | Control (bps) | V4 − control (bps) | p | V4 − V2 (bps) | p |",
-         "|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+         "| Semilla de red | Cumplimiento V4 | Slippage V4 (bps) | Slippage V2 (bps) | Control (bps) | V4 − control (bps) | p | V4 − V2 (bps) | p | V2 − control (bps) | p |",
+         "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for r in filas:
         L.append(f"| {r['semilla']} | {_f(r['cumpl_v4'], 3)} | {_f(r['slip_v4'])} | {_f(r['slip_v2'])} | {_f(r['slip_ctrl'])} | "
-                 f"{_f(r['dif_v4_ctrl'])} | {_f(r['p_v4_ctrl'], 3)} | {_f(r['dif_v4_v2'])} | {_f(r['p_v4_v2'], 3)} |")
+                 f"{_f(r['dif_v4_ctrl'])} | {_f(r['p_v4_ctrl'], 3)} | {_f(r['dif_v4_v2'])} | {_f(r['p_v4_v2'], 3)} | "
+                 f"{_f(r['dif_v2_ctrl'])} | {_f(r['p_v2_ctrl'], 3)} |")
     dc = [r["dif_v4_ctrl"] for r in filas if r["dif_v4_ctrl"] is not None]
     d2 = [r["dif_v4_v2"] for r in filas if r["dif_v4_v2"] is not None]
     L.append("")
@@ -105,6 +108,11 @@ def informe(filas: Sequence[Dict]) -> str:
     if d2:
         mejores = sum(1 for d in d2 if d < 0)
         L.append(f"- **V4 frente a V2:** {mejores} de {len(d2)} redes cuestan menos; diferencia media {_f(float(np.mean(d2)))} bps.")
+    d2c = [r["dif_v2_ctrl"] for r in filas if r["dif_v2_ctrl"] is not None]
+    if d2c:
+        mejores = sum(1 for d in d2c if d < 0)
+        L.append(f"- **V2 frente al control** (las redes que tienen V2 y control con las mismas semillas): {mejores} de {len(d2c)} cuestan menos; "
+                 f"diferencia media {_f(float(np.mean(d2c)))} bps.")
     cum = [r["cumpl_v4"] for r in filas if r["cumpl_v4"] is not None]
     if cum:
         L.append(f"- **Cumplimiento V4 (muestreando):** media {_f(float(np.mean(cum)), 3)}, mínimo {_f(float(np.min(cum)), 3)}.")
@@ -128,7 +136,7 @@ def figura(filas: Sequence[Dict], ruta: Path) -> None:
     ax.set_xticklabels([f"red {r['semilla']}" for r in filas])
     ax.set_ylabel("Slippage medio (bps), política muestreada")
     ax.set_title("Costo por semilla de red (menos es mejor)")
-    ax.legend(frameon=False, fontsize=8)
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=3)
     for lado in ("top", "right"):
         ax.spines[lado].set_visible(False)
     fig.tight_layout()

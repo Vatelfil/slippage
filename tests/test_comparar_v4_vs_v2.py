@@ -47,3 +47,12 @@ def test_informe_y_figura(tmp_path):
     texto = Path(out).read_text(encoding="utf-8")
     assert "V4 frente al control" in texto and "1 de 1 redes cuestan menos" in texto
     assert (tmp_path / "r.png").stat().st_size > 1000
+
+
+def test_incluye_v2_frente_al_control(tmp_path):
+    rng = np.random.default_rng(2)
+    ctrl = rng.normal(3, 20, 40)          # la deriva del precio domina; red y control la comparten
+    _escribir(tmp_path / "v2", 1000, ctrl - 2 + rng.normal(0, 0.5, 40))
+    _escribir(tmp_path / "v4", 1000, ctrl + rng.normal(0, 0.5, 40), ctrl=ctrl)
+    fila = comp.comparar(comp.cargar(tmp_path / "v2"), comp.cargar(tmp_path / "v4"))[0]
+    assert fila["dif_v2_ctrl"] == pytest.approx(-2.0, abs=0.5) and fila["p_v2_ctrl"] < 0.01
