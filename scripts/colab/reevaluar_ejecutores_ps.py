@@ -9,7 +9,7 @@ conclusión cambió de signo. Aquí se evalúan, en las MISMAS semillas, las red
 `checkpoint_last.pt`), la red inicial de cada semilla (control, muestreando la política) y las tres heurísticas.
 
     PYTHONPATH=. python scripts/colab/reevaluar_ejecutores_ps.py --raices <drive>/conf_pen30_g1_A <drive>/v4_pen30_g1_A \
-        --n-semillas 150 --out-dir <drive>/reeval_150
+        --n-semillas 300 --out-dir <drive>/reeval_300
 
 Es reanudable: lo que ya está en `--out-dir` se salta, así que se puede volver a lanzar cuando aparezcan redes nuevas
 (p. ej. las del cuaderno B). Orden: control y heurísticas primero, después las redes.
@@ -70,7 +70,7 @@ def main(argv: Optional[Sequence[str]] = None) -> dict:
     ap.add_argument("--tramo", default="apertura", choices=["apertura", "media_jornada", "cierre"])
     ap.add_argument("--q-slice", type=int, default=1000)
     ap.add_argument("--ventana-min", type=int, default=15)
-    ap.add_argument("--n-semillas", type=int, default=150)
+    ap.add_argument("--n-semillas", type=int, default=300)
     ap.add_argument("--eval-seed-base", type=int, default=5000)
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--max-minutes", type=float, default=None)

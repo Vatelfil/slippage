@@ -194,18 +194,26 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_comparar_v4_vs_v2.py tests/test_variantes_recompensa.py`.
 - **Gráficos:** ninguno todavía; el comparador genera `data/analysis/v4_vs_v2_ABIDES.png` cuando lleguen los zip y se explicará en `docs/guia_graficos.md`.
 
-### `feature/ps-abides-v4-resultados-A`: resultado parcial de V4 (cuaderno A), corrección del control y reevaluación con 150 semillas (26 de octubre, noche)
+### `feature/ps-abides-v4-resultados-A`: resultado parcial de V4 (cuaderno A), corrección del control y reevaluación con 300 semillas (26 de octubre, noche)
 - **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
-- **Qué:** datos del cuaderno A de V4 (`data/colab_resultados/v4_pen30_g1_A/`); `docs/v4_abides_resultado_parcial_A_PS.md` y `docs/v4_vs_v2_ABIDES_A_PS.md`; `scripts/colab/reevaluar_ejecutores_ps.py` y `notebooks/Colab_reevaluacion_150_ABIDES.ipynb` (reevalúan todas las redes con 150 semillas, sin entrenar); `scripts/analizar_reevaluacion_ps.py`; el comparador ahora incluye V2 − control; correcciones en los documentos que daban por cierto el «+3 bps, 0 de 4».
+- **Qué:** datos del cuaderno A de V4 (`data/colab_resultados/v4_pen30_g1_A/`); `docs/v4_abides_resultado_parcial_A_PS.md` y `docs/v4_vs_v2_ABIDES_A_PS.md`; `scripts/colab/reevaluar_ejecutores_ps.py` y `notebooks/Colab_reevaluacion_300_ABIDES.ipynb` (reevalúan todas las redes con 300 semillas, sin entrenar); `scripts/analizar_reevaluacion_ps.py`; el comparador ahora incluye V2 − control; correcciones en los documentos que daban por cierto el «+3 bps, 0 de 4».
 - **Por qué:** el control con 15 semillas era demasiado corto: el slippage por semilla lo domina el movimiento del precio y las 15 primeras semillas eran las más tranquilas. Con las 40 del cuaderno A la conclusión cambió de signo.
-- **Resultado:** V4 no se distingue de V2 (−0,22 y +2,05 bps entre redes, no significativo). V2 frente al control: −2,2 bps con 40 semillas (24 y 26 de 40 mejores; p = 0,22 y 0,17). Sin conclusión firme hasta la reevaluación con 150 semillas.
+- **Resultado:** V4 no se distingue de V2 (−0,22 y +2,05 bps entre redes, no significativo). V2 frente al control: −2,2 bps con 40 semillas (24 y 26 de 40 mejores; p = 0,22 y 0,17). Sin conclusión firme hasta la reevaluación con 300 semillas.
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_comparar_v4_vs_v2.py tests/test_reevaluar_ejecutores.py tests/test_analizar_reevaluacion.py`.
 - **Gráficos:** `data/analysis/v4_vs_v2_ABIDES_A.png` explicado en `docs/guia_graficos.md`.
 
 ### `feature/ps-abides-v4-resultados-A2`: corrección del cuaderno de reevaluación (26 de octubre, noche)
-- **Quién:** PS con apoyo de Claude Code. **Qué:** el cuaderno `notebooks/Colab_reevaluacion_150_ABIDES.ipynb` ya no incluye las redes antiguas en la celda principal, porque en Drive hay dos carpetas llamadas `d3_1000ep` y Colab solo ve una; quedan en una celda opcional aparte. El cuaderno ahora descarga el código de esta rama (la anterior queda con la versión previa).
+- **Quién:** PS con apoyo de Claude Code. **Qué:** el cuaderno `notebooks/Colab_reevaluacion_300_ABIDES.ipynb` ya no incluye las redes antiguas en la celda principal, porque en Drive hay dos carpetas llamadas `d3_1000ep` y Colab solo ve una; quedan en una celda opcional aparte. El cuaderno ahora descarga el código de esta rama (la anterior queda con la versión previa).
 - **Por qué:** revisión del cuaderno antes de correrlo: se comprobó en Drive que las 4 redes de V2 y las 2 de V4 existen con su `checkpoint_last.pt` y que el reevaluador funciona de punta a punta con una raíz que aún no existe (la de V4 B).
 - **Resultado:** sin cambios en los resultados; solo el cuaderno.
+
+### `feature/ps-abides-v4-resultados-A3`: reevaluación con 300 semillas y análisis con los datos existentes (26 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de MR ni de BF.
+- **Qué:** el cuaderno de reevaluación pasa de 150 a 300 semillas (`notebooks/Colab_reevaluacion_300_ABIDES.ipynb`, carpeta de Drive `reeval_300`, ≈ 100–170 min); sección 3b de `docs/v4_abides_resultado_parcial_A_PS.md` con el análisis de lo que ya se puede decir con los datos de 40 semillas (control sustituto, comparación con TWAP, argmax, potencia).
+- **Por qué:** con los datos de 40 semillas la desviación de la diferencia pareada red − control resultó ≈ 12 bps y no 9; con 150 semillas solo se verían diferencias de ≈ 3 bps, y las redes con penalización parecen estar en ≈ −2 bps.
+- **Resultado:** las 4 redes de V2 quedan 1,8 a 3,4 bps por debajo del control (usando un control sustituto para 3000 y 4000), ninguna significativa por sí sola. V4 no se distingue de V2. Falta la reevaluación para confirmarlo.
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_reevaluar_ejecutores.py tests/test_analizar_reevaluacion.py`.
+- **Gráficos:** ninguno nuevo.
 
 ## 3. Ramas obsoletas (no usar)
 

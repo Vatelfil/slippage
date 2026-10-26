@@ -4,7 +4,7 @@
 
 Continúa a `docs/experimentos_recompensa_PS.md` (que probó el arreglo en el simulador de Poisson) y a `docs/propuesta_cambio_RE_para_BF_y_MR.md`. Las tablas completas, generadas con `scripts/analizar_estabilidad_D3.py`, están en `docs/conf_pen30_g1_ABIDES_PS.md` y el panel de monitoreo en `docs/monitoreo_conf_pen30_g1.md`.
 
-> **Corrección del 26 de octubre (noche):** la comparación con el control usó solo 15 semillas de evaluación; con 40 la diferencia cambia de signo (V2 − control = −2,2 bps en las dos redes comparables, no significativo). Hoy no se puede afirmar ni que el entrenamiento mejora ni que empeora el costo; falta la reevaluación con 150 semillas. Ver `docs/v4_abides_resultado_parcial_A_PS.md`.
+> **Corrección del 26 de octubre (noche):** la comparación con el control usó solo 15 semillas de evaluación; con 40 la diferencia cambia de signo (V2 − control = −2,2 bps en las dos redes comparables, no significativo). Hoy no se puede afirmar ni que el entrenamiento mejora ni que empeora el costo; falta la reevaluación con 300 semillas. Ver `docs/v4_abides_resultado_parcial_A_PS.md`.
 >
 > Lo que sigue (secciones 2 a 5) está calculado con las primeras 15 semillas de evaluación, que es lo que tenía el control; léase con esa reserva.
 

@@ -13,7 +13,7 @@ Hasta ahora todas las comparaciones «red entrenada frente a red sin entrenar» 
 
 (V2 = recompensa original + penalización de 30 bps + γ = 1, la «confirmación» anterior.)
 
-**Por qué pasa:** en ABIDES el slippage de cada semilla de evaluación lo domina hacia dónde se mueve el precio en esa simulación: hay semillas de −25 bps y de +75 bps **para todas las estrategias** (la heurística TWAP y la red sin entrenar suben y bajan juntas). Las 15 primeras semillas resultaron ser las más tranquilas; en las 25 siguientes el control cuesta 12 bps. La diferencia entre dos estrategias es de 1 a 3 bps, mucho menos que ese ruido (desviación de la diferencia pareada ≈ 9 bps), así que **con 15 semillas no se puede distinguir una estrategia de otra** y la conclusión depende de qué semillas se tomaron.
+**Por qué pasa:** en ABIDES el slippage de cada semilla de evaluación lo domina hacia dónde se mueve el precio en esa simulación: hay semillas de −25 bps y de +75 bps **para todas las estrategias** (la heurística TWAP y la red sin entrenar suben y bajan juntas). Las 15 primeras semillas resultaron ser las más tranquilas; en las 25 siguientes el control cuesta 12 bps. La diferencia entre dos estrategias es de 1 a 3 bps, mucho menos que ese ruido (desviación de la diferencia pareada ≈ 9 a 12 bps), así que **con 15 semillas no se puede distinguir una estrategia de otra** y la conclusión depende de qué semillas se tomaron.
 
 **Qué se corrige de lo dicho antes:**
 - «La confirmación con penalización y γ = 1 no baja el costo (+3,0 bps, 0 de 4 redes mejores)» era cierto solo para las primeras 15 semillas. Con 40 semillas, las dos redes que se pudieron comparar cuestan **2,2 bps menos** que el control (tendencia a favor, **no significativa**).
@@ -37,7 +37,25 @@ Hoy lo honesto es: **no se puede afirmar ni que el entrenamiento mejora el costo
 ## 3. Qué falta
 
 - **Cuaderno B de V4** (semillas 3000 y 4000): da las otras dos redes de V4. Con las dos del cuaderno A solo hay 2 redes por variante.
-- **Reevaluación con 150 semillas** (`notebooks/Colab_reevaluacion_150_ABIDES.ipynb`, no entrena): evalúa en las mismas 150 semillas todas las redes ya entrenadas (V2, V4 y las de recompensa original), su control y las heurísticas. Con 150 semillas se pueden ver diferencias de unos 2 bps. Es la prueba que decide si el entrenamiento ayuda; los 40 resultados de aquí son orientativos.
+- **Reevaluación con 300 semillas** (`notebooks/Colab_reevaluacion_300_ABIDES.ipynb`, no entrena): evalúa en las mismas 300 semillas todas las redes ya entrenadas (V2, V4 y las de recompensa original), su control y las heurísticas. La desviación de la diferencia pareada red − control es ≈ 12 bps (no 9, como se estimó antes), así que se necesitan ≈ 120 semillas para detectar 3 bps y ≈ 270 para detectar 2 bps: con 300 semillas se ven diferencias de unos 2 bps (con 150 solo se habrían visto unos 3 bps). Es la prueba que decide si el entrenamiento ayuda; los 40 resultados de aquí son orientativos.
+
+## 3b. Qué se puede decir ya con los datos que hay (sin Colab)
+
+Calculado en el PC con los resultados de 40 semillas ya descargados. Las redes sin entrenar de distintas semillas dan casi lo mismo semilla a semilla (correlación 0,99 entre el control de la red 1000 y el de la 2000), así que para las redes 3000 y 4000, que no tienen control de 40 semillas, se usó el de la 1000 como **sustituto aproximado** (no reemplaza al control propio, que traerá la reevaluación).
+
+| Red | Cuesta menos que el control (bps) | Semillas en que gana | p |
+|---|---:|---:|---:|
+| V2 1000 | −2,25 | 24 de 40 | 0,22 |
+| V2 2000 | −2,01 | 25 de 40 | 0,21 |
+| V2 3000 | −3,40 | 26 de 40 | 0,08 |
+| V2 4000 | −1,83 | 21 de 40 | 0,38 |
+| V4 1000 | −2,47 | 26 de 40 | 0,025 |
+| V4 2000 | +0,05 | 22 de 40 | 0,31 |
+
+- **V2 (las 4 redes) queda por debajo del control en todas**, entre 1,8 y 3,4 bps (promedio −2,4 bps; mediana de la diferencia ≈ −1 bps), pero ninguna es significativa por sí sola. Es una tendencia coherente, no una prueba.
+- **Frente a TWAP límite** (misma semilla), las redes cuestan entre +2,5 y +6,0 bps más y el control +5,9 bps; ninguna diferencia es significativa. Las redes parecen haber recorrido una parte del camino entre el control y TWAP, pero no lo alcanzan.
+- **Con argmax** (elegir siempre la acción más probable) dos redes de V2 y una de V4 no completan la orden bien (cumplimiento 0,00; 0,93; 0,925). Con la política muestreada todas completan. El argmax de una política casi uniforme es poco fiable.
+- **Potencia:** la desviación de la diferencia pareada red − control es ≈ 12 bps. Detectar 3 bps con 80 % de potencia pide ≈ 120 semillas; 2 bps, ≈ 270; 1 bps, más de 1.000. Por eso la reevaluación se subió de 150 a 300 semillas.
 
 ## 4. Cómo se lee lo que venga
 

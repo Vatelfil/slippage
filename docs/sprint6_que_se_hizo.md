@@ -62,6 +62,6 @@ Estados (los mismos que en `docs/sprint5_que_se_hizo.md`): **Hecho** · **Hecho 
 | Cierre del Sprint 5 | `docs/sprint5_que_se_hizo.md` |
 
 ## Confirmación en ABIDES de la penalización terminal (26 de octubre)
-- Las 4 redes entrenadas con penalización de 30 bps y γ = 1 en ABIDES cumplen la orden (cumplimiento ≈ 1,0). Su costo frente a la red sin entrenar no está resuelto: +3,0 bps con 15 semillas de evaluación, −2,2 bps con 40 (no significativo). Hace falta reevaluar con 150 semillas. Detalle en `docs/v4_abides_resultado_parcial_A_PS.md` y `docs/confirmacion_abides_penalizacion_resultado_PS.md`; datos en `data/colab_resultados/conf_pen30_g1/`.
+- Las 4 redes entrenadas con penalización de 30 bps y γ = 1 en ABIDES cumplen la orden (cumplimiento ≈ 1,0). Su costo frente a la red sin entrenar no está resuelto: +3,0 bps con 15 semillas de evaluación, −2,2 bps con 40 (no significativo). Hace falta reevaluar con 300 semillas. Detalle en `docs/v4_abides_resultado_parcial_A_PS.md` y `docs/confirmacion_abides_penalizacion_resultado_PS.md`; datos en `data/colab_resultados/conf_pen30_g1/`.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

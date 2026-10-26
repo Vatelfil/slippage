@@ -23,7 +23,7 @@ La variante **V4** cambia solo eso: la recompensa de cada compra es lo que cuest
 | V4 cuesta **igual que V2** (≈ +3 bps sobre el control) | El problema no es la recompensa: la política sigue casi uniforme tras 1.000 episodios, o ABIDES necesita mucho más entrenamiento | Probar más episodios y otros hiperparámetros con MR, y declarar el límite |
 | V4 cuesta **más** o pierde cumplimiento | Esa recompensa no sirve con este presupuesto | Dejarlo documentado como descartado |
 
-Con 40 semillas de evaluación se detectan diferencias de unos 4 bps o más entre una red y el control; con menos de eso, el resultado es solo orientativo.
+Con 40 semillas de evaluación solo se detectan diferencias de unos 5 bps o más entre una red y el control (la desviación de la diferencia pareada resultó ≈ 12 bps); con menos de eso, el resultado es solo orientativo (ver `docs/v4_abides_resultado_parcial_A_PS.md`).
 
 ## 4. Cómo verificarlo cuando lleguen los zip
 

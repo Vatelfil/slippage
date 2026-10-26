@@ -47,7 +47,7 @@ Continúa a `docs/diagnostico_recompensa_PS.md` (qué falla y por qué). Los res
 
 ## 4. Límites
 
-- Es el simulador de Poisson: no tiene impacto de precio ni tendencia y una orden límite que se llena paga lo mismo que una de mercado. Los resultados explican **por qué** la red hacía lo que hacía; **no** garantizan el mismo tamaño de mejora en ABIDES. La confirmación en ABIDES ya se corrió (26 de octubre): el arreglo evita la espera (cumplimiento ≈ 1,0). Sobre el costo, con 15 semillas parecía peor que el control (+3,0 bps) pero con 40 pasa a −2,2 bps (no significativo): **sin conclusión hasta reevaluar con 150 semillas**; ver `docs/v4_abides_resultado_parcial_A_PS.md`.
+- Es el simulador de Poisson: no tiene impacto de precio ni tendencia y una orden límite que se llena paga lo mismo que una de mercado. Los resultados explican **por qué** la red hacía lo que hacía; **no** garantizan el mismo tamaño de mejora en ABIDES. La confirmación en ABIDES ya se corrió (26 de octubre): el arreglo evita la espera (cumplimiento ≈ 1,0). Sobre el costo, con 15 semillas parecía peor que el control (+3,0 bps) pero con 40 pasa a −2,2 bps (no significativo): **sin conclusión hasta reevaluar con 300 semillas**; ver `docs/v4_abides_resultado_parcial_A_PS.md`.
 - Cinco semillas de red por variante y 1.000 episodios.
 - Solo se probaron penalizaciones de 30 y 100 bps y un costo de espera de 100 bps.
 - No incluye al Maestro: el Ejecutor se entrenó solo, con tamaños fijos.
@@ -55,7 +55,7 @@ Continúa a `docs/diagnostico_recompensa_PS.md` (qué falla y por qué). Los res
 ## 5. Recomendación
 
 1. Entrenar el Ejecutor con **γ = 1** y una **penalización terminal de 30 bps por cada acción del slice sin comprar** (propuesta detallada en `docs/propuesta_cambio_RE_para_BF_y_MR.md`).
-2. **Confirmación en ABIDES: hecha** (4 semillas de 1.000 episodios; cumplimiento ≈ 1,0). El costo frente al control **no está resuelto**: +3,0 bps con 15 semillas, −2,2 bps con 40 (no significativo). Siguiente paso: reevaluar todas las redes con 150 semillas (`notebooks/Colab_reevaluacion_150_ABIDES.ipynb`); detalle en `docs/v4_abides_resultado_parcial_A_PS.md`.
+2. **Confirmación en ABIDES: hecha** (4 semillas de 1.000 episodios; cumplimiento ≈ 1,0). El costo frente al control **no está resuelto**: +3,0 bps con 15 semillas, −2,2 bps con 40 (no significativo). Siguiente paso: reevaluar todas las redes con 300 semillas (`notebooks/Colab_reevaluacion_300_ABIDES.ipynb`); detalle en `docs/v4_abides_resultado_parcial_A_PS.md`.
 3. Medir todo contra la red inicial muestreando y contra la mejor heurística.
 4. Después de la confirmación, entrenar el Maestro sobre estos Ejecutores y repetir la evaluación del sistema completo.
 

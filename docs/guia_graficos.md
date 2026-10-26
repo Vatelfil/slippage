@@ -166,7 +166,7 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 
 ### `data/analysis/v4_vs_v2_ABIDES_A.png` (rama `feature/ps-abides-v4-resultados-A`)
 - **Qué muestra:** por cada red del cuaderno A (semillas 1000 y 2000), el slippage medio en 40 semillas de evaluación, política muestreada, de tres Ejecutores: la red sin entrenar (control, gris), V2 (recompensa original con penalización y γ = 1, naranja) y V4 (recompensa contra el precio de llegada con penalización y γ = 1, verde). Menos es mejor.
-- **Cómo leerlo:** las dos variantes entrenadas quedan por debajo del control en la red 1000, y solo V2 en la 2000; entre V2 y V4 no hay un ganador claro. Son medias sobre 40 semillas en las que el movimiento del precio pesa mucho más que la diferencia entre barras, así que es orientativo; lo decide la reevaluación con 150 semillas (`docs/v4_abides_resultado_parcial_A_PS.md`).
+- **Cómo leerlo:** las dos variantes entrenadas quedan por debajo del control en la red 1000, y solo V2 en la 2000; entre V2 y V4 no hay un ganador claro. Son medias sobre 40 semillas en las que el movimiento del precio pesa mucho más que la diferencia entre barras, así que es orientativo; lo decide la reevaluación con 300 semillas (`docs/v4_abides_resultado_parcial_A_PS.md`).
 - **Datos y script:** `data/colab_resultados/v4_pen30_g1_A/` y `scripts/comparar_v4_vs_v2_ps.py`.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
