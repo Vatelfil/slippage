@@ -3,9 +3,9 @@
 **Elaborado por:** Mauricio Reynoso (MR)  
 **Fecha:** Octubre 2026 (Sprint 5)  
 **Revisión:** Paolo Sepúlveda (PS) y Benjamín Farías (BF)  
-**Código fuente:** [`src/envs/ctde_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/src/envs/ctde_protocol.py), [`src/envs/maestro_ejecutor_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/src/envs/maestro_ejecutor_protocol.py)  
-**Esquemas formales:** [`docs/schemas/protocolo_asignar_schema.json`](file:///c:/Users/rokla/workspace/titulo/slippage/docs/schemas/protocolo_asignar_schema.json), [`docs/schemas/protocolo_reporte_schema.json`](file:///c:/Users/rokla/workspace/titulo/slippage/docs/schemas/protocolo_reporte_schema.json)  
-**Batería de pruebas:** [`tests/test_ctde_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/tests/test_ctde_protocol.py)
+**Código fuente:** [`src/envs/ctde_protocol.py`](../src/envs/ctde_protocol.py), [`src/envs/maestro_ejecutor_protocol.py`](../src/envs/maestro_ejecutor_protocol.py)  
+**Esquemas formales:** [`docs/schemas/protocolo_asignar_schema.json`](schemas/protocolo_asignar_schema.json), [`docs/schemas/protocolo_reporte_schema.json`](schemas/protocolo_reporte_schema.json)  
+**Batería de pruebas:** [`tests/test_ctde_protocol.py`](../tests/test_ctde_protocol.py)
 
 ---
 
@@ -73,7 +73,7 @@ Tras concluir los pasos tácticos de 30 segundos (o agotar el volumen asignado),
 - `ejecutor_id`: Tramo del ejecutor que operó.
 - `q_ejecutado`: Volumen acumulado ejecutado en la ventana ($q_{\text{ejec}} \le q_{\text{slice}}$).
 - `p_promedio`: Precio promedio ponderado por volumen (VWAP táctico obtenido).
-- `slippage_parcial`: Costo de slippage acumulado en CLP frente al precio de referencia inicial ($IS_{\text{parcial}} = (P_{\text{promedio}} - P_{\text{ref}}) \cdot q_{\text{ejec}}$).
+- `slippage_parcial`: Costo de slippage acumulado en CLP frente al precio de referencia inicial ($IS_{\text{parcial}} = (P_{\text{promedio}} - P_{\text{ref}}) \cdot q_{\text{ejec}}$). Se expresa siempre en CLP; si el simulador subyacente opera en otra unidad de cuenta (como ABIDES en décimos de CLP), el orquestador convierte automáticamente los precios dividiendo por `unidades_por_clp` (ver §3.1).
 - `q_pendiente`: Acciones no ejecutadas del slice ($q_{\text{slice}} - q_{\text{ejec}}$).
 - `pasos_usados`: Cantidad de pasos de 30 s ejecutados (máximo $2 \times \text{ventana\_min}$).
 - `razon_termino`: Causa de finalización (`"ventana_completada"` o `"inventario_agotado"`).
@@ -83,7 +83,7 @@ Tras concluir los pasos tácticos de 30 segundos (o agotar el volumen asignado),
 
 ## 3. Ejemplo de Log de Auditoría Completo (Meta-Orden de 5.000 acciones)
 
-A continuación se muestra un extracto real generado por el canal en una corrida controlada de jornada completa:
+A continuación se muestra un extracto del log generado por el canal (`CanalComunicacionCTDE.guardar_log`) en una corrida controlada de jornada completa con el **simulador de Poisson** (`EjecutorEnvPoissonFallback`, el entorno por defecto del orquestador), no con ABIDES-Gym:
 
 ```json
 [
@@ -144,11 +144,33 @@ A continuación se muestra un extracto real generado por el canal en una corrida
 ]
 ```
 
+### 3.1 Log de una ventana con ABIDES-Gym (Colab, 20 oct 2026)
+
+*Corrida en Colab revisada y ratificada por MR.* Una decisión del Maestro con el entorno `EjecutorEnvAbides` calibrado (FALABELLA, `rmsc04_ipsa_FALABELLA_2026-08-23.json`, vía `make_calibrated_env_factory`): tramo apertura, 10 % de una meta-orden de 10 000 acciones, ventana de 5 minutos. Se intercambiaron 2 mensajes (1 ASIGNAR y 1 REPORTE) y los dos pasaron la validación de esquema. Log completo: [`data/colab_resultados/ctde_log_ventana_abides.json`](../data/colab_resultados/ctde_log_ventana_abides.json); resumen de la corrida (también del entrenador): [`resumen_evidencia_abides.json`](../data/colab_resultados/resumen_evidencia_abides.json). Script: `scripts/colab/evidencia_ctde_ppo_abides_ps.py`.
+
+```json
+{"direccion": "Ejecutor -> Maestro",
+ "payload": {"ejecutor_id": "apertura", "q_ejecutado": 1000.0, "p_promedio": 5992.6924,
+             "slippage_parcial": 22592.399999999907, "q_pendiente": 0.0, "pasos_usados": 7,
+             "razon_termino": "inventario_agotado", "hora_fin": "09:35:00", "tipo": "reporte"}}
+```
+
+**Resolución de la decisión de unidades (MR, 21 oct 2026):**
+Se adopta la opción de **convertir en el protocolo con `unidades_por_clp`** (parámetro ya existente en `BridgeConfig` y en los JSON de calibración de la tarea 2.2.4: 10 en la calibración oficial en décimos de CLP; 100 en la configuración cruda de ABIDES; 1 en Poisson).
+
+**Implementación en el orquestador (`src/envs/maestro_ejecutor_protocol.py`):**
+1. Al recibir `info` en `reset()`, el orquestador obtiene `unidades = float(info.get("unidades_por_clp", 1.0))`. Si `P_referencia` no estaba fijado, se calcula como `raw_entry / unidades`, quedando siempre en CLP (~5 969,8 CLP para FALABELLA).
+2. En cada paso de ejecución, el precio de ejecución `p_paso` se normaliza a CLP (directo desde `info["p_fill_step_clp"]` que ya viene convertido por `ExecutorRewardState`, o dividiendo por `unidades`).
+3. El mensaje `REPORTE` resultante publica `p_promedio` y `slippage_parcial` estrictamente en CLP.
+4. Consecuencias positivas:
+   - Coherencia total entre simuladores: `IS_total` y $R_M$ tienen la misma escala monetaria en CLP tanto sobre ABIDES como sobre el simulador Poisson.
+   - Preservación de la calibración: El hiperparámetro $\lambda = 0{,}05$ de la recompensa del Maestro (tarea 2.2.2) conserva el balance 1:1 entre penalización e `IS_total` para el cual fue diseñado, sin sufrir la distorsión de un factor $	imes 10$ que habría provocado operar en décimos.
+
 ---
 
 ## 4. Verificación y Resultados de Tests
 
-La suite [`tests/test_ctde_protocol.py`](file:///c:/Users/rokla/workspace/titulo/slippage/tests/test_ctde_protocol.py) valida:
+La suite [`tests/test_ctde_protocol.py`](../tests/test_ctde_protocol.py) valida:
 1. `test_mensaje_asignar_roundtrip`: Serialización JSON exacta y deserialización con tipos nativos (`PASSED`).
 2. `test_mensaje_reporte_roundtrip`: Validación y serialización completa del reporte táctico (`PASSED`).
 3. `test_mensaje_invalido_es_rechazado`: Rechazo estricto de tramos inexistentes, duraciones fuera de $\{1, 5, 10, 15\}$, razones de término inválidas o cantidades negativas (`PASSED`).

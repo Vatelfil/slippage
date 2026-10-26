@@ -12,6 +12,7 @@ Para probar contra ABIDES-Gym real (no corre aqui, requiere Colab), pasar
 """
 from __future__ import annotations
 
+import pytest
 import numpy as np
 import pandas as pd
 
@@ -204,3 +205,52 @@ def test_maestro_lambda_penalty_customizable():
 
     assert env_low_lambda.lambda_penalty == 0.01
     assert env_high_lambda.lambda_penalty == 1.0
+
+
+def test_maestro_ejecutor_conversion_unidades_por_clp():
+    """Verifica que el orquestador convierta precios y slippage a CLP cuando el entorno
+    reporta en decimos de CLP (unidades_por_clp = 10, caso de ABIDES calibrado)."""
+    class DummyAbidesLikeEnv:
+        def __init__(self, executor_id="apertura", q_slice=1000, ventana_min=5, **kwargs):
+            self.q_slice = q_slice
+            self.paso = 0
+
+        def reset(self):
+            # entry_price en decimos de CLP: 59698 (equivale a 5969.8 CLP)
+            return np.zeros(27, dtype=np.float32), {
+                "entry_price": 59698.0,
+                "unidades_por_clp": 10.0,
+            }
+
+        def step(self, action):
+            self.paso += 1
+            # Llena la orden completa en 1 paso
+            info = {
+                "remaining": 0.0,
+                "p_fill_step_clp": 5992.6924,
+                "unidades_por_clp": 10.0,
+            }
+            return np.zeros(27, dtype=np.float32), 1.0, True, False, info
+
+        def close(self):
+            pass
+
+    env = MaestroEjecutorEnv(
+        meta_orden_quantity=10000,
+        executor_env_factory=DummyAbidesLikeEnv,
+        datos_historicos=_fake_datos_historicos(),
+    )
+    env.reset()
+    assert env.P_referencia is None  # se fija en el primer step
+
+    s_m, r_m, done, info = env.step((1, 1))  # alpha_idx=1 (10% de 10000 = 1000 acciones)
+    # P_referencia debe estar convertido a CLP
+    assert pytest.approx(env.P_referencia, rel=1e-5) == 5969.8  # alpha_idx=1 (10% de 10000 = 1000 acciones)
+    rep = info["executor_report"]
+
+    # p_promedio debe estar en CLP (5992.6924), no en decimos (~59926.9)
+    assert pytest.approx(rep["p_promedio"], rel=1e-5) == 5992.6924
+
+    # slippage_parcial en CLP = (5992.6924 - 5969.8) * 1000 = 22892.4 CLP
+    esperado_slippage = (5992.6924 - 5969.8) * 1000.0
+    assert pytest.approx(rep["slippage_parcial"], rel=1e-4) == esperado_slippage
