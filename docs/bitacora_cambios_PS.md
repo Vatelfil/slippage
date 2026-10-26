@@ -202,6 +202,11 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_comparar_v4_vs_v2.py tests/test_reevaluar_ejecutores.py tests/test_analizar_reevaluacion.py`.
 - **Gráficos:** `data/analysis/v4_vs_v2_ABIDES_A.png` explicado en `docs/guia_graficos.md`.
 
+### `feature/ps-abides-v4-resultados-A2`: corrección del cuaderno de reevaluación (26 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. **Qué:** el cuaderno `notebooks/Colab_reevaluacion_150_ABIDES.ipynb` ya no incluye las redes antiguas en la celda principal, porque en Drive hay dos carpetas llamadas `d3_1000ep` y Colab solo ve una; quedan en una celda opcional aparte. El cuaderno ahora descarga el código de esta rama (la anterior queda con la versión previa).
+- **Por qué:** revisión del cuaderno antes de correrlo: se comprobó en Drive que las 4 redes de V2 y las 2 de V4 existen con su `checkpoint_last.pt` y que el reevaluador funciona de punta a punta con una raíz que aún no existe (la de V4 B).
+- **Resultado:** sin cambios en los resultados; solo el cuaderno.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
