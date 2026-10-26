@@ -121,7 +121,7 @@ Lo que muestra:
 
 1. **Una política casi uniforme ya cumple la orden y cuesta ≈ 3 bps.** La red inicial muestreando ejecuta el 100 % en las 5 semillas. Ese es el punto de partida real, y es mucho mejor que el 6 bps del control con argmax que se usaba antes.
 2. **Con 100 episodios el entrenamiento casi no cambia nada** (−0,39 bps de media).
-3. **Con 1.000 episodios las 6 redes cuestan más que la red sin entrenar** (+1,6 a +5,7 bps), con las dos opciones de R_E. Las políticas se concentran y cumplen de forma más decidida, pero **no bajan el costo**; lo empeoran. Como las redes comparten el diseño de la recompensa y el entorno, la prueba de signos es una guía, no una prueba independiente.
+3. **Con 1.000 episodios las 6 redes cuestan más que la red sin entrenar** (+1,6 a +5,7 bps, medido con 15 semillas; con 300 semillas no hay diferencia, ver la nota de más arriba y `docs/reeval_300_resultado_PS.md`), con las dos opciones de R_E. Las políticas se concentran y cumplen de forma más decidida, pero **no bajan el costo**; lo empeoran. Como las redes comparten el diseño de la recompensa y el entorno, la prueba de signos es una guía, no una prueba independiente.
 4. **La diferencia entre las opciones 0 y A (6,61 frente a 5,31 bps) es menor que la diferencia de cualquiera de las dos con el control (≈ 3 bps).** La elección de R_E no es hoy el factor que más mueve el costo.
 
 ### Qué cambia para D3 y para el Sprint 6

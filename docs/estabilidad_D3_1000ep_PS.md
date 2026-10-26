@@ -63,6 +63,8 @@ La comparación anterior pone la red entrenada muestreando frente a la red sin e
 
 En 0 de 6 redes la entrenada muestreando cuesta menos que la inicial muestreando (diferencia media 3,08 bps; prueba de signos entre redes, p = 0,031). Las redes comparten el diseño de la recompensa y el entorno, así que la prueba de signos es una guía y no una prueba independiente.
 
+> **Nota del 26 de octubre (noche), 300 semillas:** la reevaluación con 300 semillas de evaluación (`docs/reeval_300_resultado_PS.md`) mostró que ninguna de las 8 redes entrenadas cuesta distinto a su control (diferencias de −0,6 a +1,0 bps, todos los intervalos con el 0). Las cifras de 15 y 40 semillas de este documento eran ruido del precio y no deben citarse como evidencia de costo; el cumplimiento y el colapso a esperar no dependen de eso.
+
 ## 4. Cómo leerlo
 
 - Opción 0: la regla se dispara en 1 de 3 redes; opción A: en 0 de 3.

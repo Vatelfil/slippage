@@ -223,6 +223,20 @@
 - **Cómo reproducir o verificar:** `python scripts/analizar_reevaluacion_ps.py --dir data/colab_resultados/reeval_300 --out-md docs/reeval_300_ABIDES_PS.md --out-png data/analysis/reeval_300_ABIDES.png`.
 - **Gráficos:** entrada en `docs/guia_graficos.md` (`reeval_300_ABIDES.png`).
 
+### `feature/ps-plan-dejar-listo-mr-bf`: plan para que MR y BF solo lleguen, ejecuten y revisen (26 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. **Estado:** solo plan; no se escribió ni modificó código de MR ni de BF.
+- **Qué:** `docs/plan_dejar_listo_MR_y_BF_PS.md`: aclara qué es el Plan 1 (arreglar el problema crítico, hecho) y el Plan 2 (desarrollo de la parte de PS, ejecutado en lo adelantable); lista, por persona, lo que PS puede dejar escrito (bucle del Maestro, barrido de hiperparámetros, revalidación de λ, parche de γ = 1 para MR; escenarios de liquidez, consolidador, parche de penalización en R_E y hoja de decisiones D1/D3 para BF), con tiempos de revisión, calendario y riesgo estadístico de las 90 corridas.
+- **Por qué:** pedido de PS: que MR y BF lleguen, ejecuten y revisen en vez de programar desde cero.
+- **Resultado:** ≈ 28 h de trabajo de PS a repartir en una semana y ≈ 4 h de revisión entre MR y BF. Falta que el grupo diga cuáles borradores quiere.
+
+### `feature/ps-sprint6-completo`: PR único del Sprint 6 de PS (26 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. No toca archivos de tareas de MR ni de BF.
+- **Qué:** reúne en un solo PR las 20 ramas `feature/ps-…` del Sprint 6 anteriores (están encadenadas, cada una contiene a la anterior) y se fusionó con `main` al 26 de octubre (PR #41 incluido, sin conflictos). Agrega `docs/informe_sprint6_PS.md` (informe para el Título II), el texto del PR (`docs/pr_sprint6_PS.md`), notas de «300 semillas» en los documentos que citaban cifras de 15 o 40 semillas (`diagnostico_recompensa_PS.md`, `estabilidad_D3_1000ep_PS.md`, `decision_RE_final_D3_para_BF.md`, `investigacion_recompensa_que_se_hizo.md`, `propuesta_cambio_RE_para_BF_y_MR.md`) y la actualización de `docs/sprint6_que_se_hizo.md` con el resultado de las 300 semillas y una tabla de lo que MR y BF deben revisar.
+- **Por qué:** pedido de PS: subir su parte completa del Sprint 6 para que MR y BF vean lo que les corresponde. Con un solo PR ya no importa el orden de merge de las ramas anteriores.
+- **Resultado:** ver `docs/informe_sprint6_PS.md`. Las ramas anteriores quedan como respaldo y se pueden cerrar tras el merge.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests -q` (la única falla conocida es la que necesita el parquet de mercado).
+- **Gráficos:** ninguno nuevo; los anteriores están explicados en `docs/guia_graficos.md`.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

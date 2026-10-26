@@ -7,7 +7,7 @@ Este documento reúne la evidencia de las fases 0 y 1 del plan de investigación
 ![Diagnóstico](../data/analysis/diagnostico_recompensa.png)
 
 ## 1. Qué se observó
-- Con 1.000 episodios, las redes entrenadas con R_E cuestan **más** que la misma red sin entrenar (+3,08 bps, 0 de 6 redes mejores; `docs/estabilidad_D3_1000ep_PS.md`).
+- Con 1.000 episodios, las redes entrenadas con R_E cuestan **más** que la misma red sin entrenar (+3,08 bps, 0 de 6 redes mejores; `docs/estabilidad_D3_1000ep_PS.md`). **Nota del 26 de octubre (noche), 300 semillas:** la reevaluación con 300 semillas de evaluación (`docs/reeval_300_resultado_PS.md`) mostró que ninguna de las 8 redes entrenadas cuesta distinto a su control (diferencias de −0,6 a +1,0 bps, todos los intervalos con el 0). Las cifras de 15 y 40 semillas de este documento eran ruido del precio y no deben citarse como evidencia de costo; el cumplimiento y el colapso a esperar no dependen de eso.
 - En el entrenamiento la recompensa mejora, pero el slippage frente al precio de llegada no, y la conducta cambia de órdenes de mercado a órdenes límite pasivas.
 
 ## 2. Reproducción en el PC (Poisson, recompensa original)
