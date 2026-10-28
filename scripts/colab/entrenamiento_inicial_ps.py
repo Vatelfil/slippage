@@ -19,6 +19,7 @@ Semillas: entrenamiento 1001-1100 (--seed 1000), evaluacion 5001-5015. No se usa
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import sys
 import time
@@ -33,21 +34,33 @@ from src.config.market_params import BETA_RIESGO_EJECUTOR  # noqa: E402
 from src.envs.rmsc04_search import load_resumable, save_json  # noqa: E402
 from src.experiments import beta_phase2 as bp  # noqa: E402
 from src.experiments import beta_sweep as bs  # noqa: E402
+from src.training.monitoreo import MonitorEntrenamiento  # noqa: E402
 
 CUMPLIMIENTO_MIN = 0.95  # regla de vigilancia de D3
 
 
-def _factory(entorno: str, calibrated_json: str, ticker: str):
+def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str = "ejecutado"):
+    extra = {} if riesgo_sobre == "ejecutado" else {"riesgo_sobre": riesgo_sobre}   # opcion A de D3: riesgo sobre lo pendiente
     if entorno == "abides":
         from src.envs.abides_ejecutor_env import make_calibrated_env_factory  # requiere ABIDES
-        return make_calibrated_env_factory(calibrated_json, ticker=ticker)
+        return make_calibrated_env_factory(calibrated_json, ticker=ticker, **extra)
     from src.envs.fallback_poisson_env import EjecutorEnvPoissonFallback
-    return EjecutorEnvPoissonFallback
+    return functools.partial(EjecutorEnvPoissonFallback, **extra) if extra else EjecutorEnvPoissonFallback
 
 
-def _nuevo_trainer(seed: int):
+def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, recompensa: str = "original"):
+    """Aplica al entrenamiento la penalización por lo no comprado, el costo de espera y/o la recompensa de slippage contra el
+    precio de llegada (ver `src/experiments/variantes_recompensa.py`). La evaluación sigue usando la fábrica original, así que
+    el slippage y el cumplimiento que se informan son los de siempre y se pueden comparar con corridas anteriores."""
+    from src.experiments.variantes_recompensa import EntornoVariante, Variante
+    variante = Variante("entrenamiento", recompensa=recompensa, penalizacion_bps=penalizacion_bps,
+                        costo_espera_bps=costo_espera_bps)
+    return lambda **kw: EntornoVariante(factory(**kw), variante)
+
+
+def _nuevo_trainer(seed: int, gamma: float = 0.95):
     from src.training.ppo_trainer import PPOConfig, PPOTrainer
-    cfg = PPOConfig(lr=3e-4, gamma=0.95, gae_lambda=0.95, clip_ratio=0.2, entropy_coef=0.01, value_coef=0.5,
+    cfg = PPOConfig(lr=3e-4, gamma=gamma, gae_lambda=0.95, clip_ratio=0.2, entropy_coef=0.01, value_coef=0.5,
                     epochs=4, minibatch_size=64, episodes_per_update=10)
     return PPOTrainer(role="ejecutor", cfg=cfg, seed=seed)
 
@@ -55,6 +68,35 @@ def _nuevo_trainer(seed: int):
 def _resumen_eval(factory, net, tramo, seeds: Sequence[int], q_slice: int, ventana_min: int) -> Dict:
     eps = bp.evaluar_red(net, factory, tramo, seeds, q_slice, ventana_min)
     return bp.resumen_evaluacion(eps, BETA_RIESGO_EJECUTOR)
+
+
+def _evaluar_estocastica(factory, net, tramo, seeds: Sequence[int], q_slice: int, ventana_min: int):
+    """Igual que `bp.evaluar_red`, pero MUESTREANDO la accion de la politica (como en el entrenamiento) en vez de
+    tomar el argmax. Con una politica de alta entropia el argmax puede ser una accion de espera y no ejecutar nada."""
+    import torch
+    from src.envs.spaces import EjecutorActionSpace
+
+    space, out = EjecutorActionSpace(), []
+    for seed in seeds:
+        torch.manual_seed(int(seed))
+        env = factory(executor_id=tramo, q_slice=q_slice, ventana_min=ventana_min, seed=int(seed), beta=0.0)
+        try:
+            obs, info = env.reset()
+            p_ref = info.get("p_referencia")
+            if p_ref is None:
+                p_ref = float(info["entry_price"]) / float(info.get("unidades_por_clp", 1.0))
+            pasos, done = [], False
+            while not done:
+                with torch.no_grad():
+                    logits, _ = net(torch.as_tensor(obs, dtype=torch.float32).unsqueeze(0))
+                idx = int(torch.distributions.Categorical(logits=logits.squeeze(0)).sample().item())
+                obs, _, done, trunc, info = env.step(space.decode_flat(idx))
+                done = bool(done or trunc)
+                pasos.append(bs.step_record(info))
+            out.append(bs.summarize_episode(pasos, float(q_slice), float(p_ref)))
+        finally:
+            env.close()
+    return out
 
 
 def main(argv: Optional[Sequence[str]] = None) -> Path:
@@ -69,6 +111,19 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--seed", type=int, default=1000, help="semilla del entrenador: episodio k usa la semilla seed + k")
     ap.add_argument("--eval-seeds", type=int, default=15)
     ap.add_argument("--eval-seed-base", type=int, default=5000)
+    ap.add_argument("--riesgo-sobre", choices=["ejecutado", "pendiente"], default="ejecutado",
+                    help="ejecutado = opcion 0 de D3 (Titulo I); pendiente = opcion A (riesgo sobre lo que falta ejecutar)")
+    ap.add_argument("--gamma", type=float, default=0.95,
+                    help="factor de descuento del Ejecutor; con 1,0 un costo al final de la ventana no se achica al verlo desde el principio")
+    ap.add_argument("--penalizacion-bps", type=float, default=0.0,
+                    help="castigo, en bps del precio de llegada, por cada acción del slice sin comprar al terminar la ventana")
+    ap.add_argument("--costo-espera-bps", type=float, default=0.0,
+                    help="costo denso por inventario pendiente (total en bps si no se compra nada en la ventana)")
+    ap.add_argument("--recompensa", choices=["original", "is_llegada"], default="original",
+                    help="original = R_E del Titulo I (compara con el precio medio de cada instante); is_llegada = lo que cuesta cada "
+                         "compra frente al precio de llegada de la orden (variante V4 con --penalizacion-bps 30 y --gamma 1)")
+    ap.add_argument("--sin-monitoreo", action="store_true",
+                    help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--max-minutes", type=float, default=None)
     args = ap.parse_args(argv)
@@ -79,11 +134,26 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     csv_path = out_dir / f"entrenamiento_{args.tramo}.csv"
     ckpt_dir = out_dir / f"checkpoints_{args.tramo}"
     estado_path = out_dir / f"entrenamiento_inicial_{args.tramo}.json"
-    factory = _factory(args.entorno, args.calibrated_json, args.ticker)
+    factory = _factory(args.entorno, args.calibrated_json, args.ticker, args.riesgo_sobre)
     firma = {"tarea": "2.3.5", "entorno": args.entorno, "ticker": args.ticker, "tramo": args.tramo,
              "episodios": args.episodes, "q_slice": args.q_slice, "ventana_min": args.ventana_min,
              "seed": args.seed, "eval_seeds": args.eval_seeds, "eval_seed_base": args.eval_seed_base,
              "beta": BETA_RIESGO_EJECUTOR, "calibrated_json": Path(args.calibrated_json).name}
+    if args.riesgo_sobre != "ejecutado":   # solo si no es la opcion por defecto, para no invalidar corridas anteriores
+        firma["riesgo_sobre"] = args.riesgo_sobre
+    # igual que arriba: estos campos solo entran a la firma cuando se usan
+    if args.gamma != 0.95:
+        firma["gamma"] = args.gamma
+    if args.penalizacion_bps:
+        firma["penalizacion_bps"] = args.penalizacion_bps
+    if args.costo_espera_bps:
+        firma["costo_espera_bps"] = args.costo_espera_bps
+    if args.recompensa != "original":
+        firma["recompensa"] = args.recompensa
+    monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
+    usa_variante = args.penalizacion_bps or args.costo_espera_bps or args.recompensa != "original"
+    factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps, args.recompensa) if usa_variante else factory
+    factory_entrenamiento = monitor.envolver(factory_variante) if monitor else factory_variante
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
     eval_seeds = [args.eval_seed_base + i for i in range(1, args.eval_seeds + 1)]
@@ -99,7 +169,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         save_json(estado_path, estado)
 
     # -- Etapa 1: entrenamiento reanudable en bloques de 10 episodios (= una actualizacion PPO)
-    trainer = _nuevo_trainer(args.seed)
+    trainer = _nuevo_trainer(args.seed, args.gamma)
     ckpt = ckpt_dir / "checkpoint_last.pt"
     if ckpt.exists():
         trainer.load_checkpoint(ckpt)
@@ -112,7 +182,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
             return estado_path
         n = min(10, args.episodes - trainer.current_episode)
         t0 = time.time()
-        trainer.train_executor_episodes(env_factory=factory, n_episodes=n, tramo=args.tramo, q_slice=args.q_slice,
+        trainer.train_executor_episodes(env_factory=factory_entrenamiento, n_episodes=n, tramo=args.tramo, q_slice=args.q_slice,
                                         ventana_min=args.ventana_min, csv_path=csv_path, checkpoint_dir=ckpt_dir,
                                         checkpoint_freq=10)
         estado["segundos_entrenamiento"] = round(estado["segundos_entrenamiento"] + time.time() - t0, 1)
@@ -125,6 +195,12 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         print("== Evaluando la red entrenada", flush=True)
         estado["evaluacion_entrenada"] = _resumen_eval(factory, trainer.model, args.tramo, eval_seeds,
                                                        args.q_slice, args.ventana_min)
+        save_json(estado_path, estado)
+
+    if "evaluacion_entrenada_estocastica" not in estado:
+        print("== Evaluando la red entrenada MUESTREANDO la politica (como en el entrenamiento)", flush=True)
+        eps = _evaluar_estocastica(factory, trainer.model, args.tramo, eval_seeds, args.q_slice, args.ventana_min)
+        estado["evaluacion_entrenada_estocastica"] = bp.resumen_evaluacion(eps, BETA_RIESGO_EJECUTOR)
         save_json(estado_path, estado)
 
     # -- Etapa 3: politicas de referencia en las mismas semillas
@@ -145,12 +221,16 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     cumpl = estado["evaluacion_entrenada"].get("cumplimiento_medio")
     estado["vigilancia_D3"] = {
         "cumplimiento_medio": cumpl, "umbral": CUMPLIMIENTO_MIN,
+        "cumplimiento_politica_muestreada": estado["evaluacion_entrenada_estocastica"].get("cumplimiento_medio"),
         "cumple": bool(cumpl is not None and cumpl >= CUMPLIMIENTO_MIN),
         "texto": ("El cumplimiento de la red entrenada es >= 95 %: se mantiene la opcion 0 de D3." if
                   (cumpl is not None and cumpl >= CUMPLIMIENTO_MIN) else
                   "El cumplimiento de la red entrenada es < 95 %: segun la regla de D3 corresponde pasar a la opcion A "
                   "(riesgo sobre lo pendiente) y recalcular beta*."),
     }
+    if args.riesgo_sobre != "ejecutado":   # el texto de arriba habla de la opcion 0; en una corrida con la A solo se informa el dato
+        estado["vigilancia_D3"]["texto"] = (f"Corrida con la opcion A de R_E (riesgo sobre lo pendiente): cumplimiento con argmax "
+                                            f"{'>=' if estado['vigilancia_D3']['cumple'] else '<'} 95 %; la regla de D3 se aplica a la opcion 0.")
     estado["segundos_totales_esta_ejecucion"] = round(time.time() - t_ini, 1)
     save_json(estado_path, estado)
     print(f"\nGuardado: {estado_path}\n{estado['vigilancia_D3']['texto']}")

@@ -1,0 +1,158 @@
+{
+ "d3_opcion0_s1000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.81,
+  "kl_maximo": 0.000283,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.33705150551203183,
+  "alertas": [],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcion0_s2000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.69,
+  "kl_maximo": 0.000393,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.2921811441088993,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -1.82 (primeros 50) frente a -2.27 (ultimos 50)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcion0_s3000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.69,
+  "kl_maximo": 0.000643,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.27415221845204346,
+  "alertas": [],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcion0_s4000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.69,
+  "kl_maximo": 0.000648,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.24516355194276088,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "ARGMAX_DISTINTO_DE_MUESTREO",
+    "mensaje": "Cumplimiento 0.646 con argmax y 1.000 muestreando: la evaluacion determinista no representa la politica entrenada."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 0
+ },
+ "d3_opcion0_s6000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.77,
+  "kl_maximo": 0.000364,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.3054473291773063,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -1.20 (primeros 50) frente a -1.87 (ultimos 50)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcionA_s1000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.86,
+  "kl_maximo": 0.000227,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.3366699500190212,
+  "alertas": [],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcionA_s2000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.6,
+  "kl_maximo": 0.000697,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.29029929163194657,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -2.36 (primeros 50) frente a -2.88 (ultimos 50)."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ARGMAX_DISTINTO_DE_MUESTREO",
+    "mensaje": "Cumplimiento 0.115 con argmax y 1.000 muestreando: la evaluacion determinista no representa la politica entrenada."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 0
+ },
+ "d3_opcionA_s3000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.75,
+  "kl_maximo": 0.000364,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.2904484586874814,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -1.94 (primeros 50) frente a -1.97 (ultimos 50)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcionA_s4000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.72,
+  "kl_maximo": 0.00046,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.2786233325498031,
+  "alertas": [],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "d3_opcionA_s6000": {
+  "actualizaciones": 10,
+  "episodios_registrados": 100,
+  "entropia_final_pct_max": 99.58,
+  "kl_maximo": 0.000706,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.3102734924174553,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -1.75 (primeros 50) frente a -3.51 (ultimos 50)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "PICO_PERDIDA_CRITICO",
+    "mensaje": "Pico de la perdida del critico (42.9, mediana 1.56)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ }
+}

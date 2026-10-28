@@ -111,6 +111,8 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--seeds", type=int, default=2)
     ap.add_argument("--ordenes", nargs="*", default=None, help="ids a correr (para repartir entre cuadernos)")
     ap.add_argument("--max-minutes", type=float, default=None)
+    ap.add_argument("--perfil-volumen", default=str(REPO_ROOT / "data/meta_ordenes/perfil_volumen_v1.csv"),
+                    help="perfil de volumen por tramo para VWAP (evita depender del parquet de mercado, que no se versiona)")
     args = ap.parse_args(argv)
 
     with open(args.meta_ordenes, "r", encoding="utf-8-sig") as f:  # tolera el BOM que agrega Windows
@@ -136,7 +138,13 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     estado = load_resumable(out, firma)
     seeds = list(range(1, args.seeds + 1))
     print(f"{len(pendientes(estado, ordenes, seeds))} corridas pendientes", flush=True)
+    perfil = None
+    if Path(args.perfil_volumen).exists():
+        import pandas as pd
+        perfil = pd.read_csv(args.perfil_volumen, index_col=0)
+        print(f"Perfil de volumen: {args.perfil_volumen}", flush=True)
     ok = correr(ordenes, seeds, estado, lambda e: save_json(out, e), factory_por_ticker,
+                volume_profile=perfil,
                 presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60)
     estado["resumen"] = resumen(estado)
     save_json(out, estado)

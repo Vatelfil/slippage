@@ -1,0 +1,107 @@
+{
+ "d3_opcion0_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 0,
+  "entropia_final_pct_max": 80.1,
+  "kl_maximo": 0.004376,
+  "cumplimiento_final": null,
+  "pct_espera_final": null,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 80 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "PICO_PERDIDA_CRITICO",
+    "mensaje": "Pico de la perdida del critico (33.3, mediana 0.86)."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ARGMAX_DISTINTO_DE_MUESTREO",
+    "mensaje": "Cumplimiento 0.000 con argmax y 1.000 muestreando: la evaluacion determinista no representa la politica entrenada."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 1
+ },
+ "d3_opcion0_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 35.29,
+  "kl_maximo": 0.00753,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.08041269841269841,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 34 % del maximo: la politica casi no explora."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 0
+ },
+ "d3_opcion0_s3000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 82.35,
+  "kl_maximo": 0.004889,
+  "cumplimiento_final": 0.9999600000000001,
+  "pct_espera_final": 0.3150042686459202,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 85 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "PICO_PERDIDA_CRITICO",
+    "mensaje": "Pico de la perdida del critico (42.1, mediana 1.12)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "d3_opcionA_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 71.42,
+  "kl_maximo": 0.003629,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.0796031191031191,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 67 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "d3_opcionA_s3000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 38.59,
+  "kl_maximo": 0.005842,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.04424603174603175,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 36 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "PICO_PERDIDA_CRITICO",
+    "mensaje": "Pico de la perdida del critico (79.1, mediana 1.36)."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 0
+ }
+}
