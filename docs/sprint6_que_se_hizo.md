@@ -1,5 +1,7 @@
 # Sprint 6 (26 oct – 6 nov 2026): qué se hizo
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 Documento de cierre del Sprint 6 (tarea 3.1.5, Sprint Review). **Borrador en curso** elaborado por PS con apoyo de Claude Code (uso autorizado por la universidad); última actualización: 26 de octubre de 2026. Se completa el viernes 6 de noviembre; cada fila debe ser confirmada por su responsable (columna "Confirma"). Lo que sigue como "Por completar" **no se ha hecho**.
 
 Estados (los mismos que en `docs/sprint5_que_se_hizo.md`): **Hecho** · **Hecho con límite demostrado** · **Pasa al Sprint 7 por diseño** · **Por completar** (aún no hay resultado).

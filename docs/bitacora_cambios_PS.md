@@ -237,6 +237,14 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests -q` (la única falla conocida es la que necesita el parquet de mercado).
 - **Gráficos:** ninguno nuevo; los anteriores están explicados en `docs/guia_graficos.md`.
 
+### `feature/ps-revision-opus`: revisión técnica y corrección de la recompensa del Ejecutor en ABIDES (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code (Opus). El parche de R_E es un **BORRADOR de PS para BF** (apagado por defecto); no se tocó código de MR.
+- **Qué:** `docs/revision_opus_PS.md` (veredicto, 9 hallazgos, plan de 10 días y regla para cerrar D3); opción `mid_decision` en `src/envs/abides_bridge.py` y `src/envs/abides_ejecutor_env.py`, y `--mid-decision` en `scripts/colab/entrenamiento_inicial_ps.py`; `scripts/colab/verificar_mid_decision_ps.py`; cuadernos `notebooks/Colab_mid_decision_A.ipynb`, `_B.ipynb` y `Colab_reevaluacion_mid_decision_300.ipynb`; prueba de cordura del PPO `scripts/prueba_cordura_ppo_ps.py` (resultado en `data/analysis/prueba_cordura_ppo.txt`); `tests/test_mid_decision.py`; nota en 10 documentos con resultados de ABIDES y sección 10 del memo de D3.
+- **Por qué:** pedido de PS: revisar si el proyecto va bien y buscar la falla de fondo. En ABIDES la recompensa comparaba el precio pagado con el precio medio de 30 s *después* (en Poisson, con el de la decisión), y la recompensa casi no se relacionaba con el costo.
+- **Resultado:** el PPO de MR aprende en una prueba trivial (0,33 → 0,999 en 1.000 episodios); en las corridas V2 la correlación entre recompensa y costo es de 0,04 a 0,22; con el parche, comprar 1 CLP sobre el precio de decisión pasa de +1 a −1. Falta verificar en ABIDES (cuadernos listos).
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_mid_decision.py tests/test_abides_bridge.py -q` y `python scripts/prueba_cordura_ppo_ps.py`.
+- **Gráficos:** ninguno nuevo.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

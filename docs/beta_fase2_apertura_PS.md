@@ -1,5 +1,7 @@
 # Fase 2 de la elección de β (tarea 2.2.3), tramo apertura
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo o sobre el valor de β no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 **Elaborado por:** Paolo Sepúlveda (PS) con apoyo de Claude Code. **Pendiente de revisión por:** Benjamín Farias (BF) y Mauricio Reynoso (MR).
 Corrida en Colab el 10 oct 2026 (ABIDES calibrado, FALABELLA, snapshot 2026-08-23). Episodios de entrenamiento por β: 300 · semillas de evaluación: 30 · β\* = 0,0618 (barrido de BF en ABIDES). PPO con la implementación de MR.
 

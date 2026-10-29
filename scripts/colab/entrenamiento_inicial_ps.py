@@ -39,9 +39,11 @@ from src.training.monitoreo import MonitorEntrenamiento  # noqa: E402
 CUMPLIMIENTO_MIN = 0.95  # regla de vigilancia de D3
 
 
-def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str = "ejecutado"):
+def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str = "ejecutado", mid_decision: bool = False):
     extra = {} if riesgo_sobre == "ejecutado" else {"riesgo_sobre": riesgo_sobre}   # opcion A de D3: riesgo sobre lo pendiente
     if entorno == "abides":
+        if mid_decision:   # R_E contra el P_mid al decidir (borrador para BF, ver docs/revision_opus_PS.md)
+            extra["mid_decision"] = True
         from src.envs.abides_ejecutor_env import make_calibrated_env_factory  # requiere ABIDES
         return make_calibrated_env_factory(calibrated_json, ticker=ticker, **extra)
     from src.envs.fallback_poisson_env import EjecutorEnvPoissonFallback
@@ -122,6 +124,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--recompensa", choices=["original", "is_llegada"], default="original",
                     help="original = R_E del Titulo I (compara con el precio medio de cada instante); is_llegada = lo que cuesta cada "
                          "compra frente al precio de llegada de la orden (variante V4 con --penalizacion-bps 30 y --gamma 1)")
+    ap.add_argument("--mid-decision", action="store_true",
+                    help="solo ABIDES: R_E compara el precio pagado con el P_mid que vio el agente al decidir (como en Poisson), "
+                         "no con el del despertar siguiente")
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -134,7 +139,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     csv_path = out_dir / f"entrenamiento_{args.tramo}.csv"
     ckpt_dir = out_dir / f"checkpoints_{args.tramo}"
     estado_path = out_dir / f"entrenamiento_inicial_{args.tramo}.json"
-    factory = _factory(args.entorno, args.calibrated_json, args.ticker, args.riesgo_sobre)
+    factory = _factory(args.entorno, args.calibrated_json, args.ticker, args.riesgo_sobre, args.mid_decision)
     firma = {"tarea": "2.3.5", "entorno": args.entorno, "ticker": args.ticker, "tramo": args.tramo,
              "episodios": args.episodes, "q_slice": args.q_slice, "ventana_min": args.ventana_min,
              "seed": args.seed, "eval_seeds": args.eval_seeds, "eval_seed_base": args.eval_seed_base,
@@ -150,6 +155,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["costo_espera_bps"] = args.costo_espera_bps
     if args.recompensa != "original":
         firma["recompensa"] = args.recompensa
+    if args.mid_decision:
+        firma["mid_decision"] = True
     monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
     usa_variante = args.penalizacion_bps or args.costo_espera_bps or args.recompensa != "original"
     factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps, args.recompensa) if usa_variante else factory

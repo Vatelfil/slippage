@@ -1,5 +1,7 @@
 # Confirmación en ABIDES de la penalización terminal con γ = 1: resultado
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 **Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 26 de octubre de 2026. **No actualiza el Título II**: deja el material listo para cuando se actualice.
 
 Continúa a `docs/experimentos_recompensa_PS.md` (que probó el arreglo en el simulador de Poisson) y a `docs/propuesta_cambio_RE_para_BF_y_MR.md`. Las tablas completas, generadas con `scripts/analizar_estabilidad_D3.py`, están en `docs/conf_pen30_g1_ABIDES_PS.md` y el panel de monitoreo en `docs/monitoreo_conf_pen30_g1.md`.
