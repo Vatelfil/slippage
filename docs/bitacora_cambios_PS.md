@@ -269,6 +269,14 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_maestro_trainer.py -q`.
 - **Gráficos:** el barrido genera `barrido.png` en su carpeta de salida; se explicará en `docs/guia_graficos.md` cuando se corra.
 
+### `feature/ps-borrador-bf-c6b-mm`: resultado del C-6 y escenarios v2 que escalan solo al market maker (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Borrador para BF; no toca los entornos.
+- **Qué:** resultado del C-6 en `data/colab_resultados/c6_liquidez/` y `docs/c6_liquidez_resultado_PS.md`; `data/scenarios/escenarios_liquidez_v2.json` (solo `mm_pov`, 0,25×, 1× y 4×, criterio fijado antes de correr); `claves_abides` y `criterio_c6` en `src/envs/escenarios_liquidez.py`, en los dos evaluadores y en el C-6; cuaderno `notebooks/Colab_C6b_liquidez_mm_BF.ipynb` (60 semillas).
+- **Por qué:** el C-6 dio REVISAR. Con la v1, comprar a mercado no cambió entre escenarios y los IC fueron de ±5 a ±10 bps: escalar agentes mezcla liquidez con volatilidad y rompe el pareo por semilla. PS pidió arreglarlo sin esperar a BF.
+- **Resultado:** la v1 solo distingue con órdenes pasivas (TWAP límite con liquidez baja: +7,9 bps, IC +0,7 a +13,9). Falta correr el C-6b.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** ninguno.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

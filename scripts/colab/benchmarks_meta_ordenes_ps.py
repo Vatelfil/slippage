@@ -143,7 +143,8 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     from src.envs import escenarios_liquidez as el
     ordenes = el.ajustar_ordenes(ordenes, args.factor_tamano)
     factor_liq = el.factor_de(args.escenario, args.escenarios_json)
-    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq)
+    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq,
+                                                claves=el.claves_de(args.escenarios_json))
 
     sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano) + ("_impacto" if args.impacto else "")
     out = Path(args.out_dir) / f"benchmarks_meta_ordenes_{args.entorno}{sufijo}.json"

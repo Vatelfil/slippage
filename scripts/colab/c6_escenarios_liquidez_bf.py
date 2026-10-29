@@ -32,9 +32,9 @@ from src.experiments import beta_phase2 as bp  # noqa: E402
 HEURISTICAS = ("agresiva_market", "twap_limit_medio")
 
 
-def fabrica(entorno: str, factor: float, calibrated_json: str, ticker: str):
+def fabrica(entorno: str, factor: float, calibrated_json: str, ticker: str, claves=el.CLAVES_ABIDES):
     if entorno == "abides":
-        return el.fabrica_abides(calibrated_json, ticker=ticker, factor=factor)
+        return el.fabrica_abides(calibrated_json, ticker=ticker, factor=factor, claves=claves)
     return el.fabrica_poisson(factor, ticker=ticker)
 
 
@@ -70,19 +70,20 @@ def analizar(resultados: Dict[str, Dict], escenarios: Sequence[str], tamanos: Se
     return filas
 
 
-def veredicto(filas: Sequence[Dict]) -> str:
-    """Se juzga con la compra a mercado, que barre el libro y por eso depende de su profundidad. TWAP con órdenes límite
-    espera en el mejor precio y casi no cambia entre escenarios (en Poisson, 0 a 0,24 bps): se informa, pero no decide.
-    OK si con compra a mercado la liquidez baja cuesta más que la media en todos los tamaños (IC sobre 0) y la alta no
-    cuesta más que la media."""
-    agresivas = [f for f in filas if f["heuristica"] == "agresiva_market"]
+def veredicto(filas: Sequence[Dict], criterio: Optional[Dict] = None) -> str:
+    """Juzga con la heurística y los tamaños del `criterio_c6` del JSON, fijados antes de correr (la v1 usa la compra a
+    mercado, que en Poisson es la que depende de la profundidad). OK si en esas filas la liquidez baja cuesta más que la
+    media (IC sobre 0) y la alta no cuesta más que la media; las demás filas se informan pero no deciden."""
+    criterio = criterio or {"heuristica": "agresiva_market", "tamanos": None}
+    agresivas = [f for f in filas if f["heuristica"] == criterio["heuristica"]
+                 and (not criterio.get("tamanos") or f["q_slice"] in criterio["tamanos"])]
     if not agresivas:
         return "SIN DATOS"
     malos = [f"q={f['q_slice']}" for f in agresivas
              if not (f.get("baja_menos_media", {}).get("ic_bajo", -1) > 0 and f.get("media_menos_alta", {}).get("media", -1) >= 0)]
     if not malos:
-        return "OK: comprar a mercado cuesta más con liquidez baja y no cuesta más con liquidez alta"
-    return ("REVISAR: con compra a mercado no se distingue el orden esperado en " + ", ".join(malos) +
+        return f"OK: con {criterio['heuristica']} la liquidez baja cuesta más y la alta no cuesta más"
+    return (f"REVISAR: con {criterio['heuristica']} no se distingue el orden esperado en " + ", ".join(malos) +
             " (ajustar los factores o subir las semillas)")
 
 
@@ -101,15 +102,19 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     args = ap.parse_args(argv)
 
     escenarios = el.cargar_escenarios(args.escenarios_json)
+    claves = el.claves_de(args.escenarios_json)
+    criterio = el.criterio_de(args.escenarios_json)
     out = Path(args.out)
     firma = {"tarea": "3.1.3-C6", "entorno": args.entorno, "ticker": args.ticker, "tramo": args.tramo,
              "tamanos": args.tamanos, "ventana_min": args.ventana_min, "n_semillas": args.n_semillas,
              "seed_base": args.seed_base, "escenarios": escenarios}
+    if tuple(claves) != el.CLAVES_ABIDES:
+        firma["claves_abides"] = list(claves)
     estado = load_resumable(out, firma)
     res = estado.setdefault("resultados", {})
     seeds = [args.seed_base + i for i in range(1, args.n_semillas + 1)]
     for e, factor in escenarios.items():
-        fab = fabrica(args.entorno, factor, args.calibrated_json, args.ticker)
+        fab = fabrica(args.entorno, factor, args.calibrated_json, args.ticker, claves)
         for h in HEURISTICAS:
             for q in args.tamanos:
                 clave = f"{e}|{h}|{q}"
@@ -124,7 +129,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                 print(f"{clave}: slippage {r['slippage_bps_medio']:.2f} bps, cumplimiento {r['cumplimiento_medio']:.3f} "
                       f"({r['segundos']:.0f} s)", flush=True)
     estado["analisis"] = analizar(res, list(escenarios), args.tamanos)
-    estado["veredicto"] = veredicto(estado["analisis"])
+    estado["veredicto"] = veredicto(estado["analisis"], criterio)
     save_json(out, estado)
     for f in estado["analisis"]:
         print(f"{f['heuristica']:18s} q={f['q_slice']:6d}  " +

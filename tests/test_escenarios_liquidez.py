@@ -76,3 +76,23 @@ def test_consolidador_pareado_y_ajustado(tmp_path):
     t = pd.read_csv(out / "tabla_maestra.csv")
     assert t.loc[0, "ranking"].endswith("PPO")
     assert (out / "tabla_maestra.tex").read_text(encoding="utf-8").startswith("\\begin{tabular}")
+
+
+def test_v2_escala_solo_al_market_maker():
+    claves = el.claves_de(el.ESCENARIOS_JSON_V2)
+    assert claves == ("mm_pov",)
+    base = {"num_noise_agents": 1000, "lambda_a": 5.7e-12, "mm_pov": 0.005}
+    k = el.escalar_kwargs_abides(base, 0.25, claves)
+    assert k["num_noise_agents"] == 1000 and k["lambda_a"] == base["lambda_a"]
+    assert k["mm_pov"] == pytest.approx(0.00125)
+    assert el.claves_de() == el.CLAVES_ABIDES          # la v1 no cambia
+    assert el.criterio_de(el.ESCENARIOS_JSON_V2)["tamanos"] == [5000]
+
+
+def test_veredicto_usa_el_criterio_del_json():
+    from scripts.colab import c6_escenarios_liquidez_bf as c6
+    fila = lambda h, q, bm, ma: {"heuristica": h, "q_slice": q, "baja_menos_media": {"ic_bajo": bm, "media": bm},
+                                 "media_menos_alta": {"media": ma}}
+    filas = [fila("agresiva_market", 1000, -1.0, -1.0), fila("agresiva_market", 5000, 0.5, 0.2)]
+    assert c6.veredicto(filas, {"heuristica": "agresiva_market", "tamanos": [5000]}).startswith("OK")
+    assert c6.veredicto(filas).startswith("REVISAR")    # sin criterio se juzgan todos los tamaños, como la v1

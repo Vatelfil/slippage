@@ -285,7 +285,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         datos_sm = pd.read_csv(args.datos_sm, index_col=0, parse_dates=True)
 
     maestro, redes = cargar_redes(args.ckpt_maestro, ckpts, args.seed_red)
-    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq)
+    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq,
+                                                claves=el.claves_de(args.escenarios_json))
 
     sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano) + ("_impacto" if args.impacto else "")
     out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}{sufijo}.json"
