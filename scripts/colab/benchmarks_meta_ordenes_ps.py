@@ -51,7 +51,8 @@ def pendientes(estado: Dict, ordenes: Sequence[Dict], seeds: Sequence[int]) -> L
 
 def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar: Callable[[Dict], None],
            factory_por_ticker: Callable[[str], Optional[Callable]], volume_profile=None,
-           presupuesto_s: Optional[float] = None, log: Callable[[str], None] = print) -> bool:
+           presupuesto_s: Optional[float] = None, log: Callable[[str], None] = print,
+           impacto_por_orden: Optional[Callable[[Dict], object]] = None) -> bool:
     """Corre lo pendiente. Devuelve True si no queda nada."""
     t_ini = time.time()
     corridas = estado.setdefault("corridas", {})
@@ -65,8 +66,12 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
         t0 = time.time()
         clave = f"{oid}|{estrategia}|{seed}"
         try:
+            fab = factory_por_ticker(o["ticker"])
+            if impacto_por_orden is not None:   # estado de impacto nuevo por meta-orden (borrador de PS para MR)
+                from src.envs.impacto_acumulado import con_impacto, fabrica_poisson
+                fab = con_impacto(fab or fabrica_poisson(o["ticker"]), impacto_por_orden(o))
             r = run_benchmark_episode(sched, seed=int(seed) + int(o.get("semilla", 0)), ticker=o["ticker"],
-                                      env_factory=factory_por_ticker(o["ticker"]))
+                                      env_factory=fab)
             m = evaluate_episode(q_total=r.q_total, q_executed=r.q_executed, p_referencia=r.p_referencia,
                                  p_promedio_ejecutado=r.p_promedio_ejecutado)
             corridas[clave] = {"orden": oid, "estrategia": estrategia, "seed": int(seed), "ticker": o["ticker"],
@@ -101,6 +106,13 @@ def resumen(estado: Dict) -> Dict:
     return res
 
 
+def _parametros_impacto(orden: Dict, y: float, tau: float):
+    from src.envs.impacto_acumulado import parametros_para
+    if "volumen_dia_simulado" not in orden:
+        raise ValueError(f"{orden['id']}: --impacto necesita volumen_dia_simulado (usar meta_ordenes_v2_candidata.json)")
+    return parametros_para(orden["ticker"], float(orden["volumen_dia_simulado"]), y=y, tau_min=tau)
+
+
 def main(argv: Optional[Sequence[str]] = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--meta-ordenes", default=str(REPO_ROOT / "data/meta_ordenes/meta_ordenes_v1.json"))
@@ -111,6 +123,10 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--seeds", type=int, default=2)
     ap.add_argument("--ordenes", nargs="*", default=None, help="ids a correr (para repartir entre cuadernos)")
     ap.add_argument("--max-minutes", type=float, default=None)
+    ap.add_argument("--impacto", action="store_true",
+                    help="impacto acumulado entre ventanas (src/envs/impacto_acumulado.py; borrador de PS para MR)")
+    ap.add_argument("--impacto-y", type=float, default=0.5)
+    ap.add_argument("--impacto-tau", type=float, default=120.0)
     ap.add_argument("--escenario", default=None, help="escenario de liquidez (baja, media, alta; ver data/scenarios); sin la opcion, la calibracion de siempre")
     ap.add_argument("--escenarios-json", default=None)
     ap.add_argument("--factor-tamano", type=float, default=1.0, help="multiplica la cantidad de cada meta-orden (0.5, 1, 1.5)")
@@ -129,12 +145,14 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     factor_liq = el.factor_de(args.escenario, args.escenarios_json)
     factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq)
 
-    sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano)
+    sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano) + ("_impacto" if args.impacto else "")
     out = Path(args.out_dir) / f"benchmarks_meta_ordenes_{args.entorno}{sufijo}.json"
     firma = {"tarea": "2.3.4", "entorno": args.entorno, "snapshot": args.snapshot,
              "ordenes": sorted(o["id"] for o in ordenes), "cantidades": {o["id"]: o["cantidad"] for o in ordenes}}
     if sufijo:
         firma.update({"escenario": args.escenario, "factor_liquidez": factor_liq, "factor_tamano": args.factor_tamano})
+    if args.impacto:
+        firma["impacto"] = {"y": args.impacto_y, "tau_min": args.impacto_tau}
     estado = load_resumable(out, firma)
     seeds = list(range(1, args.seeds + 1))
     print(f"{len(pendientes(estado, ordenes, seeds))} corridas pendientes", flush=True)
@@ -145,7 +163,8 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         print(f"Perfil de volumen: {args.perfil_volumen}", flush=True)
     ok = correr(ordenes, seeds, estado, lambda e: save_json(out, e), factory_por_ticker,
                 volume_profile=perfil,
-                presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60)
+                presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60,
+                impacto_por_orden=(lambda o: _parametros_impacto(o, args.impacto_y, args.impacto_tau)) if args.impacto else None)
     for c in estado.get("corridas", {}).values():
         c.setdefault("escenario", args.escenario or "media")
         c.setdefault("factor_tamano", args.factor_tamano)

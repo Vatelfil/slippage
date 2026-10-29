@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import csv
 import os
+import random
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, Generator, List, Optional, Sequence, Tuple, Union
@@ -27,6 +28,12 @@ import torch.optim as optim
 
 from src.models.actor_critic import BaseActorCritic, ExecutorActorCritic, MasterActorCritic
 from src.envs.spaces import EjecutorActionSpace
+
+
+# BORRADOR de PS para MR (29 oct): γ_E = 1 en vez del 0,95 del Titulo I; ver la seccion 6 de
+# DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md. Para volver al valor anterior basta con poner 0.95 aqui.
+GAMMA_EJECUTOR = 1.0
+GAMMA_MAESTRO = 0.99
 
 
 @dataclass
@@ -44,6 +51,23 @@ class PPOConfig:
     episodes_per_update: int = 10
     target_kl: float = 0.015         # Objetivo de divergencia KL
     kl_threshold_multiplier: float = 1.5  # Si KL > target_kl * mult, se corta la actualizacion
+
+
+def _estado_aleatorio() -> Dict[str, Any]:
+    """Estado de torch, numpy y random en tipos simples (tensores, listas y enteros), para que `torch.load` lo lea
+    también con `weights_only=True`, el valor por defecto en torch >= 2.6."""
+    nombre, claves, pos, gauss, cached = np.random.get_state()
+    return {"torch": torch.get_rng_state(),
+            "numpy": [nombre, [int(x) for x in claves], int(pos), int(gauss), float(cached)],
+            "python": [random.getstate()[0], list(random.getstate()[1]), random.getstate()[2]]}
+
+
+def _restaurar_estado_aleatorio(rng: Dict[str, Any]) -> None:
+    torch.set_rng_state(rng["torch"])
+    nombre, claves, pos, gauss, cached = rng["numpy"]
+    np.random.set_state((nombre, np.array(claves, dtype=np.uint32), pos, gauss, cached))
+    version, interno, gauss_py = rng["python"]
+    random.setstate((version, tuple(interno), gauss_py))
 
 
 class RolloutBuffer:
@@ -156,7 +180,7 @@ class PPOTrainer:
         elif isinstance(cfg, dict):
             self.cfg = PPOConfig(**cfg)
         else:
-            default_gamma = 0.99 if role == "maestro" else 0.95
+            default_gamma = GAMMA_MAESTRO if role == "maestro" else GAMMA_EJECUTOR
             self.cfg = PPOConfig(gamma=default_gamma)
 
         self.device = torch.device(device) if device else torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -292,6 +316,8 @@ class PPOTrainer:
             "cfg": self.cfg.__dict__,
             "seed": self.seed,
             "extra_info": extra_info or {},
+            # BORRADOR de PS para MR (29 oct): estado aleatorio, para que reanudar dé lo mismo que no cortar
+            "rng_state": _estado_aleatorio(),
         }
         torch.save(payload, p)
         if is_best:
@@ -307,6 +333,9 @@ class PPOTrainer:
         self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         self.current_episode = int(checkpoint.get("current_episode", 0))
         self.best_eval_return = float(checkpoint.get("best_eval_return", -float("inf")))
+        rng = checkpoint.get("rng_state")
+        if rng is not None:   # los checkpoints anteriores no lo traen y cargan igual
+            _restaurar_estado_aleatorio(rng)
         return checkpoint
 
     def train_executor_episodes(

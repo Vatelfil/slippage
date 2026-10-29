@@ -73,10 +73,15 @@ def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, rec
     return lambda **kw: EntornoVariante(factory(**kw), variante)
 
 
-def _nuevo_trainer(seed: int, gamma: float = 0.95):
+HP_DEFECTO = {"lr": 3e-4, "epochs": 4, "minibatch": 64, "clip": 0.2, "gae_lambda": 0.95, "entropy_coef": 0.01}
+
+
+def _nuevo_trainer(seed: int, gamma: float = 0.95, hp: Optional[Dict] = None):
+    """Entrenador del Ejecutor. `hp` cambia los hiperparametros del barrido (3.1.1 y 3.1.2); sin `hp`, los de siempre."""
     from src.training.ppo_trainer import PPOConfig, PPOTrainer
-    cfg = PPOConfig(lr=3e-4, gamma=gamma, gae_lambda=0.95, clip_ratio=0.2, entropy_coef=0.01, value_coef=0.5,
-                    epochs=4, minibatch_size=64, episodes_per_update=10)
+    h = dict(HP_DEFECTO, **(hp or {}))
+    cfg = PPOConfig(lr=h["lr"], gamma=gamma, gae_lambda=h["gae_lambda"], clip_ratio=h["clip"], entropy_coef=h["entropy_coef"],
+                    value_coef=0.5, epochs=int(h["epochs"]), minibatch_size=int(h["minibatch"]), episodes_per_update=10)
     return PPOTrainer(role="ejecutor", cfg=cfg, seed=seed)
 
 
@@ -143,6 +148,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--aleatorizar", action="store_true",
                     help="entrenar con tamaños (1.000 a 20.000) y ventanas (1 a 15 min) sorteados por episodio; la evaluación sigue "
                          "con --q-slice y --ventana-min")
+    for nombre, valor in HP_DEFECTO.items():   # hiperparametros del barrido de MR (borrador de PS para MR)
+        ap.add_argument(f"--{nombre.replace('_', '-')}", type=type(valor), default=valor)
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -175,6 +182,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["mid_decision"] = True
     if args.aleatorizar:
         firma["aleatorizar"] = True
+    hp = {k: getattr(args, k) for k in HP_DEFECTO}
+    if hp != HP_DEFECTO:   # solo si cambia, para no invalidar corridas anteriores
+        firma["hiperparametros"] = hp
     monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
     usa_variante = args.penalizacion_bps or args.costo_espera_bps or args.recompensa != "original"
     factory_base = _con_tamanos_aleatorios(factory) if args.aleatorizar else factory
@@ -196,7 +206,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         save_json(estado_path, estado)
 
     # -- Etapa 1: entrenamiento reanudable en bloques de 10 episodios (= una actualizacion PPO)
-    trainer = _nuevo_trainer(args.seed, args.gamma)
+    trainer = _nuevo_trainer(args.seed, args.gamma, hp)
     ckpt = ckpt_dir / "checkpoint_last.pt"
     if ckpt.exists():
         trainer.load_checkpoint(ckpt)

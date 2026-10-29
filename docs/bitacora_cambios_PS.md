@@ -261,6 +261,14 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_escenarios_liquidez.py -q`.
 - **Gráficos:** ninguno.
 
+### `feature/ps-borrador-mr-maestro`: BORRADOR de PS para MR, bucle del Maestro, impacto acumulado, checkpoint, γ, barrido y λ (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. **Borrador para MR:** el único archivo de MR que cambia es `src/training/ppo_trainer.py` (estado aleatorio en el checkpoint y `GAMMA_EJECUTOR = 1.0`); lo demás son módulos nuevos.
+- **Qué:** `src/training/maestro_trainer.py` y `scripts/entrenar_maestro.py` (M1); `src/envs/impacto_acumulado.py` y `--impacto` en los dos evaluadores (diseño del Maestro, opción 2); estado aleatorio en el checkpoint (M2); barrido de hiperparámetros con regla fijada (`scripts/barrido_hiperparametros_mr.py`, `scripts/colab/grid_specs/hiperparametros_ejecutor_mr.json`, opciones de hiperparámetros en `entrenamiento_inicial_ps.py`) (M3); `scripts/revalidar_lambda_maestro.py` (M4); γ_E = 1 y secciones 6 y 7 de `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` (M5); `notebooks/Colab_Maestro_MR.ipynb` (M6); `scripts/comparar_maestro_vs_twap_ps.py`; `docs/maestro_primer_entrenamiento_PS.md`; `docs/LEEME_MR.md`; datos en `data/maestro/primer_entrenamiento_29oct/`; pruebas en `tests/test_maestro_trainer.py`.
+- **Por qué:** pedido de PS: dejar el código de MR escrito para que solo revise, decida y corra Colab. El Maestro no tenía bucle de entrenamiento y, sin impacto entre ventanas, no tenía nada que coordinar.
+- **Resultado (Poisson):** el Maestro aprende a completar la orden (cumplimiento de 0,959 a 0,999). Con λ = 0,05 cuesta más que TWAP (+1,82 bps con 2.000 jornadas); con λ = 0,02 empata (+0,36 bps, IC −0,08 a +0,83). Reanudar desde un checkpoint ahora da los mismos pesos que no cortar.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_maestro_trainer.py -q`.
+- **Gráficos:** el barrido genera `barrido.png` en su carpeta de salida; se explicará en `docs/guia_graficos.md` cuando se corra.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
