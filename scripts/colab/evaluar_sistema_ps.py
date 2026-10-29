@@ -188,6 +188,14 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
     return True
 
 
+def _pesos(ckpt) -> Dict:
+    """Pesos de un checkpoint: `PPOTrainer.save_checkpoint` los guarda en `model_state_dict`; otros scripts usaban `model`."""
+    for clave in ("model_state_dict", "model"):
+        if isinstance(ckpt, dict) and clave in ckpt:
+            return ckpt[clave]
+    return ckpt
+
+
 def cargar_redes(ckpt_maestro: Optional[str], ckpt_ejecutores: Dict[str, str], seed_red: int = SEED_RED):
     """(Maestro, {tramo: Ejecutor}); los que no tienen checkpoint quedan con pesos iniciales, FIJADOS por `seed_red`
     (sin esa semilla cada proceso crea redes distintas y dos sesiones no serian comparables)."""
@@ -197,9 +205,9 @@ def cargar_redes(ckpt_maestro: Optional[str], ckpt_ejecutores: Dict[str, str], s
     torch.manual_seed(int(seed_red))
     maestro, redes = make_hierarchy()
     if ckpt_maestro:
-        maestro.load_state_dict(torch.load(ckpt_maestro, map_location="cpu")["model"])
+        maestro.load_state_dict(_pesos(torch.load(ckpt_maestro, map_location="cpu")))
     for tramo, ruta in ckpt_ejecutores.items():
-        redes[tramo].load_state_dict(torch.load(ruta, map_location="cpu")["model"])
+        redes[tramo].load_state_dict(_pesos(torch.load(ruta, map_location="cpu")))
     maestro.eval()
     for r in redes.values():
         r.eval()

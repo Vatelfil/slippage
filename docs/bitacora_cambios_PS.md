@@ -245,6 +245,14 @@
 - **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_mid_decision.py tests/test_abides_bridge.py -q` y `python scripts/prueba_cordura_ppo_ps.py`.
 - **Gráficos:** ninguno nuevo.
 
+### `feature/ps-evaluador-90-corridas`: arreglos del evaluador y tamaños variables en el entrenamiento (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Solo toca scripts de PS.
+- **Qué:** `scripts/colab/evaluar_sistema_ps.py` carga los checkpoints de `PPOTrainer` (clave `model_state_dict`; antes buscaba `model` y una red entrenada no habría cargado); `scripts/colab/entrenamiento_inicial_ps.py` acepta `--aleatorizar` (tamaño de 1.000 a 20.000 acciones y ventana de 1 a 15 min sorteados por episodio, con la semilla del episodio para que reanudar dé lo mismo); pruebas en `tests/test_evaluador_90_corridas.py`.
+- **Por qué:** hallazgo H4 de `docs/revision_opus_PS.md` (el Ejecutor solo veía 1.000 acciones y 15 min) y la carga de checkpoints, necesaria para evaluar redes entrenadas.
+- **Resultado:** sin cambios en el comportamiento por defecto.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_evaluador_90_corridas.py -q`.
+- **Gráficos:** ninguno.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

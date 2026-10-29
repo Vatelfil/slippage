@@ -50,6 +50,19 @@ def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str 
     return functools.partial(EjecutorEnvPoissonFallback, **extra) if extra else EjecutorEnvPoissonFallback
 
 
+def _con_tamanos_aleatorios(factory):
+    """En cada episodio sortea el tamaño del slice y la ventana entre los valores que pedirá el Maestro (hallazgo H4 de
+    `docs/revision_opus_PS.md`). El sorteo sale de la semilla del episodio, así que no cambia al reanudar."""
+    import numpy as np
+    from src.experiments.variantes_recompensa import Q_SLICE_MAESTRO, VENTANAS_MAESTRO
+
+    def fabrica(**kw):
+        rng = np.random.default_rng(int(kw.get("seed", 0)) + 77)
+        kw = dict(kw, q_slice=int(rng.choice(Q_SLICE_MAESTRO)), ventana_min=int(rng.choice(VENTANAS_MAESTRO)))
+        return factory(**kw)
+    return fabrica
+
+
 def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, recompensa: str = "original"):
     """Aplica al entrenamiento la penalización por lo no comprado, el costo de espera y/o la recompensa de slippage contra el
     precio de llegada (ver `src/experiments/variantes_recompensa.py`). La evaluación sigue usando la fábrica original, así que
@@ -127,6 +140,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--mid-decision", action="store_true",
                     help="solo ABIDES: R_E compara el precio pagado con el P_mid que vio el agente al decidir (como en Poisson), "
                          "no con el del despertar siguiente")
+    ap.add_argument("--aleatorizar", action="store_true",
+                    help="entrenar con tamaños (1.000 a 20.000) y ventanas (1 a 15 min) sorteados por episodio; la evaluación sigue "
+                         "con --q-slice y --ventana-min")
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -157,9 +173,13 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["recompensa"] = args.recompensa
     if args.mid_decision:
         firma["mid_decision"] = True
+    if args.aleatorizar:
+        firma["aleatorizar"] = True
     monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
     usa_variante = args.penalizacion_bps or args.costo_espera_bps or args.recompensa != "original"
-    factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps, args.recompensa) if usa_variante else factory
+    factory_base = _con_tamanos_aleatorios(factory) if args.aleatorizar else factory
+    factory_variante = (_con_variante(factory_base, args.penalizacion_bps, args.costo_espera_bps, args.recompensa)
+                        if usa_variante else factory_base)
     factory_entrenamiento = monitor.envolver(factory_variante) if monitor else factory_variante
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
