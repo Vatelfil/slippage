@@ -240,6 +240,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--nombre", default=None, help="nombre de la estrategia en el archivo (por defecto PPO o PPO_sin_entrenar)")
     ap.add_argument("--datos-sm", default=None, help="CSV con indice horario y columnas volatilidad, vol_promedio")
     ap.add_argument("--max-minutes", type=float, default=None)
+    ap.add_argument("--escenario", default=None, help="escenario de liquidez (baja, media, alta; ver data/scenarios); sin la opcion, la calibracion de siempre")
+    ap.add_argument("--escenarios-json", default=None)
+    ap.add_argument("--factor-tamano", type=float, default=1.0, help="multiplica la cantidad de cada meta-orden (0.5, 1, 1.5)")
     args = ap.parse_args(argv)
 
     with open(args.meta_ordenes, "r", encoding="utf-8-sig") as f:
@@ -247,6 +250,10 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ordenes = data["meta_ordenes"] if isinstance(data, dict) else data
     if args.ordenes:
         ordenes = [o for o in ordenes if o["id"] in set(args.ordenes)]
+    # escenario de liquidez y tamaño (3.1.3 / 3.2.1, borrador de PS para BF); sin opciones queda todo como antes
+    from src.envs import escenarios_liquidez as el
+    ordenes = el.ajustar_ordenes(ordenes, args.factor_tamano)
+    factor_liq = el.factor_de(args.escenario, args.escenarios_json)
     ckpts = _parse_ckpt(args.ckpt_ejecutor)
     entrenado = bool(args.ckpt_maestro or ckpts)
     nombre = args.nombre or ("PPO" if entrenado else "PPO_sin_entrenar")
@@ -255,28 +262,25 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         datos_sm = pd.read_csv(args.datos_sm, index_col=0, parse_dates=True)
 
     maestro, redes = cargar_redes(args.ckpt_maestro, ckpts, args.seed_red)
-    factories: Dict[str, Callable] = {}
+    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq)
 
-    def factory_por_ticker(ticker: str):
-        if args.entorno == "poisson":
-            return None
-        if ticker not in factories:  # import tardio: requiere ABIDES
-            from src.envs.abides_ejecutor_env import make_calibrated_env_factory
-            js = Path(args.calibrated_dir) / f"rmsc04_ipsa_{ticker}_{args.snapshot}.json"
-            factories[ticker] = make_calibrated_env_factory(js, ticker=ticker)
-        return factories[ticker]
-
-    out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}.json"
+    sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano)
+    out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}{sufijo}.json"
     firma = {"tarea": "3.2.3-evaluador", "entorno": args.entorno, "snapshot": args.snapshot, "sistema": nombre,
              "modo": args.modo, "ckpt_maestro": args.ckpt_maestro, "ckpt_ejecutores": ckpts, "seed_red": args.seed_red,
              "ordenes": sorted(o["id"] for o in ordenes), "cantidades": {o["id"]: o["cantidad"] for o in ordenes},
              "datos_sm": args.datos_sm}
+    if sufijo:
+        firma.update({"escenario": args.escenario, "factor_liquidez": factor_liq, "factor_tamano": args.factor_tamano})
     estado = load_resumable(out, firma)
     seeds = list(range(1, args.seeds + 1))
     print(f"{len(pendientes(estado, ordenes, seeds, nombre))} corridas pendientes ({nombre}, {args.modo})", flush=True)
     ok = correr(ordenes, seeds, estado, lambda e: save_json(out, e), maestro, redes, factory_por_ticker, nombre,
                 deterministic=args.modo == "argmax", datos_sm=datos_sm,
                 presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60)
+    for c in estado.get("corridas", {}).values():
+        c.setdefault("escenario", args.escenario or "media")
+        c.setdefault("factor_tamano", args.factor_tamano)
     save_json(out, estado)
     print(f"Guardado: {out}")
     if not ok:

@@ -111,6 +111,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--seeds", type=int, default=2)
     ap.add_argument("--ordenes", nargs="*", default=None, help="ids a correr (para repartir entre cuadernos)")
     ap.add_argument("--max-minutes", type=float, default=None)
+    ap.add_argument("--escenario", default=None, help="escenario de liquidez (baja, media, alta; ver data/scenarios); sin la opcion, la calibracion de siempre")
+    ap.add_argument("--escenarios-json", default=None)
+    ap.add_argument("--factor-tamano", type=float, default=1.0, help="multiplica la cantidad de cada meta-orden (0.5, 1, 1.5)")
     ap.add_argument("--perfil-volumen", default=str(REPO_ROOT / "data/meta_ordenes/perfil_volumen_v1.csv"),
                     help="perfil de volumen por tramo para VWAP (evita depender del parquet de mercado, que no se versiona)")
     args = ap.parse_args(argv)
@@ -120,21 +123,18 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ordenes = data["meta_ordenes"] if isinstance(data, dict) else data
     if args.ordenes:
         ordenes = [o for o in ordenes if o["id"] in set(args.ordenes)]
+    # escenario de liquidez y tamaño (3.1.3 / 3.2.1, borrador de PS para BF); sin opciones queda todo como antes
+    from src.envs import escenarios_liquidez as el
+    ordenes = el.ajustar_ordenes(ordenes, args.factor_tamano)
+    factor_liq = el.factor_de(args.escenario, args.escenarios_json)
+    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq)
 
-    factories: Dict[str, Callable] = {}
-
-    def factory_por_ticker(ticker: str):
-        if args.entorno == "poisson":
-            return None
-        if ticker not in factories:  # import tardio: requiere ABIDES
-            from src.envs.abides_ejecutor_env import make_calibrated_env_factory
-            js = Path(args.calibrated_dir) / f"rmsc04_ipsa_{ticker}_{args.snapshot}.json"
-            factories[ticker] = make_calibrated_env_factory(js, ticker=ticker)
-        return factories[ticker]
-
-    out = Path(args.out_dir) / f"benchmarks_meta_ordenes_{args.entorno}.json"
+    sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano)
+    out = Path(args.out_dir) / f"benchmarks_meta_ordenes_{args.entorno}{sufijo}.json"
     firma = {"tarea": "2.3.4", "entorno": args.entorno, "snapshot": args.snapshot,
              "ordenes": sorted(o["id"] for o in ordenes), "cantidades": {o["id"]: o["cantidad"] for o in ordenes}}
+    if sufijo:
+        firma.update({"escenario": args.escenario, "factor_liquidez": factor_liq, "factor_tamano": args.factor_tamano})
     estado = load_resumable(out, firma)
     seeds = list(range(1, args.seeds + 1))
     print(f"{len(pendientes(estado, ordenes, seeds))} corridas pendientes", flush=True)
@@ -146,6 +146,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ok = correr(ordenes, seeds, estado, lambda e: save_json(out, e), factory_por_ticker,
                 volume_profile=perfil,
                 presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60)
+    for c in estado.get("corridas", {}).values():
+        c.setdefault("escenario", args.escenario or "media")
+        c.setdefault("factor_tamano", args.factor_tamano)
     estado["resumen"] = resumen(estado)
     save_json(out, estado)
     print(f"Guardado: {out}")

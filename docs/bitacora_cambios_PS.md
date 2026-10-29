@@ -253,6 +253,14 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_evaluador_90_corridas.py -q`.
 - **Gráficos:** ninguno.
 
+### `feature/ps-borrador-bf-liquidez`: BORRADOR de PS para BF, escenarios de liquidez, consolidador y hoja D1/D3 (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. **Borrador para BF:** no modifica los entornos ni la recompensa de BF; los escenarios se aplican desde afuera.
+- **Qué:** `src/envs/escenarios_liquidez.py` y `data/scenarios/escenarios_liquidez_v1.json` (0,5×, 1× y 2×; en ABIDES `num_noise_agents`, `lambda_a`, `mm_pov`; en Poisson, la profundidad del libro); `--escenario` y `--factor-tamano` en `scripts/colab/evaluar_sistema_ps.py` y `scripts/colab/benchmarks_meta_ordenes_ps.py`; `scripts/colab/c6_escenarios_liquidez_bf.py` y `notebooks/Colab_C6_escenarios_liquidez_BF.ipynb`; `scripts/consolidar_resultados_3_2_2.py`; `docs/hoja_decisiones_D1_D3_BF.md`; `docs/LEEME_BF.md`; pruebas en `tests/test_escenarios_liquidez.py`.
+- **Por qué:** pedido de PS: dejar el código de BF escrito para que solo revise, decida y corra Colab (tareas 3.1.3 y 3.2.2, decisiones D1 y D3 pendientes desde hace dos semanas).
+- **Resultado:** en Poisson (30 semillas), comprar 1.000 acciones a mercado cuesta 2,5 bps más con liquidez baja (IC 95 % de 2,3 a 2,7) y 0,7 bps menos con liquidez alta: el C-6 da OK. Falta confirmarlo en ABIDES.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** ninguno.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
