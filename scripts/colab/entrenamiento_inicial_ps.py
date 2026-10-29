@@ -63,6 +63,53 @@ def _con_tamanos_aleatorios(factory):
     return fabrica
 
 
+def imitar_heuristica(net, factory, heuristica: str, entorno: str, tramo: str, seeds: Sequence[int], q_slice: int,
+                      ventana_min: int, epocas: int = 30, lr: float = 1e-3) -> Dict:
+    """Arranque por imitacion: la red copia a una heuristica (por defecto TWAP con ordenes limite, la mejor medida en
+    ABIDES) antes de que PPO la ajuste. Se juntan pares (observacion, accion) corriendo la heuristica en el MISMO entorno
+    del entrenamiento y se entrena la cabeza de politica con entropia cruzada, con suavizado para que la politica no quede
+    con probabilidad 1 y PPO pueda seguir explorando. La red sigue siendo el Ejecutor PPO del Titulo I; solo cambia el
+    punto de partida. Devuelve la exactitud sobre los datos de imitacion."""
+    import numpy as np
+    import torch
+    import torch.nn.functional as F
+    from src.envs.spaces import EjecutorActionSpace
+
+    espacio, politica, nivel = EjecutorActionSpace(), bs.POLITICAS[heuristica], bs.NIVEL_PASIVO[entorno]
+    obs_l, act_l = [], []
+    for s in seeds:
+        env = factory(executor_id=tramo, q_slice=q_slice, ventana_min=ventana_min, seed=int(s), beta=0.0)
+        try:
+            obs, _ = env.reset()
+            paso, done = 0, False
+            while not done:
+                a = politica(paso, env.max_steps, nivel)
+                obs_l.append(np.asarray(obs, dtype=np.float32).copy())
+                act_l.append(espacio.encode_flat(int(a[0]), int(a[1]), int(a[2])))
+                obs, _, done, trunc, _ = env.step(a)
+                done = bool(done or trunc)
+                paso += 1
+        finally:
+            env.close()
+    X = torch.as_tensor(np.array(obs_l), dtype=torch.float32)
+    y = torch.as_tensor(act_l, dtype=torch.int64)
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
+    gen = torch.Generator().manual_seed(int(seeds[0]))
+    for _ in range(epocas):
+        perm = torch.randperm(len(X), generator=gen)
+        for i in range(0, len(X), 128):
+            idx = perm[i:i + 128]
+            logits, _ = net(X[idx])
+            loss = F.cross_entropy(logits, y[idx], label_smoothing=0.1)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+    with torch.no_grad():
+        logits, _ = net(X)
+        exactitud = float((logits.argmax(-1) == y).float().mean())
+    return {"heuristica": heuristica, "episodios": len(seeds), "pares": int(len(X)), "exactitud": exactitud}
+
+
 def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, recompensa: str = "original"):
     """Aplica al entrenamiento la penalización por lo no comprado, el costo de espera y/o la recompensa de slippage contra el
     precio de llegada (ver `src/experiments/variantes_recompensa.py`). La evaluación sigue usando la fábrica original, así que
@@ -150,6 +197,11 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                          "con --q-slice y --ventana-min")
     for nombre, valor in HP_DEFECTO.items():   # hiperparametros del barrido de MR (borrador de PS para MR)
         ap.add_argument(f"--{nombre.replace('_', '-')}", type=type(valor), default=valor)
+    ap.add_argument("--imitar", default=None, choices=list(bs.POLITICAS),
+                    help="arranque por imitacion de una heuristica antes de PPO (p. ej. twap_limit_medio)")
+    ap.add_argument("--imitar-episodios", type=int, default=100)
+    ap.add_argument("--guardar-imitacion", default=None,
+                    help="carpeta donde guardar la red recien imitada, antes de PPO (para evaluarla aparte)")
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -182,6 +234,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["mid_decision"] = True
     if args.aleatorizar:
         firma["aleatorizar"] = True
+    if args.imitar:
+        firma["imitar"] = {"heuristica": args.imitar, "episodios": args.imitar_episodios}
     hp = {k: getattr(args, k) for k in HP_DEFECTO}
     if hp != HP_DEFECTO:   # solo si cambia, para no invalidar corridas anteriores
         firma["hiperparametros"] = hp
@@ -211,6 +265,16 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     if ckpt.exists():
         trainer.load_checkpoint(ckpt)
         print(f"Reanudando desde el episodio {trainer.current_episode}", flush=True)
+    elif args.imitar:
+        # semillas propias (30.000 + ...), distintas de las de entrenamiento y de evaluacion
+        semillas_im = [30000 + args.seed + i for i in range(1, args.imitar_episodios + 1)]
+        print(f"== Imitando {args.imitar} en {len(semillas_im)} episodios", flush=True)
+        estado["imitacion"] = imitar_heuristica(trainer.model, factory, args.imitar, args.entorno, args.tramo, semillas_im,
+                                                args.q_slice, args.ventana_min)
+        print(f"   exactitud {estado['imitacion']['exactitud']:.3f} sobre {estado['imitacion']['pares']} pares", flush=True)
+        if args.guardar_imitacion:
+            trainer.save_checkpoint(Path(args.guardar_imitacion) / f"checkpoints_{args.tramo}" / "checkpoint_last.pt")
+        save_json(estado_path, estado)
     while trainer.current_episode < args.episodes:
         if excedido():
             estado["entrenamiento_completo"] = False

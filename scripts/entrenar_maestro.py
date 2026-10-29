@@ -60,6 +60,10 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--eval-seed-base", type=int, default=90000, help="aparte de las de entrenamiento (20.000 + jornada)")
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--seed-red-ejecutores", type=int, default=1000, help="pesos de los Ejecutores fijos (sin entrenar)")
+    ap.add_argument("--inicio-aleatorio", action="store_true",
+                    help="cada jornada parte en apertura, media jornada o cierre (como las meta-ordenes de evaluacion)")
+    ap.add_argument("--ckpt-ejecutor", default=None,
+                    help="checkpoint de un Ejecutor entrenado (PPOTrainer) para los tres tramos; sin esto, Ejecutores sin entrenar")
     ap.add_argument("--out-dir", required=True)
     args = ap.parse_args(argv)
 
@@ -68,9 +72,17 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     impacto = (parametros_para(args.ticker, args.volumen_dia, y=args.impacto_y, tau_min=args.impacto_tau)
                if args.impacto else None)
     redes = mt.redes_ejecutores(args.seed_red_ejecutores)
+    if args.ckpt_ejecutor:   # el mismo Ejecutor entrenado en los tres tramos (solo hay redes entrenadas en apertura)
+        import torch
+        try:   # torch >= 2.6 pide weights_only para objetos que no son tensores; 1.13 (Colab) no conoce el argumento
+            ck = torch.load(args.ckpt_ejecutor, map_location="cpu", weights_only=False)
+        except TypeError:
+            ck = torch.load(args.ckpt_ejecutor, map_location="cpu")
+        for red in redes.values():
+            red.load_state_dict(ck.get("model_state_dict", ck.get("model", ck)))
     mt.guardar_ejecutores(redes, out)            # para evaluar en ABIDES con los mismos Ejecutores
     cfg = mt.ConfigJornada(q_total=args.q_total, ticker=args.ticker, lambda_penalty=args.lambda_penalty, impacto=impacto,
-                           executor_policy_fn=mt.politica_ejecutores(redes))
+                           executor_policy_fn=mt.politica_ejecutores(redes), inicio_aleatorio=args.inicio_aleatorio)
     semillas = [args.eval_seed_base + i for i in range(1, args.eval_semillas + 1)]
     resumen_path = out / "resumen_maestro.json"
     resumen = json.loads(resumen_path.read_text(encoding="utf-8")) if resumen_path.exists() else {}
@@ -95,7 +107,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     resumen["entrenado"] = {"agregado": _agregar(evs), "jornadas": evs, "episodios": tr.current_episode}
     resumen["entrenado_menos_sin_entrenar_R_M_bps"] = diferencia_pareada(evs, resumen["sin_entrenar"]["jornadas"])
     resumen["entrenado_menos_sin_entrenar_slippage_bps"] = diferencia_pareada(evs, resumen["sin_entrenar"]["jornadas"], "slippage_bps")
-    resumen["config"] = {"q_total": args.q_total, "ticker": args.ticker, "impacto": resumen_impacto(impacto),
+    resumen["config"] = {"inicio_aleatorio": args.inicio_aleatorio, "ckpt_ejecutor": args.ckpt_ejecutor, "q_total": args.q_total, "ticker": args.ticker, "impacto": resumen_impacto(impacto),
                          "lambda_penalty": args.lambda_penalty, "seed": args.seed, "lr": args.lr,
                          "eval_semillas": semillas, "segundos_esta_ejecucion": round(time.time() - t0, 1)}
     resumen_path.write_text(json.dumps(resumen, indent=1, ensure_ascii=False), encoding="utf-8")

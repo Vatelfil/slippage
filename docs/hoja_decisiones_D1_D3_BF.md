@@ -26,6 +26,15 @@ Para responder basta con copiar una línea: `D1: v2` o `D1: v1`, y `D3: regla` o
 - La opción 0 no obliga a declarar otra desviación del Título I.
 - La evidencia anterior que favorecía la A se midió con la recompensa con falla (`docs/revision_opus_PS.md`, H1), así que no sirve para decidir.
 
+## Resultado de D3 (29 de octubre, noche)
+
+Con la recompensa corregida, en las mismas semillas:
+- **Opción A − opción 0:** −0,60 bps (IC −1,04 a −0,16).
+- **Condición (a), completar más órdenes con argmax:** no se cumple; las dos completan el 100 %.
+- **Respuesta por defecto que da la regla:** **D3: 0**.
+
+Por costo, la A es algo menos mala, pero todas las redes con esa recompensa cuestan más que su control (`docs/reeval_300_mid_resultado_PS.md`). BF puede cambiarla.
+
 ## Qué cambia según la respuesta
 
 - **D1:** solo el archivo de meta-órdenes que se pasa a los evaluadores (`--meta-ordenes`). El código ya acepta las dos versiones.

@@ -40,6 +40,9 @@ class ConfigJornada:
     datos_historicos: Optional[object] = None        # tabla S_M (1.2.2); None: la sintética del protocolo
     fabrica_ejecutor: Optional[Callable] = None      # None: Poisson del ticker
     executor_policy_fn: Optional[Callable] = None    # None: Ejecutores sin entrenar muestreando (ver politica_ejecutores)
+    # Las meta-ordenes de evaluacion parten a las 09:30, 11:00 o 14:00 (las de cierre con la mitad del tamano). Con esto
+    # cada jornada sortea su tramo de inicio con la semilla, y S_M usa las mismas constantes que el evaluador.
+    inicio_aleatorio: bool = False
 
 
 def redes_ejecutores(seed_red: int = 1000) -> Dict:
@@ -84,10 +87,25 @@ def _fabrica_con_semillas(base: Callable, semilla_jornada: int) -> Callable:
     return f
 
 
+HORA_INICIO = {"apertura": "09:30", "media_jornada": "11:00", "cierre": "14:00"}   # igual que evaluar_sistema_ps.py
+VOL_CONSTANTE, VOLP_CONSTANTE = 0.002, 0.2
+
+
+def tabla_desde(tramo: str):
+    import pandas as pd
+    idx = pd.date_range(f"2026-09-29 {HORA_INICIO[tramo]}", "2026-09-29 16:00", freq="5min")
+    return pd.DataFrame({"volatilidad": VOL_CONSTANTE, "vol_promedio": VOLP_CONSTANTE}, index=idx)
+
+
 def crear_jornada(cfg: ConfigJornada, semilla: int, executor_policy_fn: Callable) -> MaestroEjecutorEnv:
     base = cfg.fabrica_ejecutor or fabrica_poisson(cfg.ticker)
     fabrica = con_impacto(_fabrica_con_semillas(base, semilla), cfg.impacto)
-    return MaestroEjecutorEnv(meta_orden_quantity=int(cfg.q_total), datos_historicos=cfg.datos_historicos,
+    datos, q = cfg.datos_historicos, int(cfg.q_total)
+    if cfg.inicio_aleatorio:
+        tramo = tuple(HORA_INICIO)[int(semilla) % len(HORA_INICIO)]
+        datos = tabla_desde(tramo)
+        q = q // 2 if tramo == "cierre" else q
+    return MaestroEjecutorEnv(meta_orden_quantity=q, datos_historicos=datos,
                               executor_env_factory=fabrica, executor_policy_fn=executor_policy_fn,
                               lambda_penalty=cfg.lambda_penalty)
 

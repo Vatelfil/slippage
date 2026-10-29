@@ -106,3 +106,19 @@ El Título I fija γ_E = 0,95. Con ese valor, un costo al final de una ventana d
 
 ### 7.2 Propuesta
 Arrastrar el impacto con la ley de la raíz cuadrada y decaimiento exponencial (`src/envs/impacto_acumulado.py`): impacto = Y · σ_día · √(Q_efectiva / V_día), con Y = 0,5 y τ = 120 min como **supuestos de la literatura, no calibrados**. Se aplica igual al sistema y a TWAP/VWAP (`--impacto` en los dos evaluadores), así que la comparación sigue siendo pareada. Hay que declararlo en el informe como supuesto del modelo y, si alcanza el tiempo, contrastar Y con dos ventanas seguidas en ABIDES. **Estado: pendiente de que MR la acepte.**
+
+---
+
+## 8. Un mismo Ejecutor entrenado para los tres tramos en la evaluación del Sprint 6 [PS, 29 oct 2026]
+
+### 8.1 Descripción
+El Título I prevé un Ejecutor por tramo (apertura, media jornada y cierre). Todos los Ejecutores entrenados hasta ahora son de apertura, porque entrenar en ABIDES los tramos posteriores es mucho más lento: cada episodio simula desde las 09:30.
+
+### 8.2 Tratamiento
+En el sistema final del Sprint 6 (`notebooks/Colab_sistema_final.ipynb`) la misma red de apertura, elegida con la regla de `scripts/elegir_ejecutor_ps.py`, se usa en los tres tramos. Las tres siguen siendo instancias separadas del mismo tipo de red PPO. Entrenar redes propias para media jornada y cierre queda para el Sprint 7 si alcanza el tiempo.
+
+---
+
+## 9. Arranque por imitación del Ejecutor (método de entrenamiento, no cambia la arquitectura) [PS, 29 oct 2026]
+
+El Ejecutor PPO puede partir copiando a TWAP con órdenes límite (`--imitar twap_limit_medio`) y después se ajusta con PPO. Se mantienen la red, el espacio de acción y la recompensa del Título I; solo cambia el punto de partida de los pesos. Se declara en la metodología porque, si esa red resulta elegida, su desempeño depende de esa inicialización.

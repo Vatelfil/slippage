@@ -277,6 +277,24 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_escenarios_liquidez.py -q`.
 - **Gráficos:** ninguno.
 
+### `feature/ps-cierre-sprint6`: cierre del Sprint 6, resultados de Colab, Ejecutor con imitación, sistema final y 30 corridas (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code (Opus). Lo que toca partes de MR (Maestro, barrido) y BF (D3) sigue como borrador para ellos.
+- **Qué:**
+  - Resultados de Colab guardados: `data/colab_resultados/reeval_300_mid/`, `rmid/`, `maestro_impacto/`.
+  - Informes: `docs/reeval_300_mid_resultado_PS.md` (con su tabla `docs/reeval_300_mid_ABIDES_PS.md`, generada por `scripts/analizar_reeval_mid_ps.py`) y `docs/maestro_abides_primera_prueba_PS.md`.
+  - D3 cerrada con la regla (opción 0) en la hoja y en el memo.
+  - Ejecutor: arranque por imitación (`--imitar`, `--guardar-imitacion` en `entrenamiento_inicial_ps.py`).
+  - Sistema final: regla para elegir el Ejecutor (`scripts/elegir_ejecutor_ps.py`, excluye heurísticas y redes solo imitadas); Maestro con Ejecutor entrenado (`--ckpt-ejecutor`) y con inicio en los tres tramos (`--inicio-aleatorio`).
+  - Consolidador con desviación, Wilcoxon, t-test y gráfico de cajas, que salta los bloques que faltan.
+  - Monitoreo conectado al barrido de hiperparámetros.
+  - Corrección de la «hipótesis del 10 %» (no está en el Título I) y desviaciones 8 y 9.
+  - Cuadernos: `Colab_imitacion_A/B`, `Colab_reevaluacion_imitacion_300`, `Colab_sistema_final`, `Colab_30corridas_bloque1` a `4`; orden en `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+  - Pruebas en `tests/test_cierre_sprint6.py`.
+- **Por qué:** pedido de PS: dejar completo el Sprint 6 guiándose por el Título I. La recompensa corregida empeoró el costo (+1,55 bps frente al control) y el Título I exige Ejecutores PPO, así que se prueba la imitación y se elige el mejor Ejecutor PPO con una regla fijada antes.
+- **Resultado:** la cadena completa (imitación → reevaluación → elección → Maestro → 30 corridas → tabla) se probó en Poisson en el PC. Los números de ABIDES llegan con los cuadernos.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_cierre_sprint6.py tests/test_maestro_trainer.py tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** `cajas.png` y `barrido.png`, explicados en `docs/guia_graficos.md`.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

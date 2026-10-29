@@ -31,6 +31,8 @@ VOLUMEN_DIA_FALABELLA = 882768
 
 def comparar(resumen: Dict, impacto: bool, volumen_dia: float, ticker: str = "FALABELLA") -> List[Dict]:
     perfil = pd.read_csv(REPO_ROOT / "data/meta_ordenes/perfil_volumen_v1.csv", index_col=0)
+    if resumen["config"].get("inicio_aleatorio"):
+        raise SystemExit("Esta comparacion supone jornadas desde las 09:30; con --inicio-aleatorio usar el evaluador del sistema.")
     q_total = float(resumen["config"]["q_total"])
     filas = []
     for politica in ("sin_entrenar", "entrenado"):

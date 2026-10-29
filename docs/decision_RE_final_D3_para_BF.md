@@ -137,4 +137,11 @@ Lo que muestra:
 
 La evidencia de las secciones 7 a 9 se midió con la falla H1 (`docs/revision_opus_PS.md`). Los cuadernos `notebooks/Colab_mid_decision_A.ipynb` y `_B.ipynb` entrenan las dos opciones con la recompensa corregida sobre las mismas semillas, y la reevaluación con 300 semillas las compara de forma pareada. La regla propuesta, fijada antes de ver los resultados, y el plazo (martes 3 de noviembre) están en la sección 6 de `docs/revision_opus_PS.md`. BF puede cambiarla o decidir otra cosa; si no responde en el plazo, PS aplica la regla y la presenta en la Sprint Review como regla por defecto.
 
+## 11. Resultado del 29 de octubre (noche): D3 cerrada con la regla
+
+- **Medido** (`docs/reeval_300_mid_resultado_PS.md`, sección 5): con la recompensa corregida, A − 0 = −0,60 bps (IC −1,04 a −0,16).
+- **Por qué se queda la 0:** las dos opciones completan el 100 % con argmax, así que no se cumple la condición (a) de la regla.
+- **Resultado: opción 0** (fórmula del Título I). BF puede cambiarla si prefiere la A por costo.
+- **Por qué D3 no cambia la conclusión práctica:** todas las redes con la recompensa corregida cuestan más que su control (+1,55 bps para la opción 0, +0,57 para la A).
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

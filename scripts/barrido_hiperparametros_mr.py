@@ -57,7 +57,7 @@ def configuraciones(grid: Dict, fase: str, base: Optional[Dict] = None) -> List[
     return out
 
 
-def correr_una(c: Dict, semilla: int, comunes: Dict) -> Dict:
+def correr_una(c: Dict, semilla: int, comunes: Dict, carpeta_monitoreo: Optional[Path] = None) -> Dict:
     """Entrena una red con la configuración y la evalúa, junto con su red inicial, en las semillas de evaluación."""
     import copy
     from src.experiments import variantes_recompensa as vr
@@ -70,9 +70,15 @@ def correr_una(c: Dict, semilla: int, comunes: Dict) -> Dict:
     inicial = copy.deepcopy(tr.model)
     fabrica = vr.fabrica_entrenamiento(vr.Variante("barrido", penalizacion_bps=comunes["penalizacion_bps"]),
                                        semilla_sorteo=int(semilla))
+    csv_entrenador = None
+    if carpeta_monitoreo is not None:   # monitoreo de la 3.1.4: una fila por episodio y el CSV del entrenador
+        from src.training.monitoreo import MonitorEntrenamiento
+        carpeta_monitoreo.mkdir(parents=True, exist_ok=True)
+        fabrica = MonitorEntrenamiento(carpeta_monitoreo / "monitoreo_episodios.csv", seed_base=int(semilla)).envolver(fabrica)
+        csv_entrenador = carpeta_monitoreo / "entrenamiento_apertura.csv"
     t0 = time.time()
     tr.train_executor_episodes(env_factory=fabrica, n_episodes=int(comunes["episodios"]), q_slice=comunes["q_slice"],
-                               ventana_min=comunes["ventana_min"], log_fn=lambda *_: None)
+                               ventana_min=comunes["ventana_min"], csv_path=csv_entrenador, log_fn=lambda *_: None)
     seeds = [comunes["eval_seed_base"] + i for i in range(1, comunes["eval_semillas"] + 1)]
     kw = dict(q_slice=comunes["q_slice"], ventana_min=comunes["ventana_min"])
     red = vr.evaluar_red(tr.model, seeds, muestrear=True, **kw)
@@ -186,7 +192,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict:
                 f = out / f"{nombre_config(c)}_s{s}.json"
                 if f.exists():
                     continue
-                r = correr_una(c, s, comunes)
+                r = correr_una(c, s, comunes, out / "monitoreo" / f.stem)
                 f.write_text(json.dumps(r, ensure_ascii=False) + "\n", encoding="utf-8")
                 d = np.nanmean(np.array(r["slippage_red"]) - np.array(r["slippage_inicial"]))
                 print(f"{f.stem}: diferencia {d:.2f} bps, cumplimiento {r['cumplimiento_red']:.3f} ({r['segundos']:.0f} s)", flush=True)

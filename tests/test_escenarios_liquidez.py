@@ -1,7 +1,6 @@
 """Escenarios de liquidez, C-6 y consolidador 3.2.2 (borrador de PS para BF)."""
 import json
 
-import numpy as np
 import pytest
 
 from src.envs import escenarios_liquidez as el

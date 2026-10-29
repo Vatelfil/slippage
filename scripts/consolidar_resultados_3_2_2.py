@@ -59,6 +59,33 @@ def ic_bootstrap(d: np.ndarray, n_boot: int = 3000, seed: int = 0):
     return float(np.percentile(medias, 2.5)), float(np.percentile(medias, 97.5))
 
 
+def _pruebas(d: np.ndarray):
+    """p-valores pareados (Wilcoxon y t de Student) de la diferencia sistema − referencia; NaN si hay menos de 3 pares."""
+    d = d[np.isfinite(d)]
+    if len(d) < 3 or np.allclose(d, 0):
+        return float("nan"), float("nan")
+    from scipy.stats import ttest_1samp, wilcoxon
+    return float(wilcoxon(d).pvalue), float(ttest_1samp(d, 0.0).pvalue)
+
+
+def grafico_cajas(df: pd.DataFrame, ruta: Path, criterio: str) -> None:
+    """Cajas del costo por estrategia (todas las corridas), para la 3.1.3."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    estrategias = sorted(df["estrategia"].unique())
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.boxplot([df.loc[df["estrategia"] == e, "costo"].to_numpy() for e in estrategias], showmeans=True)
+    ax.set_xticks(range(1, len(estrategias) + 1))
+    ax.set_xticklabels(estrategias, rotation=15, fontsize=8)
+    ax.set_ylabel(f"Costo (bps; {criterio})")
+    ax.axhline(0, color="grey", lw=0.6)
+    ax.set_title("Costo por corrida y estrategia (triángulo: media)")
+    fig.tight_layout()
+    fig.savefig(ruta, dpi=130)
+    plt.close(fig)
+
+
 def tabla_maestra(df: pd.DataFrame, sistema: str) -> pd.DataFrame:
     filas = []
     for (esc, tam), g in df.groupby(["escenario", "factor_tamano"], sort=True):
@@ -67,6 +94,8 @@ def tabla_maestra(df: pd.DataFrame, sistema: str) -> pd.DataFrame:
         medias = {e: float(piv[e].mean()) for e in piv.columns}
         for e, m in medias.items():
             fila[f"IS_{e}"] = m
+        if sistema in piv.columns:
+            fila[f"sd_{sistema}"] = float(piv[sistema].std(ddof=1)) if piv[sistema].count() > 1 else float("nan")
         if sistema in piv.columns:
             for ref in REFERENCIAS:
                 if ref not in piv.columns:
@@ -77,6 +106,7 @@ def tabla_maestra(df: pd.DataFrame, sistema: str) -> pd.DataFrame:
                 fila["n_pares"] = max(fila["n_pares"], len(d))
                 fila[f"dif_vs_{ref}_bps"] = float(d.mean()) if len(d) else float("nan")
                 fila[f"dif_vs_{ref}_ic"] = f"[{lo:.2f}; {hi:.2f}]"
+                fila[f"p_wilcoxon_vs_{ref}"], fila[f"p_ttest_vs_{ref}"] = _pruebas(d)
                 base = float(par[ref].mean())
                 fila[f"dif_vs_{ref}_pct"] = 100.0 * float(d.mean()) / abs(base) if len(d) and base else float("nan")
         fila["ranking"] = " < ".join(sorted(medias, key=medias.get))
@@ -121,6 +151,9 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict[str, Path]:
     rutas: List[Path] = []
     for e in args.entradas:
         p = Path(e)
+        if not p.exists():   # p. ej. un bloque de las 30 corridas que todavia no se corre
+            print(f"(se salta {p}: no existe)")
+            continue
         rutas += sorted(p.glob("*.json")) if p.is_dir() else [p]
     df = leer_corridas(rutas)
     if df.empty:
@@ -142,6 +175,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict[str, Path]:
         f"IC 95 % por bootstrap. Corridas leídas: {len(df)} de {len(rutas)} archivos.\n\n## Por escenario y tamaño\n\n"
         + a_markdown(maestra) + "\n## Por estrategia\n\n" + a_markdown(agg), encoding="utf-8")
     salidas["tex"].write_text(a_latex(maestra), encoding="utf-8")
+    salidas["png"] = out / "cajas.png"
+    grafico_cajas(df, salidas["png"], criterio)
     print(maestra.to_string(index=False))
     return salidas
 

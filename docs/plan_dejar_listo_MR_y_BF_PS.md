@@ -1,5 +1,7 @@
 # Plan para dejar listo el trabajo de MR y BF (que lleguen, ejecuten y revisen)
 
+> **Corrección del 29 de octubre:** donde este plan habla de la «hipótesis del 10 %», hay que leer «la comparación con TWAP y VWAP del Título I». Ese 10 % no está en el Título I; venía de un error en `Contexto_Agente_Programacion.md`. Los borradores de este plan ya se ejecutaron (ver `docs/bitacora_cambios_PS.md`).
+
 **Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 26 de octubre de 2026. **Estado: propuesta, sin ejecutar.** Se ejecuta cuando PS dé la orden.
 **Se basa en:** el chat completo de las sesiones del proyecto, el Título I, `plan-desarrollo-titulo-2.xlsx`, `ESPECIFICACION_DETALLADA_TAREAS.md`, `Contexto_Agente_Programacion.md`, `docs/sprint5_que_se_hizo.md`, `docs/sprint6_que_se_hizo.md`, `docs/plan_borradores_para_MR_y_BF_sprint6.md` y el estado real del repositorio.
 
