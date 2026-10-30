@@ -329,6 +329,9 @@
   - falta la red s2000, que no se encontró en Drive;
   - en el C-6b, más `mm_pov` encarece la compra a mercado (11,7 → 24,2 bps), con el pareo funcionando.
 - **Cómo verificar:** `PYTHONPATH=. python scripts/analizar_reeval_mid_ps.py --dir data/colab_resultados/reeval_300_imitacion`; `python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Agregado después, en la misma rama:**
+  - resultado del sistema final en `data/colab_resultados/sistema_final/` y `docs/sistema_final_resultado_PS.md`: Ejecutor s1000; el Maestro completa el 97,6 % de la orden (antes, 73 %);
+  - cuaderno `notebooks/Colab_reeval_red_B.ipynb`, que encuentra y reevalúa la red s2000 y rehace el Maestro si esa red gana.
 - **Gráficos:** no hay.
 
 ## 3. Ramas obsoletas (no usar)

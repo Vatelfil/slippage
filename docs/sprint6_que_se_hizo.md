@@ -64,9 +64,9 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 
 ## 5. Lo que falta correr en Colab para cerrar (orden en `docs/LEEME_COLAB_CIERRE_SPRINT6.md`)
 
-1. ~~`Colab_imitacion_A` y `_B`~~ (29 oct) → ~~`Colab_reevaluacion_imitacion_300`~~ y ~~`Colab_C6b_liquidez_mm_BF`~~ (30 oct). **Repetir la reevaluación** para la red s2000, que faltó (≈ 12 min).
-2. `Colab_sistema_final`.
-3. `Colab_30corridas_bloque1` a `4` (3.1.3).
+1. ~~`Colab_imitacion_A` y `_B`~~ (29 oct) → ~~`Colab_reevaluacion_imitacion_300`~~ y ~~`Colab_C6b_liquidez_mm_BF`~~ (30 oct). La red s2000 no se encontró en Drive: la evalúa `Colab_reeval_red_B`.
+2. ~~`Colab_sistema_final`~~ (30 oct): eligió la red s1000 (5,68 bps). El Maestro completa el 97,6 % de la orden (antes, 73 %). Ver `docs/sistema_final_resultado_PS.md`. Se rehace solo si gana la red s2000.
+3. `Colab_30corridas_bloque1` a `4` (3.1.3), después de `Colab_reeval_red_B`.
 
 Cuando lleguen los resultados se completan las filas 3.1.3 y el resultado del Ejecutor con imitación.
 
