@@ -122,3 +122,9 @@ En el sistema final del Sprint 6 (`notebooks/Colab_sistema_final.ipynb`) la mism
 ## 9. Arranque por imitación del Ejecutor (método de entrenamiento, no cambia la arquitectura) [PS, 29 oct 2026]
 
 El Ejecutor PPO puede partir copiando a TWAP con órdenes límite (`--imitar twap_limit_medio`) y después se ajusta con PPO. Se mantienen la red, el espacio de acción y la recompensa del Título I; solo cambia el punto de partida de los pesos. Se declara en la metodología porque, si esa red resulta elegida, su desempeño depende de esa inicialización.
+
+---
+
+## 10. Escenarios de liquidez definidos por el costo medido (v3) [PROPUESTA de PS para BF, 30 oct 2026]
+
+El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDES se usa el tamaño de las cotizaciones del market maker (`mm_pov`) para generarlos. En el C-6b, subir `mm_pov` **encareció** la compra a mercado (`docs/c6_liquidez_resultado_PS.md`, sección 4). La v3 asigna los nombres según ese costo: baja = ×4, alta = ×0,25. El orden se eligió mirando el resultado, así que se declara y se confirma con las semillas de las 90 corridas del Sprint 7. **Estado: pendiente de que BF la acepte.**

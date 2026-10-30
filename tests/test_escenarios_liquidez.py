@@ -95,3 +95,13 @@ def test_veredicto_usa_el_criterio_del_json():
     filas = [fila("agresiva_market", 1000, -1.0, -1.0), fila("agresiva_market", 5000, 0.5, 0.2)]
     assert c6.veredicto(filas, {"heuristica": "agresiva_market", "tamanos": [5000]}).startswith("OK")
     assert c6.veredicto(filas).startswith("REVISAR")    # sin criterio se juzgan todos los tamaños, como la v1
+
+
+def test_v3_invierte_los_nombres_de_la_v2():
+    """La v3 usa los mismos factores de mm_pov que la v2, con baja y alta según el costo medido en el C-6b."""
+    v2 = el.cargar_escenarios(el.ESCENARIOS_JSON_V2)
+    v3_ruta = el.REPO_ROOT / "data" / "scenarios" / "escenarios_liquidez_v3.json"
+    v3 = el.cargar_escenarios(v3_ruta)
+    assert v3 == {"baja": v2["alta"], "media": 1.0, "alta": v2["baja"]}
+    assert el.claves_de(v3_ruta) == ("mm_pov",)
+    assert el.criterio_de(v3_ruta)["heuristica"] == "agresiva_market"

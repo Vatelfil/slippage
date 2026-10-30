@@ -314,6 +314,23 @@
 - **Cómo verificar:** leer `resultados.evaluacion_entrenada` en `data/colab_resultados/rimit/*/entrenamiento_inicial_apertura.json`.
 - **Gráficos:** no hay.
 
+### `feature/ps-resultados-30oct`: reevaluación con imitación y C-6b (30 de octubre)
+- **Quién:** PS con apoyo de Claude Code. PS corrió los cuadernos en Colab. Los escenarios v3 son **borrador de PS para BF**.
+- **Qué:**
+  - resultados en `data/colab_resultados/reeval_300_imitacion/` y `c6b_liquidez/`;
+  - `docs/reeval_300_imitacion_resultado_PS.md` y la tabla `docs/reeval_300_imitacion_ABIDES_PS.md`;
+  - sección 4 de `docs/c6_liquidez_resultado_PS.md`;
+  - `data/scenarios/escenarios_liquidez_v3.json`, con su prueba, y la desviación 10;
+  - el analizador de la reevaluación separa los grupos de imitación;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md` y `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+- **Por qué:** paso 2 del cierre del Sprint 6.
+- **Resultado:**
+  - la red de imitación + PPO s1000 cuesta 5,68 bps en 300 semillas, la mejor red PPO medida, y queda +1,03 bps sobre TWAP límite;
+  - falta la red s2000, que no se encontró en Drive;
+  - en el C-6b, más `mm_pov` encarece la compra a mercado (11,7 → 24,2 bps), con el pareo funcionando.
+- **Cómo verificar:** `PYTHONPATH=. python scripts/analizar_reeval_mid_ps.py --dir data/colab_resultados/reeval_300_imitacion`; `python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** no hay.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

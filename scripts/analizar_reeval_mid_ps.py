@@ -17,7 +17,8 @@ from typing import Dict, Optional, Sequence
 import numpy as np
 from scipy.stats import wilcoxon
 
-GRUPOS = (("rmid", "recompensa corregida (mid_decision)"), ("conf_pen30_g1", "V2: original + penalización + γ = 1"),
+GRUPOS = (("rimit_bc", "solo imitación de TWAP límite (sin PPO)"), ("rimit", "imitación de TWAP límite + PPO"),
+          ("rmid", "recompensa corregida (mid_decision)"), ("conf_pen30_g1", "V2: original + penalización + γ = 1"),
           ("v4_pen30_g1", "V4: precio de llegada + penalización + γ = 1"), ("d3_1000ep", "original, γ = 0,95"))
 
 

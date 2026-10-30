@@ -33,4 +33,31 @@ Veredicto: **REVISAR**.
 - **Uso:** los evaluadores aceptan `--escenarios-json data/scenarios/escenarios_liquidez_v2.json`.
 - **Si el C-6b da REVISAR:** se define la liquidez por el costo de las órdenes pasivas (lo que la v1 sí distinguió), o se calibran escenarios con días reales del IPSA.
 
+## 4. Resultado del C-6b con la v2 (30 de octubre)
+
+**Datos:** `data/colab_resultados/c6b_liquidez/c6b_liquidez.json` (60 semillas, desde la 8001). Se escala solo `mm_pov`: 0,25×, 1× y 4×. Veredicto del script con el criterio fijado: **REVISAR**.
+
+| Heurística | Acciones | mm_pov ×0,25 | ×1 | ×4 | ×0,25 − ×1 (IC 95 %) | ×1 − ×4 (IC 95 %) |
+|---|---:|---:|---:|---:|---|---|
+| Todo a mercado | 1.000 | 6,31 | 7,58 | 10,57 | −1,27 [−2,54; −0,43] | −2,99 [−5,18; −1,39] |
+| **Todo a mercado (criterio)** | **5.000** | **11,75** | **14,65** | **24,15** | **−2,90 [−5,95; −0,68]** | **−9,50 [−15,24; −5,29]** |
+| TWAP con límite | 1.000 | 2,44 | 2,80 | 1,14 | −0,36 [−1,73; +0,97] | +1,65 [−0,26; +3,83] |
+| TWAP con límite | 5.000 | 7,68 | 6,89 | 6,52 | +0,79 [−0,74; +2,38] | +0,37 [−1,44; +2,23] |
+
+### Lectura
+
+- **El pareo por semilla ahora funciona.** Los intervalos bajaron de ±5–10 bps (v1) a ±1–5 bps. Escalar solo al market maker deja comparable el mismo mercado.
+- **El efecto es claro y va en un solo sentido, pero al revés de lo esperado.** Con más `mm_pov`, comprar a mercado cuesta **más**: 11,7 → 14,7 → 24,2 bps con 5.000 acciones. El veredicto es REVISAR porque la v2 suponía que más `mm_pov` era más liquidez.
+- **Por qué pasa (inferido, no medido):** en rmsc04 el market maker pone en cada nivel una fracción del volumen del último minuto. Con más `mm_pov`, el market maker negocia más y su cotización sigue más de cerca al precio. Eso puede hacer que el precio reaccione más a una compra grande. En la calibración (`docs/calibracion_rmsc04_2.2.4_BF.md`, §8.1), subir `mm_pov` también duplicaba el volumen.
+- **TWAP con órdenes límite casi no cambia entre escenarios** (todos los IC incluyen el 0).
+
+### Qué se propone (v3, borrador para BF)
+
+`data/scenarios/escenarios_liquidez_v3.json`: los **mismos factores**, con los nombres puestos según el costo medido. Baja liquidez = `mm_pov` ×4 (comprar a mercado es más caro), media = ×1 y alta = ×0,25.
+
+- **Por qué es válido:** la liquidez se define por cuánto cuesta barrer el libro, igual que las medidas de iliquidez por impacto en el precio (Kyle, Amihud). No se define por el parámetro interno del simulador.
+- **Límite:** el orden se eligió mirando este resultado. Hay que declararlo y confirmarlo con otras semillas: las 90 corridas del Sprint 7 usan semillas distintas, y la heurística a mercado se corre ahí también.
+- **Alternativa,** si BF no la acepta: calibrar los escenarios con días reales del IPSA de baja y alta liquidez.
+- **Uso:** `--escenarios-json data/scenarios/escenarios_liquidez_v3.json`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

@@ -1,7 +1,7 @@
 # Sprint 6 (26 oct – 6 nov 2026): qué se hizo
 
 Documento de cierre del Sprint 6 (tarea 3.1.5, Sprint Review), elaborado por PS con apoyo de Claude Code (uso de IA autorizado por la universidad).
-- **Última actualización:** 29 de octubre de 2026 (noche).
+- **Última actualización:** 30 de octubre de 2026.
 - **Pendiente:** se completa con los resultados de los cuadernos de cierre (sección 5) y cada fila la confirma su responsable en la reunión del viernes 6 de noviembre.
 - **Referencia:** el Título I. La «hipótesis del 10 %» que aparecía antes era un error de un documento de contexto: el Título I pide comparar con TWAP y VWAP y verificar si hay reducción, sin umbral.
 
@@ -28,9 +28,9 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 | Bucle de entrenamiento del Maestro (Ejecutores fijos, R_M en bps, inicio en los tres tramos) | El Maestro no se entrenaba | `src/training/maestro_trainer.py`, `scripts/entrenar_maestro.py` | Hecho (borrador para MR) |
 | Impacto acumulado entre ventanas | Que el Maestro tenga algo que coordinar; se aplica igual a TWAP/VWAP | `src/envs/impacto_acumulado.py`, desviación 7 | Hecho (supuesto declarado) |
 | Checkpoint con estado aleatorio | Que reanudar dé lo mismo que no cortar | `src/training/ppo_trainer.py` | Hecho (borrador para MR) |
-| Escenarios de liquidez, C-6 y C-6b | Base de las 90 corridas del Sprint 7 | `src/envs/escenarios_liquidez.py`, `docs/c6_liquidez_resultado_PS.md` | v1 dio REVISAR; v2 en Colab |
+| Escenarios de liquidez, C-6 y C-6b | Base de las 90 corridas del Sprint 7 | `src/envs/escenarios_liquidez.py`, `docs/c6_liquidez_resultado_PS.md` | v1 y v2 dieron REVISAR; v3 propuesta (borrador para BF) |
 | Revisión técnica y corrección de la recompensa en ABIDES (`mid_decision`) | Saber por qué el Ejecutor no aprendía | `docs/revision_opus_PS.md`, `docs/reeval_300_mid_resultado_PS.md` | Hecho; la corrección no bajó el costo y queda como opción |
-| Arranque por imitación del Ejecutor | Que el Ejecutor PPO parta de la mejor política medida | `--imitar` en `scripts/colab/entrenamiento_inicial_ps.py`, `docs/imitacion_resultado_PS.md` | Entrenado (2 redes); falta la reevaluación con 300 semillas |
+| Arranque por imitación del Ejecutor | Que el Ejecutor PPO parta de la mejor política medida | `--imitar` en `scripts/colab/entrenamiento_inicial_ps.py`, `docs/imitacion_resultado_PS.md` | Reevaluada con 300 semillas: 5,68 bps, +1,03 sobre TWAP límite (`docs/reeval_300_imitacion_resultado_PS.md`). Falta la red s2000 |
 | Regla para elegir el Ejecutor del sistema final | Elegir sin mirar las 30 corridas | `scripts/elegir_ejecutor_ps.py` | Hecho |
 | Prueba de cordura del PPO | Descartar un error del entrenador | `scripts/prueba_cordura_ppo_ps.py` | Hecho: el PPO aprende |
 
@@ -46,8 +46,9 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 3. **La recompensa en ABIDES tenía una falla** (medía contra el precio de 30 s después). Se corrigió y la red cambió de conducta (dejó de comprar a mercado), pero empeoró el costo, porque esa recompensa no mide el costo de esperar.
 4. **Maestro:** en Poisson aprende a completar la orden (cumplimiento de 0,96 a 0,999). Con λ = 0,02 y 2.000 jornadas empata con TWAP. En ABIDES (4 corridas) no se distingue de TWAP (−3,4 bps, IC −44 a +37): el costo de una jornada lo domina hacia dónde se mueve el precio ese día.
 5. **Hiperparámetros:** en Poisson casi cualquier configuración razonable llega al mismo nivel. La tasa alta con lote chico colapsa, y el monitoreo lo detecta.
-6. **Ejecutor con imitación (15 semillas):** las dos redes quedan ≈ 1,5 bps sobre TWAP límite, con cumplimiento de 0,99. Las redes anteriores quedaban entre 3,8 y 5,8 bps sobre TWAP en esas mismas semillas. Falta confirmarlo con 300 semillas.
-7. **Precisión:** la desviación del costo entre jornadas en ABIDES es ≈ 40 bps. Con 30 corridas, el IC de la diferencia con TWAP quedará en ≈ ±15 bps.
+6. **Ejecutor con imitación (15 semillas):** las dos redes quedan ≈ 1,5 bps sobre TWAP límite, con cumplimiento de 0,99. Las redes anteriores quedaban entre 3,8 y 5,8 bps sobre TWAP en esas mismas semillas. Con 300 semillas, la red s1000 cuesta 5,68 bps: la mejor red PPO medida, 0,8 bps menos que la anterior, pero todavía 1,03 bps sobre TWAP límite (IC +0,11 a +1,88).
+7. **Liquidez (C-6b):** escalar solo al market maker deja el pareo funcionando (IC de ±1 a 5 bps), pero más `mm_pov` encarece la compra a mercado (11,7 → 24,2 bps). La v3 nombra los escenarios según ese costo.
+8. **Precisión:** la desviación del costo entre jornadas en ABIDES es ≈ 40 bps. Con 30 corridas, el IC de la diferencia con TWAP quedará en ≈ ±15 bps.
 
 ## 4. Decisiones
 
@@ -59,11 +60,11 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 | λ del Maestro | Revalidado en Poisson | 0,02 en el sistema final (MR puede cambiarlo) |
 | Recompensa corregida (`mid_decision`) | Opción, no por defecto | Empeora el costo en ABIDES |
 | Ejecutor del sistema final | Regla fijada | La red PPO más barata en 300 semillas que cumpla al menos el 95 % (sin heurísticas ni redes solo imitadas) |
-| Escenarios de liquidez | v1 REVISAR; v2 en Colab | Si el C-6b da OK, la v2 queda para el Sprint 7 |
+| Escenarios de liquidez | v1 y v2 REVISAR; v3 propuesta | La v3 (mismos factores, nombres según el costo medido) queda para el Sprint 7 si BF la acepta (desviación 10) |
 
 ## 5. Lo que falta correr en Colab para cerrar (orden en `docs/LEEME_COLAB_CIERRE_SPRINT6.md`)
 
-1. ~~`Colab_imitacion_A` y `_B`~~ (hecho el 29 de octubre) → `Colab_reevaluacion_imitacion_300` (y en paralelo `Colab_C6b_liquidez_mm_BF`).
+1. ~~`Colab_imitacion_A` y `_B`~~ (29 oct) → ~~`Colab_reevaluacion_imitacion_300`~~ y ~~`Colab_C6b_liquidez_mm_BF`~~ (30 oct). **Repetir la reevaluación** para la red s2000, que faltó (≈ 12 min).
 2. `Colab_sistema_final`.
 3. `Colab_30corridas_bloque1` a `4` (3.1.3).
 
@@ -71,7 +72,7 @@ Cuando lleguen los resultados se completan las filas 3.1.3 y el resultado del Ej
 
 ## 6. Qué pasa al Sprint 7
 
-- 3.2.1 a 3.2.4 (90 corridas por escenario, consolidación, comparación estadística y sensibilidad): el código está listo y probado; falta el escenario de liquidez validado (C-6b).
+- 3.2.1 a 3.2.4 (90 corridas por escenario, consolidación, comparación estadística y sensibilidad): el código está listo y probado. Los escenarios a usar son la v3 si BF la acepta.
 - Ejecutores propios para media jornada y cierre (desviación 8).
 - Aplicar en ABIDES los hiperparámetros del barrido, si MR los aprueba.
 
@@ -84,7 +85,8 @@ Cuando lleguen los resultados se completan las filas 3.1.3 y el resultado del Ej
 5. `feature/ps-borrador-bf-c6b-mm`
 6. `feature/ps-cierre-sprint6`
 7. `feature/ps-cierre-sprint6-b` (barrido y este documento)
-8. `feature/ps-cierre-sprint6-c` (resultado de la imitación). Contiene a todas las anteriores: un solo PR desde esta rama las lleva todas a `main`
+8. `feature/ps-cierre-sprint6-c` (resultado de la imitación). Mergeada con el PR #44 junto con las anteriores
+9. `feature/ps-resultados-30oct` (reevaluación con imitación y C-6b), sobre `main`
 
 Cada una contiene a la anterior. No borrar `feature/ps-revision-opus` ni `feature/ps-cierre-sprint6` mientras haya cuadernos que las usen.
 
