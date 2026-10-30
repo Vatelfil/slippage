@@ -30,7 +30,7 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 | Checkpoint con estado aleatorio | Que reanudar dé lo mismo que no cortar | `src/training/ppo_trainer.py` | Hecho (borrador para MR) |
 | Escenarios de liquidez, C-6 y C-6b | Base de las 90 corridas del Sprint 7 | `src/envs/escenarios_liquidez.py`, `docs/c6_liquidez_resultado_PS.md` | v1 dio REVISAR; v2 en Colab |
 | Revisión técnica y corrección de la recompensa en ABIDES (`mid_decision`) | Saber por qué el Ejecutor no aprendía | `docs/revision_opus_PS.md`, `docs/reeval_300_mid_resultado_PS.md` | Hecho; la corrección no bajó el costo y queda como opción |
-| Arranque por imitación del Ejecutor | Que el Ejecutor PPO parta de la mejor política medida | `--imitar` en `scripts/colab/entrenamiento_inicial_ps.py` | En Colab |
+| Arranque por imitación del Ejecutor | Que el Ejecutor PPO parta de la mejor política medida | `--imitar` en `scripts/colab/entrenamiento_inicial_ps.py`, `docs/imitacion_resultado_PS.md` | Entrenado (2 redes); falta la reevaluación con 300 semillas |
 | Regla para elegir el Ejecutor del sistema final | Elegir sin mirar las 30 corridas | `scripts/elegir_ejecutor_ps.py` | Hecho |
 | Prueba de cordura del PPO | Descartar un error del entrenador | `scripts/prueba_cordura_ppo_ps.py` | Hecho: el PPO aprende |
 
@@ -46,7 +46,8 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 3. **La recompensa en ABIDES tenía una falla** (medía contra el precio de 30 s después). Se corrigió y la red cambió de conducta (dejó de comprar a mercado), pero empeoró el costo, porque esa recompensa no mide el costo de esperar.
 4. **Maestro:** en Poisson aprende a completar la orden (cumplimiento de 0,96 a 0,999). Con λ = 0,02 y 2.000 jornadas empata con TWAP. En ABIDES (4 corridas) no se distingue de TWAP (−3,4 bps, IC −44 a +37): el costo de una jornada lo domina hacia dónde se mueve el precio ese día.
 5. **Hiperparámetros:** en Poisson casi cualquier configuración razonable llega al mismo nivel. La tasa alta con lote chico colapsa, y el monitoreo lo detecta.
-6. **Precisión:** la desviación del costo entre jornadas en ABIDES es ≈ 40 bps. Con 30 corridas, el IC de la diferencia con TWAP quedará en ≈ ±15 bps.
+6. **Ejecutor con imitación (15 semillas):** las dos redes quedan ≈ 1,5 bps sobre TWAP límite, con cumplimiento de 0,99. Las redes anteriores quedaban entre 3,8 y 5,8 bps sobre TWAP en esas mismas semillas. Falta confirmarlo con 300 semillas.
+7. **Precisión:** la desviación del costo entre jornadas en ABIDES es ≈ 40 bps. Con 30 corridas, el IC de la diferencia con TWAP quedará en ≈ ±15 bps.
 
 ## 4. Decisiones
 
@@ -62,7 +63,7 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 
 ## 5. Lo que falta correr en Colab para cerrar (orden en `docs/LEEME_COLAB_CIERRE_SPRINT6.md`)
 
-1. `Colab_imitacion_A` y `_B` → `Colab_reevaluacion_imitacion_300` (y en paralelo `Colab_C6b_liquidez_mm_BF`).
+1. ~~`Colab_imitacion_A` y `_B`~~ (hecho el 29 de octubre) → `Colab_reevaluacion_imitacion_300` (y en paralelo `Colab_C6b_liquidez_mm_BF`).
 2. `Colab_sistema_final`.
 3. `Colab_30corridas_bloque1` a `4` (3.1.3).
 
@@ -74,7 +75,7 @@ Cuando lleguen los resultados se completan las filas 3.1.3 y el resultado del Ej
 - Ejecutores propios para media jornada y cierre (desviación 8).
 - Aplicar en ABIDES los hiperparámetros del barrido, si MR los aprueba.
 
-## 7. Ramas (todas sin PR; orden de merge)
+## 7. Ramas (orden en que se construyeron)
 
 1. `feature/ps-revision-opus-v2`
 2. `feature/ps-evaluador-90-corridas`
@@ -83,6 +84,7 @@ Cuando lleguen los resultados se completan las filas 3.1.3 y el resultado del Ej
 5. `feature/ps-borrador-bf-c6b-mm`
 6. `feature/ps-cierre-sprint6`
 7. `feature/ps-cierre-sprint6-b` (barrido y este documento)
+8. `feature/ps-cierre-sprint6-c` (resultado de la imitación). Contiene a todas las anteriores: un solo PR desde esta rama las lleva todas a `main`
 
 Cada una contiene a la anterior. No borrar `feature/ps-revision-opus` ni `feature/ps-cierre-sprint6` mientras haya cuadernos que las usen.
 

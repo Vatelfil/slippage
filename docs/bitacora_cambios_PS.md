@@ -306,6 +306,14 @@
 - **Cómo verificar:** `PYTHONPATH=. python scripts/barrido_hiperparametros_mr.py --fase 3.1.2 --out-dir data/barrido_hp --solo-analizar`.
 - **Gráficos:** `data/barrido_hp/*/barrido.png` y `monitoreo.png`, explicados en `docs/guia_graficos.md`.
 
+### `feature/ps-cierre-sprint6-c`: resultado del Ejecutor con imitación (29 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió los cuadernos en Colab.
+- **Qué:** resultados de `Colab_imitacion_A` y `_B` en `data/colab_resultados/rimit/` y análisis en `docs/imitacion_resultado_PS.md`. Se actualizaron `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md` y `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+- **Por qué:** paso 1 del cierre del Sprint 6.
+- **Resultado:** en 15 semillas, las dos redes con argmax quedan en +1,48 y +1,62 bps sobre TWAP límite, con cumplimiento de 0,99. Las redes anteriores quedaban entre +3,8 y +5,8 en las mismas semillas. Falta la reevaluación con 300 semillas.
+- **Cómo verificar:** leer `resultados.evaluacion_entrenada` en `data/colab_resultados/rimit/*/entrenamiento_inicial_apertura.json`.
+- **Gráficos:** no hay.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

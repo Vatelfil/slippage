@@ -4,7 +4,7 @@
 
 | Paso | Cuaderno | Qué hace | Necesita antes | Tiempo | Devolver |
 |---|---|---|---|---|---|
-| 1 | `Colab_imitacion_A.ipynb` y `Colab_imitacion_B.ipynb` (juntos) | Ejecutor PPO que parte copiando a TWAP límite y se ajusta con PPO (semillas 1000 y 2000) | — | ≈ 1 h 15 min cada uno | `rimit_A.zip`, `rimit_B.zip` |
+| 1 | `Colab_imitacion_A.ipynb` y `Colab_imitacion_B.ipynb` (juntos) | Ejecutor PPO que parte copiando a TWAP límite y se ajusta con PPO (semillas 1000 y 2000) | — | ≈ 1 h 15 min cada uno | `rimit_A.zip`, `rimit_B.zip` (**hecho**, 29 de octubre) |
 | 2 | `Colab_reevaluacion_imitacion_300.ipynb` | Reevalúa esas redes (y las solo imitadas) en las 300 semillas | Paso 1 | ≈ 50 min | `reeval_300_imitacion.zip` |
 | 2b | `Colab_C6b_liquidez_mm_BF.ipynb` (junto con el paso 2) | Escenarios de liquidez v2 (solo el market maker) | — | ≈ 1 h 20 min | `c6b_liquidez.zip` |
 | 3 | `Colab_sistema_final.ipynb` | Elige el Ejecutor con la regla y entrena el Maestro (λ = 0,02, impacto) | Paso 2 | ≈ 1 h | `sistema_final.zip` |
