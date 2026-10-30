@@ -15,6 +15,15 @@ Todo lo que dice «medido» sale de archivos del repositorio (rutas en la secci�
 5. **Límite de precisión del experimento:** con las 90 corridas previstas solo se detectaría una diferencia de ≈ 20 bps contra TWAP/VWAP (desviación pareada ≈ 70 bps por celda, con el sistema sin entrenar). Hay que recalcularlo con el primer sistema entrenado y discutir con la profesora guía cómo se redacta la hipótesis.
 6. Sigue pendiente lo que pertenece a MR (bucle de entrenamiento del Maestro, ajuste de hiperparámetros) y a BF (decisiones D1 y D3, niveles de liquidez). Se dejó un plan para que lleguen, ejecuten y revisen (`docs/plan_dejar_listo_MR_y_BF_PS.md`).
 
+## 1b. Actualización del 29 de octubre (para la redacción del Título II)
+
+- **Revisión técnica:** el PPO funciona (prueba de cordura). La recompensa del Ejecutor en ABIDES medía contra el precio de 30 s después. Se corrigió, pero la versión corregida **empeora** el costo (+1,55 bps frente al control, 300 semillas), porque no mide el costo de esperar. Ninguna de las cuatro recompensas probadas logra que el Ejecutor le gane a su red sin entrenar en ABIDES. Ver `docs/revision_opus_PS.md` y `docs/reeval_300_mid_resultado_PS.md`.
+- **Maestro:** bucle de entrenamiento nuevo, impacto acumulado entre ventanas (supuesto declarado) y revalidación de λ. En Poisson, con λ = 0,02, empata con TWAP. En ABIDES, con 4 corridas, no se distingue de TWAP. Ver `docs/maestro_primer_entrenamiento_PS.md` y `docs/maestro_abides_primera_prueba_PS.md`.
+- **Hiperparámetros (3.1.1 y 3.1.2):** barrido en Poisson con regla fijada; mejora chica (≈ 0,2 bps). Ver `docs/barrido_hiperparametros_resultado_PS.md`.
+- **D3:** opción 0 por la regla fijada.
+- **Sistema final y 30 corridas (3.1.3):** cuadernos listos. El resultado se agrega cuando llegue.
+- **Precisión:** el costo de una jornada en ABIDES varía ≈ 40 bps. Con 30 corridas el IC de la diferencia con TWAP será de ≈ ±15 bps. El informe debe presentar la reducción medida con su intervalo, que es lo que pide el Título I (objetivo 4).
+
 ## 2. Alcance del sprint
 
 | Tarea | Responsable (según `docs/sprint6_que_se_hizo.md`) | Estado al 26 de octubre |

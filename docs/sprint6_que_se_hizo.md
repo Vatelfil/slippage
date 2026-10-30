@@ -1,88 +1,100 @@
 # Sprint 6 (26 oct – 6 nov 2026): qué se hizo
 
-> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+Documento de cierre del Sprint 6 (tarea 3.1.5, Sprint Review), elaborado por PS con apoyo de Claude Code (uso de IA autorizado por la universidad).
+- **Última actualización:** 29 de octubre de 2026 (noche).
+- **Pendiente:** se completa con los resultados de los cuadernos de cierre (sección 5) y cada fila la confirma su responsable en la reunión del viernes 6 de noviembre.
+- **Referencia:** el Título I. La «hipótesis del 10 %» que aparecía antes era un error de un documento de contexto: el Título I pide comparar con TWAP y VWAP y verificar si hay reducción, sin umbral.
 
-Documento de cierre del Sprint 6 (tarea 3.1.5, Sprint Review). **Borrador en curso** elaborado por PS con apoyo de Claude Code (uso autorizado por la universidad); última actualización: 26 de octubre de 2026. Se completa el viernes 6 de noviembre; cada fila debe ser confirmada por su responsable (columna "Confirma"). Lo que sigue como "Por completar" **no se ha hecho**.
+Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falta el resultado del cuaderno) · **Pasa al Sprint 7**.
 
-Estados (los mismos que en `docs/sprint5_que_se_hizo.md`): **Hecho** · **Hecho con límite demostrado** · **Pasa al Sprint 7 por diseño** · **Por completar** (aún no hay resultado).
+> **Condición de cierre:** una tarea queda cerrada cuando su código está en `main` mediante un PR mergeado. Orden de las ramas en la sección 7.
+> **Asignación:** el Excel pone 3.1.3 a PS y 3.1.4 a BF; la especificación detallada lo hace al revés. Este documento sigue la especificación y anota los dos nombres, para que el grupo lo confirme.
 
-> **Condición de cierre:** una tarea queda cerrada cuando su código está en `main` mediante un PR mergeado.
-> Las filas del Sprint 6 del Excel del plan vienen vacías; las tareas salen de `ESPECIFICACION_DETALLADA_TAREAS.md` y se confirman en la reunión de arranque del 26 de octubre.
+## 1. Tareas del sprint
 
-## Tareas del sprint
-
-| Tarea | Responsable | Estado | Qué hay hasta hoy | PR | Confirma |
+| Tarea | Responsable | Estado | Qué hay | Dónde | Confirma |
 |---|---|---|---|---|---|
-| **3.1.1** Ajuste de tasa de aprendizaje, tamaño de lote y épocas del PPO | MR | Por completar | Valores iniciales: tasa 3 × 10⁻⁴, 4 épocas, minibatch 64. **Punto de partida nuevo:** con el factor de descuento γ = 1 y una penalización por lo no comprado, el entrenamiento del Ejecutor pasa de empeorar el costo a igualar a la mejor heurística (ver «Resultados clave»); el ajuste conviene hacerlo sobre esa base. Rejilla: por definir por MR | — | MR |
-| **3.1.2** Ajuste del clipping ε y del GAE λ | MR | Por completar | Valores iniciales: ε = 0,2, λ de GAE = 0,95 | — | MR |
-| **3.1.3** Corridas de evaluación por escenario de liquidez | BF | Por completar | El evaluador por escenario y la sensibilidad (3.2.4) están listos para recibir los escenarios; falta la definición de los tres niveles de liquidez | — | BF |
-| **3.1.4** Monitoreo y registro de métricas de entrenamiento | PS | Hecho con límite | Monitor por episodio validado con ABIDES real (100 y 1.000 episodios), panel con curvas de varias corridas, **alertas calibradas con 27 corridas reales** (`docs/calibracion_monitoreo_PS.md`), alerta nueva «la recompensa sube y el costo no», línea de costo de partida y guía de alertas. **Límite:** falta integrarlo en las corridas del ajuste de MR (dos líneas, que requieren su visto bueno) | PR `feature/ps-sprint6-completo` (sin mergear) | PS |
-| **3.1.5** Sprint Review | Los tres | Por completar | Este documento | — | Los tres |
-| **P10** Revalidar λ del Maestro | MR | Por completar | Depende del bucle de entrenamiento del Maestro, que aún no existe en `PPOTrainer` | — | MR |
+| **3.1.1** Tasa de aprendizaje, lote y épocas del PPO | MR (borrador de PS) | Hecho con límite | Barrido de 36 configuraciones × 2 redes en Poisson, con regla fijada antes. Gana tasa 0,003, lote 128, 16 épocas (−2,62 bps frente a la red inicial; la configuración de siempre, −2,43). La mejora es chica. **Límite:** medido en Poisson; en ABIDES no se aplicó todavía | `docs/barrido_hiperparametros_resultado_PS.md`, `data/barrido_hp/3_1_1/` | MR |
+| **3.1.2** Clipping ε y λ de GAE | MR (borrador de PS) | Hecho con límite | 25 combinaciones aleatorias partiendo del ganador de la 3.1.1. Ninguna mejora con claridad: **se mantienen ε = 0,2 y λ = 0,95**. Las combinaciones con λ ≈ 0,90 no completan la orden. Mismo límite | `data/barrido_hp/3_1_2/` | MR |
+| **3.1.3** Corridas de evaluación (30 corridas del sistema contra TWAP y VWAP, con media, desviación, IC 95 %, Wilcoxon, t-test y gráfico de cajas) | BF (PS según el Excel) | En Colab | Sistema final (Maestro y Ejecutor PPO), 10 meta-órdenes × 3 semillas, con impacto acumulado. Evaluadores, consolidador y cuadernos listos y probados en Poisson | `notebooks/Colab_30corridas_bloque1` a `4`, `scripts/consolidar_resultados_3_2_2.py` | BF / PS |
+| **3.1.4** Monitoreo y registro de métricas | PS (BF según el Excel) | Hecho | Monitor por episodio y panel, con alertas calibradas en 27 corridas reales. **Conectado al barrido de MR:** hubo alertas críticas en 6 de 122 redes, que son justo las que no completan la orden. Se cerró el límite anterior | `src/training/monitoreo.py`, `docs/guia_alertas_monitoreo_PS.md`, `data/barrido_hp/*/monitoreo.md` | PS |
+| **3.1.5** Sprint Review | Los tres | Este documento | — | — | Los tres |
+| **P10** Revalidar λ del Maestro | MR (borrador de PS) | Hecho con límite | En Poisson, con el Maestro entrenado, λ = 0,05 deja al Maestro 1,8 bps sobre TWAP y λ = 0,02 lo deja empatado (+0,36 bps, IC −0,08 a +0,83). El sistema final usa λ = 0,02. **Límite:** Poisson | `docs/maestro_primer_entrenamiento_PS.md`, `scripts/revalidar_lambda_maestro.py` | MR |
 
-## Adelantos de PS que apoyan el sprint (no son tareas del Excel)
+## 2. Lo que se construyó en el sprint (además de las tareas)
 
 | Qué | Para qué | Dónde | Estado |
 |---|---|---|---|
-| Diagnóstico y arreglo del entrenamiento del Ejecutor | Saber por qué las redes entrenadas costaban más que la red sin entrenar | `docs/diagnostico_recompensa_PS.md`, `docs/experimentos_recompensa_PS.md`, `docs/investigacion_recompensa_que_se_hizo.md` | Hecho. En Poisson el arreglo baja el costo; **en ABIDES (300 semillas) hace que la red complete la orden pero no baja el costo** (`docs/reeval_300_resultado_PS.md`) |
-| Propuesta de cambio de R_E y de γ para BF y MR | Que revisen el arreglo (la penalización va a R_E, γ al entrenador) | `docs/propuesta_cambio_RE_para_BF_y_MR.md` | Borrador, pendiente de su revisión |
-| Estabilidad de D3 con 100 y 1.000 episodios y control muestreado | Evidencia para la decisión de BF | `docs/estabilidad_D3_PS.md`, `docs/estabilidad_D3_1000ep_PS.md`, `docs/decision_RE_final_D3_para_BF.md` | Hecho |
-| Evaluador del sistema completo sobre las 10 meta-órdenes | Primer punto de comparación con TWAP y VWAP | `scripts/colab/evaluar_sistema_ps.py`, `docs/c3_sistema_sin_entrenar_PS.md` | Hecho con redes sin entrenar (semilla de red fija) |
-| Comparación contra TWAP y VWAP con **costo ajustado por lo no ejecutado** | Que un sistema que compra poco no parezca barato | `scripts/comparar_sistema_vs_benchmarks.py` (opción `--penalizaciones-no-ejecutado`) | Listo y probado; la penalización a usar es una decisión del equipo |
-| Sensibilidad por tamaño, tramo y liquidez (3.2.4, Sprint 7) | Ver dónde gana o pierde el sistema y si el efecto crece con el tamaño | `scripts/analizar_sensibilidad_3_2_4.py` | Listo y probado con datos sintéticos; se corre cuando existan las 90 corridas |
-| Archivo candidato de meta-órdenes `v2` con benchmarks ensamblados | Dejar lista la opción de D1 sin repetir corridas | `docs/benchmarks_2.3.4_v2_PS.md` | Hecho (10 de 10 órdenes ejecutables) |
+| Bucle de entrenamiento del Maestro (Ejecutores fijos, R_M en bps, inicio en los tres tramos) | El Maestro no se entrenaba | `src/training/maestro_trainer.py`, `scripts/entrenar_maestro.py` | Hecho (borrador para MR) |
+| Impacto acumulado entre ventanas | Que el Maestro tenga algo que coordinar; se aplica igual a TWAP/VWAP | `src/envs/impacto_acumulado.py`, desviación 7 | Hecho (supuesto declarado) |
+| Checkpoint con estado aleatorio | Que reanudar dé lo mismo que no cortar | `src/training/ppo_trainer.py` | Hecho (borrador para MR) |
+| Escenarios de liquidez, C-6 y C-6b | Base de las 90 corridas del Sprint 7 | `src/envs/escenarios_liquidez.py`, `docs/c6_liquidez_resultado_PS.md` | v1 dio REVISAR; v2 en Colab |
+| Revisión técnica y corrección de la recompensa en ABIDES (`mid_decision`) | Saber por qué el Ejecutor no aprendía | `docs/revision_opus_PS.md`, `docs/reeval_300_mid_resultado_PS.md` | Hecho; la corrección no bajó el costo y queda como opción |
+| Arranque por imitación del Ejecutor | Que el Ejecutor PPO parta de la mejor política medida | `--imitar` en `scripts/colab/entrenamiento_inicial_ps.py` | En Colab |
+| Regla para elegir el Ejecutor del sistema final | Elegir sin mirar las 30 corridas | `scripts/elegir_ejecutor_ps.py` | Hecho |
+| Prueba de cordura del PPO | Descartar un error del entrenador | `scripts/prueba_cordura_ppo_ps.py` | Hecho: el PPO aprende |
 
-## Resultados clave
+## 3. Resultados clave (medidos)
 
-- **El entrenamiento del Ejecutor no bajaba el costo y la causa está identificada.** Con la recompensa actual, la red aprende a esperar (97 % a 99 % de los pasos): nada obliga a completar la orden, y el descuento γ = 0,95 hace que un costo al final de la ventana se vea cuatro veces más barato. Con una **penalización de 30 bps por acción sin comprar y γ = 1**, 5 de 5 redes cumplen la orden y llegan al costo de la mejor heurística (17,9 frente a 17,91 bps; la red inicial, 20,3), en el simulador de Poisson. Cada cambio por separado no funciona.
-- **Control justo:** una política casi uniforme ya cumple la orden. Con 15 semillas de evaluación parecía que las 6 redes de 1.000 episodios costaban más que ese control (+3,08 bps); **con 300 semillas ninguna red entrenada se distingue de su control** (diferencias de −0,6 a +1,0 bps, todos los intervalos con el 0). Los números de 15 y 40 semillas eran ruido del precio.
-- **Reevaluación con 300 semillas (ABIDES, FALABELLA, apertura):** las 8 redes juntas cuestan −0,08 bps respecto de su control (IC 95 % de −0,98 a +0,77); la penalización más γ = 1 (V2) y la recompensa contra el precio de llegada (V4) no se distinguen entre sí; redes y control cuestan ≈ 2 bps más que TWAP límite. Entrenar 1.000 episodios no cambió el costo de forma medible (`docs/reeval_300_resultado_PS.md`).
-- **Regla de vigilancia de D3** (cumplimiento con argmax < 95 %): se dispara en 1 de 3 redes de 1.000 episodios con la opción 0 y en 0 de 3 con la A; con 100 episodios no distingue las opciones.
-- **Evaluador del sistema completo (redes sin entrenar):** cumple el 66,3 % de las órdenes (apertura 94,6 %, media jornada 76,3 %, cierre 18,5 %) y no se distingue de TWAP en costo; con una penalización de 300 bps por lo no comprado es claramente peor, así que la conclusión depende de cómo se valore lo no ejecutado.
-- **Monitoreo:** las alertas se calibraron con corridas buenas y malas. La alerta nueva avisa en 7 de 10 corridas malas y en ninguna buena; la entropía baja, que daba falsas alarmas, quedó como aviso informativo.
+1. **El PPO funciona.** En una prueba simple aprende la mejor acción en 1.000 episodios (de 0,33 a 0,999). Con el ruido de ABIDES, 1.000 episodios no alcanzan (0,34) y 20.000 llegan a 0,64.
+2. **Ejecutor en ABIDES, con 300 semillas:** ninguna recompensa probada le gana a la misma red sin entrenar:
+   - V2: −0,19 bps;
+   - V4: −0,11 bps;
+   - recompensa corregida: +1,55 bps (peor).
 
-## Decisiones
+   TWAP con órdenes límite cuesta ≈ 2,3 bps menos que cualquier red.
+3. **La recompensa en ABIDES tenía una falla** (medía contra el precio de 30 s después). Se corrigió y la red cambió de conducta (dejó de comprar a mercado), pero empeoró el costo, porque esa recompensa no mide el costo de esperar.
+4. **Maestro:** en Poisson aprende a completar la orden (cumplimiento de 0,96 a 0,999). Con λ = 0,02 y 2.000 jornadas empata con TWAP. En ABIDES (4 corridas) no se distingue de TWAP (−3,4 bps, IC −44 a +37): el costo de una jornada lo domina hacia dónde se mueve el precio ese día.
+5. **Hiperparámetros:** en Poisson casi cualquier configuración razonable llega al mismo nivel. La tasa alta con lote chico colapsa, y el monitoreo lo detecta.
+6. **Precisión:** la desviación del costo entre jornadas en ABIDES es ≈ 40 bps. Con 30 corridas, el IC de la diferencia con TWAP quedará en ≈ ±15 bps.
 
-| Decisión | Quién decide | Estado al 26 de octubre | Regla por defecto |
-|---|---|---|---|
-| D1: tamaño de las meta-órdenes | BF | Sin respuesta | 100.000 acciones por orden (`meta_ordenes_v1.json`); la propuesta de PS queda como candidata |
-| D3: R_E (opción 0 u opción A) | BF | Sin respuesta | Opción 0 con regla de vigilancia. Propuesta de PS: «D3: A» por robustez del cumplimiento, sin recalcular β∗ hasta tener entrenamientos que bajen el costo (`docs/decision_RE_final_D3_para_BF.md`, secciones 7 a 9) |
-| Penalización por lo no comprado en R_E y γ = 1 en el Ejecutor | BF (R_E) y MR (entrenador) | Propuesta enviada (borrador) | Sin cambios hasta que la revisen y se confirme en ABIDES |
-| Valor de la penalización por lo no ejecutado en la comparación final | Los tres | Por definir | Se informan varios valores (50, 100 y 300 bps) |
+## 4. Decisiones
 
-## Qué pasa al Sprint 7
+| Decisión | Estado | Qué se aplicó |
+|---|---|---|
+| D1: tamaño de las meta-órdenes | Por defecto (BF puede cambiarlo) | v2: 10 % del volumen del día (5 % si parte en el cierre); 10 de 10 órdenes ejecutables |
+| D3: R_E opción 0 u opción A | Cerrada con la regla fijada | **Opción 0**: las dos completan el 100 % con argmax; la A cuesta 0,60 bps menos, pero eso no basta según la regla |
+| γ_E = 1 y penalización de 30 bps | Propuesta (desviación 6) | Se usan en los entrenamientos del Ejecutor |
+| λ del Maestro | Revalidado en Poisson | 0,02 en el sistema final (MR puede cambiarlo) |
+| Recompensa corregida (`mid_decision`) | Opción, no por defecto | Empeora el costo en ABIDES |
+| Ejecutor del sistema final | Regla fijada | La red PPO más barata en 300 semillas que cumpla al menos el 95 % (sin heurísticas ni redes solo imitadas) |
+| Escenarios de liquidez | v1 REVISAR; v2 en Colab | Si el C-6b da OK, la v2 queda para el Sprint 7 |
 
-3.2.1 a 3.2.4 dependen de un sistema entrenado. **Ya están listos** (y probados con datos de ejemplo): la comparación contra TWAP y VWAP (3.2.3), el costo ajustado por lo no ejecutado y la sensibilidad por tamaño, tramo y liquidez (3.2.4). Falta el entrenamiento del Maestro (bucle de MR) y los escenarios de liquidez (BF).
+## 5. Lo que falta correr en Colab para cerrar (orden en `docs/LEEME_COLAB_CIERRE_SPRINT6.md`)
 
-## Qué toca revisar a MR y a BF (propuesta, nada de esto está ejecutado)
+1. `Colab_imitacion_A` y `_B` → `Colab_reevaluacion_imitacion_300` (y en paralelo `Colab_C6b_liquidez_mm_BF`).
+2. `Colab_sistema_final`.
+3. `Colab_30corridas_bloque1` a `4` (3.1.3).
 
-El detalle, con tiempos y valores por defecto, está en `docs/plan_dejar_listo_MR_y_BF_PS.md`. PS no modificó ningún archivo de sus tareas; lo que sigue son documentos para leer y decidir.
+Cuando lleguen los resultados se completan las filas 3.1.3 y el resultado del Ejecutor con imitación.
 
-| Para | Qué hay que mirar | Dónde | Tiempo estimado |
-|---|---|---|---|
-| MR | Propuesta de γ = 1 en el entrenador del Ejecutor (y declararlo como desviación del Título I) | `docs/propuesta_cambio_RE_para_BF_y_MR.md` | 30 min |
-| MR | Visto bueno para conectar el monitoreo en sus corridas (dos líneas) | `docs/guia_alertas_monitoreo_PS.md` | 15 min |
-| MR | Plan de lo que PS puede dejar escrito para el bucle de entrenamiento del Maestro, el barrido de hiperparámetros y la revalidación de λ (decidir cuáles quiere) | `docs/plan_dejar_listo_MR_y_BF_PS.md`, sección 4 | 30 min |
-| BF | Decisión D3 (R_E opción 0 u opción A) con la evidencia y la regla por defecto | `docs/decision_RE_final_D3_para_BF.md` | 30 min |
-| BF | Decisión D1 (tamaño de las meta-órdenes) con la regla por defecto | `docs/meta_ordenes_2.3.3.md`, `docs/benchmarks_2.3.4_v2_PS.md` | 20 min |
-| BF | Penalización por lo no comprado en R_E | `docs/propuesta_cambio_RE_para_BF_y_MR.md` | 30 min |
-| BF | Definir los tres niveles de liquidez (lo que desbloquea 3.1.3 y las 90 corridas) y qué se prepara de antemano | `docs/plan_dejar_listo_MR_y_BF_PS.md`, sección 5 | 30 min |
-| Los tres | Valor de la penalización por lo no ejecutado en la comparación final; cómo redactar la hipótesis del 10 % dado que 90 corridas solo detectan ≈ 20 bps | `docs/plan_dejar_listo_MR_y_BF_PS.md`, secciones 6 y 7 | reunión |
+## 6. Qué pasa al Sprint 7
 
-## Dónde está cada cosa
+- 3.2.1 a 3.2.4 (90 corridas por escenario, consolidación, comparación estadística y sensibilidad): el código está listo y probado; falta el escenario de liquidez validado (C-6b).
+- Ejecutores propios para media jornada y cierre (desviación 8).
+- Aplicar en ABIDES los hiperparámetros del barrido, si MR los aprueba.
+
+## 7. Ramas (todas sin PR; orden de merge)
+
+1. `feature/ps-revision-opus-v2`
+2. `feature/ps-evaluador-90-corridas`
+3. `feature/ps-borrador-bf-liquidez`
+4. `feature/ps-borrador-mr-maestro`
+5. `feature/ps-borrador-bf-c6b-mm`
+6. `feature/ps-cierre-sprint6`
+7. `feature/ps-cierre-sprint6-b` (barrido y este documento)
+
+Cada una contiene a la anterior. No borrar `feature/ps-revision-opus` ni `feature/ps-cierre-sprint6` mientras haya cuadernos que las usen.
+
+## 8. Dónde está cada cosa
 
 | Qué | Dónde |
 |---|---|
-| Informe del Sprint 6 de PS para futura redacción del Título II | `docs/informe_sprint6_PS.md` |
-| Plan para que MR y BF solo lleguen, ejecuten y revisen | `docs/plan_dejar_listo_MR_y_BF_PS.md` |
-| Resultado con 300 semillas | `docs/reeval_300_resultado_PS.md` |
-| Bitácora de cada PR (qué se hizo en el PC, por qué y quién) | `docs/bitacora_cambios_PS.md` |
+| Informe del Sprint 6 para el Título II | `docs/informe_sprint6_PS.md` |
+| Revisión técnica | `docs/revision_opus_PS.md` |
+| Bitácora de cada rama | `docs/bitacora_cambios_PS.md` |
 | Explicación de cada gráfico | `docs/guia_graficos.md` |
-| Qué significa cada alerta del monitoreo y qué hacer | `docs/guia_alertas_monitoreo_PS.md` |
-| Plan de PS para el sprint y qué está bloqueado | `docs/plan_accion_PS_sprint6.md`, `docs/plan_ejecucion_PS_sprint6.md` |
-| Cierre del Sprint 5 | `docs/sprint5_que_se_hizo.md` |
-
-## Confirmación en ABIDES de la penalización terminal (26 de octubre)
-- Las 4 redes entrenadas con penalización de 30 bps y γ = 1 en ABIDES cumplen la orden (cumplimiento ≈ 1,0). Su costo frente a la red sin entrenar fue +3,0 bps con 15 semillas de evaluación y −2,2 bps con 40 (no significativo); **con 300 semillas la diferencia es nula** (`docs/reeval_300_resultado_PS.md`). Detalle en `docs/v4_abides_resultado_parcial_A_PS.md` y `docs/confirmacion_abides_penalizacion_resultado_PS.md`; datos en `data/colab_resultados/conf_pen30_g1/`.
+| Desviaciones respecto del Título I | `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` |
+| Guías para MR y BF | `docs/LEEME_MR.md`, `docs/LEEME_BF.md` |
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

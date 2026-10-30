@@ -94,8 +94,10 @@ def _ic(d: np.ndarray, n_boot: int = 3000):
     return float(np.percentile(m, 2.5)), float(np.percentile(m, 97.5))
 
 
-def analizar(resultados: Sequence[Dict], grid: Dict) -> Dict:
-    """Aplica la regla de selección del JSON de la rejilla."""
+def analizar(resultados: Sequence[Dict], grid: Dict, referencia: Optional[Dict] = None) -> Dict:
+    """Aplica la regla de selección del JSON de la rejilla. `referencia` es la configuración contra la que se exige una
+    mejora clara: la por defecto en la 3.1.1 y el ganador de la 3.1.1 (punto de partida) en la 3.1.2."""
+    referencia = dict(referencia or grid["por_defecto"])
     por: Dict[str, Dict] = {}
     for r in resultados:
         n = nombre_config(r["config"])
@@ -112,20 +114,20 @@ def analizar(resultados: Sequence[Dict], grid: Dict) -> Dict:
                       "n_semillas_red": len(e["semillas"])})
     filas.sort(key=lambda f: f["dif_media_bps"])
     validas = [f for f in filas if f["cumplimiento"] >= 0.95]
-    defecto = next((f for f in filas if all(f[k] == grid["por_defecto"][k] for k in CLAVES)), None)
+    defecto = next((f for f in filas if all(f[k] == referencia[k] for k in CLAVES)), None)
     if not validas:
         decision = {"ganador": None, "texto": "Ninguna configuración cumple el 95 % de la orden: revisar la rejilla."}
     else:
         g = validas[0]
         if defecto is not None and g is not defecto and defecto in validas \
                 and g["ic_bajo"] <= defecto["dif_media_bps"] <= g["ic_alto"]:
-            elegido, texto = defecto, "Sin mejora clara frente a la configuración por defecto: se mantiene la de por defecto."
+            elegido, texto = defecto, "Sin mejora clara frente a la configuración de referencia: se mantiene la de referencia."
         elif g is defecto:
-            elegido, texto = g, "La configuración por defecto es la mejor de las que cumplen: se mantiene."
+            elegido, texto = g, "La configuración de referencia es la mejor de las que cumplen: se mantiene."
         else:
             elegido = g
-            texto = (f"Gana {g['nombre']}: su IC no incluye la diferencia de la configuración por defecto."
-                     if defecto in validas else f"Gana {g['nombre']}; la configuración por defecto no cumple el 95 % o no se corrió.")
+            texto = (f"Gana {g['nombre']}: su IC no incluye la diferencia de la configuración de referencia."
+                     if defecto in validas else f"Gana {g['nombre']}; la configuración de referencia no cumple el 95 % o no se corrió.")
         decision = {"ganador": elegido["nombre"], "config": {k: elegido[k] for k in CLAVES}, "texto": texto}
     return {"filas": filas, "decision": decision}
 
@@ -197,7 +199,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict:
                 d = np.nanmean(np.array(r["slippage_red"]) - np.array(r["slippage_inicial"]))
                 print(f"{f.stem}: diferencia {d:.2f} bps, cumplimiento {r['cumplimiento_red']:.3f} ({r['segundos']:.0f} s)", flush=True)
     resultados = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(out.glob("lr*_s*.json"))]
-    an = analizar(resultados, grid)
+    an = analizar(resultados, grid, base)
+    an["referencia"] = dict(base or grid["por_defecto"])
     (out / "analisis.json").write_text(json.dumps(an, indent=1, ensure_ascii=False), encoding="utf-8")
     (out / "barrido.md").write_text(informe_md(an, args.fase), encoding="utf-8")
     grafico(an, out / "barrido.png", args.fase)

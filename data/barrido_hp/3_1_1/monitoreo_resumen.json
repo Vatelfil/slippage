@@ -1,0 +1,1386 @@
+{
+ "lr0.0001_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 68.83,
+  "kl_maximo": 0.010354,
+  "cumplimiento_final": 0.9973291644468273,
+  "pct_espera_final": 0.3606960354167107,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 73 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 66.53,
+  "kl_maximo": 0.011777,
+  "cumplimiento_final": 0.9938350519539537,
+  "pct_espera_final": 0.34786117352628065,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 66 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 79.9,
+  "kl_maximo": 0.001426,
+  "cumplimiento_final": 0.9371565690294353,
+  "pct_espera_final": 0.45769180782958085,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "CUMPLIMIENTO_BAJO",
+    "mensaje": "Cumplimiento medio 0.937 en los ultimos 50 episodios (< 0.95): regla de vigilancia de D3."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 79 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.0001_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 82.0,
+  "kl_maximo": 0.003625,
+  "cumplimiento_final": 0.9979310165811411,
+  "pct_espera_final": 0.4011789881615968,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 80 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.23,
+  "kl_maximo": 0.006468,
+  "cumplimiento_final": 0.9926772685012156,
+  "pct_espera_final": 0.20139438184376893,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 61 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 63.81,
+  "kl_maximo": 0.008172,
+  "cumplimiento_final": 0.9990876279484661,
+  "pct_espera_final": 0.22572869103048132,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 64 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 64.47,
+  "kl_maximo": 0.011181,
+  "cumplimiento_final": 0.9984139109700365,
+  "pct_espera_final": 0.1336254997546632,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 68 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 63.64,
+  "kl_maximo": 0.01235,
+  "cumplimiento_final": 0.9947487515558981,
+  "pct_espera_final": 0.31505258705146266,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 60 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 72.36,
+  "kl_maximo": 0.006762,
+  "cumplimiento_final": 0.9969869685146852,
+  "pct_espera_final": 0.2670271771769583,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 72 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.18,
+  "kl_maximo": 0.007563,
+  "cumplimiento_final": 0.9954286444020751,
+  "pct_espera_final": 0.2075174597118331,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 61 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.83,
+  "kl_maximo": 0.010161,
+  "cumplimiento_final": 0.9980593334033206,
+  "pct_espera_final": 0.29408528702771786,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 66 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 67.49,
+  "kl_maximo": 0.011336,
+  "cumplimiento_final": 0.9965494983915765,
+  "pct_espera_final": 0.222062656641604,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 65 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 67.99,
+  "kl_maximo": 0.010316,
+  "cumplimiento_final": 0.9978335090200636,
+  "pct_espera_final": 0.23374988500196633,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 68 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 68.79,
+  "kl_maximo": 0.012091,
+  "cumplimiento_final": 0.9992721977556271,
+  "pct_espera_final": 0.22488474975466496,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 68 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 56.5,
+  "kl_maximo": 0.003952,
+  "cumplimiento_final": 0.9950032561244798,
+  "pct_espera_final": 0.2587224022915706,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 59 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 64.88,
+  "kl_maximo": 0.00742,
+  "cumplimiento_final": 0.993971314071852,
+  "pct_espera_final": 0.2452801872750722,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 65 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 70.6,
+  "kl_maximo": 0.008235,
+  "cumplimiento_final": 0.9958635423036983,
+  "pct_espera_final": 0.27381542518112395,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 72 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0001_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.44,
+  "kl_maximo": 0.010051,
+  "cumplimiento_final": 0.9983662132477571,
+  "pct_espera_final": 0.1664737487178782,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 68 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 69.08,
+  "kl_maximo": 0.01244,
+  "cumplimiento_final": 0.9929257741820138,
+  "pct_espera_final": 0.3305600508991814,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 69 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 64.85,
+  "kl_maximo": 0.013637,
+  "cumplimiento_final": 0.9948765778664721,
+  "pct_espera_final": 0.3372355166401762,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 67 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 66.25,
+  "kl_maximo": 0.006112,
+  "cumplimiento_final": 0.9943711058693434,
+  "pct_espera_final": 0.16855868500464002,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 60 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 57.09,
+  "kl_maximo": 0.007033,
+  "cumplimiento_final": 0.9954443734165208,
+  "pct_espera_final": 0.19920305209216227,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 57 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 62.66,
+  "kl_maximo": 0.01337,
+  "cumplimiento_final": 0.9970363079866769,
+  "pct_espera_final": 0.26692476734215864,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 68 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 67.38,
+  "kl_maximo": 0.011715,
+  "cumplimiento_final": 0.9938238773745682,
+  "pct_espera_final": 0.28005822578746903,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 66 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 61.99,
+  "kl_maximo": 0.010523,
+  "cumplimiento_final": 0.9971742704229976,
+  "pct_espera_final": 0.20031522266912632,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 60 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 66.03,
+  "kl_maximo": 0.011076,
+  "cumplimiento_final": 0.9948336715817436,
+  "pct_espera_final": 0.19668015240821202,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 66 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 70.8,
+  "kl_maximo": 0.011323,
+  "cumplimiento_final": 0.9958215320984326,
+  "pct_espera_final": 0.29418806040905243,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 72 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 61.18,
+  "kl_maximo": 0.011519,
+  "cumplimiento_final": 0.9975083113377352,
+  "pct_espera_final": 0.23117432037613525,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 60 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 61.99,
+  "kl_maximo": 0.010523,
+  "cumplimiento_final": 0.9971742704229976,
+  "pct_espera_final": 0.20031522266912632,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 60 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.8,
+  "kl_maximo": 0.011251,
+  "cumplimiento_final": 0.9967300333190607,
+  "pct_espera_final": 0.1963333177414211,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 67 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 76.76,
+  "kl_maximo": 0.012252,
+  "cumplimiento_final": 0.9987640743119619,
+  "pct_espera_final": 0.24260356277765893,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 74 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 43.66,
+  "kl_maximo": 0.010563,
+  "cumplimiento_final": 0.9982716829839421,
+  "pct_espera_final": 0.17988164713058585,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 46 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 68.41,
+  "kl_maximo": 0.011745,
+  "cumplimiento_final": 0.9982245918565336,
+  "pct_espera_final": 0.18680919584505556,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 69 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 56.18,
+  "kl_maximo": 0.009827,
+  "cumplimiento_final": 0.9925239713027572,
+  "pct_espera_final": 0.20296727786579044,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 51 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 64.22,
+  "kl_maximo": 0.011785,
+  "cumplimiento_final": 0.9955122269671166,
+  "pct_espera_final": 0.29389316162151324,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 68 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.0003_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 66.98,
+  "kl_maximo": 0.015583,
+  "cumplimiento_final": 0.9971026031872996,
+  "pct_espera_final": 0.21597723334812582,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 67 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 63.17,
+  "kl_maximo": 0.013822,
+  "cumplimiento_final": 0.9915896243101262,
+  "pct_espera_final": 0.36155375317348015,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 62 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 49.86,
+  "kl_maximo": 0.015954,
+  "cumplimiento_final": 0.9918708593190912,
+  "pct_espera_final": 0.27473708625820986,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 52 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 66.55,
+  "kl_maximo": 0.013717,
+  "cumplimiento_final": 0.9968449129539916,
+  "pct_espera_final": 0.20894377990430624,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 64 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 42.61,
+  "kl_maximo": 0.013503,
+  "cumplimiento_final": 0.9975798280747887,
+  "pct_espera_final": 0.3418002571737599,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 47 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 42.96,
+  "kl_maximo": 0.013365,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.12337359114191124,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 41 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 46.53,
+  "kl_maximo": 0.015954,
+  "cumplimiento_final": 0.9967534538968631,
+  "pct_espera_final": 0.12362120878395101,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 44 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 51.9,
+  "kl_maximo": 0.013283,
+  "cumplimiento_final": 0.9934206742022142,
+  "pct_espera_final": 0.22453042624907685,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 56 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.2,
+  "kl_maximo": 0.016003,
+  "cumplimiento_final": 0.9984390156411096,
+  "pct_espera_final": 0.30668826515640424,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 65 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 51.9,
+  "kl_maximo": 0.013283,
+  "cumplimiento_final": 0.9934206742022142,
+  "pct_espera_final": 0.22453042624907685,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 56 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.2,
+  "kl_maximo": 0.016003,
+  "cumplimiento_final": 0.9984390156411096,
+  "pct_espera_final": 0.30668826515640424,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 65 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 51.9,
+  "kl_maximo": 0.013283,
+  "cumplimiento_final": 0.9934206742022142,
+  "pct_espera_final": 0.22453042624907685,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 56 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 65.2,
+  "kl_maximo": 0.016003,
+  "cumplimiento_final": 0.9984390156411096,
+  "pct_espera_final": 0.30668826515640424,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 65 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 47.36,
+  "kl_maximo": 0.018691,
+  "cumplimiento_final": 0.9977319426760863,
+  "pct_espera_final": 0.12766333621543632,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 48 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 50.08,
+  "kl_maximo": 0.014355,
+  "cumplimiento_final": 0.9962914748829295,
+  "pct_espera_final": 0.19610260977976846,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 52 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 42.0,
+  "kl_maximo": 0.013762,
+  "cumplimiento_final": 0.99528007170664,
+  "pct_espera_final": 0.12906175070426534,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 44 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 49.97,
+  "kl_maximo": 0.024392,
+  "cumplimiento_final": 0.9969881038023306,
+  "pct_espera_final": 0.1904277618453806,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 54 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0244 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.001_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 47.36,
+  "kl_maximo": 0.018691,
+  "cumplimiento_final": 0.9977319426760863,
+  "pct_espera_final": 0.12766333621543632,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 48 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.001_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 50.08,
+  "kl_maximo": 0.014355,
+  "cumplimiento_final": 0.9962914748829295,
+  "pct_espera_final": 0.19610260977976846,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 52 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "lr0.003_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 31.07,
+  "kl_maximo": 0.030448,
+  "cumplimiento_final": 0.9994563419950104,
+  "pct_espera_final": 0.060138220221507055,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 36 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0304 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size128_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 18.2,
+  "kl_maximo": 0.042267,
+  "cumplimiento_final": 0.9988616633103464,
+  "pct_espera_final": 0.06325189539829233,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 23 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0423 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 45.82,
+  "kl_maximo": 0.030448,
+  "cumplimiento_final": 0.9983742145328415,
+  "pct_espera_final": 0.1711710988417813,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 47 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0304 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.003_minibatch_size128_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 45.23,
+  "kl_maximo": 0.039077,
+  "cumplimiento_final": 0.9982083284523762,
+  "pct_espera_final": 0.19391192230691487,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 52 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0391 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.003_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 31.07,
+  "kl_maximo": 0.030448,
+  "cumplimiento_final": 0.9994563419950104,
+  "pct_espera_final": 0.060138220221507055,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 36 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0304 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size128_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 18.2,
+  "kl_maximo": 0.042267,
+  "cumplimiento_final": 0.9988616633103464,
+  "pct_espera_final": 0.06325189539829233,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 23 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0423 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 46.63,
+  "kl_maximo": 0.059169,
+  "cumplimiento_final": 0.9949931713909956,
+  "pct_espera_final": 0.23565975484072527,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 51 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0592 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.003_minibatch_size32_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 0.0,
+  "kl_maximo": 0.052433,
+  "cumplimiento_final": 0.0,
+  "pct_espera_final": 1.0,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.000 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 100 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 29 % a 100 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -11.69 (primeros 50) frente a -17.40 (ultimos 50)."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 0 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0524 (> 0.02)."
+   }
+  ],
+  "criticas": 2,
+  "avisos": 3
+ },
+ "lr0.003_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 46.63,
+  "kl_maximo": 0.059169,
+  "cumplimiento_final": 0.9949931713909956,
+  "pct_espera_final": 0.23565975484072527,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 51 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0592 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.003_minibatch_size32_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 0.0,
+  "kl_maximo": 0.052433,
+  "cumplimiento_final": 0.0,
+  "pct_espera_final": 1.0,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.000 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 100 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 29 % a 100 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -11.69 (primeros 50) frente a -17.40 (ultimos 50)."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 0 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0524 (> 0.02)."
+   }
+  ],
+  "criticas": 2,
+  "avisos": 3
+ },
+ "lr0.003_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 46.63,
+  "kl_maximo": 0.059169,
+  "cumplimiento_final": 0.9949931713909956,
+  "pct_espera_final": 0.23565975484072527,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 51 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0592 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "lr0.003_minibatch_size32_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 0.0,
+  "kl_maximo": 0.052433,
+  "cumplimiento_final": 0.0,
+  "pct_espera_final": 1.0,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.000 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 100 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 29 % a 100 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -11.69 (primeros 50) frente a -17.40 (ultimos 50)."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 0 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0524 (> 0.02)."
+   }
+  ],
+  "criticas": 2,
+  "avisos": 3
+ },
+ "lr0.003_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 22.06,
+  "kl_maximo": 0.031699,
+  "cumplimiento_final": 0.9999691163301858,
+  "pct_espera_final": 0.20947468975962047,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 22 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0317 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size64_epochs16_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 31.16,
+  "kl_maximo": 0.03012,
+  "cumplimiento_final": 0.9892341931475525,
+  "pct_espera_final": 0.06085896993783051,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 37 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0301 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 22.06,
+  "kl_maximo": 0.031699,
+  "cumplimiento_final": 0.9999691163301858,
+  "pct_espera_final": 0.20947468975962047,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 22 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0317 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size64_epochs4_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 31.16,
+  "kl_maximo": 0.03012,
+  "cumplimiento_final": 0.9892341931475525,
+  "pct_espera_final": 0.06085896993783051,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 37 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0301 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 22.06,
+  "kl_maximo": 0.031699,
+  "cumplimiento_final": 0.9999691163301858,
+  "pct_espera_final": 0.20947468975962047,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 22 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0317 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ },
+ "lr0.003_minibatch_size64_epochs8_clip_ratio0.2_gae_lambda0.95_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 31.16,
+  "kl_maximo": 0.03012,
+  "cumplimiento_final": 0.9892341931475525,
+  "pct_espera_final": 0.06085896993783051,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 37 % del maximo: la politica casi no explora."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "KL_ALTO",
+    "mensaje": "KL maximo 0.0301 (> 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 2
+ }
+}

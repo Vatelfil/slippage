@@ -295,6 +295,17 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_cierre_sprint6.py tests/test_maestro_trainer.py tests/test_escenarios_liquidez.py -q`.
 - **Gráficos:** `cajas.png` y `barrido.png`, explicados en `docs/guia_graficos.md`.
 
+### `feature/ps-cierre-sprint6-b`: resultado del barrido de hiperparámetros y documento del Sprint 6 (29 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. Borrador para MR en lo que toca a la 3.1.1 y la 3.1.2.
+- **Qué:** resultados del barrido en `data/barrido_hp/3_1_1/` y `3_1_2/` (con su monitoreo); `docs/barrido_hiperparametros_resultado_PS.md`; corrección del analizador del barrido (en la 3.1.2 la referencia es el ganador de la 3.1.1, no la configuración de siempre); `docs/sprint6_que_se_hizo.md` reescrito; sección 1b de `docs/informe_sprint6_PS.md`.
+- **Por qué:** cerrar el Sprint 6 con lo medido.
+- **Resultado:**
+  - 3.1.1: gana tasa 0,003, lote 128, 16 épocas (−2,62 bps frente a −2,43 de la configuración de siempre).
+  - 3.1.2: se mantienen ε = 0,2 y λ = 0,95.
+  - El monitoreo marcó alertas críticas justo en las 6 redes que no completan la orden.
+- **Cómo verificar:** `PYTHONPATH=. python scripts/barrido_hiperparametros_mr.py --fase 3.1.2 --out-dir data/barrido_hp --solo-analizar`.
+- **Gráficos:** `data/barrido_hp/*/barrido.png` y `monitoreo.png`, explicados en `docs/guia_graficos.md`.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
