@@ -1,5 +1,7 @@
 # Resultado de la reevaluación con 300 semillas (ABIDES, FALABELLA, apertura)
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 **Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad). Describe lo medido; las decisiones son del grupo.
 **Fecha:** 26 de octubre de 2026. **Datos:** `data/colab_resultados/reeval_300/` (8 redes, 4 controles, 3 heurísticas). **Tabla completa:** `docs/reeval_300_ABIDES_PS.md`. **Figura:** `data/analysis/reeval_300_ABIDES.png`.
 

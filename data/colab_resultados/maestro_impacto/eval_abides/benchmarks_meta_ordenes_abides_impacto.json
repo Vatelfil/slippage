@@ -1,0 +1,195 @@
+{
+ "firma": {
+  "tarea": "2.3.4",
+  "entorno": "abides",
+  "snapshot": "2026-08-23",
+  "ordenes": [
+   "MO-01",
+   "MO-02"
+  ],
+  "cantidades": {
+   "MO-01": 88300,
+   "MO-02": 29100
+  },
+  "escenario": null,
+  "factor_liquidez": 1.0,
+  "factor_tamano": 1.0,
+  "impacto": {
+   "y": 0.5,
+   "tau_min": 120.0
+  }
+ },
+ "resultados": {},
+ "corridas": {
+  "MO-01|TWAP|1": {
+   "orden": "MO-01",
+   "estrategia": "TWAP",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "segundos": 380.8,
+   "Q_total": 88300.0,
+   "Q_executed": 88296.0,
+   "execution_rate": 0.9999546998867497,
+   "P_referencia": 5969.15,
+   "P_promedio_ejecutado": 5959.016507650774,
+   "IS_total": -894787.374436646,
+   "slippage_bps": -16.97644111678529,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-01|VWAP|1": {
+   "orden": "MO-01",
+   "estrategia": "VWAP",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "segundos": 381.4,
+   "Q_total": 88300.0,
+   "Q_executed": 88294.0,
+   "execution_rate": 0.9999320498301246,
+   "P_referencia": 5969.15,
+   "P_promedio_ejecutado": 5953.4832056022215,
+   "IS_total": -1383377.945323813,
+   "slippage_bps": -26.24627358631996,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-02|TWAP|1": {
+   "orden": "MO-02",
+   "estrategia": "TWAP",
+   "seed": 1,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 152.3,
+   "Q_total": 29100.000000000007,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329894,
+   "P_referencia": 6130.0,
+   "P_promedio_ejecutado": 6184.432740202182,
+   "IS_total": 1583992.7398834901,
+   "slippage_bps": 88.79729233634873,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-02|VWAP|1": {
+   "orden": "MO-02",
+   "estrategia": "VWAP",
+   "seed": 1,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 152.6,
+   "Q_total": 29100.0,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329896,
+   "P_referencia": 6130.0,
+   "P_promedio_ejecutado": 6194.708585967807,
+   "IS_total": 1883019.8516631916,
+   "slippage_bps": 105.56049913182262,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-01|TWAP|2": {
+   "orden": "MO-01",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "segundos": 351.0,
+   "Q_total": 88300.0,
+   "Q_executed": 88296.0,
+   "execution_rate": 0.9999546998867497,
+   "P_referencia": 5970.0,
+   "P_promedio_ejecutado": 5988.16310120848,
+   "IS_total": 1603801.8367087778,
+   "slippage_bps": 30.423955123081956,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-01|VWAP|2": {
+   "orden": "MO-01",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "segundos": 351.9,
+   "Q_total": 88300.0,
+   "Q_executed": 86466.0,
+   "execution_rate": 0.9792298980747451,
+   "P_referencia": 5970.0,
+   "P_promedio_ejecutado": 5984.242816367739,
+   "IS_total": 1257640.6852713246,
+   "slippage_bps": 23.85731384880849,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-02|TWAP|2": {
+   "orden": "MO-02",
+   "estrategia": "TWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 160.1,
+   "Q_total": 29100.000000000007,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329894,
+   "P_referencia": 6130.0,
+   "P_promedio_ejecutado": 6208.916478648982,
+   "IS_total": 2296469.528685373,
+   "slippage_bps": 128.7381380896931,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-02|VWAP|2": {
+   "orden": "MO-02",
+   "estrategia": "VWAP",
+   "seed": 2,
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "segundos": 162.7,
+   "Q_total": 29100.0,
+   "Q_executed": 29094.0,
+   "execution_rate": 0.9997938144329896,
+   "P_referencia": 6130.0,
+   "P_promedio_ejecutado": 6218.672805549036,
+   "IS_total": 2580378.64147694,
+   "slippage_bps": 144.6538426574808,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  }
+ },
+ "resumen": {
+  "MO-01": {
+   "TWAP": {
+    "n": 2,
+    "IS_medio": 354507.2311360659,
+    "EE": 1249294.605572712
+   },
+   "VWAP": {
+    "n": 2,
+    "IS_medio": -62868.63002624421,
+    "EE": 1320509.3152975684
+   }
+  },
+  "MO-02": {
+   "TWAP": {
+    "n": 2,
+    "IS_medio": 1940231.1342844316,
+    "EE": 356238.3944009413
+   },
+   "VWAP": {
+    "n": 2,
+    "IS_medio": 2231699.2465700656,
+    "EE": 348679.3949068741
+   }
+  }
+ }
+}

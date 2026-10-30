@@ -39,13 +39,75 @@ from src.training.monitoreo import MonitorEntrenamiento  # noqa: E402
 CUMPLIMIENTO_MIN = 0.95  # regla de vigilancia de D3
 
 
-def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str = "ejecutado"):
+def _factory(entorno: str, calibrated_json: str, ticker: str, riesgo_sobre: str = "ejecutado", mid_decision: bool = False):
     extra = {} if riesgo_sobre == "ejecutado" else {"riesgo_sobre": riesgo_sobre}   # opcion A de D3: riesgo sobre lo pendiente
     if entorno == "abides":
+        if mid_decision:   # R_E contra el P_mid al decidir (borrador para BF, ver docs/revision_opus_PS.md)
+            extra["mid_decision"] = True
         from src.envs.abides_ejecutor_env import make_calibrated_env_factory  # requiere ABIDES
         return make_calibrated_env_factory(calibrated_json, ticker=ticker, **extra)
     from src.envs.fallback_poisson_env import EjecutorEnvPoissonFallback
     return functools.partial(EjecutorEnvPoissonFallback, **extra) if extra else EjecutorEnvPoissonFallback
+
+
+def _con_tamanos_aleatorios(factory):
+    """En cada episodio sortea el tamaño del slice y la ventana entre los valores que pedirá el Maestro (hallazgo H4 de
+    `docs/revision_opus_PS.md`). El sorteo sale de la semilla del episodio, así que no cambia al reanudar."""
+    import numpy as np
+    from src.experiments.variantes_recompensa import Q_SLICE_MAESTRO, VENTANAS_MAESTRO
+
+    def fabrica(**kw):
+        rng = np.random.default_rng(int(kw.get("seed", 0)) + 77)
+        kw = dict(kw, q_slice=int(rng.choice(Q_SLICE_MAESTRO)), ventana_min=int(rng.choice(VENTANAS_MAESTRO)))
+        return factory(**kw)
+    return fabrica
+
+
+def imitar_heuristica(net, factory, heuristica: str, entorno: str, tramo: str, seeds: Sequence[int], q_slice: int,
+                      ventana_min: int, epocas: int = 30, lr: float = 1e-3) -> Dict:
+    """Arranque por imitacion: la red copia a una heuristica (por defecto TWAP con ordenes limite, la mejor medida en
+    ABIDES) antes de que PPO la ajuste. Se juntan pares (observacion, accion) corriendo la heuristica en el MISMO entorno
+    del entrenamiento y se entrena la cabeza de politica con entropia cruzada, con suavizado para que la politica no quede
+    con probabilidad 1 y PPO pueda seguir explorando. La red sigue siendo el Ejecutor PPO del Titulo I; solo cambia el
+    punto de partida. Devuelve la exactitud sobre los datos de imitacion."""
+    import numpy as np
+    import torch
+    import torch.nn.functional as F
+    from src.envs.spaces import EjecutorActionSpace
+
+    espacio, politica, nivel = EjecutorActionSpace(), bs.POLITICAS[heuristica], bs.NIVEL_PASIVO[entorno]
+    obs_l, act_l = [], []
+    for s in seeds:
+        env = factory(executor_id=tramo, q_slice=q_slice, ventana_min=ventana_min, seed=int(s), beta=0.0)
+        try:
+            obs, _ = env.reset()
+            paso, done = 0, False
+            while not done:
+                a = politica(paso, env.max_steps, nivel)
+                obs_l.append(np.asarray(obs, dtype=np.float32).copy())
+                act_l.append(espacio.encode_flat(int(a[0]), int(a[1]), int(a[2])))
+                obs, _, done, trunc, _ = env.step(a)
+                done = bool(done or trunc)
+                paso += 1
+        finally:
+            env.close()
+    X = torch.as_tensor(np.array(obs_l), dtype=torch.float32)
+    y = torch.as_tensor(act_l, dtype=torch.int64)
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
+    gen = torch.Generator().manual_seed(int(seeds[0]))
+    for _ in range(epocas):
+        perm = torch.randperm(len(X), generator=gen)
+        for i in range(0, len(X), 128):
+            idx = perm[i:i + 128]
+            logits, _ = net(X[idx])
+            loss = F.cross_entropy(logits, y[idx], label_smoothing=0.1)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+    with torch.no_grad():
+        logits, _ = net(X)
+        exactitud = float((logits.argmax(-1) == y).float().mean())
+    return {"heuristica": heuristica, "episodios": len(seeds), "pares": int(len(X)), "exactitud": exactitud}
 
 
 def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, recompensa: str = "original"):
@@ -58,10 +120,15 @@ def _con_variante(factory, penalizacion_bps: float, costo_espera_bps: float, rec
     return lambda **kw: EntornoVariante(factory(**kw), variante)
 
 
-def _nuevo_trainer(seed: int, gamma: float = 0.95):
+HP_DEFECTO = {"lr": 3e-4, "epochs": 4, "minibatch": 64, "clip": 0.2, "gae_lambda": 0.95, "entropy_coef": 0.01}
+
+
+def _nuevo_trainer(seed: int, gamma: float = 0.95, hp: Optional[Dict] = None):
+    """Entrenador del Ejecutor. `hp` cambia los hiperparametros del barrido (3.1.1 y 3.1.2); sin `hp`, los de siempre."""
     from src.training.ppo_trainer import PPOConfig, PPOTrainer
-    cfg = PPOConfig(lr=3e-4, gamma=gamma, gae_lambda=0.95, clip_ratio=0.2, entropy_coef=0.01, value_coef=0.5,
-                    epochs=4, minibatch_size=64, episodes_per_update=10)
+    h = dict(HP_DEFECTO, **(hp or {}))
+    cfg = PPOConfig(lr=h["lr"], gamma=gamma, gae_lambda=h["gae_lambda"], clip_ratio=h["clip"], entropy_coef=h["entropy_coef"],
+                    value_coef=0.5, epochs=int(h["epochs"]), minibatch_size=int(h["minibatch"]), episodes_per_update=10)
     return PPOTrainer(role="ejecutor", cfg=cfg, seed=seed)
 
 
@@ -122,6 +189,19 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--recompensa", choices=["original", "is_llegada"], default="original",
                     help="original = R_E del Titulo I (compara con el precio medio de cada instante); is_llegada = lo que cuesta cada "
                          "compra frente al precio de llegada de la orden (variante V4 con --penalizacion-bps 30 y --gamma 1)")
+    ap.add_argument("--mid-decision", action="store_true",
+                    help="solo ABIDES: R_E compara el precio pagado con el P_mid que vio el agente al decidir (como en Poisson), "
+                         "no con el del despertar siguiente")
+    ap.add_argument("--aleatorizar", action="store_true",
+                    help="entrenar con tamaños (1.000 a 20.000) y ventanas (1 a 15 min) sorteados por episodio; la evaluación sigue "
+                         "con --q-slice y --ventana-min")
+    for nombre, valor in HP_DEFECTO.items():   # hiperparametros del barrido de MR (borrador de PS para MR)
+        ap.add_argument(f"--{nombre.replace('_', '-')}", type=type(valor), default=valor)
+    ap.add_argument("--imitar", default=None, choices=list(bs.POLITICAS),
+                    help="arranque por imitacion de una heuristica antes de PPO (p. ej. twap_limit_medio)")
+    ap.add_argument("--imitar-episodios", type=int, default=100)
+    ap.add_argument("--guardar-imitacion", default=None,
+                    help="carpeta donde guardar la red recien imitada, antes de PPO (para evaluarla aparte)")
     ap.add_argument("--sin-monitoreo", action="store_true",
                     help="no escribir monitoreo_episodios.csv (costo, cumplimiento y fraccion de espera por episodio; 3.1.4)")
     ap.add_argument("--out-dir", required=True)
@@ -134,7 +214,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     csv_path = out_dir / f"entrenamiento_{args.tramo}.csv"
     ckpt_dir = out_dir / f"checkpoints_{args.tramo}"
     estado_path = out_dir / f"entrenamiento_inicial_{args.tramo}.json"
-    factory = _factory(args.entorno, args.calibrated_json, args.ticker, args.riesgo_sobre)
+    factory = _factory(args.entorno, args.calibrated_json, args.ticker, args.riesgo_sobre, args.mid_decision)
     firma = {"tarea": "2.3.5", "entorno": args.entorno, "ticker": args.ticker, "tramo": args.tramo,
              "episodios": args.episodes, "q_slice": args.q_slice, "ventana_min": args.ventana_min,
              "seed": args.seed, "eval_seeds": args.eval_seeds, "eval_seed_base": args.eval_seed_base,
@@ -150,9 +230,20 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["costo_espera_bps"] = args.costo_espera_bps
     if args.recompensa != "original":
         firma["recompensa"] = args.recompensa
+    if args.mid_decision:
+        firma["mid_decision"] = True
+    if args.aleatorizar:
+        firma["aleatorizar"] = True
+    if args.imitar:
+        firma["imitar"] = {"heuristica": args.imitar, "episodios": args.imitar_episodios}
+    hp = {k: getattr(args, k) for k in HP_DEFECTO}
+    if hp != HP_DEFECTO:   # solo si cambia, para no invalidar corridas anteriores
+        firma["hiperparametros"] = hp
     monitor = None if args.sin_monitoreo else MonitorEntrenamiento(out_dir / "monitoreo_episodios.csv", seed_base=args.seed)
     usa_variante = args.penalizacion_bps or args.costo_espera_bps or args.recompensa != "original"
-    factory_variante = _con_variante(factory, args.penalizacion_bps, args.costo_espera_bps, args.recompensa) if usa_variante else factory
+    factory_base = _con_tamanos_aleatorios(factory) if args.aleatorizar else factory
+    factory_variante = (_con_variante(factory_base, args.penalizacion_bps, args.costo_espera_bps, args.recompensa)
+                        if usa_variante else factory_base)
     factory_entrenamiento = monitor.envolver(factory_variante) if monitor else factory_variante
     estado = load_resumable(estado_path, firma)
     estado.setdefault("segundos_entrenamiento", 0.0)
@@ -169,11 +260,21 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         save_json(estado_path, estado)
 
     # -- Etapa 1: entrenamiento reanudable en bloques de 10 episodios (= una actualizacion PPO)
-    trainer = _nuevo_trainer(args.seed, args.gamma)
+    trainer = _nuevo_trainer(args.seed, args.gamma, hp)
     ckpt = ckpt_dir / "checkpoint_last.pt"
     if ckpt.exists():
         trainer.load_checkpoint(ckpt)
         print(f"Reanudando desde el episodio {trainer.current_episode}", flush=True)
+    elif args.imitar:
+        # semillas propias (30.000 + ...), distintas de las de entrenamiento y de evaluacion
+        semillas_im = [30000 + args.seed + i for i in range(1, args.imitar_episodios + 1)]
+        print(f"== Imitando {args.imitar} en {len(semillas_im)} episodios", flush=True)
+        estado["imitacion"] = imitar_heuristica(trainer.model, factory, args.imitar, args.entorno, args.tramo, semillas_im,
+                                                args.q_slice, args.ventana_min)
+        print(f"   exactitud {estado['imitacion']['exactitud']:.3f} sobre {estado['imitacion']['pares']} pares", flush=True)
+        if args.guardar_imitacion:
+            trainer.save_checkpoint(Path(args.guardar_imitacion) / f"checkpoints_{args.tramo}" / "checkpoint_last.pt")
+        save_json(estado_path, estado)
     while trainer.current_episode < args.episodes:
         if excedido():
             estado["entrenamiento_completo"] = False

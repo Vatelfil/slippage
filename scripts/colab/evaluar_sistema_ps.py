@@ -109,9 +109,23 @@ class _Grabador:
         return getattr(self._env, nombre)
 
 
-def _factory_pareada(base: Optional[Callable], semilla_orden: int, periodo0: int, acum: _Acumulador) -> Callable:
-    """Fabrica de Ejecutores que usa la semilla de mercado de los benchmarks para el periodo correspondiente."""
+def parametros_impacto(orden: Dict, y: float, tau: float):
+    """Parametros del impacto acumulado de una meta-orden (necesita `volumen_dia_simulado`, que traen las ordenes v2)."""
+    from src.envs.impacto_acumulado import parametros_para
+    if "volumen_dia_simulado" not in orden:
+        raise ValueError(f"{orden['id']}: --impacto necesita volumen_dia_simulado (usar meta_ordenes_v2_candidata.json)")
+    return parametros_para(orden["ticker"], float(orden["volumen_dia_simulado"]), y=y, tau_min=tau)
+
+
+def _factory_pareada(base: Optional[Callable], semilla_orden: int, periodo0: int, acum: _Acumulador,
+                     impacto=None) -> Callable:
+    """Fabrica de Ejecutores que usa la semilla de mercado de los benchmarks para el periodo correspondiente.
+    Con `impacto` (ParametrosImpacto) los precios de cada ventana llevan el impacto de lo comprado antes."""
     contador = {"k": 0}
+    estado = None
+    if impacto is not None:
+        from src.envs.impacto_acumulado import ImpactoAcumulado
+        estado = ImpactoAcumulado(impacto)
 
     def fabrica(executor_id="apertura", q_slice=1000, ventana_min=15, **kw):
         semilla = semilla_orden * 1000 + periodo0 + contador["k"]
@@ -122,13 +136,16 @@ def _factory_pareada(base: Optional[Callable], semilla_orden: int, periodo0: int
                                              ticker=kw.pop("ticker", "FALABELLA"), seed=semilla)
         else:
             env = base(executor_id=executor_id, q_slice=int(max(q_slice, 1)), ventana_min=ventana_min, seed=semilla)
+        if estado is not None:
+            from src.envs.impacto_acumulado import EntornoConImpacto
+            env = EntornoConImpacto(env, estado)
         return _Grabador(env, acum)
 
     return fabrica
 
 
 def correr_orden(orden: Dict, seed: int, maestro, redes: Dict, base_factory: Optional[Callable], nombre: str,
-                 deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None) -> Dict:
+                 deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None, impacto=None) -> Dict:
     """Una meta-orden con el sistema completo. Devuelve la corrida en el formato de los benchmarks."""
     import torch
     from src.envs.maestro_ejecutor_protocol import MaestroEjecutorEnv, maestro_policy
@@ -140,7 +157,7 @@ def correr_orden(orden: Dict, seed: int, maestro, redes: Dict, base_factory: Opt
     torch.manual_seed(semilla_orden)
     env = MaestroEjecutorEnv(meta_orden_quantity=int(orden["cantidad"]),
                              datos_historicos=datos_desde(orden["tramo_inicio"], datos_sm),
-                             executor_env_factory=_factory_pareada(base_factory, semilla_orden, p0, acum),
+                             executor_env_factory=_factory_pareada(base_factory, semilla_orden, p0, acum, impacto),
                              executor_policy_fn=make_executor_policy_fn(redes, deterministic=deterministic))
     s_m, done, r_m, decisiones = env.reset(), False, 0.0, []
     while not done:
@@ -166,7 +183,8 @@ def pendientes(estado: Dict, ordenes: Sequence[Dict], seeds: Sequence[int], nomb
 def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar: Callable[[Dict], None],
            maestro, redes: Dict, factory_por_ticker: Callable[[str], Optional[Callable]], nombre: str,
            deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None,
-           presupuesto_s: Optional[float] = None, log: Callable[[str], None] = print) -> bool:
+           presupuesto_s: Optional[float] = None, log: Callable[[str], None] = print,
+           impacto_por_orden: Optional[Callable[[Dict], object]] = None) -> bool:
     """Corre lo pendiente. Devuelve True si no queda nada."""
     t_ini = time.time()
     corridas = estado.setdefault("corridas", {})
@@ -177,7 +195,8 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
             return False
         o, clave, t0 = por_id[oid], f"{oid}|{nombre}|{seed}", time.time()
         try:
-            c = correr_orden(o, seed, maestro, redes, factory_por_ticker(o["ticker"]), nombre, deterministic, datos_sm)
+            imp = impacto_por_orden(o) if impacto_por_orden else None
+            c = correr_orden(o, seed, maestro, redes, factory_por_ticker(o["ticker"]), nombre, deterministic, datos_sm, imp)
             c["segundos"] = round(time.time() - t0, 1)
             corridas[clave] = c
             log(f"{clave}: slippage={c['slippage_bps']:.2f} bps cumpl={c['execution_rate']:.3f} ({c['segundos']:.0f}s)")
@@ -186,6 +205,14 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
             log(f"{clave}: ERROR {corridas[clave]['error']}")
         guardar(estado)
     return True
+
+
+def _pesos(ckpt) -> Dict:
+    """Pesos de un checkpoint: `PPOTrainer.save_checkpoint` los guarda en `model_state_dict`; otros scripts usaban `model`."""
+    for clave in ("model_state_dict", "model"):
+        if isinstance(ckpt, dict) and clave in ckpt:
+            return ckpt[clave]
+    return ckpt
 
 
 def cargar_redes(ckpt_maestro: Optional[str], ckpt_ejecutores: Dict[str, str], seed_red: int = SEED_RED):
@@ -197,9 +224,9 @@ def cargar_redes(ckpt_maestro: Optional[str], ckpt_ejecutores: Dict[str, str], s
     torch.manual_seed(int(seed_red))
     maestro, redes = make_hierarchy()
     if ckpt_maestro:
-        maestro.load_state_dict(torch.load(ckpt_maestro, map_location="cpu")["model"])
+        maestro.load_state_dict(_pesos(torch.load(ckpt_maestro, map_location="cpu")))
     for tramo, ruta in ckpt_ejecutores.items():
-        redes[tramo].load_state_dict(torch.load(ruta, map_location="cpu")["model"])
+        redes[tramo].load_state_dict(_pesos(torch.load(ruta, map_location="cpu")))
     maestro.eval()
     for r in redes.values():
         r.eval()
@@ -232,6 +259,13 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--nombre", default=None, help="nombre de la estrategia en el archivo (por defecto PPO o PPO_sin_entrenar)")
     ap.add_argument("--datos-sm", default=None, help="CSV con indice horario y columnas volatilidad, vol_promedio")
     ap.add_argument("--max-minutes", type=float, default=None)
+    ap.add_argument("--impacto", action="store_true",
+                    help="impacto acumulado entre ventanas (src/envs/impacto_acumulado.py; borrador de PS para MR)")
+    ap.add_argument("--impacto-y", type=float, default=0.5)
+    ap.add_argument("--impacto-tau", type=float, default=120.0)
+    ap.add_argument("--escenario", default=None, help="escenario de liquidez (baja, media, alta; ver data/scenarios); sin la opcion, la calibracion de siempre")
+    ap.add_argument("--escenarios-json", default=None)
+    ap.add_argument("--factor-tamano", type=float, default=1.0, help="multiplica la cantidad de cada meta-orden (0.5, 1, 1.5)")
     args = ap.parse_args(argv)
 
     with open(args.meta_ordenes, "r", encoding="utf-8-sig") as f:
@@ -239,6 +273,10 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ordenes = data["meta_ordenes"] if isinstance(data, dict) else data
     if args.ordenes:
         ordenes = [o for o in ordenes if o["id"] in set(args.ordenes)]
+    # escenario de liquidez y tamaño (3.1.3 / 3.2.1, borrador de PS para BF); sin opciones queda todo como antes
+    from src.envs import escenarios_liquidez as el
+    ordenes = el.ajustar_ordenes(ordenes, args.factor_tamano)
+    factor_liq = el.factor_de(args.escenario, args.escenarios_json)
     ckpts = _parse_ckpt(args.ckpt_ejecutor)
     entrenado = bool(args.ckpt_maestro or ckpts)
     nombre = args.nombre or ("PPO" if entrenado else "PPO_sin_entrenar")
@@ -247,28 +285,29 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         datos_sm = pd.read_csv(args.datos_sm, index_col=0, parse_dates=True)
 
     maestro, redes = cargar_redes(args.ckpt_maestro, ckpts, args.seed_red)
-    factories: Dict[str, Callable] = {}
+    factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq,
+                                                claves=el.claves_de(args.escenarios_json))
 
-    def factory_por_ticker(ticker: str):
-        if args.entorno == "poisson":
-            return None
-        if ticker not in factories:  # import tardio: requiere ABIDES
-            from src.envs.abides_ejecutor_env import make_calibrated_env_factory
-            js = Path(args.calibrated_dir) / f"rmsc04_ipsa_{ticker}_{args.snapshot}.json"
-            factories[ticker] = make_calibrated_env_factory(js, ticker=ticker)
-        return factories[ticker]
-
-    out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}.json"
+    sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano) + ("_impacto" if args.impacto else "")
+    out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}{sufijo}.json"
     firma = {"tarea": "3.2.3-evaluador", "entorno": args.entorno, "snapshot": args.snapshot, "sistema": nombre,
              "modo": args.modo, "ckpt_maestro": args.ckpt_maestro, "ckpt_ejecutores": ckpts, "seed_red": args.seed_red,
              "ordenes": sorted(o["id"] for o in ordenes), "cantidades": {o["id"]: o["cantidad"] for o in ordenes},
              "datos_sm": args.datos_sm}
+    if sufijo:
+        firma.update({"escenario": args.escenario, "factor_liquidez": factor_liq, "factor_tamano": args.factor_tamano})
+    if args.impacto:
+        firma["impacto"] = {"y": args.impacto_y, "tau_min": args.impacto_tau}
     estado = load_resumable(out, firma)
     seeds = list(range(1, args.seeds + 1))
     print(f"{len(pendientes(estado, ordenes, seeds, nombre))} corridas pendientes ({nombre}, {args.modo})", flush=True)
     ok = correr(ordenes, seeds, estado, lambda e: save_json(out, e), maestro, redes, factory_por_ticker, nombre,
                 deterministic=args.modo == "argmax", datos_sm=datos_sm,
-                presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60)
+                presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60,
+                impacto_por_orden=(lambda o: parametros_impacto(o, args.impacto_y, args.impacto_tau)) if args.impacto else None)
+    for c in estado.get("corridas", {}).values():
+        c.setdefault("escenario", args.escenario or "media")
+        c.setdefault("factor_tamano", args.factor_tamano)
     save_json(out, estado)
     print(f"Guardado: {out}")
     if not ok:

@@ -1,5 +1,7 @@
 # Informe del Sprint 6 (26 oct – 6 nov 2026): trabajo de PS
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 **Elaborado por:** PS con apoyo de Claude Code (uso de IA autorizado por la universidad; debe declararse en el informe). **Fecha de corte:** 26 de octubre de 2026. **Uso previsto:** material para redactar después el documento de Título II. **No actualiza el informe de Título II ahora**; este archivo es la fuente que se copia cuando corresponda.
 
 Todo lo que dice «medido» sale de archivos del repositorio (rutas en la sección 9). Lo que dice «hipótesis» no está probado.
@@ -10,8 +12,18 @@ Todo lo que dice «medido» sale de archivos del repositorio (rutas en la secci�
 2. PS además investigó **por qué entrenar al Ejecutor no bajaba el costo**. Causa encontrada: la recompensa no obliga a completar la orden y el descuento γ = 0,95 hace que un costo al final de la ventana se vea cuatro veces más barato, así que la red aprende a esperar. Arreglo probado: **penalización de 30 bps por acción sin comprar y γ = 1**.
 3. En ABIDES el arreglo **hace que la red complete la orden, pero no baja el costo**: con 300 semillas de evaluación, ninguna de las 8 redes entrenadas se distingue de la misma red sin entrenar (diferencia media −0,08 bps, IC 95 % de −0,98 a +0,77). Los resultados previos con 15 y 40 semillas eran ruido del precio.
 4. La mejor heurística (TWAP con órdenes límite) cuesta ≈ 2 bps menos que la red, entrenada o no, en el escenario medido (FALABELLA, apertura).
-5. **Riesgo para la hipótesis del 10 %:** con las 90 corridas previstas solo se detectaría una diferencia de ≈ 20 bps contra TWAP/VWAP (desviación pareada ≈ 70 bps por celda, con el sistema sin entrenar). Hay que recalcularlo con el primer sistema entrenado y discutir con la profesora guía cómo se redacta la hipótesis.
+5. **Límite de precisión del experimento:** con las 90 corridas previstas solo se detectaría una diferencia de ≈ 20 bps contra TWAP/VWAP (desviación pareada ≈ 70 bps por celda, con el sistema sin entrenar). Hay que recalcularlo con el primer sistema entrenado y discutir con la profesora guía cómo se redacta la hipótesis.
 6. Sigue pendiente lo que pertenece a MR (bucle de entrenamiento del Maestro, ajuste de hiperparámetros) y a BF (decisiones D1 y D3, niveles de liquidez). Se dejó un plan para que lleguen, ejecuten y revisen (`docs/plan_dejar_listo_MR_y_BF_PS.md`).
+
+## 1b. Actualización del 29 de octubre (para la redacción del Título II)
+
+- **Revisión técnica:** el PPO funciona (prueba de cordura). La recompensa del Ejecutor en ABIDES medía contra el precio de 30 s después. Se corrigió, pero la versión corregida **empeora** el costo (+1,55 bps frente al control, 300 semillas), porque no mide el costo de esperar. Ninguna de las cuatro recompensas probadas logra que el Ejecutor le gane a su red sin entrenar en ABIDES. Ver `docs/revision_opus_PS.md` y `docs/reeval_300_mid_resultado_PS.md`.
+- **Maestro:** bucle de entrenamiento nuevo, impacto acumulado entre ventanas (supuesto declarado) y revalidación de λ. En Poisson, con λ = 0,02, empata con TWAP. En ABIDES, con 4 corridas, no se distingue de TWAP. Ver `docs/maestro_primer_entrenamiento_PS.md` y `docs/maestro_abides_primera_prueba_PS.md`.
+- **Hiperparámetros (3.1.1 y 3.1.2):** barrido en Poisson con regla fijada; mejora chica (≈ 0,2 bps). Ver `docs/barrido_hiperparametros_resultado_PS.md`.
+- **Ejecutor con imitación:** copia a TWAP límite y después PPO. En 15 semillas, las dos redes quedan ≈ 1,5 bps sobre TWAP límite (antes, entre 3,8 y 5,8), con cumplimiento de 0,99. Falta la reevaluación con 300 semillas. Ver `docs/imitacion_resultado_PS.md`.
+- **D3:** opción 0 por la regla fijada.
+- **Sistema final y 30 corridas (3.1.3):** cuadernos listos. El resultado se agrega cuando llegue.
+- **Precisión:** el costo de una jornada en ABIDES varía ≈ 40 bps. Con 30 corridas el IC de la diferencia con TWAP será de ≈ ±15 bps. El informe debe presentar la reducción medida con su intervalo, que es lo que pide el Título I (objetivo 4).
 
 ## 2. Alcance del sprint
 
@@ -105,11 +117,13 @@ Regla práctica: detectar 3 bps con 80 % de potencia pide ≈ 120 semillas parea
 - **Semilla de red fija** para las redes sin entrenar (reproducibilidad).
 - **Hallazgo de reproducibilidad (Sprint 5):** reanudar un entrenamiento desde un checkpoint cambia los resultados porque el checkpoint no guarda el estado aleatorio (pendiente para MR).
 
-## 7. Riesgo estadístico de la hipótesis del 10 %
+## 7. Precisión del experimento de 90 corridas
 
-La hipótesis del Título I pide reducir el IS al menos un 10 % frente a TWAP/VWAP con 90 corridas (3 niveles de liquidez × 3 tamaños × 10 semillas). Con el sistema sin entrenar, la desviación de la diferencia pareada es ≈ 70 bps por celda, de modo que la diferencia mínima detectable con 90 corridas es ≈ 20 bps. Un 10 % equivale a 5–30 bps según la orden. Es posible que la hipótesis no pueda confirmarse con esa precisión aunque el efecto exista.
+> **Corrección del 29 de octubre:** la «hipótesis del 10 %» no está en el Título I; venía de un error en `Contexto_Agente_Programacion.md`. El Título I pide comparar con TWAP y VWAP y verificar si hay reducción del costo (objetivo específico 4 y sección 7), sin un umbral. Lo que sigue sobre el tamaño de efecto detectable (≈ 20 bps con 90 corridas) vale igual, pero como límite de precisión del experimento, no como hipótesis a contrastar.
 
-Opciones (a discutir con la profesora guía, no decididas): mantener el pareo por semilla y reportar el IC además del p-valor; subir el número de semillas por celda; redactar la hipótesis como no inferioridad o con el IC como criterio. Recalcular con el primer sistema entrenado.
+El plan de evaluación prevé 90 corridas (3 niveles de liquidez × 3 tamaños × 10 semillas). Con el sistema sin entrenar, la desviación de la diferencia pareada es ≈ 70 bps por celda, de modo que la diferencia mínima detectable con 90 corridas es ≈ 20 bps. Diferencias más chicas que eso no se podrían distinguir del ruido del precio, aunque existan.
+
+Qué se hace (a confirmar con la profesora guía): mantener el pareo por semilla y reportar el IC junto al p-valor, y presentar el resultado como «reducción medida con su intervalo», que es lo que pide el Título I. Recalcular con el sistema entrenado.
 
 ## 8. Limitaciones y pendientes
 

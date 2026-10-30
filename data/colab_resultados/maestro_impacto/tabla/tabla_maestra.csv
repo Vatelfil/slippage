@@ -1,0 +1,2 @@
+escenario,factor_tamano,n_pares,IS_PPO_maestro,IS_PPO_maestro_sin_entrenar,IS_TWAP,IS_VWAP,dif_vs_TWAP_bps,dif_vs_TWAP_ic,dif_vs_TWAP_pct,dif_vs_VWAP_bps,dif_vs_VWAP_ic,dif_vs_VWAP_pct,ranking
+media,1.0,4,54.32974378565287,44.94838592365366,57.74573610808463,61.95634551294799,-3.415992322431755,[-43.70; 36.87],-5.915574989013782,-7.626601727295114,[-60.04; 44.79],-12.30963780086297,PPO_maestro_sin_entrenar < PPO_maestro < TWAP < VWAP

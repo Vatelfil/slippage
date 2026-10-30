@@ -1,0 +1,19 @@
+{
+  "version": "v2-borrador",
+  "estado": "BORRADOR de PS para BF (29 oct 2026). Reemplaza a la v1 si el C-6b da OK: el C-6 con la v1 mostro que escalar los agentes de ruido y de valor mezcla liquidez con volatilidad y rompe el pareo por semilla (docs/c6_liquidez_resultado_PS.md).",
+  "que_escala": {
+    "abides": "solo mm_pov (tamano de las cotizaciones del market maker de rmsc04): cambia la profundidad del libro y deja igual a los demas agentes",
+    "poisson": "avg_order_size (profundidad del libro), igual que la v1"
+  },
+  "claves_abides": ["mm_pov"],
+  "criterio_c6": {
+    "heuristica": "agresiva_market",
+    "tamanos": [5000],
+    "razon": "fijado antes de correr el C-6b: comprar 5.000 acciones a mercado barre varios niveles, asi que es lo que mas depende de la profundidad del libro; las demas filas se informan"
+  },
+  "escenarios": {
+    "baja": {"factor": 0.25, "descripcion": "un cuarto de la profundidad del market maker calibrado"},
+    "media": {"factor": 1.0, "descripcion": "la calibracion vigente, sin cambios"},
+    "alta": {"factor": 4.0, "descripcion": "cuatro veces la profundidad del market maker calibrado"}
+  }
+}

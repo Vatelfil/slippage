@@ -1,0 +1,14 @@
+{
+  "estado": "BORRADOR de PS para MR (29 oct 2026): MR elige la rejilla final. Correr solo con la recompensa corregida (mid_decision) confirmada.",
+  "regla_seleccion": "Entre las configuraciones con cumplimiento medio >= 0,95, gana la de menor diferencia media de costo frente a su red inicial (pareada por semilla de evaluacion). Si el IC 95 % de esa diferencia incluye la diferencia de la configuracion por defecto, no hay mejora clara y se mantiene la configuracion por defecto.",
+  "por_defecto": {"lr": 0.0003, "minibatch_size": 64, "epochs": 4, "clip_ratio": 0.2, "gae_lambda": 0.95},
+  "comunes": {"gamma": 1.0, "penalizacion_bps": 30.0, "entropy_coef": 0.01, "episodes_per_update": 10,
+              "episodios": 1000, "semillas_red": [1000, 2000], "q_slice": 5000, "ventana_min": 15,
+              "eval_semillas": 30, "eval_seed_base": 5000},
+  "fases": {
+    "3.1.1": {"modo": "rejilla", "parametros": {"lr": [0.0001, 0.0003, 0.001, 0.003], "minibatch_size": [32, 64, 128], "epochs": [4, 8, 16]}},
+    "3.1.2": {"modo": "aleatorio", "n": 25, "semilla": 312,
+              "parametros": {"clip_ratio": [0.1, 0.3], "gae_lambda": [0.9, 1.0]},
+              "base": "ganador de 3.1.1"}
+  }
+}

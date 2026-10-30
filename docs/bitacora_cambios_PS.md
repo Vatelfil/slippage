@@ -237,6 +237,83 @@
 - **Cómo verificar:** `PYTHONPATH=. python -m pytest tests -q` (la única falla conocida es la que necesita el parquet de mercado).
 - **Gráficos:** ninguno nuevo; los anteriores están explicados en `docs/guia_graficos.md`.
 
+### `feature/ps-revision-opus`: revisión técnica y corrección de la recompensa del Ejecutor en ABIDES (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code (Opus). El parche de R_E es un **BORRADOR de PS para BF** (apagado por defecto); no se tocó código de MR.
+- **Qué:** `docs/revision_opus_PS.md` (veredicto, 9 hallazgos, plan de 10 días y regla para cerrar D3); opción `mid_decision` en `src/envs/abides_bridge.py` y `src/envs/abides_ejecutor_env.py`, y `--mid-decision` en `scripts/colab/entrenamiento_inicial_ps.py`; `scripts/colab/verificar_mid_decision_ps.py`; cuadernos `notebooks/Colab_mid_decision_A.ipynb`, `_B.ipynb` y `Colab_reevaluacion_mid_decision_300.ipynb`; prueba de cordura del PPO `scripts/prueba_cordura_ppo_ps.py` (resultado en `data/analysis/prueba_cordura_ppo.txt`); `tests/test_mid_decision.py`; nota en 10 documentos con resultados de ABIDES y sección 10 del memo de D3.
+- **Por qué:** pedido de PS: revisar si el proyecto va bien y buscar la falla de fondo. En ABIDES la recompensa comparaba el precio pagado con el precio medio de 30 s *después* (en Poisson, con el de la decisión), y la recompensa casi no se relacionaba con el costo.
+- **Resultado:** el PPO de MR aprende en una prueba trivial (0,33 → 0,999 en 1.000 episodios); en las corridas V2 la correlación entre recompensa y costo es de 0,04 a 0,22; con el parche, comprar 1 CLP sobre el precio de decisión pasa de +1 a −1. Falta verificar en ABIDES (cuadernos listos).
+- **Cómo reproducir o verificar:** `PYTHONPATH=. python -m pytest tests/test_mid_decision.py tests/test_abides_bridge.py -q` y `python scripts/prueba_cordura_ppo_ps.py`.
+- **Gráficos:** ninguno nuevo.
+
+### `feature/ps-evaluador-90-corridas`: arreglos del evaluador y tamaños variables en el entrenamiento (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Solo toca scripts de PS.
+- **Qué:** `scripts/colab/evaluar_sistema_ps.py` carga los checkpoints de `PPOTrainer` (clave `model_state_dict`; antes buscaba `model` y una red entrenada no habría cargado); `scripts/colab/entrenamiento_inicial_ps.py` acepta `--aleatorizar` (tamaño de 1.000 a 20.000 acciones y ventana de 1 a 15 min sorteados por episodio, con la semilla del episodio para que reanudar dé lo mismo); pruebas en `tests/test_evaluador_90_corridas.py`.
+- **Por qué:** hallazgo H4 de `docs/revision_opus_PS.md` (el Ejecutor solo veía 1.000 acciones y 15 min) y la carga de checkpoints, necesaria para evaluar redes entrenadas.
+- **Resultado:** sin cambios en el comportamiento por defecto.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_evaluador_90_corridas.py -q`.
+- **Gráficos:** ninguno.
+
+### `feature/ps-borrador-bf-liquidez`: BORRADOR de PS para BF, escenarios de liquidez, consolidador y hoja D1/D3 (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. **Borrador para BF:** no modifica los entornos ni la recompensa de BF; los escenarios se aplican desde afuera.
+- **Qué:** `src/envs/escenarios_liquidez.py` y `data/scenarios/escenarios_liquidez_v1.json` (0,5×, 1× y 2×; en ABIDES `num_noise_agents`, `lambda_a`, `mm_pov`; en Poisson, la profundidad del libro); `--escenario` y `--factor-tamano` en `scripts/colab/evaluar_sistema_ps.py` y `scripts/colab/benchmarks_meta_ordenes_ps.py`; `scripts/colab/c6_escenarios_liquidez_bf.py` y `notebooks/Colab_C6_escenarios_liquidez_BF.ipynb`; `scripts/consolidar_resultados_3_2_2.py`; `docs/hoja_decisiones_D1_D3_BF.md`; `docs/LEEME_BF.md`; pruebas en `tests/test_escenarios_liquidez.py`.
+- **Por qué:** pedido de PS: dejar el código de BF escrito para que solo revise, decida y corra Colab (tareas 3.1.3 y 3.2.2, decisiones D1 y D3 pendientes desde hace dos semanas).
+- **Resultado:** en Poisson (30 semillas), comprar 1.000 acciones a mercado cuesta 2,5 bps más con liquidez baja (IC 95 % de 2,3 a 2,7) y 0,7 bps menos con liquidez alta: el C-6 da OK. Falta confirmarlo en ABIDES.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** ninguno.
+
+### `feature/ps-borrador-mr-maestro`: BORRADOR de PS para MR, bucle del Maestro, impacto acumulado, checkpoint, γ, barrido y λ (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. **Borrador para MR:** el único archivo de MR que cambia es `src/training/ppo_trainer.py` (estado aleatorio en el checkpoint y `GAMMA_EJECUTOR = 1.0`); lo demás son módulos nuevos.
+- **Qué:** `src/training/maestro_trainer.py` y `scripts/entrenar_maestro.py` (M1); `src/envs/impacto_acumulado.py` y `--impacto` en los dos evaluadores (diseño del Maestro, opción 2); estado aleatorio en el checkpoint (M2); barrido de hiperparámetros con regla fijada (`scripts/barrido_hiperparametros_mr.py`, `scripts/colab/grid_specs/hiperparametros_ejecutor_mr.json`, opciones de hiperparámetros en `entrenamiento_inicial_ps.py`) (M3); `scripts/revalidar_lambda_maestro.py` (M4); γ_E = 1 y secciones 6 y 7 de `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` (M5); `notebooks/Colab_Maestro_MR.ipynb` (M6); `scripts/comparar_maestro_vs_twap_ps.py`; `docs/maestro_primer_entrenamiento_PS.md`; `docs/LEEME_MR.md`; datos en `data/maestro/primer_entrenamiento_29oct/`; pruebas en `tests/test_maestro_trainer.py`.
+- **Por qué:** pedido de PS: dejar el código de MR escrito para que solo revise, decida y corra Colab. El Maestro no tenía bucle de entrenamiento y, sin impacto entre ventanas, no tenía nada que coordinar.
+- **Resultado (Poisson):** el Maestro aprende a completar la orden (cumplimiento de 0,959 a 0,999). Con λ = 0,05 cuesta más que TWAP (+1,82 bps con 2.000 jornadas); con λ = 0,02 empata (+0,36 bps, IC −0,08 a +0,83). Reanudar desde un checkpoint ahora da los mismos pesos que no cortar.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_maestro_trainer.py -q`.
+- **Gráficos:** el barrido genera `barrido.png` en su carpeta de salida; se explicará en `docs/guia_graficos.md` cuando se corra.
+
+### `feature/ps-borrador-bf-c6b-mm`: resultado del C-6 y escenarios v2 que escalan solo al market maker (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code. Borrador para BF; no toca los entornos.
+- **Qué:** resultado del C-6 en `data/colab_resultados/c6_liquidez/` y `docs/c6_liquidez_resultado_PS.md`; `data/scenarios/escenarios_liquidez_v2.json` (solo `mm_pov`, 0,25×, 1× y 4×, criterio fijado antes de correr); `claves_abides` y `criterio_c6` en `src/envs/escenarios_liquidez.py`, en los dos evaluadores y en el C-6; cuaderno `notebooks/Colab_C6b_liquidez_mm_BF.ipynb` (60 semillas).
+- **Por qué:** el C-6 dio REVISAR. Con la v1, comprar a mercado no cambió entre escenarios y los IC fueron de ±5 a ±10 bps: escalar agentes mezcla liquidez con volatilidad y rompe el pareo por semilla. PS pidió arreglarlo sin esperar a BF.
+- **Resultado:** la v1 solo distingue con órdenes pasivas (TWAP límite con liquidez baja: +7,9 bps, IC +0,7 a +13,9). Falta correr el C-6b.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** ninguno.
+
+### `feature/ps-cierre-sprint6`: cierre del Sprint 6, resultados de Colab, Ejecutor con imitación, sistema final y 30 corridas (29 de octubre)
+- **Quién:** PS con apoyo de Claude Code (Opus). Lo que toca partes de MR (Maestro, barrido) y BF (D3) sigue como borrador para ellos.
+- **Qué:**
+  - Resultados de Colab guardados: `data/colab_resultados/reeval_300_mid/`, `rmid/`, `maestro_impacto/`.
+  - Informes: `docs/reeval_300_mid_resultado_PS.md` (con su tabla `docs/reeval_300_mid_ABIDES_PS.md`, generada por `scripts/analizar_reeval_mid_ps.py`) y `docs/maestro_abides_primera_prueba_PS.md`.
+  - D3 cerrada con la regla (opción 0) en la hoja y en el memo.
+  - Ejecutor: arranque por imitación (`--imitar`, `--guardar-imitacion` en `entrenamiento_inicial_ps.py`).
+  - Sistema final: regla para elegir el Ejecutor (`scripts/elegir_ejecutor_ps.py`, excluye heurísticas y redes solo imitadas); Maestro con Ejecutor entrenado (`--ckpt-ejecutor`) y con inicio en los tres tramos (`--inicio-aleatorio`).
+  - Consolidador con desviación, Wilcoxon, t-test y gráfico de cajas, que salta los bloques que faltan.
+  - Monitoreo conectado al barrido de hiperparámetros.
+  - Corrección de la «hipótesis del 10 %» (no está en el Título I) y desviaciones 8 y 9.
+  - Cuadernos: `Colab_imitacion_A/B`, `Colab_reevaluacion_imitacion_300`, `Colab_sistema_final`, `Colab_30corridas_bloque1` a `4`; orden en `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+  - Pruebas en `tests/test_cierre_sprint6.py`.
+- **Por qué:** pedido de PS: dejar completo el Sprint 6 guiándose por el Título I. La recompensa corregida empeoró el costo (+1,55 bps frente al control) y el Título I exige Ejecutores PPO, así que se prueba la imitación y se elige el mejor Ejecutor PPO con una regla fijada antes.
+- **Resultado:** la cadena completa (imitación → reevaluación → elección → Maestro → 30 corridas → tabla) se probó en Poisson en el PC. Los números de ABIDES llegan con los cuadernos.
+- **Cómo verificar:** `PYTHONPATH=. python -m pytest tests/test_cierre_sprint6.py tests/test_maestro_trainer.py tests/test_escenarios_liquidez.py -q`.
+- **Gráficos:** `cajas.png` y `barrido.png`, explicados en `docs/guia_graficos.md`.
+
+### `feature/ps-cierre-sprint6-b`: resultado del barrido de hiperparámetros y documento del Sprint 6 (29 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. Borrador para MR en lo que toca a la 3.1.1 y la 3.1.2.
+- **Qué:** resultados del barrido en `data/barrido_hp/3_1_1/` y `3_1_2/` (con su monitoreo); `docs/barrido_hiperparametros_resultado_PS.md`; corrección del analizador del barrido (en la 3.1.2 la referencia es el ganador de la 3.1.1, no la configuración de siempre); `docs/sprint6_que_se_hizo.md` reescrito; sección 1b de `docs/informe_sprint6_PS.md`.
+- **Por qué:** cerrar el Sprint 6 con lo medido.
+- **Resultado:**
+  - 3.1.1: gana tasa 0,003, lote 128, 16 épocas (−2,62 bps frente a −2,43 de la configuración de siempre).
+  - 3.1.2: se mantienen ε = 0,2 y λ = 0,95.
+  - El monitoreo marcó alertas críticas justo en las 6 redes que no completan la orden.
+- **Cómo verificar:** `PYTHONPATH=. python scripts/barrido_hiperparametros_mr.py --fase 3.1.2 --out-dir data/barrido_hp --solo-analizar`.
+- **Gráficos:** `data/barrido_hp/*/barrido.png` y `monitoreo.png`, explicados en `docs/guia_graficos.md`.
+
+### `feature/ps-cierre-sprint6-c`: resultado del Ejecutor con imitación (29 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió los cuadernos en Colab.
+- **Qué:** resultados de `Colab_imitacion_A` y `_B` en `data/colab_resultados/rimit/` y análisis en `docs/imitacion_resultado_PS.md`. Se actualizaron `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md` y `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+- **Por qué:** paso 1 del cierre del Sprint 6.
+- **Resultado:** en 15 semillas, las dos redes con argmax quedan en +1,48 y +1,62 bps sobre TWAP límite, con cumplimiento de 0,99. Las redes anteriores quedaban entre +3,8 y +5,8 en las mismas semillas. Falta la reevaluación con 300 semillas.
+- **Cómo verificar:** leer `resultados.evaluacion_entrenada` en `data/colab_resultados/rimit/*/entrenamiento_inicial_apertura.json`.
+- **Gráficos:** no hay.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

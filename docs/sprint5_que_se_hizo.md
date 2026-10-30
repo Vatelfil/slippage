@@ -1,5 +1,7 @@
 # Sprint 5 (12–23 oct 2026): qué se hizo
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 Documento de cierre del Sprint 5. **Borrador** elaborado por PS con apoyo de Claude Code (uso autorizado por la universidad) el 23 de octubre de 2026, a partir del repositorio, los documentos de cada tarea y las corridas de Colab. Cada fila debe ser confirmada por su responsable (columna "Confirma"); lo que nadie objete en la reunión de cierre queda como está escrito.
 
 Estados (los del plan del Sprint 5): **Hecho** · **Hecho con límite demostrado** (se ejecutó y midió; el resultado no alcanza el criterio ideal y el límite está escrito con su causa) · **Pasa al Sprint 6 por diseño** (con la razón y el costo medido).

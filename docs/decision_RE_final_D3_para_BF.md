@@ -1,5 +1,7 @@
 # Decisión final de R_E (D3) para BF: revisión del 23 de octubre
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo o sobre la opción de D3 no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 **Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad), 23 de octubre de 2026. **Para:** BF (decide), con MR y PS. **Continúa:** `docs/decision_RE_para_BF.md` (decisión del 14 de octubre). **Si no hay decisión, rige la opción 0** (regla del plan). **Actualizado el 23 de octubre por la tarde con 10 redes de 100 episodios: ver la sección 7. Actualizado el 25 de octubre con 6 redes de 1.000 episodios: la sección 8 ajusta de nuevo la recomendación. Actualizado el 25 de octubre por la noche con el control muestreado: la sección 9 cambia la lectura del costo.**
 
 ## 1. Qué se había acordado
@@ -130,5 +132,16 @@ Lo que muestra:
 - **Conviene no gastar horas de Colab en recalcular β∗ y repetir la fase 2 todavía.** Antes hay que entender por qué el entrenamiento empeora el costo (escala y forma de R_E, tasa de aprendizaje, recorte, cantidad de episodios): es justo el trabajo del ajuste de hiperparámetros del Sprint 6 (tareas 3.1.1 y 3.1.2, MR).
 - **Todo análisis de entrenamiento debería incluir la red sin entrenar muestreando como línea base.** Los informes ya pueden hacerlo con `scripts/colab/control_muestreado_ps.py`.
 - Respuesta pedida a BF: **"D3: A"** (por robustez, manteniendo β = 0,0061796 provisional y sin recalcular β∗ hasta tener entrenamientos que bajen el costo), **"D3: 0"** o **"D3: esperar"**.
+
+## 10. Actualización del 29 de octubre: cerrar D3 con la recompensa corregida
+
+La evidencia de las secciones 7 a 9 se midió con la falla H1 (`docs/revision_opus_PS.md`). Los cuadernos `notebooks/Colab_mid_decision_A.ipynb` y `_B.ipynb` entrenan las dos opciones con la recompensa corregida sobre las mismas semillas, y la reevaluación con 300 semillas las compara de forma pareada. La regla propuesta, fijada antes de ver los resultados, y el plazo (martes 3 de noviembre) están en la sección 6 de `docs/revision_opus_PS.md`. BF puede cambiarla o decidir otra cosa; si no responde en el plazo, PS aplica la regla y la presenta en la Sprint Review como regla por defecto.
+
+## 11. Resultado del 29 de octubre (noche): D3 cerrada con la regla
+
+- **Medido** (`docs/reeval_300_mid_resultado_PS.md`, sección 5): con la recompensa corregida, A − 0 = −0,60 bps (IC −1,04 a −0,16).
+- **Por qué se queda la 0:** las dos opciones completan el 100 % con argmax, así que no se cumple la condición (a) de la regla.
+- **Resultado: opción 0** (fórmula del Título I). BF puede cambiarla si prefiere la A por costo.
+- **Por qué D3 no cambia la conclusión práctica:** todas las redes con la recompensa corregida cuestan más que su control (+1,55 bps para la opción 0, +0,57 para la A).
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

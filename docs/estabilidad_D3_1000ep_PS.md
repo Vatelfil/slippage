@@ -1,5 +1,7 @@
 # Estabilidad de la regla de vigilancia de D3: varias semillas de red
 
+> **Nota del 29 de octubre (revisión):** los entrenamientos en ABIDES de este documento usaron una recompensa del Ejecutor que compara el precio pagado con el precio medio de 30 segundos *después* de la compra, no con el de la decisión (falla H1 de `docs/revision_opus_PS.md`). Esa recompensa casi no se relaciona con el costo, así que lo que aquí se concluye sobre si el entrenamiento mejora el costo o sobre la opción de D3 no debe usarse para decidir. El slippage medido, el cumplimiento y los benchmarks sí son válidos: no dependen de la recompensa.
+
 **Elaborado por:** PS con apoyo de Claude Code (uso autorizado por la universidad). **Pendiente de revisión por:** BF (decide D3) y MR. **Fecha:** 2026-10-25.
 
 Mismo entrenamiento inicial de la 2.3.5 (1000 episodios, apertura, FALABELLA, evaluación con 15 semillas nuevas) repetido con varias semillas de red por opción de R_E. La regla fijada el 14 de octubre se dispara si el cumplimiento con argmax es menor a 95 %.

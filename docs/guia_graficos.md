@@ -174,4 +174,14 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Cómo leerlo:** todas las barras cruzan el 0 y los puntos están entre −0,6 y +1 bps. Es decir, ninguna red se distingue del control: entrenar 1.000 episodios no cambió el costo de forma medible. Las barras de V4 son más cortas porque esas dos redes tienen menos variación entre semillas, no porque sean mejores.
 - **Datos y script:** `data/colab_resultados/reeval_300/` y `scripts/analizar_reevaluacion_ps.py`; lectura completa en `docs/reeval_300_resultado_PS.md`.
 
+### `barrido.png` del barrido de hiperparámetros (rama `feature/ps-cierre-sprint6`; `data/barrido_hp/3_1_1/` y `3_1_2/`)
+- **Qué muestra:** una barra por configuración de hiperparámetros. La barra es la diferencia media de costo entre la red entrenada y su red inicial, en las mismas semillas de evaluación (negativo es mejor), con su IC 95 %. Las barras grises son las configuraciones que no completan el 95 % de la orden y no pueden ganar.
+- **Cómo leerlo:** la decisión no es «la barra más baja». La regla fijada antes pide además que el IC del ganador no incluya la diferencia de la configuración por defecto; si la incluye, se queda la de por defecto. El texto de la decisión está en `barrido.md`.
+- **Datos y script:** `scripts/barrido_hiperparametros_mr.py` y `scripts/colab/grid_specs/hiperparametros_ejecutor_mr.json`.
+
+### `cajas.png` de las corridas de evaluación 3.1.3 (rama `feature/ps-cierre-sprint6`; `corridas_30/tabla/` en Drive)
+- **Qué muestra:** una caja por estrategia (sistema final, TWAP y VWAP) con el costo de cada corrida en bps contra el precio de llegada. La línea es la mediana, el triángulo la media y los puntos sueltos las corridas extremas.
+- **Cómo leerlo:** las cajas son anchas porque el costo de una jornada lo domina hacia dónde se movió el precio ese día. La comparación que vale es la pareada, por orden y semilla, de la tabla (`tabla_maestra.md`), no la distancia entre cajas.
+- **Datos y script:** `scripts/consolidar_resultados_3_2_2.py`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
