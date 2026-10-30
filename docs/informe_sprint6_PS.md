@@ -23,7 +23,7 @@ Todo lo que dice «medido» sale de archivos del repositorio (rutas en la secci�
 - **Ejecutor con imitación:** copia a TWAP límite y después PPO. En 15 semillas, las dos redes quedan ≈ 1,5 bps sobre TWAP límite (antes, entre 3,8 y 5,8), con cumplimiento de 0,99. Con 300 semillas, la red s1000 cuesta 5,68 bps, la mejor red PPO medida, y queda 1,03 bps sobre TWAP límite (IC +0,11 a +1,88). Ver `docs/imitacion_resultado_PS.md` y `docs/reeval_300_imitacion_resultado_PS.md`.
 - **Escenarios de liquidez (C-6b):** escalar solo al market maker hace que el pareo funcione, pero más `mm_pov` encarece la compra a mercado. Se propone nombrar los escenarios según el costo medido (v3, desviación 10). Ver `docs/c6_liquidez_resultado_PS.md`, sección 4.
 - **D3:** opción 0 por la regla fijada.
-- **Sistema final y 30 corridas (3.1.3):** cuadernos listos. El resultado se agrega cuando llegue.
+- **Sistema final y 30 corridas (3.1.3):** Ejecutor `rimit` s1000, confirmado tras evaluar la red s2000 (5,98 bps). El Maestro completa el 97,6 % de la orden en Poisson. Bloque 1 de las 30 corridas: 9 pares, sistema − TWAP −18,4 bps [−38,9; +3,3], sin distinguirse todavía. El resultado se agrega cuando estén los cuatro bloques.
 - **Precisión:** el costo de una jornada en ABIDES varía ≈ 40 bps. Con 30 corridas el IC de la diferencia con TWAP será de ≈ ±15 bps. El informe debe presentar la reducción medida con su intervalo, que es lo que pide el Título I (objetivo 4).
 
 ## 2. Alcance del sprint

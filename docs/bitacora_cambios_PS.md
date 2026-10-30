@@ -334,6 +334,20 @@
   - cuaderno `notebooks/Colab_reeval_red_B.ipynb`, que encuentra y reevalúa la red s2000 y rehace el Maestro si esa red gana.
 - **Gráficos:** no hay.
 
+### `feature/ps-resultados-30oct-c`: red B reevaluada y bloque 1 de las 30 corridas (30 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió `Colab_reeval_red_B` y `Colab_30corridas_bloque1` en Colab.
+- **Qué:**
+  - `data/colab_resultados/reeval_300_imitacion/red_rimit__d3_opcion0_s2000.json` y la tabla regenerada `docs/reeval_300_imitacion_ABIDES_PS.md`;
+  - `data/colab_resultados/sistema_final_revision/ejecutor_elegido.json` (la regla aplicada otra vez);
+  - `data/colab_resultados/corridas_30/bloque_1/` y `tabla_bloque1/`, con el avance en `docs/corridas_30_avance_bloque1_PS.md`;
+  - actualización de `docs/reeval_300_imitacion_resultado_PS.md`, `docs/sistema_final_resultado_PS.md`, `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md` y `docs/guia_graficos.md`.
+- **Por qué:** pasos 3b y 4 del cierre del Sprint 6.
+- **Resultado:**
+  - la red s2000 cuesta 5,98 bps, más que la s1000 (5,68): el Ejecutor elegido y el Maestro no cambian;
+  - bloque 1 (9 pares): sistema − TWAP −18,4 bps [−38,9; +3,3] y sistema − VWAP −18,7 [−44,5; +8,0]. Todavía no se distingue.
+- **Cómo verificar:** `PYTHONPATH=. python scripts/analizar_reeval_mid_ps.py --dir data/colab_resultados/reeval_300_imitacion`.
+- **Gráficos:** `tabla_bloque1/cajas.png` (ver `docs/guia_graficos.md`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

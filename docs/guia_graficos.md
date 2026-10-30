@@ -183,5 +183,6 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Qué muestra:** una caja por estrategia (sistema final, TWAP y VWAP) con el costo de cada corrida en bps contra el precio de llegada. La línea es la mediana, el triángulo la media y los puntos sueltos las corridas extremas.
 - **Cómo leerlo:** las cajas son anchas porque el costo de una jornada lo domina hacia dónde se movió el precio ese día. La comparación que vale es la pareada, por orden y semilla, de la tabla (`tabla_maestra.md`), no la distancia entre cajas.
 - **Datos y script:** `scripts/consolidar_resultados_3_2_2.py`.
+- **Avance con el bloque 1** (rama `feature/ps-resultados-30oct-c`; `data/colab_resultados/corridas_30/tabla_bloque1/cajas.png`): las mismas cajas con solo 9 corridas por estrategia. La caja del sistema es más angosta y más baja que las de TWAP y VWAP, pero la diferencia pareada todavía incluye el 0 (`docs/corridas_30_avance_bloque1_PS.md`).
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

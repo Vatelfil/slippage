@@ -2,7 +2,12 @@
 
 **Elaborado por:** PS con apoyo de Claude Code. **Datos:** `data/colab_resultados/reeval_300_imitacion/`, del cuaderno `Colab_reevaluacion_imitacion_300`, corrido por PS en Colab con ABIDES. **Tabla completa:** `docs/reeval_300_imitacion_ABIDES_PS.md`, generada con `scripts/analizar_reeval_mid_ps.py`. Todas las redes se evalúan muestreando su política, en las mismas 300 semillas (5001 a 5300).
 
-## 1. Falta una red
+## 1. La red que faltaba (actualizado el 30 de octubre, tarde)
+
+**Ya está evaluada.** El cuaderno `Colab_reeval_red_B` la encontró y la evaluó en las mismas 300 semillas (`red_rimit__d3_opcion0_s2000.json`). Resultado: **5,98 bps**, cumplimiento 1,000. Respecto de su red sin entrenar: −1,03 [−2,93; +0,97]. Respecto de TWAP límite: **+1,32 [+0,56; +2,09]**. Es más cara que la red s1000 (5,68), así que **la elección no cambia**. Además, PPO empeoró a la red B respecto de su versión solo imitada (5,13 → 5,98 bps).
+
+Lo que sigue es lo que se escribió antes de tenerla:
+
 
 La carpeta trae `rimit` con la semilla 1000, pero **no la red `rimit` con la semilla 2000**, que es la red B ajustada con PPO. La reevaluación busca `rimit/d3_opcion0_s2000/checkpoints_apertura/checkpoint_last.pt` en Drive. Si no la encontró, ese archivo no estaba cuando corrió el cuaderno. Puede ser porque Drive todavía no sincronizaba lo que dejó el cuaderno B (inferido; no hay registro que lo confirme).
 
@@ -25,6 +30,6 @@ La carpeta trae `rimit` con la semilla 1000, pero **no la red `rimit` con la sem
 - **Todavía no le gana a TWAP límite:** queda 1,03 bps por encima, y esa diferencia sí es significativa. Parte de ella viene de que la red compra el 100 % y TWAP el 98,9 %.
 - **PPO casi no cambia lo copiado** (5,77 → 5,68 bps). Con la tasa de aprendizaje baja que se usó, el ajuste es chico.
 - **La red solo imitada s2000 empata con TWAP** (+0,47, IC que incluye el 0), pero no compite: no pasó por PPO, y el Título I pide Ejecutores PPO. Su versión con PPO es la que falta (sección 1).
-- **Elección con la regla fijada:** con lo que hay, gana la red de imitación + PPO s1000 (`scripts/elegir_ejecutor_ps.py`). Se confirma cuando esté la red s2000.
+- **Elección con la regla fijada:** con lo que hay, gana la red de imitación + PPO s1000 (`scripts/elegir_ejecutor_ps.py`). Confirmado con la red s2000 (5,98 bps): sigue ganando la s1000.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

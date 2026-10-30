@@ -7,7 +7,7 @@
 - **Regla:** la red PPO de menor slippage en las 300 semillas que complete al menos el 95 %.
 - **Elegida:** `rimit__d3_opcion0_s1000` (imitación + PPO), con 5,68 bps y cumplimiento de 1,000. Le siguen dos redes V2 con 6,50 y 6,52 bps.
 - **Falta una candidata:** la red B de imitación + PPO (semilla 2000) no entró, porque la reevaluación no encontró su archivo en Drive. PS confirmó que el archivo existe: semilla 2000, 1.000 episodios, tasa 0,0001.
-- **Qué se hace:** el cuaderno `notebooks/Colab_reeval_red_B.ipynb` la busca, la reevalúa y vuelve a aplicar la regla. Si gana la B, guarda el Maestro anterior en `sistema_final/maestro_con_<red anterior>` y lo vuelve a entrenar con la B.
+- **Revisión (30 oct, tarde):** el cuaderno `notebooks/Colab_reeval_red_B.ipynb` la encontró y la evaluó: 5,98 bps, segunda en la lista. Con la regla aplicada de nuevo (`data/colab_resultados/sistema_final_revision/ejecutor_elegido.json`), **sigue ganando la s1000**. El sistema final y el Maestro quedan igual: el zip trajo el mismo `resumen_maestro.json`.
 
 ## 2. Maestro (Poisson, 2.000 jornadas, λ = 0,02, impacto acumulado, inicio sorteado entre los tres tramos)
 
