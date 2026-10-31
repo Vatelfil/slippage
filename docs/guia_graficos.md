@@ -185,5 +185,6 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Datos y script:** `scripts/consolidar_resultados_3_2_2.py`.
 - **Avance con el bloque 1** (rama `feature/ps-resultados-30oct-c`; `data/colab_resultados/corridas_30/tabla_bloque1/cajas.png`): las mismas cajas con solo 9 corridas por estrategia. La caja del sistema es más angosta y más baja que las de TWAP y VWAP, pero la diferencia pareada todavía incluye el 0 (`docs/corridas_30_avance_PS.md`).
 - **Avance con los bloques 1 a 3** (rama `feature/ps-resultados-30oct-d`; `tabla_bloques1a3/cajas.png`): 24 corridas por estrategia. La caja del sistema queda más baja y bastante más angosta que las de TWAP y VWAP: el sistema evita los días muy caros, pero también los muy baratos. La diferencia pareada sigue incluyendo el 0.
+- **Resultado final con las 30 corridas** (rama `feature/ps-resultados-30oct-e`; `data/colab_resultados/corridas_30/tabla_final/cajas.png`): la mediana del sistema es parecida a la de TWAP y VWAP, pero su caja es mucho más corta y su peor día es la mitad de malo. La media más baja viene sobre todo de evitar los días muy caros. Los puntos muy negativos son días en que el precio bajó y todos ganaron. Lectura completa en `docs/corridas_30_resultado_PS.md`.
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

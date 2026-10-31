@@ -7,6 +7,8 @@
 
 Los cuadernos `Colab_30corridas_bloque1` a `3` los corrió PS en Colab con ABIDES.
 
+> **Superado:** el resultado con las 30 corridas está en `docs/corridas_30_resultado_PS.md`.
+
 **Avance parcial: 24 de 30 corridas (8 meta-órdenes × 3 semillas).** Falta el bloque 4, con MO-09 y MO-10. El resultado de la 3.1.3 se escribe con los cuatro bloques.
 
 ## 1. Qué se corrió

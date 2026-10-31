@@ -362,6 +362,21 @@
 - **Cómo verificar:** abrir `data/colab_resultados/corridas_30/tabla_bloques1a3/tabla_maestra.md`.
 - **Gráficos:** `tabla_bloques1a3/cajas.png` (ver `docs/guia_graficos.md`).
 
+### `feature/ps-resultados-30oct-e`: resultado de las 30 corridas, 3.1.3 (30 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió los cuatro cuadernos `Colab_30corridas_bloque1` a `4` en Colab.
+- **Qué:**
+  - `data/colab_resultados/corridas_30/bloque_4/` y `tabla_final/`, con la tabla de los cuatro bloques. Los bloques 1 a 3 del zip son idénticos a los ya guardados;
+  - `docs/corridas_30_resultado_PS.md`: resultado, desglose por orden, pruebas de robustez y qué significa para el Título I;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md`, `docs/guia_graficos.md` y `docs/corridas_30_avance_PS.md`.
+- **Por qué:** cierre de la 3.1.3 y del trabajo de Colab del Sprint 6.
+- **Resultado:**
+  - sistema 34,5 bps, TWAP 58,0 y VWAP 61,0;
+  - sistema − TWAP −23,5 bps [−51,3; +3,8], p Wilcoxon 0,08: más barato en promedio, pero no significativo;
+  - el sistema varía menos entre días;
+  - en las órdenes del cierre compra solo el 91 a 92 %.
+- **Cómo verificar:** abrir `data/colab_resultados/corridas_30/tabla_final/tabla_maestra.md`.
+- **Gráficos:** `tabla_final/cajas.png` (ver `docs/guia_graficos.md`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
