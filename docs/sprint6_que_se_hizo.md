@@ -16,7 +16,7 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 |---|---|---|---|---|---|
 | **3.1.1** Tasa de aprendizaje, lote y épocas del PPO | MR (borrador de PS) | Hecho con límite | Barrido de 36 configuraciones × 2 redes en Poisson, con regla fijada antes. Gana tasa 0,003, lote 128, 16 épocas (−2,62 bps frente a la red inicial; la configuración de siempre, −2,43). La mejora es chica. **Límite:** medido en Poisson; en ABIDES no se aplicó todavía | `docs/barrido_hiperparametros_resultado_PS.md`, `data/barrido_hp/3_1_1/` | MR |
 | **3.1.2** Clipping ε y λ de GAE | MR (borrador de PS) | Hecho con límite | 25 combinaciones aleatorias partiendo del ganador de la 3.1.1. Ninguna mejora con claridad: **se mantienen ε = 0,2 y λ = 0,95**. Las combinaciones con λ ≈ 0,90 no completan la orden. Mismo límite | `data/barrido_hp/3_1_2/` | MR |
-| **3.1.3** Corridas de evaluación (30 corridas del sistema contra TWAP y VWAP, con media, desviación, IC 95 %, Wilcoxon, t-test y gráfico de cajas) | BF (PS según el Excel) | **Hecho** | 30 corridas (10 meta-órdenes × 3 semillas). Sistema 34,5 bps; TWAP 58,0; VWAP 61,0. Sistema − TWAP −23,5 bps [−51,3; +3,8], p Wilcoxon 0,08: más barato en promedio, pero no significativo. En las órdenes del cierre el sistema compraba solo el 91 a 92 % (`docs/corridas_30_resultado_PS.md`): causa encontrada y corregida (`docs/correccion_cierre_PS.md`); falta repetir las corridas del sistema | `notebooks/Colab_30corridas_bloque1` a `4`, `scripts/consolidar_resultados_3_2_2.py` | BF / PS |
+| **3.1.3** Corridas de evaluación (30 corridas del sistema contra TWAP y VWAP, con media, desviación, IC 95 %, Wilcoxon, t-test y gráfico de cajas) | BF (PS según el Excel) | **Hecho** | 30 corridas (10 meta-órdenes × 3 semillas), con la corrección del cierre: todas las órdenes completas (mínimo 0,97). Sistema 35,8 bps; TWAP 58,0; VWAP 61,0. Sistema − TWAP −22,1 bps [−50,0; +4,4], p Wilcoxon 0,10: más barato en promedio, pero no significativo (`docs/corridas_30_corregidas_resultado_PS.md`) | `notebooks/Colab_30corridas_bloque1` a `4`, `scripts/consolidar_resultados_3_2_2.py` | BF / PS |
 | **3.1.4** Monitoreo y registro de métricas | PS (BF según el Excel) | Hecho | Monitor por episodio y panel, con alertas calibradas en 27 corridas reales. **Conectado al barrido de MR:** hubo alertas críticas en 6 de 122 redes, que son justo las que no completan la orden. Se cerró el límite anterior | `src/training/monitoreo.py`, `docs/guia_alertas_monitoreo_PS.md`, `data/barrido_hp/*/monitoreo.md` | PS |
 | **3.1.5** Sprint Review | Los tres | Este documento | — | — | Los tres |
 | **P10** Revalidar λ del Maestro | MR (borrador de PS) | Hecho con límite | En Poisson, con el Maestro entrenado, λ = 0,05 deja al Maestro 1,8 bps sobre TWAP y λ = 0,02 lo deja empatado (+0,36 bps, IC −0,08 a +0,83). El sistema final usa λ = 0,02. **Límite:** Poisson | `docs/maestro_primer_entrenamiento_PS.md`, `scripts/revalidar_lambda_maestro.py` | MR |
@@ -68,7 +68,9 @@ Estados: **Hecho** · **Hecho con límite** · **En Colab** (código listo, falt
 2. ~~`Colab_sistema_final`~~ (30 oct): eligió la red s1000 (5,68 bps). El Maestro completa el 97,6 % de la orden (antes, 73 %). Ver `docs/sistema_final_resultado_PS.md`. Confirmado: no se rehace.
 3. ~~`Colab_30corridas_bloque1` a `4`~~ (30 oct): 30 corridas, sistema − TWAP −23,5 bps [−51,3; +3,8]. Ver `docs/corridas_30_resultado_PS.md`.
 
-4. `Colab_30corridas_corregidas_A` y `_B` (al mismo tiempo, ≈ 1 h): repiten solo el sistema con la corrección del cierre. Ver `docs/correccion_cierre_PS.md`.
+4. ~~`Colab_30corridas_corregidas_A` y `_B`~~ (31 oct): resultado oficial de la 3.1.3 en `docs/corridas_30_corregidas_resultado_PS.md`.
+
+**Todo lo de Colab del Sprint 6 está corrido.**
 
 Para el Sprint 7: usar `--completar-al-cierre` en las 90 corridas por escenario y, si se vuelve a entrenar el Maestro, entrenarlo con la regla activada.
 

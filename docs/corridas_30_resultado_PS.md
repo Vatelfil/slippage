@@ -8,7 +8,7 @@
 
 Los cuatro cuadernos los corrió PS en Colab con ABIDES. La tabla la genera `scripts/consolidar_resultados_3_2_2.py`. Los avances parciales están en `docs/corridas_30_avance_PS.md`.
 
-> **Corrección pendiente (31 oct):** la causa del cumplimiento bajo en el cierre ya se encontró y se corrigió (`docs/correccion_cierre_PS.md`). Las corridas del sistema se repiten con la corrección en `Colab_30corridas_corregidas_A` y `_B`. Este documento queda como la versión **sin corrección**.
+> **Superado (31 oct):** el resultado oficial, con la corrección del cierre, está en `docs/corridas_30_corregidas_resultado_PS.md`: −22,1 bps contra TWAP, con la misma conclusión. Este documento queda como la versión **sin corrección**.
 
 ## 1. Diseño
 
