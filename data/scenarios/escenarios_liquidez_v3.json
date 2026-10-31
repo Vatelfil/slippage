@@ -1,0 +1,19 @@
+{
+  "version": "v3-borrador",
+  "estado": "BORRADOR de PS para BF (30 oct 2026). Mismos factores de mm_pov que la v2, con los nombres puestos segun el costo medido en el C-6b: con mas mm_pov, comprar a mercado cuesta mas en ABIDES (docs/c6_liquidez_resultado_PS.md, seccion 4). La liquidez se define por el costo de barrer el libro, como las medidas de impacto en el precio (Kyle, Amihud). Requiere aprobacion de BF y se declara como desviacion.",
+  "que_escala": {
+    "abides": "solo mm_pov (tamano de las cotizaciones del market maker de rmsc04); deja igual a los demas agentes",
+    "poisson": "avg_order_size (profundidad del libro), igual que la v1 y la v2"
+  },
+  "claves_abides": ["mm_pov"],
+  "criterio_c6": {
+    "heuristica": "agresiva_market",
+    "tamanos": [5000],
+    "razon": "el mismo de la v2. Se confirma con las semillas de las 90 corridas del Sprint 7, que son distintas a las del C-6b"
+  },
+  "escenarios": {
+    "baja": {"factor": 4.0, "descripcion": "mm_pov x4: en el C-6b, comprar 5.000 acciones a mercado cuesta 24,2 bps"},
+    "media": {"factor": 1.0, "descripcion": "la calibracion vigente, sin cambios: 14,7 bps"},
+    "alta": {"factor": 0.25, "descripcion": "mm_pov x0,25: 11,7 bps"}
+  }
+}

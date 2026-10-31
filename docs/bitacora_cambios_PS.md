@@ -314,6 +314,82 @@
 - **Cómo verificar:** leer `resultados.evaluacion_entrenada` en `data/colab_resultados/rimit/*/entrenamiento_inicial_apertura.json`.
 - **Gráficos:** no hay.
 
+### `feature/ps-resultados-30oct`: reevaluación con imitación y C-6b (30 de octubre)
+- **Quién:** PS con apoyo de Claude Code. PS corrió los cuadernos en Colab. Los escenarios v3 son **borrador de PS para BF**.
+- **Qué:**
+  - resultados en `data/colab_resultados/reeval_300_imitacion/` y `c6b_liquidez/`;
+  - `docs/reeval_300_imitacion_resultado_PS.md` y la tabla `docs/reeval_300_imitacion_ABIDES_PS.md`;
+  - sección 4 de `docs/c6_liquidez_resultado_PS.md`;
+  - `data/scenarios/escenarios_liquidez_v3.json`, con su prueba, y la desviación 10;
+  - el analizador de la reevaluación separa los grupos de imitación;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md` y `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+- **Por qué:** paso 2 del cierre del Sprint 6.
+- **Resultado:**
+  - la red de imitación + PPO s1000 cuesta 5,68 bps en 300 semillas, la mejor red PPO medida, y queda +1,03 bps sobre TWAP límite;
+  - falta la red s2000, que no se encontró en Drive;
+  - en el C-6b, más `mm_pov` encarece la compra a mercado (11,7 → 24,2 bps), con el pareo funcionando.
+- **Cómo verificar:** `PYTHONPATH=. python scripts/analizar_reeval_mid_ps.py --dir data/colab_resultados/reeval_300_imitacion`; `python -m pytest tests/test_escenarios_liquidez.py -q`.
+- **Agregado después, en la misma rama:**
+  - resultado del sistema final en `data/colab_resultados/sistema_final/` y `docs/sistema_final_resultado_PS.md`: Ejecutor s1000; el Maestro completa el 97,6 % de la orden (antes, 73 %);
+  - cuaderno `notebooks/Colab_reeval_red_B.ipynb`, que encuentra y reevalúa la red s2000 y rehace el Maestro si esa red gana.
+- **Gráficos:** no hay.
+
+### `feature/ps-resultados-30oct-c`: red B reevaluada y bloque 1 de las 30 corridas (30 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió `Colab_reeval_red_B` y `Colab_30corridas_bloque1` en Colab.
+- **Qué:**
+  - `data/colab_resultados/reeval_300_imitacion/red_rimit__d3_opcion0_s2000.json` y la tabla regenerada `docs/reeval_300_imitacion_ABIDES_PS.md`;
+  - `data/colab_resultados/sistema_final_revision/ejecutor_elegido.json` (la regla aplicada otra vez);
+  - `data/colab_resultados/corridas_30/bloque_1/` y `tabla_bloque1/`, con el avance en `docs/corridas_30_avance_bloque1_PS.md` (renombrado después a `docs/corridas_30_avance_PS.md`);
+  - actualización de `docs/reeval_300_imitacion_resultado_PS.md`, `docs/sistema_final_resultado_PS.md`, `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md` y `docs/guia_graficos.md`.
+- **Por qué:** pasos 3b y 4 del cierre del Sprint 6.
+- **Resultado:**
+  - la red s2000 cuesta 5,98 bps, más que la s1000 (5,68): el Ejecutor elegido y el Maestro no cambian;
+  - bloque 1 (9 pares): sistema − TWAP −18,4 bps [−38,9; +3,3] y sistema − VWAP −18,7 [−44,5; +8,0]. Todavía no se distingue.
+- **Cómo verificar:** `PYTHONPATH=. python scripts/analizar_reeval_mid_ps.py --dir data/colab_resultados/reeval_300_imitacion`.
+- **Gráficos:** `tabla_bloque1/cajas.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-resultados-30oct-d`: bloques 2 y 3 de las 30 corridas (30 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió `Colab_30corridas_bloque2` y `3` en Colab.
+- **Qué:**
+  - `data/colab_resultados/corridas_30/bloque_2/`, `bloque_3/` y `tabla_bloques1a3/`. La tabla se tomó del zip del bloque 2, porque en el del bloque 3 los benchmarks del bloque 2 estaban incompletos;
+  - el avance pasa a `docs/corridas_30_avance_PS.md`, con el desglose por orden;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md` y `docs/guia_graficos.md`.
+- **Por qué:** paso 4 del cierre del Sprint 6.
+- **Resultado:**
+  - con 24 pares, sistema − TWAP −26,0 bps [−58,4; +6,0] y sistema − VWAP −29,7 [−66,8; +6,5]; el sistema gana 17 de 24 pares, pero todavía sin significancia;
+  - la desviación de la diferencia es ≈ 85 bps, más de lo estimado;
+  - en MO-08 (cierre) el sistema compra solo el 93 %.
+- **Cómo verificar:** abrir `data/colab_resultados/corridas_30/tabla_bloques1a3/tabla_maestra.md`.
+- **Gráficos:** `tabla_bloques1a3/cajas.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-resultados-30oct-e`: resultado de las 30 corridas, 3.1.3 (30 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió los cuatro cuadernos `Colab_30corridas_bloque1` a `4` en Colab.
+- **Qué:**
+  - `data/colab_resultados/corridas_30/bloque_4/` y `tabla_final/`, con la tabla de los cuatro bloques. Los bloques 1 a 3 del zip son idénticos a los ya guardados;
+  - `docs/corridas_30_resultado_PS.md`: resultado, desglose por orden, pruebas de robustez y qué significa para el Título I;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md`, `docs/guia_graficos.md` y `docs/corridas_30_avance_PS.md`.
+- **Por qué:** cierre de la 3.1.3 y del trabajo de Colab del Sprint 6.
+- **Resultado:**
+  - sistema 34,5 bps, TWAP 58,0 y VWAP 61,0;
+  - sistema − TWAP −23,5 bps [−51,3; +3,8], p Wilcoxon 0,08: más barato en promedio, pero no significativo;
+  - el sistema varía menos entre días;
+  - en las órdenes del cierre compra solo el 91 a 92 %.
+- **Cómo verificar:** abrir `data/colab_resultados/corridas_30/tabla_final/tabla_maestra.md`.
+- **Gráficos:** `tabla_final/cajas.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-sprint6-final`: corrección del cierre y cuadernos para repetir las corridas (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code.
+- **Qué:**
+  - opción `completar_al_cierre` en `src/envs/maestro_ejecutor_protocol.py` y `--completar-al-cierre` en `scripts/colab/evaluar_sistema_ps.py`;
+  - 3 pruebas en `tests/test_maestro_ejecutor_protocol.py`;
+  - cuadernos `notebooks/Colab_30corridas_corregidas_A.ipynb` y `_B.ipynb`;
+  - `docs/correccion_cierre_PS.md` y la desviación 11;
+  - actualización de `docs/corridas_30_resultado_PS.md`, `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md` y `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+- **Por qué:** en las 30 corridas, las órdenes del cierre quedaban bajo el 95 %. La causa es el tope de la acción del Maestro, 1 − 0,5⁴ = 93,75 %.
+- **Resultado:** con la regla, la última decisión asigna todo lo pendiente. Las pruebas confirman el tope sin la regla y el 100 % con ella. Falta repetir las corridas en ABIDES.
+- **Cómo verificar:** `python -m pytest tests/test_maestro_ejecutor_protocol.py -q`.
+- **Gráficos:** no hay.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
