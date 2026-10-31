@@ -339,7 +339,7 @@
 - **Qué:**
   - `data/colab_resultados/reeval_300_imitacion/red_rimit__d3_opcion0_s2000.json` y la tabla regenerada `docs/reeval_300_imitacion_ABIDES_PS.md`;
   - `data/colab_resultados/sistema_final_revision/ejecutor_elegido.json` (la regla aplicada otra vez);
-  - `data/colab_resultados/corridas_30/bloque_1/` y `tabla_bloque1/`, con el avance en `docs/corridas_30_avance_bloque1_PS.md`;
+  - `data/colab_resultados/corridas_30/bloque_1/` y `tabla_bloque1/`, con el avance en `docs/corridas_30_avance_bloque1_PS.md` (renombrado después a `docs/corridas_30_avance_PS.md`);
   - actualización de `docs/reeval_300_imitacion_resultado_PS.md`, `docs/sistema_final_resultado_PS.md`, `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md` y `docs/guia_graficos.md`.
 - **Por qué:** pasos 3b y 4 del cierre del Sprint 6.
 - **Resultado:**
@@ -347,6 +347,20 @@
   - bloque 1 (9 pares): sistema − TWAP −18,4 bps [−38,9; +3,3] y sistema − VWAP −18,7 [−44,5; +8,0]. Todavía no se distingue.
 - **Cómo verificar:** `PYTHONPATH=. python scripts/analizar_reeval_mid_ps.py --dir data/colab_resultados/reeval_300_imitacion`.
 - **Gráficos:** `tabla_bloque1/cajas.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-resultados-30oct-d`: bloques 2 y 3 de las 30 corridas (30 de octubre, noche)
+- **Quién:** PS con apoyo de Claude Code. PS corrió `Colab_30corridas_bloque2` y `3` en Colab.
+- **Qué:**
+  - `data/colab_resultados/corridas_30/bloque_2/`, `bloque_3/` y `tabla_bloques1a3/`. La tabla se tomó del zip del bloque 2, porque en el del bloque 3 los benchmarks del bloque 2 estaban incompletos;
+  - el avance pasa a `docs/corridas_30_avance_PS.md`, con el desglose por orden;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md` y `docs/guia_graficos.md`.
+- **Por qué:** paso 4 del cierre del Sprint 6.
+- **Resultado:**
+  - con 24 pares, sistema − TWAP −26,0 bps [−58,4; +6,0] y sistema − VWAP −29,7 [−66,8; +6,5]; el sistema gana 17 de 24 pares, pero todavía sin significancia;
+  - la desviación de la diferencia es ≈ 85 bps, más de lo estimado;
+  - en MO-08 (cierre) el sistema compra solo el 93 %.
+- **Cómo verificar:** abrir `data/colab_resultados/corridas_30/tabla_bloques1a3/tabla_maestra.md`.
+- **Gráficos:** `tabla_bloques1a3/cajas.png` (ver `docs/guia_graficos.md`).
 
 ## 3. Ramas obsoletas (no usar)
 
