@@ -390,6 +390,20 @@
 - **Cómo verificar:** `python -m pytest tests/test_maestro_ejecutor_protocol.py -q`.
 - **Gráficos:** no hay.
 
+### `feature/ps-3-1-3-resultado-oficial`: resultado oficial de la 3.1.3 con la corrección del cierre (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code. PS corrió `Colab_30corridas_corregidas_A` y `_B` en Colab.
+- **Qué:**
+  - `data/colab_resultados/corridas_30_completa/` (`A/`, `B/` y `tabla/`);
+  - `docs/corridas_30_corregidas_resultado_PS.md`;
+  - actualización de `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md`, `docs/LEEME_COLAB_CIERRE_SPRINT6.md`, `docs/corridas_30_resultado_PS.md`, `docs/correccion_cierre_PS.md` y `docs/guia_graficos.md`.
+- **Por qué:** dejar la 3.1.3 con todas las órdenes completas.
+- **Resultado:**
+  - cumplimiento mínimo 0,97 (antes 0,91);
+  - sistema 35,8 bps, TWAP 58,0 y VWAP 61,0;
+  - sistema − TWAP −22,1 bps [−50,0; +4,4], p Wilcoxon 0,10: más barato en promedio, pero no significativo.
+- **Cómo verificar:** abrir `data/colab_resultados/corridas_30_completa/tabla/tabla_maestra.md`.
+- **Gráficos:** `corridas_30_completa/tabla/cajas.png` (ver `docs/guia_graficos.md`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

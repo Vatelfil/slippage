@@ -40,4 +40,6 @@ Con `completar_al_cierre`, **la última decisión del día (15:30) asigna todo l
 
 Hay que repetir **solo el sistema** en las 30 corridas, con las mismas redes, semillas e impacto. Se usan los cuadernos `Colab_30corridas_corregidas_A` y `_B`, al mismo tiempo, ≈ 1 h cada uno. TWAP y VWAP no cambian y se reutilizan. El resultado reemplaza al de `docs/corridas_30_resultado_PS.md` como versión oficial de la 3.1.3. La versión sin la corrección queda como registro.
 
+**Resultado (31 oct):** el cumplimiento de las órdenes del cierre subió de 0,91–0,93 a 0,97–1,00. Las demás órdenes no cambiaron. El sistema contra TWAP queda en −22,1 bps [−50,0; +4,4]. Ver `docs/corridas_30_corregidas_resultado_PS.md`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
