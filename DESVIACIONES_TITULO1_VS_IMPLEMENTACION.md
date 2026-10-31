@@ -128,3 +128,9 @@ El Ejecutor PPO puede partir copiando a TWAP con órdenes límite (`--imitar twa
 ## 10. Escenarios de liquidez definidos por el costo medido (v3) [PROPUESTA de PS para BF, 30 oct 2026]
 
 El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDES se usa el tamaño de las cotizaciones del market maker (`mm_pov`) para generarlos. En el C-6b, subir `mm_pov` **encareció** la compra a mercado (`docs/c6_liquidez_resultado_PS.md`, sección 4). La v3 asigna los nombres según ese costo: baja = ×4, alta = ×0,25. El orden se eligió mirando el resultado, así que se declara y se confirma con las semillas de las 90 corridas del Sprint 7. **Estado: pendiente de que BF la acepte.**
+
+---
+
+## 11. Barrido final en la última decisión del Maestro [PS, 31 oct 2026]
+
+El Título I define la acción del Maestro como la fracción α ∈ [0,05; 0,50] de lo que falta. Con esa acción, una orden que empieza a las 14:00 (4 decisiones) no puede pasar del 93,75 %. Se agrega la opción `completar_al_cierre`: en la última decisión del día, α = 1. Las demás decisiones siguen la acción del Título I. Se usa en la versión corregida de las 30 corridas (`docs/correccion_cierre_PS.md`). **Estado:** aplicada por PS; el Maestro (de MR) no se modifica.

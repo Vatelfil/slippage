@@ -377,6 +377,19 @@
 - **Cómo verificar:** abrir `data/colab_resultados/corridas_30/tabla_final/tabla_maestra.md`.
 - **Gráficos:** `tabla_final/cajas.png` (ver `docs/guia_graficos.md`).
 
+### `feature/ps-sprint6-final`: corrección del cierre y cuadernos para repetir las corridas (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code.
+- **Qué:**
+  - opción `completar_al_cierre` en `src/envs/maestro_ejecutor_protocol.py` y `--completar-al-cierre` en `scripts/colab/evaluar_sistema_ps.py`;
+  - 3 pruebas en `tests/test_maestro_ejecutor_protocol.py`;
+  - cuadernos `notebooks/Colab_30corridas_corregidas_A.ipynb` y `_B.ipynb`;
+  - `docs/correccion_cierre_PS.md` y la desviación 11;
+  - actualización de `docs/corridas_30_resultado_PS.md`, `docs/sprint6_que_se_hizo.md`, `docs/informe_sprint6_PS.md` y `docs/LEEME_COLAB_CIERRE_SPRINT6.md`.
+- **Por qué:** en las 30 corridas, las órdenes del cierre quedaban bajo el 95 %. La causa es el tope de la acción del Maestro, 1 − 0,5⁴ = 93,75 %.
+- **Resultado:** con la regla, la última decisión asigna todo lo pendiente. Las pruebas confirman el tope sin la regla y el 100 % con ella. Falta repetir las corridas en ABIDES.
+- **Cómo verificar:** `python -m pytest tests/test_maestro_ejecutor_protocol.py -q`.
+- **Gráficos:** no hay.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

@@ -254,3 +254,46 @@ def test_maestro_ejecutor_conversion_unidades_por_clp():
     # slippage_parcial en CLP = (5992.6924 - 5969.8) * 1000 = 22892.4 CLP
     esperado_slippage = (5992.6924 - 5969.8) * 1000.0
     assert pytest.approx(rep["slippage_parcial"], rel=1e-4) == esperado_slippage
+
+
+def _env_cierre(completar: bool) -> MaestroEjecutorEnv:
+    """Orden que empieza a las 14:00 (4 decisiones), con un Ejecutor falso que compra todo lo asignado."""
+    idx = pd.date_range("2026-09-29 14:00", "2026-09-29 16:00", freq="5min")
+    datos = pd.DataFrame({"volatilidad": 0.002, "vol_promedio": 0.2}, index=idx)
+    env = MaestroEjecutorEnv(meta_orden_quantity=10_000, datos_historicos=datos, completar_al_cierre=completar)
+
+    def ejecutor_falso(msg_asignar=None):
+        from src.envs.ctde_protocol import MensajeAsignar
+        q = MensajeAsignar.from_json(env.canal._buzon_asignar).q_asignado
+        return {"q_ejecutado": float(q), "p_promedio": 100.0, "slippage_parcial": 0.0}
+
+    env._run_executor_episode = ejecutor_falso
+    return env
+
+
+def _correr_al_maximo(env: MaestroEjecutorEnv):
+    env.reset()
+    done, n = False, 0
+    while not done:
+        _, _, done, _ = env.step((9, 3))  # alpha = 0,5 (el maximo), ventana 15 min
+        n += 1
+    return n, env.Q_executed / env.Q_total
+
+
+def test_sin_completar_al_cierre_el_tope_es_93_75():
+    n, cumpl = _correr_al_maximo(_env_cierre(False))
+    assert n == 4
+    assert cumpl == pytest.approx(1 - 0.5 ** 4)
+
+
+def test_completar_al_cierre_asigna_todo_en_la_ultima_decision():
+    n, cumpl = _correr_al_maximo(_env_cierre(True))
+    assert n == 4
+    assert cumpl == pytest.approx(1.0)
+
+
+def test_completar_al_cierre_no_cambia_las_decisiones_anteriores():
+    env = _env_cierre(True)
+    env.reset()
+    _, _, _, info = env.step((0, 1))  # 14:00, no es la ultima: alpha = 0,05
+    assert info["Q_executed"] == pytest.approx(0.05 * 10_000)

@@ -145,7 +145,8 @@ def _factory_pareada(base: Optional[Callable], semilla_orden: int, periodo0: int
 
 
 def correr_orden(orden: Dict, seed: int, maestro, redes: Dict, base_factory: Optional[Callable], nombre: str,
-                 deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None, impacto=None) -> Dict:
+                 deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None, impacto=None,
+                 completar_al_cierre: bool = False) -> Dict:
     """Una meta-orden con el sistema completo. Devuelve la corrida en el formato de los benchmarks."""
     import torch
     from src.envs.maestro_ejecutor_protocol import MaestroEjecutorEnv, maestro_policy
@@ -158,7 +159,8 @@ def correr_orden(orden: Dict, seed: int, maestro, redes: Dict, base_factory: Opt
     env = MaestroEjecutorEnv(meta_orden_quantity=int(orden["cantidad"]),
                              datos_historicos=datos_desde(orden["tramo_inicio"], datos_sm),
                              executor_env_factory=_factory_pareada(base_factory, semilla_orden, p0, acum, impacto),
-                             executor_policy_fn=make_executor_policy_fn(redes, deterministic=deterministic))
+                             executor_policy_fn=make_executor_policy_fn(redes, deterministic=deterministic),
+                             completar_al_cierre=completar_al_cierre)
     s_m, done, r_m, decisiones = env.reset(), False, 0.0, []
     while not done:
         accion = maestro_policy(s_m, model=maestro, deterministic=deterministic)
@@ -184,7 +186,7 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
            maestro, redes: Dict, factory_por_ticker: Callable[[str], Optional[Callable]], nombre: str,
            deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None,
            presupuesto_s: Optional[float] = None, log: Callable[[str], None] = print,
-           impacto_por_orden: Optional[Callable[[Dict], object]] = None) -> bool:
+           impacto_por_orden: Optional[Callable[[Dict], object]] = None, completar_al_cierre: bool = False) -> bool:
     """Corre lo pendiente. Devuelve True si no queda nada."""
     t_ini = time.time()
     corridas = estado.setdefault("corridas", {})
@@ -196,7 +198,8 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
         o, clave, t0 = por_id[oid], f"{oid}|{nombre}|{seed}", time.time()
         try:
             imp = impacto_por_orden(o) if impacto_por_orden else None
-            c = correr_orden(o, seed, maestro, redes, factory_por_ticker(o["ticker"]), nombre, deterministic, datos_sm, imp)
+            c = correr_orden(o, seed, maestro, redes, factory_por_ticker(o["ticker"]), nombre, deterministic, datos_sm, imp,
+                             completar_al_cierre=completar_al_cierre)
             c["segundos"] = round(time.time() - t0, 1)
             corridas[clave] = c
             log(f"{clave}: slippage={c['slippage_bps']:.2f} bps cumpl={c['execution_rate']:.3f} ({c['segundos']:.0f}s)")
@@ -261,6 +264,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ap.add_argument("--max-minutes", type=float, default=None)
     ap.add_argument("--impacto", action="store_true",
                     help="impacto acumulado entre ventanas (src/envs/impacto_acumulado.py; borrador de PS para MR)")
+    ap.add_argument("--completar-al-cierre", action="store_true",
+                    help="la ultima decision del dia asigna todo lo que falta (docs/correccion_cierre_PS.md)")
     ap.add_argument("--impacto-y", type=float, default=0.5)
     ap.add_argument("--impacto-tau", type=float, default=120.0)
     ap.add_argument("--escenario", default=None, help="escenario de liquidez (baja, media, alta; ver data/scenarios); sin la opcion, la calibracion de siempre")
@@ -288,7 +293,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     factory_por_ticker = el.fabricas_por_ticker(args.entorno, args.calibrated_dir, args.snapshot, factor_liq,
                                                 claves=el.claves_de(args.escenarios_json))
 
-    sufijo = el.sufijo_condicion(args.escenario, args.factor_tamano) + ("_impacto" if args.impacto else "")
+    sufijo = (el.sufijo_condicion(args.escenario, args.factor_tamano) + ("_impacto" if args.impacto else "")
+              + ("_completa" if args.completar_al_cierre else ""))
     out = Path(args.out_dir) / f"sistema_meta_ordenes_{args.entorno}_{nombre}_{args.modo}{sufijo}.json"
     firma = {"tarea": "3.2.3-evaluador", "entorno": args.entorno, "snapshot": args.snapshot, "sistema": nombre,
              "modo": args.modo, "ckpt_maestro": args.ckpt_maestro, "ckpt_ejecutores": ckpts, "seed_red": args.seed_red,
@@ -296,6 +302,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
              "datos_sm": args.datos_sm}
     if sufijo:
         firma.update({"escenario": args.escenario, "factor_liquidez": factor_liq, "factor_tamano": args.factor_tamano})
+    if args.completar_al_cierre:
+        firma["completar_al_cierre"] = True
     if args.impacto:
         firma["impacto"] = {"y": args.impacto_y, "tau_min": args.impacto_tau}
     estado = load_resumable(out, firma)
@@ -304,7 +312,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     ok = correr(ordenes, seeds, estado, lambda e: save_json(out, e), maestro, redes, factory_por_ticker, nombre,
                 deterministic=args.modo == "argmax", datos_sm=datos_sm,
                 presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60,
-                impacto_por_orden=(lambda o: parametros_impacto(o, args.impacto_y, args.impacto_tau)) if args.impacto else None)
+                impacto_por_orden=(lambda o: parametros_impacto(o, args.impacto_y, args.impacto_tau)) if args.impacto else None,
+                completar_al_cierre=args.completar_al_cierre)
     for c in estado.get("corridas", {}).values():
         c.setdefault("escenario", args.escenario or "media")
         c.setdefault("factor_tamano", args.factor_tamano)

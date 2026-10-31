@@ -8,6 +8,8 @@
 
 Los cuatro cuadernos los corrió PS en Colab con ABIDES. La tabla la genera `scripts/consolidar_resultados_3_2_2.py`. Los avances parciales están en `docs/corridas_30_avance_PS.md`.
 
+> **Corrección pendiente (31 oct):** la causa del cumplimiento bajo en el cierre ya se encontró y se corrigió (`docs/correccion_cierre_PS.md`). Las corridas del sistema se repiten con la corrección en `Colab_30corridas_corregidas_A` y `_B`. Este documento queda como la versión **sin corrección**.
+
 ## 1. Diseño
 
 - **Sistema evaluado:** el sistema final, elegido con reglas fijadas antes de ver estas corridas.
@@ -72,7 +74,7 @@ Los cuatro cuadernos los corrió PS en Colab con ABIDES. La tabla la genera `scr
 4. **Defecto encontrado:** en las tres órdenes que empiezan al cierre, el sistema compra solo el 91 a 92 % de la orden. Esto no cumple el umbral del 95 %.
    - Ahí el slippage del sistema no es del todo comparable, porque el costo de la parte que no se compró no entra en la cuenta.
    - Sin esas órdenes el resultado casi no cambia (−25 bps), así que no explica la ventaja. Pero hay que corregirlo antes del Sprint 7.
-   - **Causa probable (inferida, no revisada en el código):** el Maestro no tiene en cuenta que, al cierre, quedan menos ventanas para terminar la orden.
+   - **Causa (revisada después en el código, `docs/correccion_cierre_PS.md`):** con 4 decisiones y α ≤ 0,5, el tope es 93,75 %. El Maestro eligió α = 0,5 en todas.
 5. **De dónde viene la ventaja (hipótesis):** el Ejecutor PPO solo no le gana a TWAP con órdenes límite (+1 bps en 300 semillas). Por eso, la diferencia vendría sobre todo de cómo el Maestro reparte la compra en el día.
 
 ## 4. Qué significa para el Título I

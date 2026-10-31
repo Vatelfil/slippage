@@ -29,7 +29,7 @@ Todo lo que dice «medido» sale de archivos del repositorio (rutas en la secci�
   - Sistema − VWAP: −26,4 bps [−58,2; +4,1].
   - El sistema gana 21 de 30 pares y varía menos entre días (desviación de 88 bps, contra 140 de TWAP).
   - **La diferencia no es significativa con 30 corridas**, y no debe presentarse como una reducción demostrada.
-  - En las tres órdenes que empiezan al cierre, el sistema compra solo el 91 a 92 %; hay que corregirlo en el Sprint 7.
+  - En las tres órdenes que empiezan al cierre, el sistema compraba solo el 91 a 92 %. La causa es un tope de la acción del Maestro (93,75 % con 4 decisiones). Se corrigió con un barrido final (`docs/correccion_cierre_PS.md`, desviación 11) y se repiten las corridas del sistema.
   - Ver `docs/corridas_30_resultado_PS.md`.
 - **Precisión:** el costo de una jornada en ABIDES varía ≈ 40 bps. Con 30 corridas el IC de la diferencia con TWAP será de ≈ ±15 bps. El informe debe presentar la reducción medida con su intervalo, que es lo que pide el Título I (objetivo 4).
 
