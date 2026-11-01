@@ -404,6 +404,22 @@
 - **Cómo verificar:** abrir `data/colab_resultados/corridas_30_completa/tabla/tabla_maestra.md`.
 - **Gráficos:** `corridas_30_completa/tabla/cajas.png` (ver `docs/guia_graficos.md`).
 
+### `feature/ps-3-2-3-comparacion`: plan de análisis y script de la comparación estadística, 3.2.3 (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code (tarea 3.2.3 del Sprint 7, asignada a PS en el Excel). Sin Colab.
+- **Qué:**
+  - `docs/plan_analisis_3_2_3_PS.md`: qué test responde la pregunta, fijado **antes** de correr las 90;
+  - `scripts/comparacion_estadistica_3_2_3.py`: Shapiro-Wilk, Wilcoxon, t-test, d de Cohen, r de rangos e IC por bootstrap; por escenario con Holm; Kruskal-Wallis, Mann-Whitney y Friedman entre escenarios; robustez sin MO-06 y promediando por orden y semilla;
+  - `tests/test_comparacion_estadistica_3_2_3.py` (7 pruebas);
+  - ensayo con las 30 corridas de la 3.1.3 en `data/analysis/3_2_3_prueba_30/`.
+- **Por qué:** dejar el análisis programado y probado mientras corren las 90, y que el test principal quede elegido antes de ver los datos.
+- **Resultado del ensayo:**
+  - reproduce la 3.1.3 (−22,15 bps [−50,01; 4,43]);
+  - la normalidad de las diferencias no se rechaza (Shapiro p 0,42);
+  - el efecto es pequeño (d = −0,28);
+  - con 90 corridas, la probabilidad de detectar una ventaja de −22 bps es de 76 %, y la de −12,5 bps, de 33 %.
+- **Cómo verificar:** `python scripts/comparacion_estadistica_3_2_3.py --entradas data/colab_resultados/corridas_30_completa/tabla/corridas.csv --out-dir data/analysis/3_2_3_prueba_30`.
+- **Gráficos:** `qq_diferencias.png`, `bosque_diferencias.png` y `diferencias_por_escenario.png` (ver `docs/guia_graficos.md`).
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
