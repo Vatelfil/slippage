@@ -432,7 +432,7 @@
 - **Cómo verificar:** `python -m pytest tests/test_cuadernos_90_corridas.py`.
 - **Gráficos:** no hay.
 
-### `feature/ps-3-2-3-control-reglas`: liquidez media de las 90, revisión del sistema y control del Maestro, 3.2.1 y 3.2.3 (1 de noviembre)
+### `feature/ps-3-2-3-control-reglas-v2`: liquidez media de las 90, revisión del sistema y control del Maestro, 3.2.1 y 3.2.3 (1 de noviembre)
 - **Quién:** PS, con apoyo de Claude Code. PS corrió en Colab la prueba corta y la liquidez media.
 - **Qué:**
   - resultado de la liquidez media: `data/colab_resultados/corridas_90/media/` y `docs/corridas_90_media_resultado_PS.md`;

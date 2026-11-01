@@ -194,7 +194,7 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **`diferencias_por_escenario.png`**: una caja por liquidez con la diferencia de cada corrida (puntos). Bajo la línea roja, el sistema fue más barato. Sirve para ver si la ventaja cambia con la liquidez, que es lo que prueba el Kruskal-Wallis. En el ensayo hay un solo escenario (media); con las 90 aparecen los tres.
 - **Datos y script:** `scripts/comparacion_estadistica_3_2_3.py`. Plan y lectura en `docs/plan_analisis_3_2_3_PS.md`.
 
-### `control_reglas.png`: qué aporta cada nivel del sistema (rama `feature/ps-3-2-3-control-reglas`; `data/analysis/3_2_3_control/`)
+### `control_reglas.png`: qué aporta cada nivel del sistema (rama `feature/ps-3-2-3-control-reglas-v2`; `data/analysis/3_2_3_control/`)
 - **Qué muestra:** tres barras horizontales, cada una con la diferencia media de costo (bps) y su IC 95 %:
   - regla fija − sistema;
   - sistema − regla uniforme (el aporte del calendario del Maestro);
@@ -206,7 +206,7 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
   - una barra que no toca el 0 es una diferencia clara.
 - **Datos y script:** `scripts/control_reglas_3_2_3.py`. La declaración está en `docs/control_reglas_3_2_3_PS.md`.
 
-### `cajas.png` de la liquidez media de las 90 corridas (rama `feature/ps-3-2-3-control-reglas`; `data/colab_resultados/corridas_90/media/tabla/`)
+### `cajas.png` de la liquidez media de las 90 corridas (rama `feature/ps-3-2-3-control-reglas-v2`; `data/colab_resultados/corridas_90/media/tabla/`)
 - **Qué muestra:** el mismo tipo de gráfico que el de la 3.1.3, con las semillas 4 a 6.
 - **Cómo leerlo:** las tres cajas quedan casi a la misma altura. Con días nuevos, la ventaja que se veía en la 3.1.3 casi desaparece (`docs/corridas_90_media_resultado_PS.md`).
 
