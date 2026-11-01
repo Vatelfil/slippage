@@ -420,6 +420,18 @@
 - **Cómo verificar:** `python scripts/comparacion_estadistica_3_2_3.py --entradas data/colab_resultados/corridas_30_completa/tabla/corridas.csv --out-dir data/analysis/3_2_3_prueba_30`.
 - **Gráficos:** `qq_diferencias.png`, `bosque_diferencias.png` y `diferencias_por_escenario.png` (ver `docs/guia_graficos.md`).
 
+### `feature/ps-3-2-1-cuadernos`: semillas nuevas y cuadernos de las 90 corridas, 3.2.1 (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code (parte de PS en la 3.2.1: pasos 1 y 2, preparar los escenarios y los cuadernos para los tres).
+- **Qué:**
+  - opción `--semilla-inicial` en `scripts/colab/evaluar_sistema_ps.py` y `scripts/colab/benchmarks_meta_ordenes_ps.py` (por defecto 1, así que lo de antes no cambia);
+  - 7 cuadernos: `Colab_90corridas_prueba` y `Colab_90corridas_{baja,media,alta}_{A,B}`;
+  - `docs/LEEME_COLAB_90_CORRIDAS.md`;
+  - `tests/test_cuadernos_90_corridas.py`.
+- **Por qué:** la liquidez «media» de la v3 es la calibración actual. Con las semillas 1 a 3, esa liquidez repetía exactamente las 30 corridas de la 3.1.3, que además motivaron la corrección del cierre. Con las semillas 4 a 6, las 90 son datos nuevos. La decisión se confirma en la reunión del Sprint 7.
+- **Resultado:** cuadernos listos para correr en paralelo, uno por escenario y persona. Ningún día simulado se repite.
+- **Cómo verificar:** `python -m pytest tests/test_cuadernos_90_corridas.py`.
+- **Gráficos:** no hay.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
