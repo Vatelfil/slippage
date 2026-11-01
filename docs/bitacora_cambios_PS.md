@@ -432,6 +432,27 @@
 - **Cómo verificar:** `python -m pytest tests/test_cuadernos_90_corridas.py`.
 - **Gráficos:** no hay.
 
+### `feature/ps-3-2-3-control-reglas`: liquidez media de las 90, revisión del sistema y control del Maestro, 3.2.1 y 3.2.3 (1 de noviembre)
+- **Quién:** PS, con apoyo de Claude Code. PS corrió en Colab la prueba corta y la liquidez media.
+- **Qué:**
+  - resultado de la liquidez media: `data/colab_resultados/corridas_90/media/` y `docs/corridas_90_media_resultado_PS.md`;
+  - revisión (QA) del sistema: `docs/qa_sistema_media_90_PS.md`;
+  - opción `--regla {fija,uniforme}` en `scripts/colab/evaluar_sistema_ps.py`, que reemplaza al Maestro por una regla con los mismos Ejecutores y semillas;
+  - argumento opcional `alpha` en `MaestroEjecutorEnv.step` (por defecto None, así que no cambia nada de lo anterior);
+  - `scripts/control_reglas_3_2_3.py`;
+  - cuadernos `Colab_control_reglas_media_{A,B}`;
+  - `docs/control_reglas_3_2_3_PS.md`;
+  - 3 archivos de pruebas.
+- **Por qué:**
+  - en la media, el sistema quedó −3,4 bps contra TWAP [−26; 20], p = 0,63, frente a −22 en la 3.1.3;
+  - la revisión mostró que el Maestro elige α = 0,5 y 15 minutos en el 98 % de las decisiones;
+  - el control mide si el Maestro aporta algo más que ese calendario y separa el aporte de los Ejecutores. Se agregó al plan después de ver la media, y está declarado.
+- **Resultado:**
+  - control listo para correr; no hubo que repetir corridas ni reentrenar;
+  - el resultado del control se agrega cuando llegue `control_reglas_media.zip`.
+- **Cómo verificar:** `python -m pytest tests/test_reglas_control_3_2_3.py tests/test_control_reglas_3_2_3.py tests/test_cuadernos_control_reglas.py`.
+- **Gráficos:** `control_reglas.png` (ver `docs/guia_graficos.md`) y `corridas_90/media/tabla/cajas.png`.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

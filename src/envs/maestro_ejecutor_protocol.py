@@ -186,7 +186,7 @@ class MaestroEjecutorEnv:
 
         return s_m_initial
 
-    def step(self, action_maestro: tuple[int, int]):
+    def step(self, action_maestro: tuple[int, int], alpha: Optional[float] = None):
         """
         Ejecuta una decision del Maestro (30 minutos de tiempo simulado).
 
@@ -194,12 +194,15 @@ class MaestroEjecutorEnv:
             action_maestro: (alpha_idx, ventana_idx), salida de MultiDiscrete([10, 4])
                 - alpha_idx: indice en ALPHA_VALUES
                 - ventana_idx: indice en VENTANA_MIN_VALUES
+            alpha: opcional, fraccion de lo pendiente que reemplaza a ALPHA_VALUES[alpha_idx]. Solo la usan las
+                reglas de control de la 3.2.3 (por ejemplo, 1/decisiones restantes, que no esta en ALPHA_VALUES);
+                el Maestro entrenado nunca la pasa. Por defecto None: todo queda como antes.
 
         Returns:
             (s_m_next, r_m, done, info) - convencion Gymnasium.
         """
         # 1. Decodificar la accion del Maestro (fase B-C del ciclo, ver arquitectura_entorno_simulacion.md).
-        alpha_t = ALPHA_VALUES[action_maestro[0]]
+        alpha_t = ALPHA_VALUES[action_maestro[0]] if alpha is None else min(max(float(alpha), 0.0), 1.0)
         ventana_min = VENTANA_MIN_VALUES[action_maestro[1]]
 
         # 2. Calcular q_slice (cantidad, no fraccion) para este tramo.
