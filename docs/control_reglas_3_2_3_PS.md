@@ -47,7 +47,10 @@ Son las mismas órdenes, semillas (4, 5 y 6), liquidez (media de la v3), impacto
 2. **El calendario del Maestro (2) depende del día:**
    - gana cuando el precio sube y pierde cuando baja;
    - en promedio puede quedar cerca de 0, con mucha dispersión.
-3. **Los Ejecutores (3)** son la parte con más chance de mostrar una ventaja estable. Comparan contra TWAP dentro de la misma ventana, así que el movimiento del día les afecta poco y la dispersión debería ser menor.
+3. **Los Ejecutores (3)** deberían quedar **cerca de 0 o un poco más caros que TWAP**, con poca dispersión:
+   - comparan contra TWAP dentro de la misma ventana, así que el movimiento del día les afecta poco;
+   - en la reevaluación de 300 semillas (`docs/reeval_300_imitacion_resultado_PS.md`), el Ejecutor elegido (s1000) costó 5,68 bps, contra 4,65 de TWAP límite en una ventana, es decir, ≈ 1 bps más caro;
+   - si eso se repite aquí, la diferencia del sistema con TWAP viene casi toda del calendario del Maestro, o sea, del día.
 
 **Cómo se usa en la tesis (capítulo 7):**
 - Si (1) se cumple, se informa que el Maestro aprendió un calendario fijo y se explica la causa: el entrenamiento sin la corrección del cierre y un S_M sin información de mercado.
