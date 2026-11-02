@@ -94,7 +94,7 @@ class MaestroEjecutorEnv:
     def __init__(self, meta_orden_quantity: int, datos_historicos: Optional[pd.DataFrame] = None,
                  executor_env_factory: Optional[Callable] = None, executor_env_kwargs: Optional[dict] = None,
                  executor_policy_fn: Optional[Callable] = None, lambda_penalty: Optional[float] = None,
-                 executor_step_callback: Optional[Callable] = None):
+                 executor_step_callback: Optional[Callable] = None, completar_al_cierre: bool = False):
         """
         Args:
             meta_orden_quantity: Q_total, cantidad total de acciones a comprar (ej. 10_000).
@@ -117,6 +117,11 @@ class MaestroEjecutorEnv:
                 Si es None, usa LAMBDA_PENALTY.
             executor_step_callback: callback opcional `(tramo, s_e, a_e_idx, log_prob, reward, value, done)`
                 llamado en cada transicion de un Ejecutor (util para rollout buffers en PPO).
+            completar_al_cierre: si es True, la ULTIMA decision de la jornada (la que empieza 30 min antes
+                de las 16:00) asigna todo lo que falta (alpha = 1), sea cual sea la accion del Maestro.
+                Sin esto, con alpha <= 0,5 y una orden que empieza a las 14:00 (4 decisiones), el
+                maximo alcanzable es 1 - 0,5**4 = 93,75 % (correccion de PS, 30 oct 2026; ver
+                docs/correccion_cierre_PS.md). Por defecto False para reproducir los resultados anteriores.
         """
         self.Q_total = meta_orden_quantity
         self.Q_executed = 0.0
@@ -140,6 +145,7 @@ class MaestroEjecutorEnv:
         self.executor_policy_fn = executor_policy_fn
         self.lambda_penalty = lambda_penalty if lambda_penalty is not None else LAMBDA_PENALTY
         self.executor_step_callback = executor_step_callback
+        self.completar_al_cierre = completar_al_cierre
         self.canal = CanalComunicacionCTDE()
 
         # Se inicializan de verdad en reset(), no en __init__().
@@ -198,6 +204,9 @@ class MaestroEjecutorEnv:
 
         # 2. Calcular q_slice (cantidad, no fraccion) para este tramo.
         q_slice = alpha_t * (self.Q_total - self.Q_executed)
+        if self.completar_al_cierre and self._es_ultima_decision():
+            alpha_t = 1.0  # barrido final: se asigna todo lo pendiente
+            q_slice = self.Q_total - self.Q_executed
 
         # 3. Construir y enviar el mensaje ASIGNAR via canal CTDE (Tarea 2.3.1).
         tramo_activo = self._tramo_de(self.current_time)
@@ -456,6 +465,10 @@ class MaestroEjecutorEnv:
             return 0.0  # fuera de rango de los datos cargados o columna no presente
         valor = self.df_yfinance.loc[self.current_time, columna]
         return float(valor) if pd.notna(valor) else 0.0
+
+    def _es_ultima_decision(self) -> bool:
+        """True si despues de esta decision (30 min) la jornada termina."""
+        return (self.current_time + pd.Timedelta(minutes=30)).hour >= 16
 
     def _is_jornada_terminada(self) -> bool:
         return self.current_time.hour >= 16

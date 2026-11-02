@@ -1,0 +1,809 @@
+{
+ "antes": {
+  "filas": [
+   {
+    "nombre": "V0_original_g1_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "ENTROPIA_COLAPSADA": "CRITICA"
+    }
+   },
+   {
+    "nombre": "V0_original_g1_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V0_original_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "ENTROPIA_COLAPSADA": "CRITICA"
+    }
+   },
+   {
+    "nombre": "V0_original_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V1_liquidacion_g1_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V1_liquidacion_g1_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "CUMPLIMIENTO_BAJO": "AVISO",
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_g1_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_g1_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "SIN_MEJORA": "INFO",
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "SIN_MEJORA": "INFO",
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V5_costo_espera_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V5_costo_espera_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s2000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "ENTROPIA_COLAPSADA": "CRITICA"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s3000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s2000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s3000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "ENTROPIA_COLAPSADA": "CRITICA",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s1000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s2000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s3000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s4000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s6000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s1000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s2000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s3000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s4000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s6000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   }
+  ],
+  "metricas": {
+   "por_alerta": {
+    "CUMPLIMIENTO_BAJO": {
+     "mala": 0,
+     "neutral": 0,
+     "buena": 1
+    },
+    "CUMPLIMIENTO_CRITICO": {
+     "mala": 6,
+     "neutral": 0,
+     "buena": 0
+    },
+    "ENTROPIA_BAJA": {
+     "mala": 2,
+     "neutral": 0,
+     "buena": 2
+    },
+    "ENTROPIA_COLAPSADA": {
+     "mala": 8,
+     "neutral": 2,
+     "buena": 2
+    },
+    "ESPERA_ALTA": {
+     "mala": 6,
+     "neutral": 0,
+     "buena": 0
+    },
+    "ESPERA_EN_AUMENTO": {
+     "mala": 6,
+     "neutral": 0,
+     "buena": 0
+    },
+    "PICO_PERDIDA_CRITICO": {
+     "mala": 6,
+     "neutral": 3,
+     "buena": 4
+    },
+    "SIN_MEJORA": {
+     "mala": 2,
+     "neutral": 5,
+     "buena": 0
+    }
+   },
+   "totales": {
+    "mala": 10,
+    "neutral": 12,
+    "buena": 4
+   }
+  }
+ },
+ "ahora": {
+  "filas": [
+   {
+    "nombre": "V0_original_g1_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V0_original_g1_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_COLAPSADA": "CRITICA"
+    }
+   },
+   {
+    "nombre": "V0_original_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V0_original_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V1_liquidacion_g1_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V1_liquidacion_g1_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "CUMPLIMIENTO_BAJO": "AVISO",
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_g1_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_g1_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "buena",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "SIN_MEJORA": "INFO",
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "V2_penalizacion_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "mala",
+    "alertas": {
+     "CUMPLIMIENTO_CRITICO": "CRITICA",
+     "ESPERA_ALTA": "AVISO",
+     "ESPERA_EN_AUMENTO": "AVISO",
+     "SIN_MEJORA": "INFO",
+     "ENTROPIA_COLAPSADA": "CRITICA"
+    }
+   },
+   {
+    "nombre": "V5_costo_espera_s1000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "V5_costo_espera_s2000",
+    "origen": "Poisson (PC)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO",
+     "PICO_PERDIDA_CRITICO": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s2000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_COLAPSADA": "AVISO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s3000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s2000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_BAJA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s3000 (1000 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "mala",
+    "alertas": {
+     "RECOMPENSA_SUBE_COSTO_NO": "AVISO",
+     "ENTROPIA_COLAPSADA": "AVISO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s1000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s2000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s3000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s4000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcion0_s6000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s1000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s2000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s3000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s4000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {}
+   },
+   {
+    "nombre": "ABIDES d3_opcionA_s6000 (100 ep)",
+    "origen": "ABIDES (Colab)",
+    "etiqueta": "neutral",
+    "alertas": {
+     "SIN_MEJORA": "INFO"
+    }
+   }
+  ],
+  "metricas": {
+   "por_alerta": {
+    "CUMPLIMIENTO_BAJO": {
+     "mala": 0,
+     "neutral": 0,
+     "buena": 1
+    },
+    "CUMPLIMIENTO_CRITICO": {
+     "mala": 6,
+     "neutral": 0,
+     "buena": 0
+    },
+    "ENTROPIA_BAJA": {
+     "mala": 6,
+     "neutral": 2,
+     "buena": 4
+    },
+    "ENTROPIA_COLAPSADA": {
+     "mala": 4,
+     "neutral": 0,
+     "buena": 0
+    },
+    "ESPERA_ALTA": {
+     "mala": 6,
+     "neutral": 0,
+     "buena": 0
+    },
+    "ESPERA_EN_AUMENTO": {
+     "mala": 6,
+     "neutral": 0,
+     "buena": 0
+    },
+    "PICO_PERDIDA_CRITICO": {
+     "mala": 0,
+     "neutral": 2,
+     "buena": 0
+    },
+    "RECOMPENSA_SUBE_COSTO_NO": {
+     "mala": 7,
+     "neutral": 0,
+     "buena": 0
+    },
+    "SIN_MEJORA": {
+     "mala": 2,
+     "neutral": 5,
+     "buena": 0
+    }
+   },
+   "totales": {
+    "mala": 10,
+    "neutral": 12,
+    "buena": 4
+   }
+  }
+ },
+ "cifras": [
+  {
+   "nombre": "V0_original_g1_s1000",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.9619684108753244,
+   "mejora_costo": 1.1386773975940905,
+   "pico_critico": 18.232325356729646,
+   "entropia": 0.45787212679024575
+  },
+  {
+   "nombre": "V0_original_g1_s2000",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.9711161506256408,
+   "mejora_costo": 0.30750057726111635,
+   "pico_critico": 62.891632249415345,
+   "entropia": 0.3687482478352445
+  },
+  {
+   "nombre": "V0_original_s1000",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.9799477615664909,
+   "mejora_costo": -0.012274389237870054,
+   "pico_critico": 15.95002790982912,
+   "entropia": 0.5210295806640595
+  },
+  {
+   "nombre": "V0_original_s2000",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.9735335908492501,
+   "mejora_costo": 0.1344061912173906,
+   "pico_critico": 34.40618005352572,
+   "entropia": 0.47868791151821205
+  },
+  {
+   "nombre": "V1_liquidacion_g1_s1000",
+   "etiqueta": "buena",
+   "ventana": 100,
+   "mejora_retorno": 0.1117515208089346,
+   "mejora_costo": 2.1067659992812047,
+   "pico_critico": 544.392672100239,
+   "entropia": 0.689148993909066
+  },
+  {
+   "nombre": "V1_liquidacion_g1_s2000",
+   "etiqueta": "buena",
+   "ventana": 100,
+   "mejora_retorno": 0.10996025316414579,
+   "mejora_costo": 2.0615086835315566,
+   "pico_critico": 823.9810573988383,
+   "entropia": 0.54565864342262
+  },
+  {
+   "nombre": "V2_penalizacion_g1_s1000",
+   "etiqueta": "buena",
+   "ventana": 100,
+   "mejora_retorno": 0.10261255177971206,
+   "mejora_costo": 2.1447933859389003,
+   "pico_critico": 412.51830852823053,
+   "entropia": 0.6665747645663752
+  },
+  {
+   "nombre": "V2_penalizacion_g1_s2000",
+   "etiqueta": "buena",
+   "ventana": 100,
+   "mejora_retorno": 0.10825460811096216,
+   "mejora_costo": 2.158262351840616,
+   "pico_critico": 982.0908728202965,
+   "entropia": 0.49942093217316696
+  },
+  {
+   "nombre": "V2_penalizacion_s1000",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": -0.46129819499784475,
+   "mejora_costo": -0.3294576485744365,
+   "pico_critico": 28.297367705256544,
+   "entropia": 0.5500366731260198
+  },
+  {
+   "nombre": "V2_penalizacion_s2000",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": -0.2195096257337909,
+   "mejora_costo": 1.6805056048512519,
+   "pico_critico": 61.070432137403664,
+   "entropia": 0.3979924294428638
+  },
+  {
+   "nombre": "V5_costo_espera_s1000",
+   "etiqueta": "neutral",
+   "ventana": 100,
+   "mejora_retorno": 0.23713711456889444,
+   "mejora_costo": 0.0281699293579436,
+   "pico_critico": 1678.2120820508,
+   "entropia": 0.4660225633770736
+  },
+  {
+   "nombre": "V5_costo_espera_s2000",
+   "etiqueta": "neutral",
+   "ventana": 100,
+   "mejora_retorno": 0.2576404298730036,
+   "mejora_costo": 0.5400190464548267,
+   "pico_critico": 2354.288379649002,
+   "entropia": 0.5491196267614811
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s2000 (1000 ep)",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.8203356169602251,
+   "mejora_costo": 0.0882252657614,
+   "pico_critico": 9.768382181166213,
+   "entropia": 0.340810848174069
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s3000 (1000 ep)",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.45186416866410967,
+   "mejora_costo": 2.025053768851336,
+   "pico_critico": 37.60083229148062,
+   "entropia": 0.8474551352432123
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s2000 (1000 ep)",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.596783976607132,
+   "mejora_costo": 0.9741321011058091,
+   "pico_critico": 15.184107997133506,
+   "entropia": 0.6733620754110234
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s3000 (1000 ep)",
+   "etiqueta": "mala",
+   "ventana": 100,
+   "mejora_retorno": 0.9601370552605313,
+   "mejora_costo": -0.044963888490808124,
+   "pico_critico": 58.18990136136405,
+   "entropia": 0.361395017570729
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s1000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": 0.3374394015772498,
+   "mejora_costo": 6.0566561914369945,
+   "pico_critico": 9.664616463213116,
+   "entropia": 0.9986488211601658
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s2000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": -0.24484894050788017,
+   "mejora_costo": -4.749829878232722,
+   "pico_critico": 3.4766264440367576,
+   "entropia": 0.9976489742305201
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s3000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": 0.6011705018325432,
+   "mejora_costo": -2.9366474210686384,
+   "pico_critico": 5.73724024693327,
+   "entropia": 0.9974828622109665
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s4000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": 0.43896889874626016,
+   "mejora_costo": -3.339941921930588,
+   "pico_critico": 2.7558061008371535,
+   "entropia": 0.997568618635824
+  },
+  {
+   "nombre": "ABIDES d3_opcion0_s6000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": -0.5521063589301415,
+   "mejora_costo": 2.489949989364157,
+   "pico_critico": 4.214794515948204,
+   "entropia": 0.9982446712004654
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s1000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": 0.33940199707375535,
+   "mejora_costo": 6.190079314477368,
+   "pico_critico": 8.421595891027815,
+   "entropia": 0.9989193370654712
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s2000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": -0.22383246606436127,
+   "mejora_costo": -4.855760436905027,
+   "pico_critico": 3.2232538283172274,
+   "entropia": 0.9969917150951558
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s3000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": -0.017382705744133392,
+   "mejora_costo": 0.03829670373202454,
+   "pico_critico": 2.346922443505586,
+   "entropia": 0.9983001026938096
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s4000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": 0.35398021314867567,
+   "mejora_costo": -2.1466282729765656,
+   "pico_critico": 17.014427332694716,
+   "entropia": 0.9975708446536609
+  },
+  {
+   "nombre": "ABIDES d3_opcionA_s6000 (100 ep)",
+   "etiqueta": "neutral",
+   "ventana": 50,
+   "mejora_retorno": -1.0115294339146,
+   "mejora_costo": -0.64224945187543,
+   "pico_critico": 27.46722806676423,
+   "entropia": 0.9971854516311423
+  }
+ ]
+}

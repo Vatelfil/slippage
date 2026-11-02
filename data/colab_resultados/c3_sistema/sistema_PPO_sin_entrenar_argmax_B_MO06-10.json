@@ -1,0 +1,549 @@
+{
+ "firma": {
+  "tarea": "3.2.3-evaluador",
+  "entorno": "abides",
+  "snapshot": "2026-08-23",
+  "sistema": "PPO_sin_entrenar",
+  "modo": "argmax",
+  "ckpt_maestro": null,
+  "ckpt_ejecutores": {},
+  "ordenes": [
+   "MO-06",
+   "MO-07",
+   "MO-08",
+   "MO-09",
+   "MO-10"
+  ],
+  "cantidades": {
+   "MO-06": 32100,
+   "MO-07": 32100,
+   "MO-08": 44100,
+   "MO-09": 44100,
+   "MO-10": 44100
+  },
+  "datos_sm": null
+ },
+ "resultados": {},
+ "corridas": {
+  "MO-06|PPO_sin_entrenar|1": {
+   "orden": "MO-06",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 1,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 14445.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 3917.75
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 6181.7625
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 3399.9693749999997
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 1869.9831562499994
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 1028.4907359374993
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 314.2610582031248
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 235.69579365234313
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 176.77184523925735
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 132.57888392944278
+    }
+   ],
+   "R_M": -1903370.3135286653,
+   "Q_total": 32100.0,
+   "Q_executed": 31703.0,
+   "execution_rate": 0.9876323987538941,
+   "P_referencia": 1774.15,
+   "P_promedio_ejecutado": 1783.148765101095,
+   "IS_total": 288860.35974514735,
+   "slippage_bps": 50.721557371670556,
+   "segundos": 138.3
+  },
+  "MO-07|PPO_sin_entrenar|1": {
+   "orden": "MO-07",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 1,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 14445.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 7944.75
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 4369.6125
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 2403.2868750000002
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 1321.8077812499996
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 726.9942796875006
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 222.13714101562528
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 166.60285576171918
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 124.95214182128984
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 93.71410636596738
+    }
+   ],
+   "R_M": -2107227.924241642,
+   "Q_total": 32100.0,
+   "Q_executed": 31820.0,
+   "execution_rate": 0.9912772585669782,
+   "P_referencia": 1789.35,
+   "P_promedio_ejecutado": 1797.47961345066,
+   "IS_total": 260960.59176619066,
+   "slippage_bps": 45.43333305759156,
+   "segundos": 117.1
+  },
+  "MO-08|PPO_sin_entrenar|1": {
+   "orden": "MO-08",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 19845.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 10914.75
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 3335.0625
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 2501.296875
+    }
+   ],
+   "R_M": -9244031.501562418,
+   "Q_total": 44100.0,
+   "Q_executed": 36596.0,
+   "execution_rate": 0.8298412698412698,
+   "P_referencia": 6074.35,
+   "P_promedio_ejecutado": 6041.200065580939,
+   "IS_total": -1461912.1078806138,
+   "slippage_bps": -54.573632436493675,
+   "segundos": 208.2
+  },
+  "MO-09|PPO_sin_entrenar|1": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 19845.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 10914.75
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 2303.0625
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 2759.296875
+    }
+   ],
+   "R_M": -42958924.765625,
+   "Q_total": 44100.0,
+   "Q_executed": 35822.0,
+   "execution_rate": 0.8122902494331066,
+   "P_referencia": 5885.85,
+   "P_promedio_ejecutado": 5956.584897548992,
+   "IS_total": 3119408.9819105156,
+   "slippage_bps": 120.17788008357549,
+   "segundos": 161.8
+  },
+  "MO-10|PPO_sin_entrenar|1": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 19641.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 11006.550000000001
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 3363.1124999999993
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 300.33437499999854
+    }
+   ],
+   "R_M": -38828666.65101935,
+   "Q_total": 44100.0,
+   "Q_executed": 34311.0,
+   "execution_rate": 0.7780272108843538,
+   "P_referencia": 5955.75,
+   "P_promedio_ejecutado": 5985.814558013465,
+   "IS_total": 1325847.008393811,
+   "slippage_bps": 50.479885847231834,
+   "segundos": 141.7
+  },
+  "MO-06|PPO_sin_entrenar|2": {
+   "orden": "MO-06",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 10513.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 9714.15
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 5342.782499999999
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 2938.530374999999
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 1616.1917062499995
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 888.9054384374997
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 271.6099950781245
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 203.70749630859336
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 152.7806222314448
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 114.58546667358314
+    }
+   ],
+   "R_M": -6872487.149810212,
+   "Q_total": 32100.0,
+   "Q_executed": 31758.0,
+   "execution_rate": 0.9893457943925233,
+   "P_referencia": 1751.75,
+   "P_promedio_ejecutado": 1781.0126298885318,
+   "IS_total": 939330.4194218714,
+   "slippage_bps": 167.047979954513,
+   "segundos": 147.6
+  },
+  "MO-07|PPO_sin_entrenar|2": {
+   "orden": "MO-07",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 2,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 14445.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 7615.75
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 4517.6625
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 2484.714375000001
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 1366.5929062500009
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 751.6260984375009
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 229.6635300781254
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 172.2476475585936
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 129.1857356689452
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 96.88930175170935
+    }
+   ],
+   "R_M": -5820977.079913451,
+   "Q_total": 32100.0,
+   "Q_executed": 31811.0,
+   "execution_rate": 0.9909968847352025,
+   "P_referencia": 1774.9,
+   "P_promedio_ejecutado": 1794.6006318569046,
+   "IS_total": 632390.2826066334,
+   "slippage_bps": 110.99572853064659,
+   "segundos": 170.3
+  },
+  "MO-08|PPO_sin_entrenar|2": {
+   "orden": "MO-08",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 19845.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 10914.75
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 3288.0625
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 2513.046875
+    }
+   ],
+   "R_M": -39469875.25000004,
+   "Q_total": 44100.0,
+   "Q_executed": 36561.0,
+   "execution_rate": 0.829047619047619,
+   "P_referencia": 5862.05,
+   "P_promedio_ejecutado": 5923.832242006509,
+   "IS_total": 2724596.8724870277,
+   "slippage_bps": 105.39357734326484,
+   "segundos": 195.0
+  },
+  "MO-09|PPO_sin_entrenar|2": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 17608.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 11921.4
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 6556.7699999999995
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 676.4575000000004
+    }
+   ],
+   "R_M": -32707629.53671719,
+   "Q_total": 44100.0,
+   "Q_executed": 36762.0,
+   "execution_rate": 0.8336054421768707,
+   "P_referencia": 5993.15,
+   "P_promedio_ejecutado": 6019.184141232794,
+   "IS_total": 1148105.628366231,
+   "slippage_bps": 43.43982919298592,
+   "segundos": 206.7
+  },
+  "MO-10|PPO_sin_entrenar|2": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 19845.0
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 2,
+     "q_ejecutado": 10914.75
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 3335.0625
+    },
+    {
+     "alpha_idx": 4,
+     "ventana_idx": 0,
+     "q_ejecutado": 2501.296875
+    }
+   ],
+   "R_M": -26579212.36562497,
+   "Q_total": 44100.0,
+   "Q_executed": 36596.0,
+   "execution_rate": 0.8298412698412698,
+   "P_referencia": 5990.45,
+   "P_promedio_ejecutado": 6018.794616898022,
+   "IS_total": 1249997.6052027587,
+   "slippage_bps": 47.31634000454347,
+   "segundos": 257.8
+  }
+ }
+}

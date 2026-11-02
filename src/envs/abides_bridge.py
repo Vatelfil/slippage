@@ -238,20 +238,28 @@ class ExecutorRewardState:
         self.last = {}
 
     def step(self, executed_orders: Sequence, mid: float, parent_size: float,
-             q_pendiente: Optional[float] = None) -> float:
+             q_pendiente: Optional[float] = None, mid_decision: Optional[float] = None) -> float:
         """R_E del paso. `mid` es el P_mid del despertar actual; sigma2 usa
         solo los P_mid de los despertares anteriores. `q_pendiente` (cantidad
-        que falta al final del paso) solo se usa con `riesgo_sobre='pendiente'`."""
+        que falta al final del paso) solo se usa con `riesgo_sobre='pendiente'`.
+
+        BORRADOR de PS para BF (29 oct): si llega `mid_decision` (el P_mid que
+        vio el agente al decidir), el termino de precio se mide contra ese
+        valor, igual que en Poisson (`p_mid_before`). Con el P_mid del
+        despertar siguiente la recompensa incluye el alza que provoca la propia
+        compra y 30 s de movimiento del mercado, y casi no se relaciona con el
+        slippage que se evalua (correlacion 0,04 a 0,22 en las corridas V2)."""
         p_mid = float(mid) / self.unidades_por_clp
         sigma2 = self._var.step(p_mid)
         q, p_fill = fills_summary(executed_orders)
-        p_ejec = p_fill / self.unidades_por_clp if q > 0 else p_mid
-        comp = reward_components(p_mid, p_ejec, q, sigma2, self.beta, self.escala,
+        p_ref_precio = float(mid_decision) / self.unidades_por_clp if mid_decision is not None else p_mid
+        p_ejec = p_fill / self.unidades_por_clp if q > 0 else p_ref_precio
+        comp = reward_components(p_ref_precio, p_ejec, q, sigma2, self.beta, self.escala,
                                  q_slice=max(float(parent_size), 1e-9),
                                  riesgo_sobre=self.riesgo_sobre, q_pendiente=q_pendiente)
         self.last = {
             "sigma2": sigma2, "reward_precio": comp["precio"], "reward_riesgo": comp["riesgo"],
-            "reward_escala": self.escala, "p_mid_clp": p_mid,
+            "reward_escala": self.escala, "p_mid_clp": p_mid, "p_ref_precio_clp": p_ref_precio,
             "q_fill_step": q, "p_fill_step_clp": p_ejec if q > 0 else None,
             "reward_sin_normalizar": comp["total"],
         }

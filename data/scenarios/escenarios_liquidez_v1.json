@@ -1,0 +1,13 @@
+{
+  "version": "v1-borrador",
+  "estado": "BORRADOR de PS para BF (29 oct 2026): factores propuestos, sin validar. BF los fija; el cuaderno C-6 comprueba que la liquidez baja cuesta mas.",
+  "que_escala": {
+    "abides": "num_noise_agents, lambda_a y mm_pov de rmsc04 calibrado (2.2.4)",
+    "poisson": "avg_order_size (profundidad del libro) del simulador calibrado (2.1.3)"
+  },
+  "escenarios": {
+    "baja": {"factor": 0.5, "descripcion": "la mitad de la liquidez calibrada"},
+    "media": {"factor": 1.0, "descripcion": "la calibracion vigente, sin cambios"},
+    "alta": {"factor": 2.0, "descripcion": "el doble de la liquidez calibrada"}
+  }
+}

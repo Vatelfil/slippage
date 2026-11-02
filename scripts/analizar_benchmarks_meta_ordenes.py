@@ -172,6 +172,7 @@ def informe(estado: Dict, filas: Sequence[Dict], comp: Dict, meta: Dict, ejec: O
          f"**Entorno:** {meta.get('entorno', '?')} · **Órdenes:** {comp['n_ordenes']} · **Fecha:** {meta.get('fecha')}", "",
          "Cada orden se reparte desde su tramo de inicio hasta el cierre con la política ingenua de mercado (TWAP: partes iguales; "
          "VWAP: proporcional al volumen histórico por tramo). IS = (P_prom − P_ref) × Q; slippage en bps sobre P_ref.", "",
+         ] + (["_Archivo ensamblado de varias tandas con tamaños distintos (`scripts/ensamblar_benchmarks_meta_ordenes.py`); las órdenes conservan su semilla._", ""] if estado.get("firma", {}).get("ensamblado") else []) + [
          "## 1. Resultados por orden", "",
          "| Orden | Activo | Inicio | Cantidad | Estrategia | n | IS medio (CLP) | Slippage medio (bps) | EE (bps) | Cumplimiento |",
          "|---|---|---|---:|---|---:|---:|---:|---:|---:|"]

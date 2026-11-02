@@ -1,0 +1,61 @@
+{
+ "firma": {
+  "tarea": "3.2.3-evaluador",
+  "entorno": "abides",
+  "snapshot": "2026-08-23",
+  "sistema": "PPO_sin_entrenar",
+  "modo": "argmax",
+  "ckpt_maestro": null,
+  "ckpt_ejecutores": {},
+  "ordenes": [
+   "MO-08"
+  ],
+  "cantidades": {
+   "MO-08": 44100
+  },
+  "datos_sm": null
+ },
+ "resultados": {},
+ "corridas": {
+  "MO-08|PPO_sin_entrenar|1": {
+   "orden": "MO-08",
+   "estrategia": "PPO_sin_entrenar",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 2,
+     "q_ejecutado": 17114.0
+    },
+    {
+     "alpha_idx": 6,
+     "ventana_idx": 1,
+     "q_ejecutado": 8195.099999999999
+    },
+    {
+     "alpha_idx": 6,
+     "ventana_idx": 1,
+     "q_ejecutado": 3453.8150000000005
+    },
+    {
+     "alpha_idx": 6,
+     "ventana_idx": 1,
+     "q_ejecutado": 4506.9797499999995
+    }
+   ],
+   "R_M": -20678288.778340936,
+   "Q_total": 44100.0,
+   "Q_executed": 33270.0,
+   "execution_rate": 0.754421768707483,
+   "P_referencia": 6074.35,
+   "P_promedio_ejecutado": 6038.785320108209,
+   "IS_total": -1568402.3832280033,
+   "slippage_bps": -58.54894744588549,
+   "segundos": 209.8
+  }
+ }
+}

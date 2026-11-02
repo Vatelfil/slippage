@@ -1,0 +1,17 @@
+archivo,orden,estrategia,seed,escenario,factor_tamano,ticker,tramo_inicio,slippage_bps,cumplimiento,costo
+benchmarks_meta_ordenes_abides_impacto.json,MO-01,TWAP,1,media,1.0,FALABELLA,apertura,-16.97644111678529,0.9999546998867497,-16.97644111678529
+benchmarks_meta_ordenes_abides_impacto.json,MO-01,VWAP,1,media,1.0,FALABELLA,apertura,-26.24627358631996,0.9999320498301246,-26.24627358631996
+benchmarks_meta_ordenes_abides_impacto.json,MO-02,TWAP,1,media,1.0,COPEC,apertura,88.79729233634873,0.9997938144329894,88.79729233634873
+benchmarks_meta_ordenes_abides_impacto.json,MO-02,VWAP,1,media,1.0,COPEC,apertura,105.56049913182262,0.9997938144329896,105.56049913182262
+benchmarks_meta_ordenes_abides_impacto.json,MO-01,TWAP,2,media,1.0,FALABELLA,apertura,30.423955123081956,0.9999546998867497,30.423955123081956
+benchmarks_meta_ordenes_abides_impacto.json,MO-01,VWAP,2,media,1.0,FALABELLA,apertura,23.85731384880849,0.9792298980747451,23.85731384880849
+benchmarks_meta_ordenes_abides_impacto.json,MO-02,TWAP,2,media,1.0,COPEC,apertura,128.7381380896931,0.9997938144329894,128.7381380896931
+benchmarks_meta_ordenes_abides_impacto.json,MO-02,VWAP,2,media,1.0,COPEC,apertura,144.6538426574808,0.9997938144329896,144.6538426574808
+sistema_meta_ordenes_abides_PPO_maestro_muestreo_impacto.json,MO-01,PPO_maestro,1,media,1.0,FALABELLA,apertura,26.300254453569387,0.9961155152887882,26.300254453569387
+sistema_meta_ordenes_abides_PPO_maestro_muestreo_impacto.json,MO-02,PPO_maestro,1,media,1.0,COPEC,apertura,20.793036328234226,0.9990034364261169,20.793036328234226
+sistema_meta_ordenes_abides_PPO_maestro_muestreo_impacto.json,MO-01,PPO_maestro,2,media,1.0,FALABELLA,apertura,60.891462754576786,0.9967836919592299,60.891462754576786
+sistema_meta_ordenes_abides_PPO_maestro_muestreo_impacto.json,MO-02,PPO_maestro,2,media,1.0,COPEC,apertura,109.3342216062311,0.9984879725085911,109.3342216062311
+sistema_meta_ordenes_abides_PPO_maestro_sin_entrenar_muestreo_impacto.json,MO-01,PPO_maestro_sin_entrenar,1,media,1.0,FALABELLA,apertura,-11.320148957842523,0.9403057757644394,-11.320148957842523
+sistema_meta_ordenes_abides_PPO_maestro_sin_entrenar_muestreo_impacto.json,MO-02,PPO_maestro_sin_entrenar,1,media,1.0,COPEC,apertura,23.69811908399612,0.9841580756013746,23.69811908399612
+sistema_meta_ordenes_abides_PPO_maestro_sin_entrenar_muestreo_impacto.json,MO-01,PPO_maestro_sin_entrenar,2,media,1.0,FALABELLA,apertura,45.68418710458744,0.9737032842582106,45.68418710458744
+sistema_meta_ordenes_abides_PPO_maestro_sin_entrenar_muestreo_impacto.json,MO-02,PPO_maestro_sin_entrenar,2,media,1.0,COPEC,apertura,121.7313864638736,0.9718900343642611,121.7313864638736

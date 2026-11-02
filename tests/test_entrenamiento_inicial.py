@@ -32,6 +32,7 @@ def test_el_ensayo_con_poisson_completa_todas_las_etapas(corrida):
         assert k in estado
     assert set(estado["referencias"]) == {"agresiva_market", "twap_limit_medio", "pasiva_limit"}
     assert (out / "entrenamiento_apertura.csv").exists() and (out / "checkpoints_apertura" / "checkpoint_last.pt").exists()
+    assert len((out / "monitoreo_episodios.csv").read_text(encoding="utf-8").strip().splitlines()) == 11   # encabezado + 10 episodios
     v = estado["vigilancia_D3"]
     assert v["umbral"] == 0.95 and v["cumple"] == (v["cumplimiento_medio"] >= 0.95)
 

@@ -1,0 +1,341 @@
+{
+ "V0_original_g1_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 44.87,
+  "kl_maximo": 0.01036,
+  "cumplimiento_final": 0.04653960000000001,
+  "pct_espera_final": 0.9780000000000001,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.047 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 98 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 30 % a 98 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "RECOMPENSA_SUBE_COSTO_NO",
+    "mensaje": "El retorno medio mejora 96 % (-11.78 a -0.45) pero el slippage solo baja 1.1 bps (20.2 a 19.1): la red puede estar optimizando la recompensa y no el costo."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 46 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 3
+ },
+ "V0_original_g1_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 37.94,
+  "kl_maximo": 0.012865,
+  "cumplimiento_final": 0.027120000000000002,
+  "pct_espera_final": 0.9893333333333334,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.027 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 99 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 30 % a 99 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "RECOMPENSA_SUBE_COSTO_NO",
+    "mensaje": "El retorno medio mejora 97 % (-11.66 a -0.34) pero el slippage solo baja 0.3 bps (20.0 a 19.7): la red puede estar optimizando la recompensa y no el costo."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 37 % del maximo: la politica casi no explora."
+   }
+  ],
+  "criticas": 2,
+  "avisos": 3
+ },
+ "V0_original_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 51.55,
+  "kl_maximo": 0.012158,
+  "cumplimiento_final": 0.013784000000000001,
+  "pct_espera_final": 0.9940000000000001,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.014 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 99 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 30 % a 99 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "RECOMPENSA_SUBE_COSTO_NO",
+    "mensaje": "El retorno medio mejora 98 % (-11.75 a -0.24) pero el slippage solo baja -0.0 bps (20.2 a 20.2): la red puede estar optimizando la recompensa y no el costo."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 52 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 3
+ },
+ "V0_original_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 47.39,
+  "kl_maximo": 0.012974,
+  "cumplimiento_final": 0.048507999999999996,
+  "pct_espera_final": 0.9620000000000001,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.049 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 96 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 30 % a 96 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "RECOMPENSA_SUBE_COSTO_NO",
+    "mensaje": "El retorno medio mejora 97 % (-11.63 a -0.31) pero el slippage solo baja 0.1 bps (20.0 a 19.9): la red puede estar optimizando la recompensa y no el costo."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 48 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 3
+ },
+ "V1_liquidacion_g1_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 67.58,
+  "kl_maximo": 0.009653,
+  "cumplimiento_final": 0.961934998751529,
+  "pct_espera_final": 0.373284370015949,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 69 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "V1_liquidacion_g1_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 50.93,
+  "kl_maximo": 0.009857,
+  "cumplimiento_final": 0.9449445343547819,
+  "pct_espera_final": 0.38932467532467535,
+  "alertas": [
+   {
+    "nivel": "AVISO",
+    "codigo": "CUMPLIMIENTO_BAJO",
+    "mensaje": "Cumplimiento medio 0.945 en los ultimos 50 episodios (< 0.95): regla de vigilancia de D3."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 55 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 1
+ },
+ "V2_penalizacion_g1_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 64.03,
+  "kl_maximo": 0.011745,
+  "cumplimiento_final": 0.994336759868608,
+  "pct_espera_final": 0.19341745477780212,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 67 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "V2_penalizacion_g1_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 50.22,
+  "kl_maximo": 0.009827,
+  "cumplimiento_final": 0.9963101255000454,
+  "pct_espera_final": 0.20307785483181764,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 50 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "V2_penalizacion_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 55.88,
+  "kl_maximo": 0.011434,
+  "cumplimiento_final": 0.031516,
+  "pct_espera_final": 0.9633333333333333,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.032 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 96 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 30 % a 96 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -11.73 (primeros 50) frente a -17.23 (ultimos 50)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 55 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   }
+  ],
+  "criticas": 1,
+  "avisos": 2
+ },
+ "V2_penalizacion_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 40.94,
+  "kl_maximo": 0.011301,
+  "cumplimiento_final": 0.4488111027999999,
+  "pct_espera_final": 0.7553333333333334,
+  "alertas": [
+   {
+    "nivel": "CRITICA",
+    "codigo": "CUMPLIMIENTO_CRITICO",
+    "mensaje": "Cumplimiento medio 0.449 en los ultimos 50 episodios (< 0.5)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_ALTA",
+    "mensaje": "La politica espera en el 76 % de los pasos (ultimos 50 episodios)."
+   },
+   {
+    "nivel": "AVISO",
+    "codigo": "ESPERA_EN_AUMENTO",
+    "mensaje": "La fraccion de pasos en espera subio de 30 % a 76 %: la politica puede estar aprendiendo a no ejecutar (R_E sin costo por esperar)."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "SIN_MEJORA",
+    "mensaje": "El retorno medio no mejora: -11.62 (primeros 50) frente a -14.24 (ultimos 50)."
+   },
+   {
+    "nivel": "CRITICA",
+    "codigo": "ENTROPIA_COLAPSADA",
+    "mensaje": "Entropia al 40 % del maximo: la politica casi no explora."
+   }
+  ],
+  "criticas": 2,
+  "avisos": 2
+ },
+ "V5_costo_espera_s1000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 47.7,
+  "kl_maximo": 0.010595,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.030138528138528135,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 47 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "PICO_PERDIDA_CRITICO",
+    "mensaje": "Pico de la perdida del critico (35.7, mediana 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ },
+ "V5_costo_espera_s2000": {
+  "actualizaciones": 100,
+  "episodios_registrados": 1000,
+  "entropia_final_pct_max": 53.02,
+  "kl_maximo": 0.009834,
+  "cumplimiento_final": 1.0,
+  "pct_espera_final": 0.03293412873676032,
+  "alertas": [
+   {
+    "nivel": "INFO",
+    "codigo": "ENTROPIA_BAJA",
+    "mensaje": "Entropia al 55 % del maximo: la politica se esta concentrando; evaluar tambien con muestreo y no solo con argmax."
+   },
+   {
+    "nivel": "INFO",
+    "codigo": "PICO_PERDIDA_CRITICO",
+    "mensaje": "Pico de la perdida del critico (47.8, mediana 0.02)."
+   }
+  ],
+  "criticas": 0,
+  "avisos": 0
+ }
+}

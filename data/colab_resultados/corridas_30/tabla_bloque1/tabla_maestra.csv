@@ -1,0 +1,2 @@
+escenario,factor_tamano,n_pares,IS_PPO_sistema,IS_TWAP,IS_VWAP,sd_PPO_sistema,dif_vs_TWAP_bps,dif_vs_TWAP_ic,p_wilcoxon_vs_TWAP,p_ttest_vs_TWAP,dif_vs_TWAP_pct,dif_vs_VWAP_bps,dif_vs_VWAP_ic,p_wilcoxon_vs_VWAP,p_ttest_vs_VWAP,dif_vs_VWAP_pct,ranking
+media,1.0,9,30.58394267921963,49.00969631186251,49.23474742928413,19.30599193716439,-18.425753632642884,[-38.85; 3.29],0.12890625,0.14874987705912399,-37.5961391708992,-18.650804750064502,[-44.46; 7.96],0.25,0.22725158089112688,-37.88138606144503,PPO_sistema < TWAP < VWAP

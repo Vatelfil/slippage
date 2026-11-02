@@ -1,0 +1,44 @@
+{
+ "politica": "entrenado",
+ "rango_cociente": [
+  0.1,
+  1.0
+ ],
+ "filas": [
+  {
+   "lambda": 0.01,
+   "IS_bps_medio_abs": 25.798670453149647,
+   "penalizacion_bps_media": 2.429595176243871,
+   "cociente": 0.09417520878279417,
+   "en_rango": false
+  },
+  {
+   "lambda": 0.02,
+   "IS_bps_medio_abs": 25.798670453149647,
+   "penalizacion_bps_media": 4.859190352487742,
+   "cociente": 0.18835041756558835,
+   "en_rango": true
+  },
+  {
+   "lambda": 0.05,
+   "IS_bps_medio_abs": 25.798670453149647,
+   "penalizacion_bps_media": 12.14797588121935,
+   "cociente": 0.47087604391397064,
+   "en_rango": true
+  },
+  {
+   "lambda": 0.1,
+   "IS_bps_medio_abs": 25.798670453149647,
+   "penalizacion_bps_media": 24.2959517624387,
+   "cociente": 0.9417520878279413,
+   "en_rango": true
+  },
+  {
+   "lambda": 0.2,
+   "IS_bps_medio_abs": 25.798670453149647,
+   "penalizacion_bps_media": 48.5919035248774,
+   "cociente": 1.8835041756558826,
+   "en_rango": false
+  }
+ ]
+}

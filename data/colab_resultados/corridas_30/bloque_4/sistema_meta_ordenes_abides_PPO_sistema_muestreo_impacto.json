@@ -1,0 +1,287 @@
+{
+ "firma": {
+  "tarea": "3.2.3-evaluador",
+  "entorno": "abides",
+  "snapshot": "2026-08-23",
+  "sistema": "PPO_sistema",
+  "modo": "muestreo",
+  "ckpt_maestro": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/checkpoint_last.pt",
+  "ckpt_ejecutores": {
+   "apertura": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/ejecutor_apertura.pt",
+   "media_jornada": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/ejecutor_media_jornada.pt",
+   "cierre": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/ejecutor_cierre.pt"
+  },
+  "seed_red": 1000,
+  "ordenes": [
+   "MO-09",
+   "MO-10"
+  ],
+  "cantidades": {
+   "MO-09": 44100,
+   "MO-10": 44100
+  },
+  "datos_sm": null,
+  "escenario": null,
+  "factor_liquidez": 1.0,
+  "factor_tamano": 1.0,
+  "impacto": {
+   "y": 0.5,
+   "tau_min": 120.0
+  }
+ },
+ "resultados": {},
+ "corridas": {
+  "MO-09|PPO_sistema|1": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sistema",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 17785.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 11242.5
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 7536.25
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 3768.125
+    }
+   ],
+   "R_M": -4046109.2722197967,
+   "Q_total": 44100.0,
+   "Q_executed": 40332.0,
+   "execution_rate": 0.9145578231292517,
+   "P_referencia": 5885.85,
+   "P_promedio_ejecutado": 5957.85810654037,
+   "IS_total": 3175557.498430283,
+   "slippage_bps": 122.34104936478032,
+   "segundos": 171.1,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-10|PPO_sistema|1": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sistema",
+   "seed": 1,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 17046.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 12744.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 7155.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 3577.5
+    }
+   ],
+   "R_M": -2486983.149046077,
+   "Q_total": 44100.0,
+   "Q_executed": 40523.0,
+   "execution_rate": 0.9188888888888889,
+   "P_referencia": 5955.75,
+   "P_promedio_ejecutado": 5990.439244124315,
+   "IS_total": 1529795.6658823064,
+   "slippage_bps": 58.24496347952035,
+   "segundos": 149.8,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-09|PPO_sistema|2": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sistema",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 18611.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 12744.5
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 6372.25
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 3186.125
+    }
+   ],
+   "R_M": -2381583.3551529436,
+   "Q_total": 44100.0,
+   "Q_executed": 40913.0,
+   "execution_rate": 0.9277324263038549,
+   "P_referencia": 5993.15,
+   "P_promedio_ejecutado": 6027.530996787612,
+   "IS_total": 1516201.9583337014,
+   "slippage_bps": 57.367155481862255,
+   "segundos": 219.7,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-10|PPO_sistema|2": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sistema",
+   "seed": 2,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 19995.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 12052.5
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 6026.25
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 3013.125
+    }
+   ],
+   "R_M": -1573500.373761604,
+   "Q_total": 44100.0,
+   "Q_executed": 41086.0,
+   "execution_rate": 0.9316553287981859,
+   "P_referencia": 5990.45,
+   "P_promedio_ejecutado": 6006.460304245741,
+   "IS_total": 706054.4172371905,
+   "slippage_bps": 26.72637989757244,
+   "segundos": 267.0,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-09|PPO_sistema|3": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sistema",
+   "seed": 3,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 16096.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 13029.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 7262.5
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 3856.25
+    }
+   ],
+   "R_M": 4388350.091136761,
+   "Q_total": 44100.0,
+   "Q_executed": 40244.0,
+   "execution_rate": 0.912562358276644,
+   "P_referencia": 6137.35,
+   "P_promedio_ejecutado": 5999.954615514331,
+   "IS_total": -6059136.455818031,
+   "slippage_bps": -223.86760488756488,
+   "segundos": 265.5,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  },
+  "MO-10|PPO_sistema|3": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sistema",
+   "seed": 3,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 20287.0
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 10954.5
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 6159.25
+    },
+    {
+     "alpha_idx": 9,
+     "ventana_idx": 3,
+     "q_ejecutado": 3349.625
+    }
+   ],
+   "R_M": 4186725.346607011,
+   "Q_total": 44100.0,
+   "Q_executed": 40750.0,
+   "execution_rate": 0.9240362811791383,
+   "P_referencia": 6157.05,
+   "P_promedio_ejecutado": 6029.762393484702,
+   "IS_total": -5613383.44732463,
+   "slippage_bps": -206.73472931890717,
+   "segundos": 178.5,
+   "escenario": "media",
+   "factor_tamano": 1.0
+  }
+ }
+}

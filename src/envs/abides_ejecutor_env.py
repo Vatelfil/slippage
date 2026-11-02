@@ -74,8 +74,14 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
                  sigma_5min: Optional[float] = None,
                  ventana_sigma2: int = VENTANA_SIGMA2_PASOS,
                  riesgo_sobre: str = RIESGO_SOBRE_EJECUTOR,
-                 normalizar_recompensa: bool = False, **kwargs):
+                 normalizar_recompensa: bool = False, mid_decision: bool = False, **kwargs):
         self._cfg = bridge_cfg or br.BridgeConfig()
+        # BORRADOR de PS para BF: con mid_decision=True el precio de R_E se mide
+        # contra el P_mid que vio el agente al decidir (como en Poisson). Apagado
+        # por defecto para no cambiar las corridas anteriores.
+        self._usar_mid_decision = bool(mid_decision)
+        self._mid_visto: Optional[float] = None
+        self._mid_decision: Optional[float] = None
         self._beta = beta
         # R_E (2.2.3): varianza movil causal del P_mid, escala comun con el
         # fallback y precios en CLP. `sigma_5min` fija el prior de sigma2.
@@ -104,6 +110,8 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
 
     def reset(self):
         self._entry_price = None
+        self._mid_visto = None
+        self._mid_decision = None
         self._remaining = float(self.parent_order_size)
         state = super().reset()  # fija self._entry_price en raw_state_to_state
         self._reward.reset(self._entry_price)
@@ -128,6 +136,10 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         mid = br.mid_price(bids, asks, last_tx)
         if self._entry_price is None:
             self._entry_price = mid
+        # ABIDES arma el estado antes que la recompensa, asi que aqui el mid
+        # visto en el despertar anterior es el de la decision de este paso.
+        self._mid_decision = self._mid_visto
+        self._mid_visto = mid
         self._best_bid = bids[0][0] if len(bids) else mid
         self._best_ask = asks[0][0] if len(asks) else mid
         self._remaining = max(float(self.parent_order_size) - float(holdings), 0.0)
@@ -147,6 +159,9 @@ class ExecutionEnv27(SubGymMarketsExecutionEnv_v0):
         orders = br.last_orders(raw_state["internal_data"]["inter_wakeup_executed_orders"])
         holdings = br.last_scalar(raw_state["internal_data"]["holdings"])
         q_pend = max(float(self.parent_order_size) - float(holdings), 0.0)
+        if self._usar_mid_decision:
+            return self._reward.step(orders, mid, self.parent_order_size, q_pendiente=q_pend,
+                                     mid_decision=self._mid_decision)
         return self._reward.step(orders, mid, self.parent_order_size, q_pendiente=q_pend)
 
     @raw_state_pre_process

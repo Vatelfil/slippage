@@ -1,0 +1,42 @@
+[
+ {
+  "maestro": "sin_entrenar",
+  "referencia": "TWAP",
+  "dif_IS_bps": 0.06131066130233466,
+  "ic_bajo": -0.759524263425426,
+  "ic_alto": 0.7467345192201713,
+  "cumplimiento_maestro": 0.958938198840402,
+  "cumplimiento_referencia": 0.9997000000000001,
+  "n": 30
+ },
+ {
+  "maestro": "sin_entrenar",
+  "referencia": "VWAP",
+  "dif_IS_bps": 0.818685793873245,
+  "ic_bajo": 0.0005047616468918725,
+  "ic_alto": 1.5119618026565216,
+  "cumplimiento_maestro": 0.958938198840402,
+  "cumplimiento_referencia": 0.9998333333333336,
+  "n": 30
+ },
+ {
+  "maestro": "entrenado",
+  "referencia": "TWAP",
+  "dif_IS_bps": 1.8237108622732818,
+  "ic_bajo": 1.33827863521046,
+  "ic_alto": 2.284123969392847,
+  "cumplimiento_maestro": 0.9988501963694788,
+  "cumplimiento_referencia": 0.9997000000000001,
+  "n": 30
+ },
+ {
+  "maestro": "entrenado",
+  "referencia": "VWAP",
+  "dif_IS_bps": 2.5810859948441927,
+  "ic_bajo": 2.1007193258995205,
+  "ic_alto": 3.0435126291372168,
+  "cumplimiento_maestro": 0.9988501963694788,
+  "cumplimiento_referencia": 0.9998333333333336,
+  "n": 30
+ }
+]

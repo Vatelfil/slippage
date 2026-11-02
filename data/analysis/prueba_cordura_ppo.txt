@@ -1,0 +1,4 @@
+sin ruido            sigma=  0.00  P(mercado) inicial=0.335  1000 ep: 0.999  (18 s)
+señal/ruido 1        sigma=  2.11  P(mercado) inicial=0.335  1000 ep: 0.668  (13 s)
+señal/ruido 0,3      sigma=  7.03  P(mercado) inicial=0.335  1000 ep: 0.371  5000 ep: 0.362  20000 ep: 0.966  (339 s)
+como ABIDES (0,12)   sigma= 17.50  P(mercado) inicial=0.335  1000 ep: 0.341  5000 ep: 0.340  20000 ep: 0.640  (321 s)

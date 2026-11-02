@@ -1,0 +1,788 @@
+{
+ "poisson": [
+  {
+   "q_slice": 1000,
+   "semilla": 2000,
+   "curvas": [
+    {
+     "episodios": "1-100",
+     "retorno": -10.446233349507786,
+     "cumplimiento_voluntario": 0.9999851621387656,
+     "cumplimiento_total": 0.9999851621387656,
+     "pct_espera": 0.3063980106166486,
+     "pct_mercado": 0.3509912732736196,
+     "pct_limite": 0.34261071610973176,
+     "slippage_bps": 17.88781038269221
+    },
+    {
+     "episodios": "101-200",
+     "retorno": -10.397727560123874,
+     "cumplimiento_voluntario": 0.9971918861515126,
+     "cumplimiento_total": 0.9971918861515126,
+     "pct_espera": 0.41692790843696537,
+     "pct_mercado": 0.29760426236212145,
+     "pct_limite": 0.2854678292009132,
+     "slippage_bps": 17.921135571978525
+    },
+    {
+     "episodios": "201-300",
+     "retorno": -7.789091972017213,
+     "cumplimiento_voluntario": 0.7550403289123361,
+     "cumplimiento_total": 0.7550403289123361,
+     "pct_espera": 0.7458058634199939,
+     "pct_mercado": 0.09741193315541143,
+     "pct_limite": 0.15678220342459473,
+     "slippage_bps": 18.081388630066282
+    },
+    {
+     "episodios": "301-400",
+     "retorno": -1.7758656918123576,
+     "cumplimiento_voluntario": 0.171524,
+     "cumplimiento_total": 0.171524,
+     "pct_espera": 0.9593634992458523,
+     "pct_mercado": 0.00997285067873303,
+     "pct_limite": 0.03066365007541478,
+     "slippage_bps": 17.848548645001106
+    },
+    {
+     "episodios": "401-500",
+     "retorno": -0.9845213645155568,
+     "cumplimiento_voluntario": 0.09417999999999999,
+     "cumplimiento_total": 0.09417999999999999,
+     "pct_espera": 0.9810641025641027,
+     "pct_mercado": 0.004884615384615385,
+     "pct_limite": 0.01405128205128205,
+     "slippage_bps": 18.380267244036816
+    },
+    {
+     "episodios": "501-600",
+     "retorno": -0.8094194471169406,
+     "cumplimiento_voluntario": 0.0781897,
+     "cumplimiento_total": 0.0781897,
+     "pct_espera": 0.9782307692307693,
+     "pct_mercado": 0.003435897435897436,
+     "pct_limite": 0.018333333333333333,
+     "slippage_bps": 18.446139552615698
+    },
+    {
+     "episodios": "601-700",
+     "retorno": -0.5217812460571224,
+     "cumplimiento_voluntario": 0.050600000000000006,
+     "cumplimiento_total": 0.050600000000000006,
+     "pct_espera": 0.9853333333333335,
+     "pct_mercado": 0.0016666666666666666,
+     "pct_limite": 0.013000000000000003,
+     "slippage_bps": 17.76528200165024
+    },
+    {
+     "episodios": "701-800",
+     "retorno": -0.8298629414027799,
+     "cumplimiento_voluntario": 0.08,
+     "cumplimiento_total": 0.08,
+     "pct_espera": 0.9686666666666668,
+     "pct_mercado": 0.0026666666666666666,
+     "pct_limite": 0.028666666666666667,
+     "slippage_bps": 18.020487406930307
+    },
+    {
+     "episodios": "801-900",
+     "retorno": -0.5836481523170868,
+     "cumplimiento_voluntario": 0.05668,
+     "cumplimiento_total": 0.05668,
+     "pct_espera": 0.9736666666666668,
+     "pct_mercado": 0.0026666666666666666,
+     "pct_limite": 0.023666666666666666,
+     "slippage_bps": 17.702849576564635
+    },
+    {
+     "episodios": "901-1000",
+     "retorno": -0.38123368997864426,
+     "cumplimiento_voluntario": 0.037000000000000005,
+     "cumplimiento_total": 0.037000000000000005,
+     "pct_espera": 0.9806666666666668,
+     "pct_mercado": 0.0006666666666666666,
+     "pct_limite": 0.018666666666666668,
+     "slippage_bps": 17.528927201660085
+    }
+   ]
+  },
+  {
+   "q_slice": 1000,
+   "semilla": 3000,
+   "curvas": [
+    {
+     "episodios": "1-100",
+     "retorno": -10.49360747310195,
+     "cumplimiento_voluntario": 0.9998814291646201,
+     "cumplimiento_total": 0.9998814291646201,
+     "pct_espera": 0.32168177897819056,
+     "pct_mercado": 0.339930666520992,
+     "pct_limite": 0.33838755450081737,
+     "slippage_bps": 17.954433860118193
+    },
+    {
+     "episodios": "101-200",
+     "retorno": -10.398641040096617,
+     "cumplimiento_voluntario": 0.9975555201862985,
+     "cumplimiento_total": 0.9975555201862985,
+     "pct_espera": 0.38188565757993437,
+     "pct_mercado": 0.3271216901993022,
+     "pct_limite": 0.2909926522207633,
+     "slippage_bps": 17.857806663413342
+    },
+    {
+     "episodios": "201-300",
+     "retorno": -9.596418251791226,
+     "cumplimiento_voluntario": 0.9284317571103251,
+     "cumplimiento_total": 0.9284317571103251,
+     "pct_espera": 0.572763407598273,
+     "pct_mercado": 0.1974599595190457,
+     "pct_limite": 0.2297766328826812,
+     "slippage_bps": 18.102396969850805
+    },
+    {
+     "episodios": "301-400",
+     "retorno": -8.44605337820754,
+     "cumplimiento_voluntario": 0.8172773642220801,
+     "cumplimiento_total": 0.8172773642220801,
+     "pct_espera": 0.672660036941616,
+     "pct_mercado": 0.13354169203116573,
+     "pct_limite": 0.19379827102721842,
+     "slippage_bps": 18.169312639010865
+    },
+    {
+     "episodios": "401-500",
+     "retorno": -6.019900136810287,
+     "cumplimiento_voluntario": 0.58067902096,
+     "cumplimiento_total": 0.58067902096,
+     "pct_espera": 0.8295297238706041,
+     "pct_mercado": 0.06823922426467799,
+     "pct_limite": 0.10223105186471791,
+     "slippage_bps": 18.123381273712038
+    },
+    {
+     "episodios": "501-600",
+     "retorno": -1.8995659360118904,
+     "cumplimiento_voluntario": 0.1845688,
+     "cumplimiento_total": 0.1845688,
+     "pct_espera": 0.9431887254901963,
+     "pct_mercado": 0.013182422969187677,
+     "pct_limite": 0.04362885154061624,
+     "slippage_bps": 18.43926897597749
+    },
+    {
+     "episodios": "601-700",
+     "retorno": -1.4210887569346682,
+     "cumplimiento_voluntario": 0.13701,
+     "cumplimiento_total": 0.13701,
+     "pct_espera": 0.9610243182743184,
+     "pct_mercado": 0.00803978428978429,
+     "pct_limite": 0.030935897435897433,
+     "slippage_bps": 18.038080054986615
+    },
+    {
+     "episodios": "701-800",
+     "retorno": -0.8850226131022312,
+     "cumplimiento_voluntario": 0.085894,
+     "cumplimiento_total": 0.085894,
+     "pct_espera": 0.9690000000000002,
+     "pct_mercado": 0.005,
+     "pct_limite": 0.026000000000000002,
+     "slippage_bps": 17.817234340295553
+    },
+    {
+     "episodios": "801-900",
+     "retorno": -0.9890202413587376,
+     "cumplimiento_voluntario": 0.09623000000000001,
+     "cumplimiento_total": 0.09623000000000001,
+     "pct_espera": 0.9658480331262941,
+     "pct_mercado": 0.0034,
+     "pct_limite": 0.030751966873706005,
+     "slippage_bps": 18.147630426816637
+    },
+    {
+     "episodios": "901-1000",
+     "retorno": -0.689519655415032,
+     "cumplimiento_voluntario": 0.0662,
+     "cumplimiento_total": 0.0662,
+     "pct_espera": 0.9750000000000001,
+     "pct_mercado": 0.0023333333333333335,
+     "pct_limite": 0.022666666666666665,
+     "slippage_bps": 18.207056298436388
+    }
+   ]
+  },
+  {
+   "q_slice": 5000,
+   "semilla": 2000,
+   "curvas": [
+    {
+     "episodios": "1-100",
+     "retorno": -11.631972858784799,
+     "cumplimiento_voluntario": 0.9999038645520435,
+     "cumplimiento_total": 0.9999038645520435,
+     "pct_espera": 0.3215111141058778,
+     "pct_mercado": 0.3297648092691671,
+     "pct_limite": 0.34872407662495497,
+     "slippage_bps": 20.031041373764875
+    },
+    {
+     "episodios": "101-200",
+     "retorno": -10.936121029189977,
+     "cumplimiento_voluntario": 0.954426610651715,
+     "cumplimiento_total": 0.954426610651715,
+     "pct_espera": 0.469002364189157,
+     "pct_mercado": 0.2639401669017132,
+     "pct_limite": 0.26705746890912996,
+     "slippage_bps": 19.752089364278003
+    },
+    {
+     "episodios": "201-300",
+     "retorno": -6.289505091591468,
+     "cumplimiento_voluntario": 0.552014226717592,
+     "cumplimiento_total": 0.552014226717592,
+     "pct_espera": 0.805174309944102,
+     "pct_mercado": 0.0792464014778848,
+     "pct_limite": 0.11557928857801329,
+     "slippage_bps": 19.807010542683404
+    },
+    {
+     "episodios": "301-400",
+     "retorno": -1.6682328123784043,
+     "cumplimiento_voluntario": 0.143999824,
+     "cumplimiento_total": 0.143999824,
+     "pct_espera": 0.9647435897435899,
+     "pct_mercado": 0.010435897435897436,
+     "pct_limite": 0.02482051282051282,
+     "slippage_bps": 19.56432934106543
+    },
+    {
+     "episodios": "401-500",
+     "retorno": -0.8206834321960862,
+     "cumplimiento_voluntario": 0.0709588,
+     "cumplimiento_total": 0.0709588,
+     "pct_espera": 0.9723333333333335,
+     "pct_mercado": 0.004333333333333333,
+     "pct_limite": 0.02333333333333333,
+     "slippage_bps": 19.69455674782317
+    },
+    {
+     "episodios": "501-600",
+     "retorno": -0.7387557054243575,
+     "cumplimiento_voluntario": 0.0643076,
+     "cumplimiento_total": 0.0643076,
+     "pct_espera": 0.9816666666666669,
+     "pct_mercado": 0.005666666666666668,
+     "pct_limite": 0.012666666666666666,
+     "slippage_bps": 19.298290029824727
+    },
+    {
+     "episodios": "601-700",
+     "retorno": -0.5057682186654364,
+     "cumplimiento_voluntario": 0.0433568,
+     "cumplimiento_total": 0.0433568,
+     "pct_espera": 0.9806666666666669,
+     "pct_mercado": 0.0016666666666666668,
+     "pct_limite": 0.017666666666666667,
+     "slippage_bps": 20.365790280173446
+    },
+    {
+     "episodios": "701-800",
+     "retorno": -0.22163567236941503,
+     "cumplimiento_voluntario": 0.019072000000000002,
+     "cumplimiento_total": 0.019072000000000002,
+     "pct_espera": 0.9836666666666667,
+     "pct_mercado": 0.0013333333333333333,
+     "pct_limite": 0.015000000000000003,
+     "slippage_bps": 20.075241649492416
+    },
+    {
+     "episodios": "801-900",
+     "retorno": -0.21402035391697932,
+     "cumplimiento_voluntario": 0.019022,
+     "cumplimiento_total": 0.019022,
+     "pct_espera": 0.9780000000000001,
+     "pct_mercado": 0.0013333333333333333,
+     "pct_limite": 0.020666666666666663,
+     "slippage_bps": 19.2940329534324
+    },
+    {
+     "episodios": "901-1000",
+     "retorno": -0.3078565529110173,
+     "cumplimiento_voluntario": 0.025254000000000002,
+     "cumplimiento_total": 0.025254000000000002,
+     "pct_espera": 0.9673333333333335,
+     "pct_mercado": 0.001,
+     "pct_limite": 0.03166666666666666,
+     "slippage_bps": 19.896635182547485
+    }
+   ]
+  },
+  {
+   "q_slice": 5000,
+   "semilla": 3000,
+   "curvas": [
+    {
+     "episodios": "1-100",
+     "retorno": -11.713523754972382,
+     "cumplimiento_voluntario": 0.9999427374678311,
+     "cumplimiento_total": 0.9999427374678311,
+     "pct_espera": 0.3296023608475594,
+     "pct_mercado": 0.3477012761827057,
+     "pct_limite": 0.32269636296973486,
+     "slippage_bps": 20.095872958342515
+    },
+    {
+     "episodios": "101-200",
+     "retorno": -11.501860462189823,
+     "cumplimiento_voluntario": 0.9988911088081701,
+     "cumplimiento_total": 0.9988911088081701,
+     "pct_espera": 0.3997854570510808,
+     "pct_mercado": 0.2905023774731717,
+     "pct_limite": 0.3097121654757475,
+     "slippage_bps": 19.82805901826482
+    },
+    {
+     "episodios": "201-300",
+     "retorno": -9.004844062123835,
+     "cumplimiento_voluntario": 0.799666313470861,
+     "cumplimiento_total": 0.799666313470861,
+     "pct_espera": 0.64888895113601,
+     "pct_mercado": 0.15112057204348225,
+     "pct_limite": 0.1999904768205078,
+     "slippage_bps": 19.56370788039316
+    },
+    {
+     "episodios": "301-400",
+     "retorno": -2.3590734641347164,
+     "cumplimiento_voluntario": 0.20465966840000005,
+     "cumplimiento_total": 0.20465966840000005,
+     "pct_espera": 0.9315714285714287,
+     "pct_mercado": 0.020952380952380948,
+     "pct_limite": 0.04747619047619047,
+     "slippage_bps": 19.56573822189679
+    },
+    {
+     "episodios": "401-500",
+     "retorno": -1.00910856169043,
+     "cumplimiento_voluntario": 0.08747348000000002,
+     "cumplimiento_total": 0.08747348000000002,
+     "pct_espera": 0.9586190476190477,
+     "pct_mercado": 0.007761904761904762,
+     "pct_limite": 0.03361904761904762,
+     "slippage_bps": 19.28648005721128
+    },
+    {
+     "episodios": "501-600",
+     "retorno": -0.7535205826194205,
+     "cumplimiento_voluntario": 0.06526180000000001,
+     "cumplimiento_total": 0.06526180000000001,
+     "pct_espera": 0.9676666666666668,
+     "pct_mercado": 0.004666666666666667,
+     "pct_limite": 0.027666666666666662,
+     "slippage_bps": 19.951615557013152
+    },
+    {
+     "episodios": "601-700",
+     "retorno": -0.7036252625070487,
+     "cumplimiento_voluntario": 0.058629999999999995,
+     "cumplimiento_total": 0.058629999999999995,
+     "pct_espera": 0.9766666666666669,
+     "pct_mercado": 0.0030000000000000005,
+     "pct_limite": 0.02033333333333333,
+     "slippage_bps": 20.532767108888983
+    },
+    {
+     "episodios": "701-800",
+     "retorno": -0.4222120340981153,
+     "cumplimiento_voluntario": 0.03643,
+     "cumplimiento_total": 0.03643,
+     "pct_espera": 0.9820000000000002,
+     "pct_mercado": 0.0013333333333333333,
+     "pct_limite": 0.016666666666666666,
+     "slippage_bps": 18.976876195713142
+    },
+    {
+     "episodios": "801-900",
+     "retorno": -0.12200343080938439,
+     "cumplimiento_voluntario": 0.009774,
+     "cumplimiento_total": 0.009774,
+     "pct_espera": 0.9876666666666668,
+     "pct_mercado": 0.0006666666666666666,
+     "pct_limite": 0.011666666666666667,
+     "slippage_bps": 21.833286459479556
+    },
+    {
+     "episodios": "901-1000",
+     "retorno": -0.23443962271017227,
+     "cumplimiento_voluntario": 0.019482,
+     "cumplimiento_total": 0.019482,
+     "pct_espera": 0.9893333333333334,
+     "pct_mercado": 0.0013333333333333333,
+     "pct_limite": 0.009333333333333334,
+     "slippage_bps": 19.400008193406393
+    }
+   ]
+  }
+ ],
+ "abides": [
+  {
+   "corrida": "d3_opcion0_s2000",
+   "bloques": [
+    {
+     "retorno": -2.0463639316089033,
+     "slippage_bps": 8.4452125076755,
+     "pct_espera": 0.30297794135383604,
+     "pct_mercado": 0.35404145334685355,
+     "pct_limite_compra": 0.34298060529931035
+    },
+    {
+     "retorno": -1.34580327657372,
+     "slippage_bps": 7.643203377936865,
+     "pct_espera": 0.30795061720185557,
+     "pct_mercado": 0.3102312891757938,
+     "pct_limite_compra": 0.38181809362235053
+    },
+    {
+     "retorno": -1.6677236622542952,
+     "slippage_bps": 7.367806506884356,
+     "pct_espera": 0.28282437980287095,
+     "pct_mercado": 0.3626841779425323,
+     "pct_limite_compra": 0.35449144225459667
+    },
+    {
+     "retorno": -1.5336454734077571,
+     "slippage_bps": 1.5166797296174495,
+     "pct_espera": 0.2971006395852842,
+     "pct_mercado": 0.2796188177218902,
+     "pct_limite_compra": 0.42328054269282567
+    },
+    {
+     "retorno": -1.3889984352643459,
+     "slippage_bps": 5.828229024887429,
+     "pct_espera": 0.32213927427501327,
+     "pct_mercado": 0.28812366376965504,
+     "pct_limite_compra": 0.38973706195533175
+    },
+    {
+     "retorno": -1.0807357508397966,
+     "slippage_bps": 6.055148044273938,
+     "pct_espera": 0.281160713554845,
+     "pct_mercado": 0.26150750392096517,
+     "pct_limite_compra": 0.4573317825241899
+    },
+    {
+     "retorno": -0.9862407154496496,
+     "slippage_bps": 7.838669950539062,
+     "pct_espera": 0.2611128329702633,
+     "pct_mercado": 0.2179259036886746,
+     "pct_limite_compra": 0.5209612633410621
+    },
+    {
+     "retorno": -0.9434885290532625,
+     "slippage_bps": 4.995026069368024,
+     "pct_espera": 0.28192884737904594,
+     "pct_mercado": 0.19069567419837305,
+     "pct_limite_compra": 0.5273754784225809
+    },
+    {
+     "retorno": -0.3403185111674885,
+     "slippage_bps": 5.806789266745941,
+     "pct_espera": 0.20676227483386925,
+     "pct_mercado": 0.14459475435984723,
+     "pct_limite_compra": 0.6486429708062835
+    },
+    {
+     "retorno": -0.3676587132473619,
+     "slippage_bps": 8.3569872419141,
+     "pct_espera": 0.10659698879551821,
+     "pct_mercado": 0.03241654995331466,
+     "pct_limite_compra": 0.8609864612511672
+    }
+   ]
+  },
+  {
+   "corrida": "d3_opcion0_s3000",
+   "bloques": [
+    {
+     "retorno": -1.4695911603680134,
+     "slippage_bps": 7.701224094759699,
+     "pct_espera": 0.30608640122160785,
+     "pct_mercado": 0.365693497098316,
+     "pct_limite_compra": 0.3282201016800761
+    },
+    {
+     "retorno": -2.1498102435436843,
+     "slippage_bps": 6.657501885930137,
+     "pct_espera": 0.32690434509715366,
+     "pct_mercado": 0.3320223159704247,
+     "pct_limite_compra": 0.3410733389324216
+    },
+    {
+     "retorno": -1.6132883620227367,
+     "slippage_bps": 4.590964703748069,
+     "pct_espera": 0.31356259412919896,
+     "pct_mercado": 0.3425613474450756,
+     "pct_limite_compra": 0.34387605842572533
+    },
+    {
+     "retorno": -2.132600459045319,
+     "slippage_bps": 6.122510173402967,
+     "pct_espera": 0.3314635330871399,
+     "pct_mercado": 0.29132816272994294,
+     "pct_limite_compra": 0.3772083041829172
+    },
+    {
+     "retorno": -1.619047027171242,
+     "slippage_bps": 6.9239027388748955,
+     "pct_espera": 0.318385553157999,
+     "pct_mercado": 0.30928790113108995,
+     "pct_limite_compra": 0.37232654571091106
+    },
+    {
+     "retorno": -1.3641702926772692,
+     "slippage_bps": 7.758574497627852,
+     "pct_espera": 0.322326284890035,
+     "pct_mercado": 0.2738072496560886,
+     "pct_limite_compra": 0.4038664654538763
+    },
+    {
+     "retorno": -1.5417164673972463,
+     "slippage_bps": 5.436347692808355,
+     "pct_espera": 0.29729147685931573,
+     "pct_mercado": 0.23850016862260096,
+     "pct_limite_compra": 0.46420835451808323
+    },
+    {
+     "retorno": -1.0682292816982555,
+     "slippage_bps": 7.819029500495618,
+     "pct_espera": 0.29132595819541923,
+     "pct_mercado": 0.19765926060501687,
+     "pct_limite_compra": 0.5110147811995638
+    },
+    {
+     "retorno": -1.7426092814680394,
+     "slippage_bps": 4.204164579409378,
+     "pct_espera": 0.34376726127695645,
+     "pct_mercado": 0.15220711134463633,
+     "pct_limite_compra": 0.5040256273784072
+    },
+    {
+     "retorno": -0.8055355724121968,
+     "slippage_bps": 5.6761703259083625,
+     "pct_espera": 0.3232292791842011,
+     "pct_mercado": 0.1748746422805446,
+     "pct_limite_compra": 0.5018960785352543
+    }
+   ]
+  },
+  {
+   "corrida": "d3_opcionA_s2000",
+   "bloques": [
+    {
+     "retorno": -2.6202339260612524,
+     "slippage_bps": 8.500616515290682,
+     "pct_espera": 0.30203701511535963,
+     "pct_mercado": 0.35371527507559525,
+     "pct_limite_compra": 0.34424770980904507
+    },
+    {
+     "retorno": -2.2964283668527914,
+     "slippage_bps": 6.9225551096565345,
+     "pct_espera": 0.30051243434329983,
+     "pct_mercado": 0.3117585919580636,
+     "pct_limite_compra": 0.3877289736986365
+    },
+    {
+     "retorno": -1.8221818984649565,
+     "slippage_bps": 5.789339034415713,
+     "pct_espera": 0.29359496577964744,
+     "pct_mercado": 0.3567150129058361,
+     "pct_limite_compra": 0.34969002131451654
+    },
+    {
+     "retorno": -1.6618505693984127,
+     "slippage_bps": 3.0141015669196087,
+     "pct_espera": 0.2709839247392466,
+     "pct_mercado": 0.3236277100338779,
+     "pct_limite_compra": 0.4053883652268755
+    },
+    {
+     "retorno": -2.028196266793627,
+     "slippage_bps": 7.6521405047291395,
+     "pct_espera": 0.2765530577385789,
+     "pct_mercado": 0.30137449268279803,
+     "pct_limite_compra": 0.4220724495786229
+    },
+    {
+     "retorno": -1.6721036873318746,
+     "slippage_bps": 6.085289789789986,
+     "pct_espera": 0.24795242724289365,
+     "pct_mercado": 0.255596484480133,
+     "pct_limite_compra": 0.4964510882769734
+    },
+    {
+     "retorno": -1.1047166997941955,
+     "slippage_bps": 7.643762049821849,
+     "pct_espera": 0.21842057043142318,
+     "pct_mercado": 0.26403853364221513,
+     "pct_limite_compra": 0.5175408959263617
+    },
+    {
+     "retorno": -1.4898305714795739,
+     "slippage_bps": 6.703154830533637,
+     "pct_espera": 0.14072922695639412,
+     "pct_mercado": 0.1767256383107776,
+     "pct_limite_compra": 0.6825451347328283
+    },
+    {
+     "retorno": -1.532558747913681,
+     "slippage_bps": 5.44102774612045,
+     "pct_espera": 0.12344871137634296,
+     "pct_mercado": 0.15151780018227384,
+     "pct_limite_compra": 0.7250334884413832
+    },
+    {
+     "retorno": -1.0565203040255002,
+     "slippage_bps": 7.526484414184873,
+     "pct_espera": 0.07606132021573198,
+     "pct_mercado": 0.09897013525689996,
+     "pct_limite_compra": 0.824968544527368
+    }
+   ]
+  },
+  {
+   "corrida": "d3_opcionA_s3000",
+   "bloques": [
+    {
+     "retorno": -1.9530524844196324,
+     "slippage_bps": 6.404455644002997,
+     "pct_espera": 0.3145663692299982,
+     "pct_mercado": 0.35964469312289343,
+     "pct_limite_compra": 0.32578893764710826
+    },
+    {
+     "retorno": -2.1666049701971604,
+     "slippage_bps": 6.526215478125431,
+     "pct_espera": 0.3090448351341305,
+     "pct_mercado": 0.33792662626704884,
+     "pct_limite_compra": 0.35302853859882055
+    },
+    {
+     "retorno": -2.319670704498245,
+     "slippage_bps": 5.390097403947886,
+     "pct_espera": 0.3079867306338736,
+     "pct_mercado": 0.34924311533602825,
+     "pct_limite_compra": 0.3427701540300982
+    },
+    {
+     "retorno": -2.335311272349921,
+     "slippage_bps": 4.960016953072324,
+     "pct_espera": 0.2978802138936578,
+     "pct_mercado": 0.2810959092600464,
+     "pct_limite_compra": 0.4210238768462958
+    },
+    {
+     "retorno": -1.9606744932137559,
+     "slippage_bps": 7.434337442293623,
+     "pct_espera": 0.27091929153577754,
+     "pct_mercado": 0.2909716680378445,
+     "pct_limite_compra": 0.4381090404263778
+    },
+    {
+     "retorno": -1.6339849385786607,
+     "slippage_bps": 7.767274651980895,
+     "pct_espera": 0.26568340461281637,
+     "pct_mercado": 0.2678847527200468,
+     "pct_limite_compra": 0.4664318426671368
+    },
+    {
+     "retorno": -1.2852094054960395,
+     "slippage_bps": 6.444424787985238,
+     "pct_espera": 0.2460173094878977,
+     "pct_mercado": 0.2205840679358481,
+     "pct_limite_compra": 0.5333986225762541
+    },
+    {
+     "retorno": -1.2444533075889748,
+     "slippage_bps": 7.924141333555745,
+     "pct_espera": 0.11846679928258874,
+     "pct_mercado": 0.09920774547090336,
+     "pct_limite_compra": 0.782325455246508
+    },
+    {
+     "retorno": -0.695339634468759,
+     "slippage_bps": 4.993738507699464,
+     "pct_espera": 0.06444877344877345,
+     "pct_mercado": 0.04204761904761905,
+     "pct_limite_compra": 0.8935036075036075
+    },
+    {
+     "retorno": -0.07785442325970181,
+     "slippage_bps": 6.449419532493805,
+     "pct_espera": 0.0612063492063492,
+     "pct_mercado": 0.05341666666666667,
+     "pct_limite_compra": 0.8853769841269842
+    }
+   ]
+  }
+ ],
+ "auditoria": [
+  {
+   "estrategia": "Esperar siempre",
+   "retorno_visto": 0.0,
+   "retorno_con_liquidacion": -12.142776297622525,
+   "slippage_bps": 21.53097651961764,
+   "cumplimiento_voluntario": 0.0,
+   "pct_espera": 1.0
+  },
+  {
+   "estrategia": "Mercado por todo lo pendiente (agresiva)",
+   "retorno_visto": -12.383040052306676,
+   "retorno_con_liquidacion": -12.383040052306676,
+   "slippage_bps": 20.929775761492234,
+   "cumplimiento_voluntario": 1.0,
+   "pct_espera": 0.0
+  },
+  {
+   "estrategia": "Orden límite por tramos (TWAP límite)",
+   "retorno_visto": -10.043789393172883,
+   "retorno_con_liquidacion": -10.280471825551771,
+   "slippage_bps": 17.913377332951406,
+   "cumplimiento_voluntario": 0.9768558868590417,
+   "pct_espera": 0.0
+  },
+  {
+   "estrategia": "Orden límite pasiva",
+   "retorno_visto": -7.023545127367183,
+   "retorno_con_liquidacion": -12.112402441810264,
+   "slippage_bps": 21.370104196576058,
+   "cumplimiento_voluntario": 0.568992,
+   "pct_espera": 0.0
+  },
+  {
+   "estrategia": "Red sin entrenar (muestreando)",
+   "retorno_visto": -11.890360456032568,
+   "retorno_con_liquidacion": -11.890651469033216,
+   "slippage_bps": 20.26433073671941,
+   "cumplimiento_voluntario": 0.9999715437297599,
+   "pct_espera": 0.29761670496461856
+  }
+ ],
+ "potencia": {
+  "sd_diferencia": 9.097757516034635,
+  "n_corridas": 6,
+  "semillas_necesarias": {
+   "1": 650,
+   "2": 163,
+   "3": 73
+  }
+ },
+ "tamanos": {
+  "n_ventanas": 180,
+  "p10": 253.1313868742187,
+  "mediana": 1671.0,
+  "p90": 7489.1003624999985,
+  "maximo": 27701.112500000003
+ }
+}

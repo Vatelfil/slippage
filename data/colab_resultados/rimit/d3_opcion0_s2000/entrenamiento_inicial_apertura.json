@@ -1,0 +1,195 @@
+{
+ "firma": {
+  "tarea": "2.3.5",
+  "entorno": "abides",
+  "ticker": "FALABELLA",
+  "tramo": "apertura",
+  "episodios": 1000,
+  "q_slice": 1000,
+  "ventana_min": 15,
+  "seed": 2000,
+  "eval_seeds": 15,
+  "eval_seed_base": 5000,
+  "beta": 0.0061796,
+  "calibrated_json": "rmsc04_ipsa_FALABELLA_2026-08-23.json",
+  "gamma": 1.0,
+  "penalizacion_bps": 30.0,
+  "recompensa": "is_llegada",
+  "imitar": {
+   "heuristica": "twap_limit_medio",
+   "episodios": 100
+  },
+  "hiperparametros": {
+   "lr": 0.0001,
+   "epochs": 4,
+   "minibatch": 64,
+   "clip": 0.2,
+   "gae_lambda": 0.95,
+   "entropy_coef": 0.001
+  }
+ },
+ "resultados": {},
+ "segundos_entrenamiento": 3330.5,
+ "evaluacion_sin_entrenar": {
+  "n": 15,
+  "slippage_bps_medio": null,
+  "slippage_bps_ee": null,
+  "cumplimiento_medio": 0.0,
+  "peso_riesgo": NaN,
+  "slippage_por_semilla": [
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ]
+ },
+ "imitacion": {
+  "heuristica": "twap_limit_medio",
+  "episodios": 100,
+  "pares": 3000,
+  "exactitud": 0.9193333387374878
+ },
+ "entrenamiento_completo": true,
+ "episodios_entrenados": 1000,
+ "evaluacion_entrenada": {
+  "n": 15,
+  "slippage_bps_medio": 3.4019784245074542,
+  "slippage_bps_ee": 4.613747219001895,
+  "cumplimiento_medio": 0.9911333333333334,
+  "peso_riesgo": 0.09758513844046393,
+  "slippage_por_semilla": [
+   16.65968709169607,
+   49.578172920612275,
+   3.8612153289576883,
+   -12.224530135013365,
+   -3.84576119428197,
+   0.2903333891765317,
+   -4.737715636474931,
+   5.466179771517178,
+   -19.05959998659787,
+   -0.21927032731433313,
+   30.008464420104,
+   1.3304059263223014,
+   -18.044658112498965,
+   7.447713661258783,
+   -5.480960749851581
+  ]
+ },
+ "evaluacion_entrenada_estocastica": {
+  "n": 15,
+  "slippage_bps_medio": 2.3460573466811714,
+  "slippage_bps_ee": 4.235271794866651,
+  "cumplimiento_medio": 1.0,
+  "peso_riesgo": 0.09645364122848185,
+  "slippage_por_semilla": [
+   16.55767362390753,
+   46.11423016976893,
+   3.932567332174684,
+   -12.193205802539019,
+   -3.8204898621791124,
+   2.0986764952253383,
+   -4.737715636474931,
+   0.27119836510445855,
+   -19.087741632886253,
+   -0.24439679721337065,
+   25.831231195998537,
+   1.298226795828155,
+   -13.243994773692483,
+   -2.1208415692330287,
+   -5.464557703571869
+  ]
+ },
+ "referencias": {
+  "agresiva_market": {
+   "n": 15,
+   "slippage_bps_medio": 10.449047228081207,
+   "slippage_bps_ee": 4.393834611225702,
+   "cumplimiento_medio": 1.0,
+   "peso_riesgo": 0.04209933263862459,
+   "slippage_por_semilla": [
+    -0.052765586786912344,
+    23.322830950745395,
+    6.454508910626373,
+    3.088880699521007,
+    3.111888404477189,
+    0.0976713017250629,
+    7.284614997736341,
+    59.120908573151304,
+    -0.1030185265834639,
+    15.598177493382513,
+    33.719735507822946,
+    1.5213019139874462,
+    -8.794264464471171,
+    7.2587021340752385,
+    5.106536111808826
+   ]
+  },
+  "twap_limit_medio": {
+   "n": 15,
+   "slippage_bps_medio": 1.777243130632759,
+   "slippage_bps_ee": 4.576409034135728,
+   "cumplimiento_medio": 0.9712000000000001,
+   "peso_riesgo": 0.08976497245156881,
+   "slippage_por_semilla": [
+    18.307910686689112,
+    46.161993665050296,
+    4.821787484929367,
+    -16.981305906393697,
+    -4.037220822909665,
+    -7.368068353161262,
+    -5.440493553960861,
+    -1.1102437202084792,
+    -19.298301450634916,
+    0.03135011748249252,
+    27.156876712790563,
+    0.8716857171599215,
+    -19.518896178926674,
+    7.447713661258783,
+    -4.3861410996736
+   ]
+  },
+  "pasiva_limit": {
+   "n": 15,
+   "slippage_bps_medio": 7.876285979735851,
+   "slippage_bps_ee": 4.685890452461176,
+   "cumplimiento_medio": 1.0,
+   "peso_riesgo": 0.21662644262903955,
+   "slippage_por_semilla": [
+    8.287547321518675,
+    70.1060852368909,
+    2.679217472865394,
+    0.1675097993223463,
+    0.5706969699511297,
+    2.687217289328647,
+    8.787573974416308,
+    17.253341820496463,
+    -0.8042145465505808,
+    1.5075881939087343,
+    3.7687620995124225,
+    0.7603995575354752,
+    -8.90833863780948,
+    7.60762504606446,
+    3.673278098586859
+   ]
+  }
+ },
+ "vigilancia_D3": {
+  "cumplimiento_medio": 0.9911333333333334,
+  "umbral": 0.95,
+  "cumplimiento_politica_muestreada": 1.0,
+  "cumple": true,
+  "texto": "El cumplimiento de la red entrenada es >= 95 %: se mantiene la opcion 0 de D3."
+ },
+ "segundos_totales_esta_ejecucion": 3986.5
+}

@@ -1,0 +1,151 @@
+{
+ "regla": "menor slippage medio en la reevaluación con cumplimiento >= 0.95",
+ "elegida": {
+  "etiqueta": "rimit__d3_opcion0_s1000",
+  "raiz": "rimit",
+  "carpeta": "d3_opcion0_s1000",
+  "slippage_bps": 5.680962479467332,
+  "cumplimiento": 1.0,
+  "n": 300
+ },
+ "checkpoint_origen": "/content/drive/MyDrive/slippage_colab/resultados/rimit/d3_opcion0_s1000/checkpoints_apertura/checkpoint_last.pt",
+ "checkpoint": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/ejecutor_elegido.pt",
+ "candidatas": [
+  {
+   "etiqueta": "rimit__d3_opcion0_s1000",
+   "raiz": "rimit",
+   "carpeta": "d3_opcion0_s1000",
+   "slippage_bps": 5.680962479467332,
+   "cumplimiento": 1.0,
+   "n": 300
+  },
+  {
+   "etiqueta": "conf_pen30_g1_B__d3_opcion0_s3000",
+   "raiz": "conf_pen30_g1_B",
+   "carpeta": "d3_opcion0_s3000",
+   "slippage_bps": 6.502880107918299,
+   "cumplimiento": 1.0000066666666667,
+   "n": 300
+  },
+  {
+   "etiqueta": "conf_pen30_g1_A__d3_opcion0_s1000",
+   "raiz": "conf_pen30_g1_A",
+   "carpeta": "d3_opcion0_s1000",
+   "slippage_bps": 6.524563411821246,
+   "cumplimiento": 1.0,
+   "n": 300
+  },
+  {
+   "etiqueta": "d3_1000ep__d3_opcion0_s3000",
+   "raiz": "d3_1000ep",
+   "carpeta": "d3_opcion0_s3000",
+   "slippage_bps": 6.613350913272143,
+   "cumplimiento": 0.9996500000000001,
+   "n": 300
+  },
+  {
+   "etiqueta": "v4_pen30_g1_B__d3_opcion0_s4000",
+   "raiz": "v4_pen30_g1_B",
+   "carpeta": "d3_opcion0_s4000",
+   "slippage_bps": 6.645359376052951,
+   "cumplimiento": 0.9999899999999998,
+   "n": 300
+  },
+  {
+   "etiqueta": "v4_pen30_g1_A__d3_opcion0_s2000",
+   "raiz": "v4_pen30_g1_A",
+   "carpeta": "d3_opcion0_s2000",
+   "slippage_bps": 6.751345914718309,
+   "cumplimiento": 1.0001533333333334,
+   "n": 300
+  },
+  {
+   "etiqueta": "conf_pen30_g1_B__d3_opcion0_s4000",
+   "raiz": "conf_pen30_g1_B",
+   "carpeta": "d3_opcion0_s4000",
+   "slippage_bps": 6.811068863356136,
+   "cumplimiento": 1.0000733333333334,
+   "n": 300
+  },
+  {
+   "etiqueta": "v4_pen30_g1_A__d3_opcion0_s1000",
+   "raiz": "v4_pen30_g1_A",
+   "carpeta": "d3_opcion0_s1000",
+   "slippage_bps": 6.818585195095571,
+   "cumplimiento": 1.0000033333333334,
+   "n": 300
+  },
+  {
+   "etiqueta": "rmid_A__d3_opcion0_s2000",
+   "raiz": "rmid_A",
+   "carpeta": "d3_opcion0_s2000",
+   "slippage_bps": 7.087125982231379,
+   "cumplimiento": 1.0,
+   "n": 300
+  },
+  {
+   "etiqueta": "v4_pen30_g1_B__d3_opcion0_s3000",
+   "raiz": "v4_pen30_g1_B",
+   "carpeta": "d3_opcion0_s3000",
+   "slippage_bps": 7.402480568273901,
+   "cumplimiento": 1.00007,
+   "n": 300
+  },
+  {
+   "etiqueta": "rmid_A__d3_opcionA_s1000",
+   "raiz": "rmid_A",
+   "carpeta": "d3_opcionA_s1000",
+   "slippage_bps": 7.450818245992835,
+   "cumplimiento": 1.0,
+   "n": 300
+  },
+  {
+   "etiqueta": "conf_pen30_g1_A__d3_opcion0_s2000",
+   "raiz": "conf_pen30_g1_A",
+   "carpeta": "d3_opcion0_s2000",
+   "slippage_bps": 7.478883849876925,
+   "cumplimiento": 0.99975,
+   "n": 300
+  },
+  {
+   "etiqueta": "rmid_B__d3_opcionA_s2000",
+   "raiz": "rmid_B",
+   "carpeta": "d3_opcionA_s2000",
+   "slippage_bps": 7.682179076459732,
+   "cumplimiento": 1.0,
+   "n": 300
+  },
+  {
+   "etiqueta": "d3_1000ep__d3_opcion0_s2000",
+   "raiz": "d3_1000ep",
+   "carpeta": "d3_opcion0_s2000",
+   "slippage_bps": 7.991272575802001,
+   "cumplimiento": 1.0003333333333335,
+   "n": 300
+  },
+  {
+   "etiqueta": "rmid_B__d3_opcion0_s4000",
+   "raiz": "rmid_B",
+   "carpeta": "d3_opcion0_s4000",
+   "slippage_bps": 8.45077499469365,
+   "cumplimiento": 0.9999566666666666,
+   "n": 300
+  },
+  {
+   "etiqueta": "rmid_A__d3_opcion0_s1000",
+   "raiz": "rmid_A",
+   "carpeta": "d3_opcion0_s1000",
+   "slippage_bps": 9.241990965521904,
+   "cumplimiento": 0.9999666666666667,
+   "n": 300
+  },
+  {
+   "etiqueta": "rmid_B__d3_opcion0_s3000",
+   "raiz": "rmid_B",
+   "carpeta": "d3_opcion0_s3000",
+   "slippage_bps": 9.482560955170797,
+   "cumplimiento": 0.9990133333333333,
+   "n": 300
+  }
+ ]
+}
