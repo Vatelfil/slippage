@@ -110,17 +110,58 @@ def volumenes_simulados(ticker: str) -> Dict[str, float]:
     return out
 
 
+def datos_reales(tickers: List[str], data_dir: Optional[Path] = None) -> Tuple[Dict[str, Dict[str, float]], List[str]]:
+    """ADV real sin subasta (acciones) y precio real (mediana de close_raw no imputado) por activo, con las
+    definiciones de `src.experiments.meta_orders` (no se duplican). Devuelve (datos, parquets que faltan)."""
+    from src.experiments.meta_orders import DEFAULT_DATA_DIR, load_daily_volume, meta_orders_for_ticker
+
+    base = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    datos, faltan = {}, []
+    for t in tickers:
+        try:
+            r = meta_orders_for_ticker(load_daily_volume(t, SNAPSHOT, base), pct_adv=[])
+        except FileNotFoundError:
+            faltan.append(str(base / f"clean_5m_{SNAPSHOT}" / f"{t}.parquet"))
+            continue
+        datos[t] = {"adv_acciones": r["adv_acciones"]["sin_subasta"], "n_dias": r["n_dias"],
+                    "precio_referencia_real": round(r["precio_referencia_clp"], 2)}
+    return datos, faltan
+
+
+def comando(cantidad: Optional[int], pct_dia: Optional[float], pct_dia_cierre: Optional[float]) -> str:
+    """Comando que reproduce la generacion (sin --salida)."""
+    partes = ["python scripts/generar_meta_ordenes.py"]
+    if cantidad is not None:
+        partes.append(f"--cantidad {cantidad}")
+    if pct_dia is not None and not es_oficial(cantidad, pct_dia, pct_dia_cierre):
+        partes.append(f"--pct-dia {pct_dia:g}")
+        if pct_dia_cierre is not None:
+            partes.append(f"--pct-dia-cierre {pct_dia_cierre:g}")
+    return " ".join(partes)
+
+
+def es_oficial(cantidad: Optional[int], pct_dia: Optional[float], pct_dia_cierre: Optional[float]) -> bool:
+    return cantidad is None and pct_dia == PCT_DIA_OFICIAL and pct_dia_cierre == PCT_DIA_CIERRE_OFICIAL
+
+
 def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
-            pct_dia_cierre: Optional[float] = None, version: str = "v1") -> Dict:
-    """Arma el diccionario con las 10 ordenes. `cantidad` fija el tamano; `pct_dia` lo calcula como
+            pct_dia_cierre: Optional[float] = None, reales: Optional[Dict[str, Dict[str, float]]] = None,
+            commit: Optional[str] = None) -> Dict:
+    """Arma el diccionario con las 10 ordenes. Sin argumentos de tamano arma la version oficial (D1 de BF:
+    `PCT_DIA_OFICIAL` y `PCT_DIA_CIERRE_OFICIAL`). `cantidad` fija el tamano; `pct_dia` lo calcula como
     fraccion del volumen del dia simulado de cada activo (redondeado a 100 acciones). `pct_dia_cierre` (solo con
     `pct_dia`) usa otra fraccion para las ordenes que parten en el cierre: en el cierre queda poco volumen y
-    la misma fraccion pesa mucho mas sobre lo que queda (ver docs/benchmarks_2.3.4_PS.md)."""
+    la misma fraccion pesa mucho mas sobre lo que queda (ver docs/benchmarks_2.3.4_PS.md).
+    `reales` (salida de `datos_reales`) agrega el ADV y el precio reales; los activos que falten quedan en null.
+    `commit` es el commit de la generacion (solo se anota)."""
     if cantidad is not None and pct_dia is not None:
         raise ValueError("usar `cantidad` o `pct_dia`, no los dos")
     if pct_dia_cierre is not None and pct_dia is None:
         raise ValueError("`pct_dia_cierre` solo se usa junto con `pct_dia`")
-    cantidad_fija = CANTIDAD_POR_DEFECTO if (cantidad is None and pct_dia is None) else cantidad
+    if cantidad is None and pct_dia is None:
+        pct_dia, pct_dia_cierre = PCT_DIA_OFICIAL, PCT_DIA_CIERRE_OFICIAL
+    oficial = es_oficial(cantidad, pct_dia, pct_dia_cierre)
+    reales = reales or {}
     cache_vol: Dict[str, Dict[str, float]] = {}
     ordenes: List[Dict] = []
     for i, (ticker, tramo) in enumerate(REPARTO, start=1):
@@ -128,7 +169,8 @@ def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
             cache_vol[ticker] = volumenes_simulados(ticker)
         v = cache_vol[ticker]
         pct = pct_dia_cierre if (tramo == "cierre" and pct_dia_cierre is not None) else pct_dia
-        q = int(cantidad_fija) if cantidad_fija is not None else int(round(pct * v["dia"], -2))
+        q = int(cantidad) if cantidad is not None else int(round(pct * v["dia"], -2))
+        real = reales.get(ticker)
         ordenes.append({
             "id": f"MO-{i:02d}",
             "ticker": ticker,
@@ -148,8 +190,10 @@ def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
         })
     tickers = sorted({t for t, _ in REPARTO})
     return {
-        "version": version,
-        "estado": "BORRADOR de PS con apoyo de Claude Code, pendiente de decision y revision de BF (2.3.3)",
+        "version": "v2" if oficial else "no_oficial",
+        "estado": ("Oficial. Borrador de PS con apoyo de Claude Code; revisado, completado y aprobado por BF "
+                   "con apoyo de Claude Code (2.3.3, D1 del 22 oct 2026)" if oficial else
+                   "Variante no oficial (sensibilidad); la oficial es data/meta_ordenes/meta_ordenes_v2.json"),
         "snapshot": SNAPSHOT,
         "generacion": {
             "comando": comando(cantidad, pct_dia, pct_dia_cierre),
@@ -160,10 +204,11 @@ def generar(cantidad: Optional[int] = None, pct_dia: Optional[float] = None,
                          "activos_con_dato": sorted(reales)},
         },
         "criterios": {
-            "tamano": (f"{cantidad_fija} acciones por orden (D1, opcion A del plan)" if cantidad_fija is not None
-                       else f"{pct_dia:.0%} del volumen del dia simulado de cada activo (D1, opcion B)"
-                       + (f", salvo las ordenes que parten en el cierre: {pct_dia_cierre:.0%}" if pct_dia_cierre is not None else "")),
-            "reparto": "FALABELLA 4, COPEC 3, ECL 3; apertura 4, media jornada 3, cierre 3 (DECISION BF)",
+            "tamano": (f"{cantidad} acciones por orden (D1, opcion A del plan)" if cantidad is not None
+                       else f"{pct_dia:.0%} del volumen del dia simulado de cada activo"
+                       + (f", salvo las ordenes que parten en el cierre: {pct_dia_cierre:.0%}" if pct_dia_cierre is not None else "")
+                       + (" (D1 de BF)" if oficial else "")),
+            "reparto": "FALABELLA 4, COPEC 3, ECL 3; apertura 4, media jornada 3, cierre 3 (decision de BF)",
             "semillas": f"semilla = {SEMILLA_BASE} + 10 * indice; el runner suma la semilla de la corrida (1, 2, ...)",
             "volumen": "mediana de 30 jornadas simuladas con la calibracion vigente de cada activo "
                        "(data/colab_resultados/validacion_2_2_5_despues_*.json)",
@@ -196,11 +241,16 @@ def main(argv: Optional[List[str]] = None) -> Path:
     ap.add_argument("--pct-dia", type=float, default=None, help="fraccion del volumen del dia (ej. 0.10)")
     ap.add_argument("--pct-dia-cierre", type=float, default=None,
                     help="con --pct-dia: otra fraccion para las ordenes que parten en el cierre (ej. 0.05)")
-    ap.add_argument("--version", default="v1", help="etiqueta de version del archivo (ej. v2-candidata)")
-    ap.add_argument("--salida", default=str(REPO_ROOT / "data/meta_ordenes/meta_ordenes_v1.json"))
+    ap.add_argument("--salida", default=None,
+                    help=f"por defecto {SALIDA_OFICIAL.relative_to(REPO_ROOT).as_posix()} (solo para la version oficial)")
+    ap.add_argument("--data-dir", default=None, help="carpeta de data/processed con el snapshot parquet (ADV real)")
     args = ap.parse_args(argv)
-    data = generar(cantidad=args.cantidad, pct_dia=args.pct_dia, pct_dia_cierre=args.pct_dia_cierre, version=args.version)
-    out = Path(args.salida)
+    reales, faltan = datos_reales(sorted({t for t, _ in REPARTO}), args.data_dir)
+    data = generar(cantidad=args.cantidad, pct_dia=args.pct_dia, pct_dia_cierre=args.pct_dia_cierre,
+                   reales=reales, commit=commit_actual())
+    if args.salida is None and data["version"] != "v2":
+        ap.error("una variante no oficial necesita --salida (para no sobrescribir la version oficial)")
+    out = Path(args.salida) if args.salida else SALIDA_OFICIAL
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"{len(data['meta_ordenes'])} ordenes ({data['version']}) -> {out}")

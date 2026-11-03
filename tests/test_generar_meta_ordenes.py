@@ -190,13 +190,48 @@ def test_el_runner_de_benchmarks_puede_leer_el_archivo(archivo):
     assert runner.pendientes({}, ordenes, [1, 2]) and len(runner.pendientes({}, ordenes, [1])) == 20
 
 
-def test_fraccion_distinta_para_las_ordenes_de_cierre():
-    d = gen.generar(pct_dia=0.10, pct_dia_cierre=0.05)
-    por_tramo = {}
-    for o in d["meta_ordenes"]:
-        por_tramo.setdefault(o["tramo_inicio"], set()).add(round(o["pct_volumen_dia"]))
-    assert por_tramo["apertura"] == {10} and por_tramo["media_jornada"] == {10} and por_tramo["cierre"] == {5}
-    assert "cierre: 5%" in d["criterios"]["tamano"]
-    with pytest.raises(ValueError):
-        gen.generar(pct_dia_cierre=0.05)
+# --- v2 (oficial) --------------------------------------------------------------------------------------------
 
+def test_el_archivo_oficial_es_el_que_genera_el_script():
+    versionado = _leer(V2)
+    reales, faltan = gen.datos_reales(["COPEC", "ECL", "FALABELLA"])
+    generado = gen.generar(reales=reales)
+    assert versionado["generacion"].pop("commit") and generado["generacion"].pop("commit") is None
+    if faltan:  # sin el parquet (no se versiona) se comparan todos los campos salvo los reales
+        for d in (versionado, generado):
+            d["generacion"]["adv_real"]["activos_con_dato"] = []
+            for o in d["meta_ordenes"]:
+                o.update({k: None for k in CAMPOS_REALES})
+    assert versionado == generado
+
+
+def test_oficial_reparto_esquema_del_runner_y_campos_nuevos():
+    d = _leer(V2)
+    ordenes = d["meta_ordenes"]
+    assert d["version"] == "v2"
+    assert Counter(o["ticker"] for o in ordenes) == {"FALABELLA": 4, "COPEC": 3, "ECL": 3}
+    assert Counter(o["tramo_inicio"] for o in ordenes) == {"apertura": 4, "media_jornada": 3, "cierre": 3}
+    for o in ordenes:  # lo que lee scripts/colab/benchmarks_meta_ordenes_ps.py
+        assert isinstance(o["id"], str) and o["ticker"] in ("FALABELLA", "COPEC", "ECL")
+        assert o["tramo_inicio"] in gen.TRAMOS and isinstance(o["cantidad"], int) and isinstance(o["semilla"], int)
+        assert set(o) == CAMPOS and all(o[k] is not None for k in CAMPOS_REALES)
+    g = d["generacion"]
+    assert g["comando"] and not g["commit"].endswith("-modificado")
+    assert set(g["calibracion"]) == {"FALABELLA", "COPEC", "ECL"}
+
+
+def test_v1_y_v2_comparten_ids_tramos_y_semillas():
+    """Las corridas de la 2.3.4 no guardan la semilla de la orden: se deduce del id (ver validar_meta_ordenes.py)."""
+    clave = lambda o: (o["id"], o["ticker"], o["tramo_inicio"], o["semilla"])
+    assert [clave(o) for o in _leer(V1)["meta_ordenes"]] == [clave(o) for o in _leer(V2)["meta_ordenes"]]
+
+
+def test_las_diez_ordenes_oficiales_estan_validadas_en_abides():
+    spec_v = importlib.util.spec_from_file_location("val_mo", ROOT / "scripts/validar_meta_ordenes.py")
+    val = importlib.util.module_from_spec(spec_v)
+    spec_v.loader.exec_module(val)
+    fuentes = {n: _leer(ROOT / r) for n, r in val.FUENTES.items()}
+    filas = val.trazar(_leer(V2)["meta_ordenes"], fuentes)
+    assert [f["estado"] for f in filas] == ["validada"] * 10
+    assert all(f["n_corridas"] == 2 and f["ejecutable"] for f in filas)
+    assert _leer(ROOT / "data/analysis/validacion_meta_ordenes_2.3.3.json")["ordenes"] == filas
