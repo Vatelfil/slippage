@@ -4,6 +4,8 @@
 
 **Responsable:** Benjamín Farias (BF). **Apoyo:** Paolo Sepúlveda (PS), Colab y análisis estadístico. **Entrenador:** Mauricio Reynoso (MR), `PPOTrainer` (2.3.2). **Estado:** **Hecho con límite demostrado**, aprobado por BF el 22 de octubre de 2026. La red entrena sin NaN, con KL estable y con un retorno que sube de forma significativa. Pero con la opción 0 de D3 la política determinista no ejecuta la orden de forma estable, y ninguna corrida se distingue de la red sin entrenar en slippage (sección 5).
 
+> **Actualización del 2 de noviembre:** la decisión de D3 de la sección 4 (pasar a la opción A por la regla de vigilancia) **queda superada**. Esa evidencia se midió con la recompensa con falla H1. Con la recompensa corregida, la regla fijada el 29 de octubre da **D3 = 0**. También se actualiza el estado de los hallazgos para MR y de lo que pasaba al Sprint 6 (sección 11). Los resultados del 22 de octubre no cambian.
+
 ## 1. Qué se hizo
 
 Se entrenó un Ejecutor con el entrenador PPO de MR (`PPOTrainer`, 2.3.2) durante **1000 episodios** sobre ABIDES calibrado (FALABELLA, tramo apertura, `rmsc04_ipsa_FALABELLA_2026-08-23.json`), con `q_slice` = 1000 acciones y ventana de 15 minutos. Recompensa: R_E según el Título I con β = 0,0061796 (opción 0 de D3). Semillas de entrenamiento 1001–2000; evaluación en 15 semillas nuevas (5001–5015). No se usaron las 10 meta-órdenes oficiales.
@@ -77,6 +79,7 @@ La regla se fijó antes de ver datos (`docs/decision_RE_para_BF.md`): si en la 2
 
 - Con la opción 0, el cumplimiento con argmax fue **0,000** (1000 episodios), **1,000** (100 episodios, primera) y **0,904** (100 episodios, repetición): **2 de 3 corridas quedan bajo el 95 %**. Las dos corridas sin cortes quedan ambas bajo el umbral. La de 1,000 es la que se reanudó desde un checkpoint y no es reproducible (sección 6).
 - **Decisión de BF (revisión final de D3):** se activa la opción A por la regla de vigilancia. Es una desviación del Título I justificada con datos. Recalcular β\* (PS) y reentrenar con la opción A pasan al Sprint 6 (sección 8).
+- *Superado el 2 de noviembre: ver la sección 11.*
 
 ## 5. Lectura de BF
 
@@ -174,6 +177,65 @@ python -m pytest tests/test_criterios_2_3_5.py -q
 ```
 
 `scripts/analizar_entrenamiento_inicial.py` genera el borrador de PS (secciones 1 a 3 y la figura). Si se corre con la ruta por defecto de `--out-md`, **sobrescribe este documento aprobado**: usar otra ruta.
+
+## 11. Actualización del 2 de noviembre de 2026
+
+Esta sección agrega información. Las secciones 1 a 10 quedan tal como se aprobaron el 22 de octubre.
+
+### D3: la decisión del 22 de octubre queda superada
+
+- **Qué se decidió el 22 de octubre:** pasar a la opción A, porque con la opción 0 el cumplimiento con argmax fue 0,000 / 1,000 / 0,904 y la regla de vigilancia del 95 % se disparaba (sección 4).
+- **Por qué ya no vale:** esa evidencia se midió con la recompensa con falla H1 (`docs/revision_opus_PS.md`). La recompensa comparaba el precio pagado con el precio medio de 30 s después de la compra, no con el de la decisión. El propio documento de D3 dice que esa evidencia no sirve para decidir (`docs/decision_RE_final_D3_para_BF.md`, nota del 29 de octubre).
+- **Regla nueva, fijada el 29 de octubre antes de ver los datos corregidos** (`docs/revision_opus_PS.md`, sección 6). Se queda la opción 0 salvo que la A cumpla dos condiciones:
+  - (a) completar la orden con argmax en más redes;
+  - (b) que el límite superior del IC 95 % de A − 0 sea menor que +1 bps.
+- **Resultado con la recompensa corregida** (`notebooks/Colab_mid_decision_A/B`, semillas de red 1000 y 2000, reevaluación pareada en 300 semillas; `docs/reeval_300_mid_resultado_PS.md`, sección 5):
+
+| Comparación (misma semilla de red) | A − 0 (bps), IC 95 % |
+|---|---|
+| Semilla 1000 | −1,79 [−2,50; −1,12] |
+| Semilla 2000 | +0,60 [−0,06; +1,25] |
+| Las dos juntas | **−0,60 [−1,04; −0,16]** |
+
+  - La condición (a) **no se cumple**: las dos opciones completan el 100 % con argmax.
+  - La condición (b) sí se cumple. Como hacen falta las dos, la regla da **D3 = 0** (fórmula del Título I).
+- **Contexto del costo:** con la recompensa corregida, las dos opciones cuestan más que su red sin entrenar:
+  - opción 0: +1,55 bps [+0,37; +2,71];
+  - opción A: +0,57 bps [−0,70; +1,78].
+- **El Ejecutor del sistema final está entrenado con la opción 0:** `rimit__d3_opcion0_s1000`, 5,68 bps en 300 semillas, cumplimiento 1,000 (`docs/sistema_final_resultado_PS.md`).
+- La respuesta formal de BF queda en `docs/hoja_decisiones_D1_D3_BF.md`.
+- **Qué se declara:** la regla de vigilancia original se aplicó el 22 de octubre, pero sobre evidencia inválida (H1). Se reemplazó por una regla fijada antes de ver los datos corregidos (R6).
+
+### Estado de los hallazgos para MR (sección 7)
+
+**(a) Checkpoint sin el estado de los generadores aleatorios: resuelto en el Sprint 6.**
+- Lo resolvió un borrador de PS para MR (`fad3ab1`, que llegó a `main` con el PR #44).
+- En `src/training/ppo_trainer.py` de `main`:
+  - `_estado_aleatorio` (líneas 55–62) guarda los estados de torch (`torch.get_rng_state()`), numpy (`np.random.get_state()`) y `random` (`random.getstate()`);
+  - `_restaurar_estado_aleatorio` (líneas 65–70) los repone;
+  - `save_checkpoint` los escribe en `rng_state` (línea 320);
+  - `load_checkpoint` los restaura (líneas 336–338). Los checkpoints anteriores, que no traen `rng_state`, cargan igual.
+- Lo fija `test_reanudar_desde_checkpoint_da_lo_mismo_que_no_cortar` (`tests/test_maestro_trainer.py:39`). El test entrena un `PPOTrainer` del Ejecutor seguido y otro cortado y reanudado, y exige pesos idénticos.
+- Falta la revisión formal de MR, porque el archivo es suyo.
+- `test_checkpoint_y_reanudacion` (`tests/test_ppo_trainer.py:92`) sigue comprobando solo el contador de episodios.
+
+**(b) Acciones del Ejecutor que no hacen nada: sigue abierto.**
+- En `main`, `map_action_to_abides_orders` sigue traduciendo las 80 acciones `LIMIT_SELL` a `[]` (`src/envs/abides_bridge.py:170`).
+- Nadie enmascaró los logits ni redujo el espacio: el último cambio en `src/models/` es del 18 de octubre (`62d6a87`).
+- Lo que se hizo en el Sprint 6 solo lo mitiga:
+  - la penalización por lo no comprado, que hace que esperar cueste (desviación 6);
+  - la métrica `pct_espera` del monitoreo, que avisa cuando una red se queda esperando (`src/training/monitoreo.py:122`);
+  - la observación H6 de `docs/revision_opus_PS.md`: de las 240 acciones, solo 91 son distintas en la práctica.
+- La decisión sigue siendo de MR, con BF.
+
+### Qué se hizo de lo que pasaba al Sprint 6 (sección 8)
+
+| Pendiente | Estado | Dónde |
+|---|---|---|
+| Evaluación con 30 semillas | **Hecho y ampliado a 300 semillas** de evaluación (5001–5300) | `docs/reeval_300_resultado_PS.md`, `docs/reeval_300_mid_resultado_PS.md`, `docs/reeval_300_imitacion_resultado_PS.md` |
+| Varias redes por configuración | **Hecho.** Barrido 3.1.1/3.1.2 con 2 redes por configuración en Poisson (36 configuraciones y 72 redes; 25 combinaciones y 50 redes). En ABIDES: 5 redes por opción de D3 con 100 episodios, 3 por opción con 1.000 episodios y 4 + 2 redes con la recompensa corregida | `docs/barrido_hiperparametros_resultado_PS.md`, `docs/estabilidad_D3_PS.md`, `docs/estabilidad_D3_1000ep_PS.md`, `docs/reeval_300_mid_resultado_PS.md` |
+| Opción A con β\* recalculado y reentrenamiento | **Ya no aplica:** D3 = 0. β = 0,0061796 se mantiene. Tampoco se revalida β con la recompensa corregida (H5), porque `mid_decision` no quedó por defecto | `docs/revision_opus_PS.md`, sección 0 |
+| Hallazgos para MR | (a) resuelto; (b) abierto | Esta sección |
 
 ---
 

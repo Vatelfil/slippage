@@ -2,12 +2,15 @@
 
 **Responsable:** Benjamín Farias (BF). **Estado:** Hecho con límite demostrado, aprobado por BF el 22 de octubre de 2026. Las 10 órdenes son ejecutables en promedio, pero MO-10 queda en el borde del criterio: una de sus dos semillas completa solo el 90,2 % (media 95,1 %), y con 2 semillas por orden no se puede asegurar que su media siga sobre el 95 % con más semillas (sección 6). **Revisión cruzada (sección 8 del plan):** PS (método y números) y MR (que corra con el orquestador).
 
+> **Actualización del 2 de noviembre:** BF ratifica **D1 = v2**. La v2 es la versión oficial, y la candidata de PS que usaron la 3.1.3 y las 90 corridas es equivalente en todo lo que leen los evaluadores. Esas corridas siguen válidas y no hay que repetirlas (sección 8).
+
 ## 1. Qué hay
 
 | Archivo | Qué es |
 |---|---|
 | `data/meta_ordenes/meta_ordenes_v2.json` | **Las 10 meta-órdenes oficiales** (decisión D1 de BF). Es lo que se usa para evaluar desde ahora. |
 | `data/meta_ordenes/meta_ordenes_v1.json` | Versión histórica de 100 000 acciones por orden. Es la que leyó la corrida base de la 2.3.4; se conserva sin cambios. |
+| `data/meta_ordenes/meta_ordenes_v2_candidata.json` | Equivalente operativo de la v2, generado por PS el 23 de octubre (`c6118de`). Es el que leen los cuadernos de la 3.1.3 y de las 90 corridas. Trae las mismas 10 órdenes, sin los campos reales (sección 8). |
 | `scripts/generar_meta_ordenes.py` | Generador reproducible y sin azar. Sin argumentos escribe la versión oficial. Las órdenes no se escriben a mano. |
 | `scripts/validar_meta_ordenes.py` | Cruza cada orden con las corridas de TWAP ya hechas en ABIDES y escribe `data/analysis/validacion_meta_ordenes_2.3.3.json`. |
 | `tests/test_generar_meta_ordenes.py`, `tests/test_validar_meta_ordenes.py` | Esquema, reparto 4/3/3, que el archivo oficial coincide con el que genera el script, campos nuevos, sha256 de la calibración y trazabilidad de la validación. |
@@ -115,6 +118,41 @@ python -m pytest tests/test_generar_meta_ordenes.py tests/test_validar_meta_orde
 ```
 
 Una variante distinta de la oficial exige `--salida`, para no sobrescribir la v2. Para usar la versión oficial en los benchmarks, el runner de la 2.3.4 se corre con `--meta-ordenes data/meta_ordenes/meta_ordenes_v2.json` **y en otra `--out-dir`**: el archivo de salida tiene siempre el mismo nombre y, si la firma cambia, el runner empieza de cero y sobrescribe los resultados anteriores.
+
+## 8. Actualización del 2 de noviembre de 2026
+
+### D1 = v2, ratificada
+
+- BF decidió D1 = v2 el 22 de octubre (secciones 2 y 3), pero la rama de ese cierre (`feature/bf-sprint5-cierre`) no llegó a `main`. Por eso los documentos del Sprint 6 registran la v2 como «por defecto» (`docs/sprint6_que_se_hizo.md`, sección 4).
+- BF la **ratifica el 2 de noviembre** en `docs/hoja_decisiones_D1_D3_BF.md`. No cambia ningún tamaño ni ninguna semilla.
+- **La v1 queda como histórico.** Es lo que leyó la corrida base de la 2.3.4; no se usa para evaluar el sistema.
+
+### La candidata de PS es equivalente a la v2
+
+Verificación del 2 de noviembre (sobre `origin/main` = `87daa21`):
+
+| Qué se comparó | Resultado |
+|---|---|
+| Número de órdenes | 10 en la v2 y 10 en la candidata |
+| `id`, `ticker`, `tramo_inicio`, `cantidad`, `semilla` | **Idénticos** en las 10 órdenes, en el mismo orden |
+| Resto de campos comunes (`volumen_dia_simulado`, `pct_volumen_dia`, `hora_inicio`, `p_referencia`, …) | Idénticos |
+| Campos que solo están en la v2 | `adv_real_acciones`, `p_referencia_real`, `pct_adv_real` (informativos, sección 3) |
+
+- **Qué leen los evaluadores.** `scripts/colab/evaluar_sistema_ps.py` y `scripts/colab/benchmarks_meta_ordenes_ps.py` (en `main` y en `feature/ps-3-2-3-control-reglas-v2`) solo leen de cada orden `id`, `ticker`, `tramo_inicio`, `cantidad`, `semilla` y `volumen_dia_simulado`. Los seis coinciden.
+- **La firma no depende del archivo.** La firma de reanudación se arma con los `id` y las `cantidades`, no con la ruta del archivo. Correr con la v2 o con la candidata da la misma firma y las mismas corridas.
+- **Consecuencia:** la 3.1.3 (`docs/corridas_30_corregidas_resultado_PS.md`) y las 90 corridas, que usaron la candidata, **son válidas con D1 = v2 sin repetir nada**. Los cuadernos de PS pueden seguir apuntando a la candidata.
+
+### Calibración
+
+El sha256 (LF) y el blob de git de los tres `rmsc04_ipsa_*_2026-08-23.json` anotados en la cabecera de la v2 **siguen coincidiendo** con los archivos de `main`. El último commit que tocó `data/calibration/rmsc04_*` sigue siendo `6492cdc` (19 de octubre).
+
+### Benchmarks con la v2
+
+`docs/benchmarks_2.3.4_v2_PS.md` (PS, 23 de octubre) ensambla los benchmarks de la 2.3.4 con los tamaños de la v2:
+- **10 de 10 órdenes ejecutables** en promedio y 19 de 20 corridas sobre el 95 %, la misma tabla de la sección 4.
+- MO-10 sigue en el borde (90,2 % y 100 %; TWAP 0,951).
+
+En la 3.1.3, con `--completar-al-cierre`, el sistema completa MO-10 con un cumplimiento mínimo de 1,00, y las otras dos órdenes de cierre con 0,97 y 0,98 (`docs/corridas_30_corregidas_resultado_PS.md`). El límite de la sección 6 se mantiene para TWAP.
 
 ---
 
