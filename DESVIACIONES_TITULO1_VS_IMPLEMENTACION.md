@@ -127,7 +127,56 @@ El Ejecutor PPO puede partir copiando a TWAP con órdenes límite (`--imitar twa
 
 ## 10. Escenarios de liquidez definidos por el costo medido (v3) [PROPUESTA de PS para BF, 30 oct 2026]
 
-El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDES se usa el tamaño de las cotizaciones del market maker (`mm_pov`) para generarlos. En el C-6b, subir `mm_pov` **encareció** la compra a mercado (`docs/c6_liquidez_resultado_PS.md`, sección 4). La v3 asigna los nombres según ese costo: baja = ×4, alta = ×0,25. El orden se eligió mirando el resultado, así que se declara y se confirma con las semillas de las 90 corridas del Sprint 7. **Estado: pendiente de que BF la acepte.**
+El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDES se usa el tamaño de las cotizaciones del market maker (`mm_pov`) para generarlos. En el C-6b, subir `mm_pov` **encareció** la compra a mercado (`docs/c6_liquidez_resultado_PS.md`, sección 4). La v3 asigna los nombres según ese costo: baja = ×4, alta = ×0,25. El orden se eligió mirando el resultado, así que se declara y se confirma con las semillas de las 90 corridas del Sprint 7. ~~**Estado: pendiente de que BF la acepte.**~~
+
+**Estado (2 nov 2026): aceptada por BF, con la confirmación C-6c pendiente.**
+
+**Por qué hace falta el C-6c.** Los cuadernos de las 90 corridas no corren la compra a mercado, así que la confirmación con «las semillas de las 90 corridas» no ocurre. Se reemplaza por el C-6c: el mismo script del C-6b con la v3 y semillas nuevas.
+
+**Criterio, fijado el 2 de noviembre antes de correr el C-6c:**
+- **Qué se corre:** compra a mercado (`agresiva_market`) de 5.000 acciones en FALABELLA, apertura, ventana de 15 minutos.
+- **Semillas:** 60 nuevas, de la 8101 a la 8160 (`--seed-base 8100`). No se cruzan con las 8001–8060 del C-6b.
+- **CONFIRMADA** si se cumplen las dos condiciones a la vez:
+  - baja − media > 0;
+  - media − alta > 0.
+
+  En las dos, el IC 95 % bootstrap pareado por semilla (10.000 remuestreos, percentil, semilla 0) debe excluir el 0, con los 60 pares completos. Como se exigen las dos, no se corrige por comparaciones múltiples.
+- **Si no se cumple:** los escenarios se informan como «profundidad del market maker ×4 / ×1 / ×0,25», sin nombres de liquidez, y se declara.
+- **Verificación:** `scripts/confirmar_v3_c6c.py` (lógica en `src/experiments/confirmacion_v3.py`). El veredicto de `scripts/colab/c6_escenarios_liquidez_bf.py` no se usa para esto, porque en media − alta solo exige que la media sea ≥ 0.
+- **Límite:** solo se confirma con FALABELLA en la apertura.
+- **Las corridas no dependen del nombre**, solo del factor. La liquidez baja se puede correr sin esperar el C-6c.
+
+---
+
+## 12. Diseño de las 90 corridas: órdenes × semillas en vez de tamaños × semillas [PROPUESTA de BF, 2 nov 2026]
+
+### 12.1 Descripción
+El Título I (§7.1) define las 90 corridas como **3 liquideces × 3 tamaños de orden × 10 semillas**. Lo que se implementó (`docs/LEEME_COLAB_90_CORRIDAS.md`) es **3 liquideces × 10 meta-órdenes × 3 semillas** (semillas 4, 5 y 6), con `factor_tamano` = 1,0 en todas.
+
+Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si parte en el cierre, D1), en las 90 no hay variación de tamaño entre condiciones. Solo cambian el activo y el tramo.
+
+### 12.2 Impacto
+- **La 3.2.4 (sensibilidad por tamaño de orden) se queda sin datos.** Solo se puede analizar por tramo y por liquidez.
+- `scripts/analizar_sensibilidad_3_2_4.py` está preparado para un factor de tamaño que no se corre.
+
+### 12.3 Propuesta: diseño en estrella
+- **Qué se agrega:** dos condiciones en la liquidez media, `--factor-tamano 0.5` y `1.5`, con las mismas 10 órdenes y las mismas semillas 4–6 que las 90. Eso da 5 % y 15 % del volumen del día; en el cierre, 2,5 % y 7,5 %.
+- **Qué queda:** con la media ×1 que ya corrió PS, se forman dos ejes pareados:
+  - un eje de tamaño (0,5 / 1 / 1,5), con la liquidez fija en media;
+  - un eje de liquidez (baja / media / alta), con el tamaño fijo en ×1.
+- **Costo:** 4 cuadernos de ≈ 3 h (A y B por factor).
+- **Qué no se puede analizar:** la interacción tamaño × liquidez. El factorial completo 3 × 3 necesitaría ≈ 12 cuadernos más y no cabe en el tiempo que queda.
+- **Lo que ya está listo:**
+  - los dos evaluadores aplican el factor con la misma función (`ajustar_ordenes` de `src/envs/escenarios_liquidez.py`) y lo registran en la firma y en cada corrida;
+  - el sufijo de archivo (`_liq-media_tam-0.5`) no choca con el de las 90.
+- **Límites que se declaran:**
+  1. El Maestro se entrenó con un solo tamaño: 88.300 acciones (44.150 en el cierre), es decir 10 % y 5 % del día, en Poisson (`data/colab_resultados/sistema_final/maestro/resumen_maestro.json`). Los factores 0,5 y 1,5 quedan **fuera de lo que vio en el entrenamiento**, y 1,5 es una extrapolación hacia arriba.
+  2. Con ×1,5, las órdenes de cierre son el 23 % del volumen que queda hasta el cierre. En la 2.3.4, TWAP ya quedaba en el borde con el 15 % y fallaba con el 31 %. Si TWAP o VWAP no completan alguna orden, se informa también el costo ajustado (`--penalizacion-bps 30`), como dice `docs/plan_analisis_3_2_3_PS.md`.
+  3. Se propone después de ver la liquidez media de las 90. No usa sus resultados, pero se declara como cambio del plan.
+- **Alternativa mínima:** no correr nada, declarar esta desviación y dejar la 3.2.4 solo por tramo y por liquidez.
+
+### 12.4 Estado
+**Propuesta de BF.** La decide el equipo en la Sprint Review del 6 de noviembre (la 3.2.4 es de PS). Si se aprueba, se corre en la primera semana del Sprint 7 con `notebooks/Colab_tamanos_media_BF.ipynb`.
 
 ---
 

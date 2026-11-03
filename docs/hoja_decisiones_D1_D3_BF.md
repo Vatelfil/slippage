@@ -40,4 +40,25 @@ Por costo, la A es algo menos mala, pero todas las redes con esa recompensa cues
 - **D1:** solo el archivo de meta-órdenes que se pasa a los evaluadores (`--meta-ordenes`). El código ya acepta las dos versiones.
 - **D3:** el `--riesgo-sobre` de los entrenamientos (`ejecutado` para la 0, `pendiente` para la A).
 
+## Respuesta de BF (2 de noviembre de 2026)
+
+**D1: v2**
+
+**D3: 0**
+
+**D1.**
+- Se confirma lo que BF decidió el 22 de octubre (`docs/meta_ordenes_2.3.3.md`, secciones 2 y 8). Esa rama no llegó a `main`, y por eso aquí aparecía como respuesta por defecto.
+- Con 100 000 acciones (v1), TWAP completa solo 5 de las 10 órdenes. Con la v2 completa 10 de 10 (19 de 20 corridas sobre el 95 %); MO-10 queda en el borde (90,2 % y 100 %).
+- La v2 oficial (`meta_ordenes_v2.json`) y la candidata de PS coinciden en los seis campos que leen los evaluadores (`id`, `ticker`, `tramo_inicio`, `cantidad`, `semilla`, `volumen_dia_simulado`). La firma de las corridas no depende del archivo. La 3.1.3 y las 90 corridas quedan válidas sin repetir nada.
+
+**D3.**
+- Se aplica la regla fijada el 29 de octubre, antes de ver los datos corregidos.
+- Con la recompensa corregida, las dos opciones completan el 100 % con argmax: no se cumple la condición (a). A − 0 = −0,60 bps (IC −1,04 a −0,16).
+- **BF retira su propuesta del 22 de octubre** de pasar a la opción A (`docs/entrenamiento_inicial_2.3.5.md`, sección 4). Esa propuesta se apoyaba en un cumplimiento con argmax de 0,000 / 1,000 / 0,904, medido con la recompensa con falla H1 (`docs/revision_opus_PS.md`).
+- **El −0,60 bps no aplica al sistema final.** Se midió en redes entrenadas con `mid_decision`, no en el tipo de Ejecutor que se usa. El Ejecutor elegido (`rimit__d3_opcion0_s1000`) es imitación + PPO con la recompensa de llegada, y la opción A nunca se probó con imitación.
+- **Costo de pasar a la A:** recalcular β\*, reentrenar y volver a elegir el Ejecutor, reentrenar el Maestro (se entrenó con ese Ejecutor) y repetir la 3.1.3 y las 90 corridas: más de 10 horas de Colab. A cambio se ganarían como mucho 0,6 bps, frente a una dispersión de ≈ 40 bps entre jornadas.
+- **Se declara (R6):** la regla de vigilancia original se aplicó el 22 de octubre sobre evidencia inválida. Se reemplazó por una regla fijada antes de los datos corregidos.
+
+Resumen de las decisiones del sprint: `docs/decisiones_sprint6_BF.md`.
+
 🤖 Generado con [Claude Code](https://claude.com/claude-code)
