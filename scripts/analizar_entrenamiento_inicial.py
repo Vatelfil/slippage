@@ -24,6 +24,7 @@ from typing import Dict, List, Optional, Sequence
 import numpy as np
 from scipy import stats
 
+CUMPLIMIENTO_D3 = 0.95  # umbral de la regla de vigilancia de D3
 N_ACCIONES = 240  # tamano del espacio de acciones del Ejecutor (3 tipos x 10 volumenes x 8 niveles)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -172,13 +173,30 @@ def seccion_corridas(corridas: Dict[str, Dict]) -> List[str]:
     return L + [""]
 
 
-def lectura_corridas(corridas: Dict[str, Dict]) -> List[str]:
-    """Frases sobre la opcion A de D3 cuando hay una corrida con riesgo sobre lo pendiente."""
+def lectura_corridas(corridas: Dict[str, Dict], estado: Optional[Dict] = None) -> List[str]:
+    """Frases sobre la regla de vigilancia de D3 en las corridas con opcion 0 y sobre la opcion A."""
+    extra: List[str] = []
+    todas = ([estado] if estado else []) + list(corridas.values())
+    op0 = [e for e in todas if e["firma"].get("riesgo_sobre", "ejecutado") == "ejecutado" and e.get("evaluacion_entrenada")]
+    if len(op0) >= 2:
+        cumpl = [e["evaluacion_entrenada"].get("cumplimiento_medio") or 0.0 for e in op0]
+        dispara = sum(c < CUMPLIMIENTO_D3 for c in cumpl)
+        extra.append(f"- **La regla de vigilancia de D3 no es estable con la opción 0:** el cumplimiento con argmax fue "
+                     + ", ".join(_f(c, 3) for c in cumpl) + f" en {len(op0)} corridas; en {dispara} de {len(op0)} queda bajo el 95 % y la regla indica pasar a la opción A. "
+                     "Con una sola red por corrida, el resultado de la regla depende del azar del entrenamiento.")
+        por_firma: Dict[tuple, List[Dict]] = {}
+        for e in op0:
+            f = e["firma"]
+            por_firma.setdefault((f["episodios"], f["seed"]), []).append(e)
+        for (ep, _), grupo in por_firma.items():
+            if len(grupo) >= 2 and len({round(g["evaluacion_entrenada"].get("slippage_bps_medio") or -999, 6) for g in grupo}) > 1:
+                extra.append(f"- **Dos corridas de {ep} episodios con la misma configuración y semilla dieron resultados distintos** "
+                             "(ver la tabla): el entrenamiento solo es reproducible si no se interrumpe. Ver Limitaciones.")
     a = next((e for e in corridas.values() if e["firma"].get("riesgo_sobre") == "pendiente"), None)
     if not a:
-        return []
+        return extra
     ent, est = a["evaluacion_entrenada"], a.get("evaluacion_entrenada_estocastica")
-    return [f"- **Con la opción A de D3 (riesgo sobre lo pendiente), la política determinista sí ejecuta (en esta corrida):** cumplimiento {_f(ent.get('cumplimiento_medio'), 3)} y "
+    return extra + [f"- **Con la opción A de D3 (riesgo sobre lo pendiente), la política determinista sí ejecuta (en esta corrida):** cumplimiento {_f(ent.get('cumplimiento_medio'), 3)} y "
             f"{_f(ent.get('slippage_bps_medio'))} bps (EE {_f(ent.get('slippage_bps_ee'))}); muestreada, {_f(est.get('cumplimiento_medio'), 3) if est else '—'} y "
             f"{_f(est.get('slippage_bps_medio')) if est else '—'} bps. Esto es lo que la regla de vigilancia de D3 buscaba: que penalizar lo que falta por ejecutar evite que la red aprenda a esperar. "
             "Fue una corrida exploratoria con el mismo β, sin recalcular β* (el plan lo pide si se adopta la opción A).",
@@ -244,12 +262,15 @@ def informe(estado: Dict, filas: List[Dict[str, float]], png_rel: str, diag: Opt
     L += ["", "## 4. Regla de vigilancia de D3", "",
           f"Cumplimiento medio de la red entrenada: **{_f(vig.get('cumplimiento_medio'), 3)}** (umbral {_f(vig.get('umbral'), 2)}). {vig.get('texto', '')} "
           "La decisión final de R_E se revisa el viernes 23 de octubre y es de BF.", "",
-          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + lectura_corridas(corridas or {}) + [""]
+          "## 5. Lectura preliminar de PS (BF debe confirmar, corregir o reemplazar)", ""] + lectura(estado, filas) + lectura_corridas(corridas or {}, estado) + [""]
     L += [
           "## 6. Limitaciones", "",
           "- Entrenamiento corto (100 a 1.000 episodios) y una sola red por corrida: el resultado es indicativo, no concluyente.",
           "- Solo FALABELLA y un tramo; no incluye a COPEC ni a ECL.",
-          "- La evaluación usa 15 semillas: el error estándar es grande frente a las diferencias entre políticas.", "",
+          "- La evaluación usa 15 semillas: el error estándar es grande frente a las diferencias entre políticas.",
+          "- **Reproducibilidad:** con las mismas semillas, un entrenamiento sin cortes da curvas idénticas (la corrida de 1.000 episodios y la repetición de 100 coinciden en todas las actualizaciones hasta el episodio 100). "
+          "Si el entrenamiento se interrumpe y se reanuda desde un checkpoint, los resultados cambian: la primera corrida de 100 episodios se reanudó desde el episodio 30 (consta en su registro de consola) "
+          "y sus curvas coinciden con las de las otras corridas solo hasta ahí. Causa probable: el checkpoint guarda pesos, optimizador y episodio, pero no el estado del generador aleatorio (`save_checkpoint` en `src/training/ppo_trainer.py`).", "",
           "## 7. Cómo reproducir", "",
           "En Colab, con el entorno preparado (`docs/dependencias_resueltas.md`, con `torch==1.13.1+cpu`):", "",
           "```bash",

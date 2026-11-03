@@ -1,0 +1,317 @@
+{
+ "tarea": "2.3.5",
+ "corrida_principal": "t5_1000ep_opcion0",
+ "criterios": {
+  "sin_nan": "Sin NaN en el CSV",
+  "retorno_final_mayor": "Retorno final > inicial (Mann-Whitney unilateral, 10 vs 10 actualizaciones)",
+  "kl_mediano_bajo_target": "KL mediano < 0,015",
+  "cumplimiento_95": "Cumplimiento medio >= 95 % (argmax, regla de D3)",
+  "slippage_vs_twap": "Menos slippage que la TWAP heuristica (Wilcoxon pareado, argmax)"
+ },
+ "parametros": {
+  "alfa": 0.05,
+  "n_actualizaciones_por_grupo": 10,
+  "target_kl": 0.015,
+  "umbral_cumplimiento": 0.95,
+  "referencia_twap": "twap_limit_medio"
+ },
+ "desviaciones": [
+  "Mann-Whitney sobre actualizaciones (10 episodios cada una): primeras 10 contra ultimas 10, en vez de primeros contra ultimos 20 episodios (el CSV no trae el retorno por episodio).",
+  "Evaluacion con 15 semillas (5001-5015) en vez de 30."
+ ],
+ "acciones_espera": {
+  "n_acciones": 240,
+  "n_espera": 80,
+  "fraccion": 0.3333333333333333,
+  "tipos": [
+   "LIMIT_SELL"
+  ],
+  "regla": "src/envs/abides_bridge.py:170 (`if size <= 0 or order_type == ORDER_LIMIT_SELL: return []`)"
+ },
+ "corridas": {
+  "t5_1000ep_opcion0": {
+   "criterios": {
+    "sin_nan": {
+     "aplicable": true,
+     "n_actualizaciones": 100,
+     "valores_no_finitos": 0,
+     "cumple": true
+    },
+    "retorno_final_mayor": {
+     "aplicable": true,
+     "n_por_grupo": 10,
+     "media_inicial": -1.9313964,
+     "media_final": -1.1306644999999997,
+     "U": 80.0,
+     "p": 0.012874040410554032,
+     "alfa": 0.05,
+     "cumple": true
+    },
+    "kl_mediano_bajo_target": {
+     "aplicable": true,
+     "mediana": 0.0011055000000000001,
+     "maximo": 0.004376,
+     "target": 0.015,
+     "cumple": true
+    },
+    "cumplimiento_95": {
+     "aplicable": true,
+     "valor": 0.0,
+     "umbral": 0.95,
+     "n_semillas": 15,
+     "cumple": false
+    },
+    "slippage_vs_twap": {
+     "aplicable": false,
+     "motivo": "la red no ejecuto en 15 de 15 semillas",
+     "cumple": false
+    }
+   },
+   "informativo": {
+    "slippage_vs_twap_muestreada": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": 3.6554376899429553,
+     "ee_bps": 2.47192445083892,
+     "p_wilcoxon": 0.27685546875,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar": {
+     "aplicable": false,
+     "motivo": "la red no ejecuto en 15 de 15 semillas",
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar_muestreada": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": -0.5826863099291895,
+     "ee_bps": 4.683174203862561,
+     "p_wilcoxon": 0.67877197265625,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "cumplimiento_muestreada": 0.9996000000000002,
+    "parametros_no_finitos_checkpoint": []
+   },
+   "cumple_todos": false,
+   "n_cumple": 3,
+   "n_no_cumple": 2,
+   "n_no_evaluable": 0,
+   "descripcion": "1000 episodios, opcion 0 (riesgo sobre lo ejecutado)",
+   "estado": "data/colab_resultados/t5_1000ep_opcion0.json",
+   "csv": "data/colab_resultados/t5_1000ep_opcion0.csv",
+   "episodios": 1000,
+   "riesgo_sobre": "ejecutado"
+  },
+  "t5_1000ep_opcionA": {
+   "criterios": {
+    "sin_nan": {
+     "aplicable": false,
+     "motivo": "sin CSV del entrenador",
+     "cumple": null
+    },
+    "retorno_final_mayor": {
+     "aplicable": false,
+     "motivo": "sin CSV del entrenador",
+     "cumple": null
+    },
+    "kl_mediano_bajo_target": {
+     "aplicable": false,
+     "motivo": "sin CSV del entrenador",
+     "cumple": null
+    },
+    "cumplimiento_95": {
+     "aplicable": true,
+     "valor": 1.0,
+     "umbral": 0.95,
+     "n_semillas": 15,
+     "cumple": true
+    },
+    "slippage_vs_twap": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": 4.134191572387871,
+     "ee_bps": 3.2318135626112716,
+     "p_wilcoxon": 0.207763671875,
+     "alfa": 0.05,
+     "cumple": false
+    }
+   },
+   "informativo": {
+    "slippage_vs_twap_muestreada": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": 2.8189088332235293,
+     "ee_bps": 3.08746376647478,
+     "p_wilcoxon": 0.25238037109375,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": -0.10393242748427388,
+     "ee_bps": 4.263678142059034,
+     "p_wilcoxon": 0.52447509765625,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar_muestreada": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": -1.419215166648617,
+     "ee_bps": 4.223468186852942,
+     "p_wilcoxon": 0.803955078125,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "cumplimiento_muestreada": 1.0
+   },
+   "cumple_todos": false,
+   "n_cumple": 1,
+   "n_no_cumple": 1,
+   "n_no_evaluable": 3,
+   "descripcion": "1000 episodios, opcion A (riesgo sobre lo pendiente), exploratoria con el mismo beta",
+   "estado": "data/colab_resultados/t5_1000ep_opcionA.json",
+   "csv": null,
+   "episodios": 1000,
+   "riesgo_sobre": "pendiente"
+  },
+  "t5_100ep_opcion0": {
+   "criterios": {
+    "sin_nan": {
+     "aplicable": true,
+     "n_actualizaciones": 10,
+     "valores_no_finitos": 0,
+     "cumple": true
+    },
+    "retorno_final_mayor": {
+     "aplicable": false,
+     "motivo": "solo 10 actualizaciones (hacen falta 20)",
+     "cumple": null
+    },
+    "kl_mediano_bajo_target": {
+     "aplicable": true,
+     "mediana": 7.35e-05,
+     "maximo": 0.000116,
+     "target": 0.015,
+     "cumple": true
+    },
+    "cumplimiento_95": {
+     "aplicable": true,
+     "valor": 1.0,
+     "umbral": 0.95,
+     "n_semillas": 15,
+     "cumple": true
+    },
+    "slippage_vs_twap": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": 1.5011920022288772,
+     "ee_bps": 3.1039266218384265,
+     "p_wilcoxon": 0.42120361328125,
+     "alfa": 0.05,
+     "cumple": false
+    }
+   },
+   "informativo": {
+    "slippage_vs_twap_muestreada": null,
+    "slippage_vs_red_sin_entrenar": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": -2.7369319976432673,
+     "ee_bps": 3.6390194884263813,
+     "p_wilcoxon": 0.76153564453125,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar_muestreada": null,
+    "cumplimiento_muestreada": null
+   },
+   "cumple_todos": false,
+   "n_cumple": 3,
+   "n_no_cumple": 1,
+   "n_no_evaluable": 1,
+   "descripcion": "100 episodios, opcion 0, primera (reanudada desde el episodio 30)",
+   "estado": "data/colab_resultados/t5_100ep_opcion0.json",
+   "csv": "data/colab_resultados/t5_100ep_opcion0.csv",
+   "episodios": 100,
+   "riesgo_sobre": "ejecutado"
+  },
+  "t5_100ep_opcion0_repeticion": {
+   "criterios": {
+    "sin_nan": {
+     "aplicable": false,
+     "motivo": "sin CSV del entrenador",
+     "cumple": null
+    },
+    "retorno_final_mayor": {
+     "aplicable": false,
+     "motivo": "sin CSV del entrenador",
+     "cumple": null
+    },
+    "kl_mediano_bajo_target": {
+     "aplicable": false,
+     "motivo": "sin CSV del entrenador",
+     "cumple": null
+    },
+    "cumplimiento_95": {
+     "aplicable": true,
+     "valor": 0.9042666666666668,
+     "umbral": 0.95,
+     "n_semillas": 15,
+     "cumple": false
+    },
+    "slippage_vs_twap": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": 0.2638478933719851,
+     "ee_bps": 2.879683103265189,
+     "p_wilcoxon": 0.846923828125,
+     "alfa": 0.05,
+     "cumple": false
+    }
+   },
+   "informativo": {
+    "slippage_vs_twap_muestreada": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": 0.9300169176630578,
+     "ee_bps": 3.145923830640295,
+     "p_wilcoxon": 0.76153564453125,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": -3.9742761065001604,
+     "ee_bps": 4.489854066058229,
+     "p_wilcoxon": 0.359130859375,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "slippage_vs_red_sin_entrenar_muestreada": {
+     "aplicable": true,
+     "n": 15,
+     "dif_media_bps": -3.308107082209088,
+     "ee_bps": 3.362242173383314,
+     "p_wilcoxon": 0.7197265625,
+     "alfa": 0.05,
+     "cumple": false
+    },
+    "cumplimiento_muestreada": 1.0
+   },
+   "cumple_todos": false,
+   "n_cumple": 0,
+   "n_no_cumple": 2,
+   "n_no_evaluable": 3,
+   "descripcion": "100 episodios, opcion 0, repeticion sin cortes",
+   "estado": "data/colab_resultados/t5_100ep_opcion0_repeticion.json",
+   "csv": null,
+   "episodios": 100,
+   "riesgo_sobre": "ejecutado"
+  }
+ }
+}

@@ -1,0 +1,305 @@
+{
+ "tarea": "2.3.3",
+ "criterio": "media de execution_rate de TWAP >= 0.95",
+ "meta_ordenes": "data/meta_ordenes/meta_ordenes_v2.json",
+ "fuentes": {
+  "base_100000": "data/colab_resultados/benchmarks_meta_ordenes_abides.json",
+  "pct10": "data/colab_resultados/benchmarks_meta_ordenes_abides_pct10.json",
+  "pct05_cierre": "data/colab_resultados/benchmarks_meta_ordenes_abides_pct05_cierre.json"
+ },
+ "resumen_por_fuente": {
+  "base_100000": {
+   "n_ordenes": 10,
+   "ordenes_ejecutables": 5,
+   "n_corridas": 20,
+   "corridas_sobre_umbral": 11,
+   "no_ejecutables": [
+    "MO-02",
+    "MO-06",
+    "MO-07",
+    "MO-09",
+    "MO-10"
+   ]
+  },
+  "pct10": {
+   "n_ordenes": 10,
+   "ordenes_ejecutables": 8,
+   "n_corridas": 20,
+   "corridas_sobre_umbral": 17,
+   "no_ejecutables": [
+    "MO-09",
+    "MO-10"
+   ]
+  },
+  "pct05_cierre": {
+   "n_ordenes": 3,
+   "ordenes_ejecutables": 3,
+   "n_corridas": 6,
+   "corridas_sobre_umbral": 5,
+   "no_ejecutables": []
+  }
+ },
+ "ordenes": [
+  {
+   "id": "MO-01",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "apertura",
+   "cantidad": 88300,
+   "semilla": 9010,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9011,
+     "execution_rate": 0.9999546998867497
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9012,
+     "execution_rate": 0.9999546998867497
+    }
+   ],
+   "media": 0.9999546998867497,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-02",
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "semilla": 9020,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9021,
+     "execution_rate": 0.9997938144329894
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9022,
+     "execution_rate": 0.9997938144329894
+    }
+   ],
+   "media": 0.9997938144329894,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-03",
+   "ticker": "COPEC",
+   "tramo_inicio": "apertura",
+   "cantidad": 29100,
+   "semilla": 9030,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9031,
+     "execution_rate": 0.9997938144329894
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9032,
+     "execution_rate": 0.9997938144329894
+    }
+   ],
+   "media": 0.9997938144329894,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-04",
+   "ticker": "ECL",
+   "tramo_inicio": "apertura",
+   "cantidad": 32100,
+   "semilla": 9040,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9041,
+     "execution_rate": 0.9999065420560745
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9042,
+     "execution_rate": 0.9999065420560745
+    }
+   ],
+   "media": 0.9999065420560745,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-05",
+   "ticker": "COPEC",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 29100,
+   "semilla": 9050,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9051,
+     "execution_rate": 0.9999999999999999
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9052,
+     "execution_rate": 0.9999999999999999
+    }
+   ],
+   "media": 0.9999999999999999,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-06",
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "semilla": 9060,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9061,
+     "execution_rate": 0.9999999999999999
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9062,
+     "execution_rate": 0.9999999999999999
+    }
+   ],
+   "media": 0.9999999999999999,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-07",
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 32100,
+   "semilla": 9070,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct10",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9071,
+     "execution_rate": 0.9999999999999999
+    },
+    {
+     "fuente": "pct10",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9072,
+     "execution_rate": 0.9999999999999999
+    }
+   ],
+   "media": 0.9999999999999999,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-08",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "semilla": 9080,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct05_cierre",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9081,
+     "execution_rate": 1.0
+    },
+    {
+     "fuente": "pct05_cierre",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9082,
+     "execution_rate": 1.0
+    }
+   ],
+   "media": 1.0,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-09",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "semilla": 9090,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct05_cierre",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9091,
+     "execution_rate": 1.0
+    },
+    {
+     "fuente": "pct05_cierre",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9092,
+     "execution_rate": 1.0
+    }
+   ],
+   "media": 1.0,
+   "corridas_sobre_umbral": 2,
+   "n_corridas": 2,
+   "ejecutable": true
+  },
+  {
+   "id": "MO-10",
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 44100,
+   "semilla": 9100,
+   "estado": "validada",
+   "corridas": [
+    {
+     "fuente": "pct05_cierre",
+     "seed_corrida": 1,
+     "semilla_efectiva": 9101,
+     "execution_rate": 0.9017233560090703
+    },
+    {
+     "fuente": "pct05_cierre",
+     "seed_corrida": 2,
+     "semilla_efectiva": 9102,
+     "execution_rate": 1.0
+    }
+   ],
+   "media": 0.9508616780045351,
+   "corridas_sobre_umbral": 1,
+   "n_corridas": 2,
+   "ejecutable": true
+  }
+ ],
+ "sin_validar": []
+}
