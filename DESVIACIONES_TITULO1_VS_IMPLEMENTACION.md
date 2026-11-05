@@ -148,6 +148,12 @@ El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDE
 
 ---
 
+## 11. Barrido final en la última decisión del Maestro [PS, 31 oct 2026]
+
+El Título I define la acción del Maestro como la fracción α ∈ [0,05; 0,50] de lo que falta. Con esa acción, una orden que empieza a las 14:00 (4 decisiones) no puede pasar del 93,75 %. Se agrega la opción `completar_al_cierre`: en la última decisión del día, α = 1. Las demás decisiones siguen la acción del Título I. Se usa en la versión corregida de las 30 corridas (`docs/correccion_cierre_PS.md`). **Estado:** aplicada por PS; el Maestro (de MR) no se modifica.
+
+---
+
 ## 12. Diseño de las 90 corridas: órdenes × semillas en vez de tamaños × semillas [PROPUESTA de BF, 2 nov 2026]
 
 ### 12.1 Descripción
@@ -177,9 +183,3 @@ Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si part
 
 ### 12.4 Estado
 **Propuesta de BF.** La decide el equipo en la Sprint Review del 6 de noviembre (la 3.2.4 es de PS). Si se aprueba, se corre en la primera semana del Sprint 7 con `notebooks/Colab_tamanos_media_BF.ipynb`.
-
----
-
-## 11. Barrido final en la última decisión del Maestro [PS, 31 oct 2026]
-
-El Título I define la acción del Maestro como la fracción α ∈ [0,05; 0,50] de lo que falta. Con esa acción, una orden que empieza a las 14:00 (4 decisiones) no puede pasar del 93,75 %. Se agrega la opción `completar_al_cierre`: en la última decisión del día, α = 1. Las demás decisiones siguen la acción del Título I. Se usa en la versión corregida de las 30 corridas (`docs/correccion_cierre_PS.md`). **Estado:** aplicada por PS; el Maestro (de MR) no se modifica.
