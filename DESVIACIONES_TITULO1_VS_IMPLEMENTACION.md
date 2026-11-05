@@ -134,3 +134,25 @@ El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDE
 ## 11. Barrido final en la última decisión del Maestro [PS, 31 oct 2026]
 
 El Título I define la acción del Maestro como la fracción α ∈ [0,05; 0,50] de lo que falta. Con esa acción, una orden que empieza a las 14:00 (4 decisiones) no puede pasar del 93,75 %. Se agrega la opción `completar_al_cierre`: en la última decisión del día, α = 1. Las demás decisiones siguen la acción del Título I. Se usa en la versión corregida de las 30 corridas (`docs/correccion_cierre_PS.md`). **Estado:** aplicada por PS; el Maestro (de MR) no se modifica.
+
+---
+
+## 12. S_M del Maestro sin datos de mercado en el sistema del Sprint 6, y Maestro v2 [PS, 4 nov 2026]
+
+### 12.1 Descripción
+- En el entrenamiento y en la evaluación del sistema final, `volatilidad` y `vol_promedio` de S_M entraron con valores fijos (0,002 y 0,2) y `OBI_agregado` valió 0.
+- El Maestro decidió, en la práctica, con lo que falta por comprar, la hora, sus decisiones previas y el tramo.
+- Además se entrenó sin la corrección del cierre (desviación 11), y `n_slices` partía en 0 sobre 13 aunque la orden empezara tarde.
+- Los datos reales de la 1.2.2 existían, pero describen la Bolsa real y no el mercado simulado en que compra el sistema.
+
+### 12.2 Propuesta (Maestro v2)
+- Medir esas tres variables en el mercado simulado, con lo que vio el Ejecutor en la ventana anterior.
+- Entrenar con la corrección del cierre y contar `n_slices` por orden.
+- Opción `sm_mercado` (apagada por defecto). Detalle en `docs/maestro_v2_PS.md`.
+- Cambia la fuente de datos fijada en `SM_schema.json` (yfinance → mercado simulado).
+- **Estado:** código listo; falta entrenar y evaluar, y que MR lo acepte. El resultado oficial sigue siendo el del sistema del Sprint 6.
+
+## 13. `tasa_ordenes` del Ejecutor vale 0 en ABIDES [PS, 4 nov 2026]
+
+`src/envs/abides_bridge.py` deja `tasa_ordenes` en 0 porque ABIDES no la entrega directamente (en Poisson sí se calcula). En ABIDES, el Ejecutor ve 26 de sus 27 variables. Arreglarlo obliga a reentrenar el Ejecutor en ABIDES, así que se declara como límite.
+

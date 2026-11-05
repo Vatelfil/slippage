@@ -453,6 +453,19 @@
 - **Cómo verificar:** `python -m pytest tests/test_reglas_control_3_2_3.py tests/test_control_reglas_3_2_3.py tests/test_cuadernos_control_reglas.py`.
 - **Gráficos:** `control_reglas.png` (ver `docs/guia_graficos.md`) y `corridas_90/media/tabla/cajas.png`.
 
+### `feature/ps-maestro-v2-ve-mercado`: el Maestro mira el mercado simulado (4 de noviembre)
+- **Quién:** PS, con apoyo de Claude Code. Borrador para que MR lo revise (el entrenamiento es su tarea).
+- **Qué:**
+  - opción `sm_mercado` en `MaestroEjecutorEnv`: volatilidad, profundidad y desbalance medidos en lo que vio el Ejecutor en la ventana anterior, y `n_slices` por orden;
+  - `completar_al_cierre` y `sm_mercado` en `ConfigJornada` y en `scripts/entrenar_maestro.py`;
+  - `--sm-mercado` en el evaluador;
+  - `--referencias` en `comparacion_estadistica_3_2_3.py`;
+  - cuaderno `Colab_maestro_v2`, `docs/maestro_v2_PS.md` y 2 archivos de pruebas.
+- **Por qué:** el Maestro del Sprint 6 nunca vio el mercado (volatilidad y actividad fijas, OBI en 0, tanto al entrenar como al evaluar) y se entrenó sin la corrección del cierre. Los valores fijos venían de borradores de PS y Claude Code.
+- **Resultado:** código listo y probado. En una prueba local de 60 jornadas, el α medio queda en ≈ 25 % (antes, pegado en 50 %). Falta correr el cuaderno.
+- **Cómo verificar:** `python -m pytest tests/test_maestro_v2_sm_mercado.py tests/test_cuaderno_maestro_v2.py`.
+- **Gráficos:** los de la comparación (`bosque_diferencias.png` y los demás), cuando llegue el zip.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |

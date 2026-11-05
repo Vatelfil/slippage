@@ -31,7 +31,8 @@ la misma que en la corrida del sistema (cuando la regla coincide con el Maestro,
 
 Limites conocidos:
   - Las variables `volatilidad` y `vol_promedio` de S_M valen una constante a menos que se pase `--datos-sm`
-    (tabla con indice horario y esas dos columnas, salida de la tarea 1.2.2).
+    (tabla con indice horario y esas dos columnas, salida de la tarea 1.2.2) o `--sm-mercado` (medidas en el
+    mercado simulado; Maestro v2, 4 nov 2026).
   - `n_slices` de S_M parte en 0 aunque la orden empiece a mitad de jornada.
   - Reanudable: guarda tras cada corrida.
 """
@@ -169,7 +170,7 @@ def accion_regla(regla: str, t):
 
 def correr_orden(orden: Dict, seed: int, maestro, redes: Dict, base_factory: Optional[Callable], nombre: str,
                  deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None, impacto=None,
-                 completar_al_cierre: bool = False, regla: Optional[str] = None) -> Dict:
+                 completar_al_cierre: bool = False, regla: Optional[str] = None, sm_mercado: bool = False) -> Dict:
     """Una meta-orden con el sistema completo (o con una regla de control en vez del Maestro, ver `--regla`). Devuelve la corrida en el formato de los benchmarks."""
     import torch
     from src.envs.maestro_ejecutor_protocol import MaestroEjecutorEnv, maestro_policy
@@ -183,7 +184,7 @@ def correr_orden(orden: Dict, seed: int, maestro, redes: Dict, base_factory: Opt
                              datos_historicos=datos_desde(orden["tramo_inicio"], datos_sm),
                              executor_env_factory=_factory_pareada(base_factory, semilla_orden, p0, acum, impacto),
                              executor_policy_fn=make_executor_policy_fn(redes, deterministic=deterministic),
-                             completar_al_cierre=completar_al_cierre)
+                             completar_al_cierre=completar_al_cierre, sm_mercado=sm_mercado)
     s_m, done, r_m, decisiones = env.reset(), False, 0.0, []
     while not done:
         accion, alpha = maestro_policy(s_m, model=maestro, deterministic=deterministic), None
@@ -214,7 +215,7 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
            deterministic: bool = True, datos_sm: Optional[pd.DataFrame] = None,
            presupuesto_s: Optional[float] = None, log: Callable[[str], None] = print,
            impacto_por_orden: Optional[Callable[[Dict], object]] = None, completar_al_cierre: bool = False,
-           regla: Optional[str] = None) -> bool:
+           regla: Optional[str] = None, sm_mercado: bool = False) -> bool:
     """Corre lo pendiente. Devuelve True si no queda nada."""
     t_ini = time.time()
     corridas = estado.setdefault("corridas", {})
@@ -227,7 +228,7 @@ def correr(ordenes: Sequence[Dict], seeds: Sequence[int], estado: Dict, guardar:
         try:
             imp = impacto_por_orden(o) if impacto_por_orden else None
             c = correr_orden(o, seed, maestro, redes, factory_por_ticker(o["ticker"]), nombre, deterministic, datos_sm, imp,
-                             completar_al_cierre=completar_al_cierre, regla=regla)
+                             completar_al_cierre=completar_al_cierre, regla=regla, sm_mercado=sm_mercado)
             c["segundos"] = round(time.time() - t0, 1)
             corridas[clave] = c
             log(f"{clave}: slippage={c['slippage_bps']:.2f} bps cumpl={c['execution_rate']:.3f} ({c['segundos']:.0f}s)")
@@ -303,6 +304,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                     help="la ultima decision del dia asigna todo lo que falta (docs/correccion_cierre_PS.md)")
     ap.add_argument("--regla", choices=REGLAS, default=None,
                     help="control de la 3.2.3: reemplaza al Maestro por una regla fija (mismos Ejecutores y semillas)")
+    ap.add_argument("--sm-mercado", action="store_true",
+                    help="S_M medido en el mercado simulado (usar con un Maestro entrenado igual: Maestro v2)")
     ap.add_argument("--impacto-y", type=float, default=0.5)
     ap.add_argument("--impacto-tau", type=float, default=120.0)
     ap.add_argument("--escenario", default=None, help="escenario de liquidez (baja, media, alta; ver data/scenarios); sin la opcion, la calibracion de siempre")
@@ -349,6 +352,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
         firma["semilla_inicial"] = args.semilla_inicial
     if args.regla:
         firma["regla"] = args.regla
+    if args.sm_mercado:
+        firma["sm_mercado"] = True
     estado = load_resumable(out, firma)
     seeds = semillas(args.seeds, args.semilla_inicial)
     print(f"{len(pendientes(estado, ordenes, seeds, nombre))} corridas pendientes ({nombre}, {args.modo})", flush=True)
@@ -356,7 +361,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                 deterministic=args.modo == "argmax", datos_sm=datos_sm,
                 presupuesto_s=None if args.max_minutes is None else args.max_minutes * 60,
                 impacto_por_orden=(lambda o: parametros_impacto(o, args.impacto_y, args.impacto_tau)) if args.impacto else None,
-                completar_al_cierre=args.completar_al_cierre, regla=args.regla)
+                completar_al_cierre=args.completar_al_cierre, regla=args.regla, sm_mercado=args.sm_mercado)
     for c in estado.get("corridas", {}).values():
         c.setdefault("escenario", args.escenario or "media")
         c.setdefault("factor_tamano", args.factor_tamano)

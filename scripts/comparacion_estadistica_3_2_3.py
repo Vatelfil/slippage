@@ -161,9 +161,10 @@ def _orden_escenarios(valores) -> List[str]:
     return [e for e in ORDEN_ESCENARIOS if e in vals] + sorted(v for v in vals if v not in ORDEN_ESCENARIOS)
 
 
-def analizar(df: pd.DataFrame, sistema: str, excluir: Sequence[str] = ("MO-06",)) -> Dict:
+def analizar(df: pd.DataFrame, sistema: str, excluir: Sequence[str] = ("MO-06",),
+             referencias: Sequence[str] = REFERENCIAS) -> Dict:
     resultado: Dict = {"sistema": sistema, "n_corridas": int(len(df)), "referencias": {}}
-    for ref in REFERENCIAS:
+    for ref in referencias:
         par = diferencias(df, sistema, ref)
         if par.empty:
             continue
@@ -326,6 +327,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict:
     ap.add_argument("--out-md", default=None)
     ap.add_argument("--titulo", default="Comparación estadística 3.2.3")
     ap.add_argument("--sin-figuras", action="store_true")
+    ap.add_argument("--referencias", nargs="+", default=list(REFERENCIAS),
+                    help="contra quien comparar (por ejemplo PPO_sistema TWAP VWAP para el Maestro v2)")
     args = ap.parse_args(argv)
 
     df = cargar(args.entradas)
@@ -333,7 +336,7 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict:
         sys.exit("No hay corridas válidas en las entradas.")
     if "costo" not in df.columns or args.penalizacion_bps is not None:
         df["costo"] = costo(df, args.penalizacion_bps)
-    res = analizar(df, args.sistema, args.excluir)
+    res = analizar(df, args.sistema, args.excluir, args.referencias)
     if not res["referencias"]:
         sys.exit(f"No hay pares de `{args.sistema}` con TWAP o VWAP.")
     out = Path(args.out_dir)
