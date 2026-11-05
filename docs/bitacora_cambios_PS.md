@@ -404,6 +404,68 @@
 - **Cómo verificar:** abrir `data/colab_resultados/corridas_30_completa/tabla/tabla_maestra.md`.
 - **Gráficos:** `corridas_30_completa/tabla/cajas.png` (ver `docs/guia_graficos.md`).
 
+### `feature/ps-3-2-3-comparacion`: plan de análisis y script de la comparación estadística, 3.2.3 (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code (tarea 3.2.3 del Sprint 7, asignada a PS en el Excel). Sin Colab.
+- **Qué:**
+  - `docs/plan_analisis_3_2_3_PS.md`: qué test responde la pregunta, fijado **antes** de correr las 90;
+  - `scripts/comparacion_estadistica_3_2_3.py`: Shapiro-Wilk, Wilcoxon, t-test, d de Cohen, r de rangos e IC por bootstrap; por escenario con Holm; Kruskal-Wallis, Mann-Whitney y Friedman entre escenarios; robustez sin MO-06 y promediando por orden y semilla;
+  - `tests/test_comparacion_estadistica_3_2_3.py` (7 pruebas);
+  - ensayo con las 30 corridas de la 3.1.3 en `data/analysis/3_2_3_prueba_30/`.
+- **Por qué:** dejar el análisis programado y probado mientras corren las 90, y que el test principal quede elegido antes de ver los datos.
+- **Resultado del ensayo:**
+  - reproduce la 3.1.3 (−22,15 bps [−50,01; 4,43]);
+  - la normalidad de las diferencias no se rechaza (Shapiro p 0,42);
+  - el efecto es pequeño (d = −0,28);
+  - con 90 corridas, la probabilidad de detectar una ventaja de −22 bps es de 76 %, y la de −12,5 bps, de 33 %.
+- **Cómo verificar:** `python scripts/comparacion_estadistica_3_2_3.py --entradas data/colab_resultados/corridas_30_completa/tabla/corridas.csv --out-dir data/analysis/3_2_3_prueba_30`.
+- **Gráficos:** `qq_diferencias.png`, `bosque_diferencias.png` y `diferencias_por_escenario.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-3-2-1-cuadernos`: semillas nuevas y cuadernos de las 90 corridas, 3.2.1 (31 de octubre)
+- **Quién:** PS con apoyo de Claude Code (parte de PS en la 3.2.1: pasos 1 y 2, preparar los escenarios y los cuadernos para los tres).
+- **Qué:**
+  - opción `--semilla-inicial` en `scripts/colab/evaluar_sistema_ps.py` y `scripts/colab/benchmarks_meta_ordenes_ps.py` (por defecto 1, así que lo de antes no cambia);
+  - 7 cuadernos: `Colab_90corridas_prueba` y `Colab_90corridas_{baja,media,alta}_{A,B}`;
+  - `docs/LEEME_COLAB_90_CORRIDAS.md`;
+  - `tests/test_cuadernos_90_corridas.py`.
+- **Por qué:** la liquidez «media» de la v3 es la calibración actual. Con las semillas 1 a 3, esa liquidez repetía exactamente las 30 corridas de la 3.1.3, que además motivaron la corrección del cierre. Con las semillas 4 a 6, las 90 son datos nuevos. La decisión se confirma en la reunión del Sprint 7.
+- **Resultado:** cuadernos listos para correr en paralelo, uno por escenario y persona. Ningún día simulado se repite.
+- **Cómo verificar:** `python -m pytest tests/test_cuadernos_90_corridas.py`.
+- **Gráficos:** no hay.
+
+### `feature/ps-3-2-3-control-reglas-v2`: liquidez media de las 90, revisión del sistema y control del Maestro, 3.2.1 y 3.2.3 (1 de noviembre)
+- **Quién:** PS, con apoyo de Claude Code. PS corrió en Colab la prueba corta y la liquidez media.
+- **Qué:**
+  - resultado de la liquidez media: `data/colab_resultados/corridas_90/media/` y `docs/corridas_90_media_resultado_PS.md`;
+  - revisión (QA) del sistema: `docs/qa_sistema_media_90_PS.md`;
+  - opción `--regla {fija,uniforme}` en `scripts/colab/evaluar_sistema_ps.py`, que reemplaza al Maestro por una regla con los mismos Ejecutores y semillas;
+  - argumento opcional `alpha` en `MaestroEjecutorEnv.step` (por defecto None, así que no cambia nada de lo anterior);
+  - `scripts/control_reglas_3_2_3.py`;
+  - cuadernos `Colab_control_reglas_media_{A,B}`;
+  - `docs/control_reglas_3_2_3_PS.md`;
+  - 3 archivos de pruebas.
+- **Por qué:**
+  - en la media, el sistema quedó −3,4 bps contra TWAP [−26; 20], p = 0,63, frente a −22 en la 3.1.3;
+  - la revisión mostró que el Maestro elige α = 0,5 y 15 minutos en el 98 % de las decisiones;
+  - el control mide si el Maestro aporta algo más que ese calendario y separa el aporte de los Ejecutores. Se agregó al plan después de ver la media, y está declarado.
+- **Resultado:**
+  - control listo para correr; no hubo que repetir corridas ni reentrenar;
+  - el resultado del control se agrega cuando llegue `control_reglas_media.zip`.
+- **Cómo verificar:** `python -m pytest tests/test_reglas_control_3_2_3.py tests/test_control_reglas_3_2_3.py tests/test_cuadernos_control_reglas.py`.
+- **Gráficos:** `control_reglas.png` (ver `docs/guia_graficos.md`) y `corridas_90/media/tabla/cajas.png`.
+
+### `feature/ps-maestro-v2-ve-mercado`: el Maestro mira el mercado simulado (4 de noviembre)
+- **Quién:** PS, con apoyo de Claude Code. Borrador para que MR lo revise (el entrenamiento es su tarea).
+- **Qué:**
+  - opción `sm_mercado` en `MaestroEjecutorEnv`: volatilidad, profundidad y desbalance medidos en lo que vio el Ejecutor en la ventana anterior, y `n_slices` por orden;
+  - `completar_al_cierre` y `sm_mercado` en `ConfigJornada` y en `scripts/entrenar_maestro.py`;
+  - `--sm-mercado` en el evaluador;
+  - `--referencias` en `comparacion_estadistica_3_2_3.py`;
+  - cuaderno `Colab_maestro_v2`, `docs/maestro_v2_PS.md` y 2 archivos de pruebas.
+- **Por qué:** el Maestro del Sprint 6 nunca vio el mercado (volatilidad y actividad fijas, OBI en 0, tanto al entrenar como al evaluar) y se entrenó sin la corrección del cierre. Los valores fijos venían de borradores de PS y Claude Code.
+- **Resultado:** código listo y probado. En una prueba local de 60 jornadas, el α medio queda en ≈ 25 % (antes, pegado en 50 %). Falta correr el cuaderno.
+- **Cómo verificar:** `python -m pytest tests/test_maestro_v2_sm_mercado.py tests/test_cuaderno_maestro_v2.py`.
+- **Gráficos:** los de la comparación (`bosque_diferencias.png` y los demás), cuando llegue el zip.
+
 ## 3. Ramas obsoletas (no usar)
 
 | Rama | Reemplazada por |
@@ -434,3 +496,18 @@
 ### `feature/ps-plan-borradores-mr-bf`: plan de borradores para MR y BF (22 de octubre)
 - **Quién:** PS con apoyo de Claude Code. **Qué:** `docs/plan_borradores_para_MR_y_BF_sprint6.md`: qué borradores de programación se pueden dejar listos para Mauricio (bucle del Maestro, checkpoint con estado aleatorio, barrido de hiperparámetros, revalidación de λ) y Benjamín (escenarios de liquidez, consolidador), más un evaluador compartido. **Estado:** solo plan, sin ejecutar.
 - **Por qué:** MR y BF tienen poco tiempo; así solo aceptan o modifican en lugar de programar y probar desde cero.
+
+### `feature/ps-maestro-v2-resultado`, 5 de noviembre: resultado del Maestro v2
+- **Quién:** PS corrió `Colab_maestro_v2` en Colab; el análisis lo hizo Claude Code.
+- **Qué:**
+  - los resultados en `data/colab_resultados/maestro_v2/` (entrenamiento, 30 corridas en la liquidez media y la comparación);
+  - el informe `docs/maestro_v2_resultado_PS.md`.
+- **Por qué:** comprobar si el Maestro, ahora que mira el mercado y se entrenó con la corrección del cierre, baja el costo.
+- **Resultado:**
+  - el Maestro ya no elige siempre 50 %: elige 40 % el 74 % de las veces y 20 % el 20 %;
+  - costo medio de 46,3 bps, contra 47,1 del Maestro anterior y 50,5 de TWAP;
+  - v2 − TWAP = −4,21 bps [−23,7; 16,1], p = 0,556 (no significativo);
+  - v2 − Maestro anterior = −0,85 bps, p = 0,855;
+  - MO-08, semilla 4, queda con un cumplimiento de 93,6 %.
+- **Cómo verificar:** el comando de la sección «Cómo reproducir» del informe.
+- **Gráficos:** `data/colab_resultados/maestro_v2/analisis/*.png` (ver `docs/guia_graficos.md`).

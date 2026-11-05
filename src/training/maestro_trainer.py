@@ -43,6 +43,10 @@ class ConfigJornada:
     # Las meta-ordenes de evaluacion parten a las 09:30, 11:00 o 14:00 (las de cierre con la mitad del tamano). Con esto
     # cada jornada sortea su tramo de inicio con la semilla, y S_M usa las mismas constantes que el evaluador.
     inicio_aleatorio: bool = False
+    # Maestro v2 (PS con Claude Code, 4 nov 2026): entrenar con la correccion del cierre y con S_M medido
+    # en el mercado simulado (ver MaestroEjecutorEnv). Por defecto False: reproduce el Maestro del Sprint 6.
+    completar_al_cierre: bool = False
+    sm_mercado: bool = False
 
 
 def redes_ejecutores(seed_red: int = 1000) -> Dict:
@@ -107,7 +111,8 @@ def crear_jornada(cfg: ConfigJornada, semilla: int, executor_policy_fn: Callable
         q = q // 2 if tramo == "cierre" else q
     return MaestroEjecutorEnv(meta_orden_quantity=q, datos_historicos=datos,
                               executor_env_factory=fabrica, executor_policy_fn=executor_policy_fn,
-                              lambda_penalty=cfg.lambda_penalty)
+                              lambda_penalty=cfg.lambda_penalty, completar_al_cierre=cfg.completar_al_cierre,
+                              sm_mercado=cfg.sm_mercado)
 
 
 def resumen_jornada(env: MaestroEjecutorEnv, r_m: float, acciones: List[int]) -> Dict[str, float]:
