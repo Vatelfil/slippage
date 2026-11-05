@@ -110,6 +110,21 @@ def test_lectura_del_c6b_reproduce_los_numeros_publicados():
     assert res["veredicto"] == cv3.CONFIRMADA
 
 
+def test_resultado_oficial_del_c6c_no_confirma_la_v3():
+    """C-6c corrido el 5 nov (semillas 8101-8160): docs/c6c_confirmacion_v3_BF.md. El JSON del criterio coincide con el
+    que se calcula aquí desde la corrida."""
+    base = ROOT / "data/colab_resultados/c6c_liquidez"
+    datos = json.loads((base / "c6c_liquidez.json").read_text(encoding="utf-8"))
+    res = cv3.evaluar(datos)
+    assert res["problemas"] == [] and res["veredicto"] == cv3.NO_CONFIRMADA
+    c = res["comparaciones"]
+    assert c["baja_menos_media"]["media"] == pytest.approx(6.69, abs=0.01)
+    assert c["baja_menos_media"]["ic_bajo"] < 0 and not c["baja_menos_media"]["cumple"]
+    assert c["media_menos_alta"]["media"] == pytest.approx(7.56, abs=0.01) and c["media_menos_alta"]["cumple"]
+    colab = json.loads((base / "c6c_confirmacion_v3.json").read_text(encoding="utf-8"))
+    assert colab["veredicto"] == res["veredicto"] and colab["comparaciones"] == res["comparaciones"]
+
+
 def test_cli_escribe_utf8_sin_bom(tmp_path):
     spec = importlib.util.spec_from_file_location("confirmar_v3_c6c", ROOT / "scripts/confirmar_v3_c6c.py")
     mod = importlib.util.module_from_spec(spec)
