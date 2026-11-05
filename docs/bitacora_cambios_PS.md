@@ -496,3 +496,18 @@
 ### `feature/ps-plan-borradores-mr-bf`: plan de borradores para MR y BF (22 de octubre)
 - **Quién:** PS con apoyo de Claude Code. **Qué:** `docs/plan_borradores_para_MR_y_BF_sprint6.md`: qué borradores de programación se pueden dejar listos para Mauricio (bucle del Maestro, checkpoint con estado aleatorio, barrido de hiperparámetros, revalidación de λ) y Benjamín (escenarios de liquidez, consolidador), más un evaluador compartido. **Estado:** solo plan, sin ejecutar.
 - **Por qué:** MR y BF tienen poco tiempo; así solo aceptan o modifican en lugar de programar y probar desde cero.
+
+### `feature/ps-maestro-v2-resultado`, 5 de noviembre: resultado del Maestro v2
+- **Quién:** PS corrió `Colab_maestro_v2` en Colab; el análisis lo hizo Claude Code.
+- **Qué:**
+  - los resultados en `data/colab_resultados/maestro_v2/` (entrenamiento, 30 corridas en la liquidez media y la comparación);
+  - el informe `docs/maestro_v2_resultado_PS.md`.
+- **Por qué:** comprobar si el Maestro, ahora que mira el mercado y se entrenó con la corrección del cierre, baja el costo.
+- **Resultado:**
+  - el Maestro ya no elige siempre 50 %: elige 40 % el 74 % de las veces y 20 % el 20 %;
+  - costo medio de 46,3 bps, contra 47,1 del Maestro anterior y 50,5 de TWAP;
+  - v2 − TWAP = −4,21 bps [−23,7; 16,1], p = 0,556 (no significativo);
+  - v2 − Maestro anterior = −0,85 bps, p = 0,855;
+  - MO-08, semilla 4, queda con un cumplimiento de 93,6 %.
+- **Cómo verificar:** el comando de la sección «Cómo reproducir» del informe.
+- **Gráficos:** `data/colab_resultados/maestro_v2/analisis/*.png` (ver `docs/guia_graficos.md`).

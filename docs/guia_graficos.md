@@ -103,6 +103,14 @@
 - **Cómo leerlo:** en el ejemplo (100 frente a 1.000 episodios, opción 0) los cuatro paneles de arriba muestran el aviso "sin monitoreo por episodio" porque esas corridas se hicieron antes de existir el registro; la entropía de la corrida de 1.000 episodios baja claramente.
 - **Script:** `scripts/monitorear_entrenamiento.py`; informe de alertas en `docs/monitoreo_entrenamiento.md`.
 
+### `data/colab_resultados/maestro_v2/analisis/` (Maestro v2, 5 de noviembre)
+- **`bosque_diferencias.png`:**
+  - Qué muestra: un punto con su intervalo por comparación (v2 contra el Maestro anterior, TWAP y VWAP).
+  - Cómo leerlo: si el intervalo cruza el 0, no hay diferencia significativa. Aquí cruzan los tres.
+- **`diferencias_por_escenario.png`:** lo mismo, con una sola liquidez (la media).
+- **`qq_diferencias.png`:** muestra si las diferencias siguen una curva normal. Los puntos cerca de la recta indican que sí, y entonces el t-test es válido.
+- **Informe:** `docs/maestro_v2_resultado_PS.md`.
+
 ## 6. Gráficos del informe de Título II
 
 Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de cifras ya publicadas en los documentos de cada tarea (no calculan nada nuevo).

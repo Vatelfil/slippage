@@ -39,6 +39,6 @@ Todo está detrás de opciones que vienen apagadas por defecto, así que lo ante
 
 ## Qué falta
 
-- Correr el cuaderno (PS) y analizar el zip `maestro_v2_media.zip`.
+- ~~Correr el cuaderno y analizar el zip~~: hecho el 5 de noviembre, ver `docs/maestro_v2_resultado_PS.md`.
 - Que MR revise el borrador, porque el entrenamiento es su tarea (2.3.2 y 3.1.1).
 - Si el Maestro v2 se usa en el informe, presentarlo como una versión mejorada, con su propia comparación, sin reemplazar el resultado oficial.
