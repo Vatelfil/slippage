@@ -1,0 +1,71 @@
+{
+ "criterio": {
+  "heuristica": "agresiva_market",
+  "q_slice": 5000,
+  "entorno": "abides",
+  "ticker": "FALABELLA",
+  "tramo": "apertura",
+  "ventana_min": 15,
+  "seed_base": 8100,
+  "n_semillas": 60,
+  "claves_abides": [
+   "mm_pov"
+  ],
+  "factores": {
+   "baja": 4.0,
+   "media": 1.0,
+   "alta": 0.25
+  },
+  "n_boot": 10000,
+  "semilla_boot": 0,
+  "nivel": 0.95
+ },
+ "problemas": [],
+ "escenarios": {
+  "baja": {
+   "factor": 4.0,
+   "nombre_en_json": "baja",
+   "costo_medio_bps": 25.052325049515378,
+   "cumplimiento": 1.0
+  },
+  "media": {
+   "factor": 1.0,
+   "nombre_en_json": "media",
+   "costo_medio_bps": 18.363878111968322,
+   "cumplimiento": 1.0
+  },
+  "alta": {
+   "factor": 0.25,
+   "nombre_en_json": "alta",
+   "costo_medio_bps": 10.80553841036529,
+   "cumplimiento": 1.0
+  }
+ },
+ "comparaciones": {
+  "baja_menos_media": {
+   "n": 60,
+   "n_descartadas": 0,
+   "media": 6.688446937547058,
+   "ic_bajo": -2.585533484583385,
+   "ic_alto": 13.767369737704968,
+   "n_boot": 10000,
+   "semilla_boot": 0,
+   "nivel": 0.95,
+   "cumple": false
+  },
+  "media_menos_alta": {
+   "n": 60,
+   "n_descartadas": 0,
+   "media": 7.55833970160303,
+   "ic_bajo": 3.0689677165449156,
+   "ic_alto": 14.774703273594946,
+   "n_boot": 10000,
+   "semilla_boot": 0,
+   "nivel": 0.95,
+   "cumple": true
+  }
+ },
+ "veredicto": "NO CONFIRMADA",
+ "texto": "No se confirma (baja_menos_media no excluye el 0 por arriba). Los escenarios se informan como profundidad del market maker ×4 / ×1 / ×0,25, sin nombres de liquidez.",
+ "entrada": "c6c_liquidez.json"
+}

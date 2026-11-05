@@ -6,7 +6,7 @@
 |---|---|---|---|
 | 1 | D1: tamaño de las meta-órdenes | **v2** | Decidida (ratifica la del 22 oct) |
 | 2 | D3: riesgo de R_E sobre lo ejecutado (0) o lo pendiente (A) | **0** | Decidida por la regla del 29 oct |
-| 3 | Escenarios de liquidez v3 (desviación 10) | **Aceptada**, con la confirmación C-6c | C-6c por correr (≈ 40 min de Colab) |
+| 3 | Escenarios de liquidez v3 (desviación 10) | **Aceptada**, con la confirmación C-6c | **C-6c (5 nov): NO CONFIRMADA.** Se informa como profundidad del market maker ×4 / ×1 / ×0,25 (`docs/c6c_confirmacion_v3_BF.md`) |
 | 4 | Factor tamaño en las 90 corridas (desviación 12) | **Diseño en estrella** | Propuesta: la decide el equipo el 6 nov |
 
 ## 1. D1 = v2

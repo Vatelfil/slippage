@@ -129,7 +129,14 @@ El Ejecutor PPO puede partir copiando a TWAP con órdenes límite (`--imitar twa
 
 El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDES se usa el tamaño de las cotizaciones del market maker (`mm_pov`) para generarlos. En el C-6b, subir `mm_pov` **encareció** la compra a mercado (`docs/c6_liquidez_resultado_PS.md`, sección 4). La v3 asigna los nombres según ese costo: baja = ×4, alta = ×0,25. El orden se eligió mirando el resultado, así que se declara y se confirma con las semillas de las 90 corridas del Sprint 7. ~~**Estado: pendiente de que BF la acepte.**~~
 
-**Estado (2 nov 2026): aceptada por BF, con la confirmación C-6c pendiente.**
+~~**Estado (2 nov 2026): aceptada por BF, con la confirmación C-6c pendiente.**~~
+
+**Estado (5 nov 2026): aceptada por BF; NO confirmada por el C-6c.** Los escenarios se informan como **profundidad del market maker ×4 / ×1 / ×0,25**, sin los nombres «baja», «media» y «alta» (`docs/c6c_confirmacion_v3_BF.md`).
+- Costos de la compra a mercado: ×4 = 25,05 bps, ×1 = 18,36 y ×0,25 = 10,81.
+- ×4 − ×1 = +6,69 bps [−2,59; +13,77]: **no excluye el 0**.
+- ×1 − ×0,25 = +7,56 bps [+3,07; +14,77].
+- Las corridas no cambian, porque dependen del factor.
+- Un análisis posterior (47 de 60 semillas positivas; un día extremo, la semilla 8121) se informa aparte y no cambia el veredicto.
 
 **Por qué hace falta el C-6c.** Los cuadernos de las 90 corridas no corren la compra a mercado, así que la confirmación con «las semillas de las 90 corridas» no ocurre. Se reemplaza por el C-6c: el mismo script del C-6b con la v3 y semillas nuevas.
 
