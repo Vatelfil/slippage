@@ -1,0 +1,168 @@
+{
+ "veredicto": "SE DETIENE",
+ "comparaciones": {
+  "bajo": {
+   "alfa_propia": 0.5,
+   "alfa_del_otro": 0.5,
+   "alfa_del_otro_admisible_aqui": true,
+   "sobrecosto_medio_bps": 0.0,
+   "ic_bajo": 0.0,
+   "ic_alto": 0.0,
+   "cumple": false
+  },
+  "alto": {
+   "alfa_propia": 0.5,
+   "alfa_del_otro": 0.5,
+   "alfa_del_otro_admisible_aqui": true,
+   "sobrecosto_medio_bps": 0.0,
+   "ic_bajo": 0.0,
+   "ic_alto": 0.0,
+   "cumple": false
+  }
+ },
+ "tabla": {
+  "bajo": {
+   "0.1": {
+    "costo_medio_bps": 24.298797909733207,
+    "fraccion_completas": 0.67,
+    "admisible": false,
+    "n": 100
+   },
+   "0.2": {
+    "costo_medio_bps": 25.623455125394923,
+    "fraccion_completas": 0.77,
+    "admisible": false,
+    "n": 100
+   },
+   "0.3": {
+    "costo_medio_bps": 25.816342613670557,
+    "fraccion_completas": 0.96,
+    "admisible": true,
+    "n": 100
+   },
+   "0.4": {
+    "costo_medio_bps": 25.36805533579837,
+    "fraccion_completas": 0.99,
+    "admisible": true,
+    "n": 100
+   },
+   "0.5": {
+    "costo_medio_bps": 24.52513870366847,
+    "fraccion_completas": 1.0,
+    "admisible": true,
+    "n": 100
+   }
+  },
+  "medio": {
+   "0.1": {
+    "costo_medio_bps": 22.494440666322916,
+    "fraccion_completas": 0.64,
+    "admisible": false,
+    "n": 100
+   },
+   "0.2": {
+    "costo_medio_bps": 23.757826280329777,
+    "fraccion_completas": 0.73,
+    "admisible": false,
+    "n": 100
+   },
+   "0.3": {
+    "costo_medio_bps": 24.248990160892795,
+    "fraccion_completas": 0.94,
+    "admisible": false,
+    "n": 100
+   },
+   "0.4": {
+    "costo_medio_bps": 24.24245792883417,
+    "fraccion_completas": 0.98,
+    "admisible": true,
+    "n": 100
+   },
+   "0.5": {
+    "costo_medio_bps": 23.88707003941631,
+    "fraccion_completas": 1.0,
+    "admisible": true,
+    "n": 100
+   }
+  },
+  "alto": {
+   "0.1": {
+    "costo_medio_bps": 20.299213207983705,
+    "fraccion_completas": 0.66,
+    "admisible": false,
+    "n": 100
+   },
+   "0.2": {
+    "costo_medio_bps": 21.44695719964375,
+    "fraccion_completas": 0.75,
+    "admisible": false,
+    "n": 100
+   },
+   "0.3": {
+    "costo_medio_bps": 21.678231734211025,
+    "fraccion_completas": 0.92,
+    "admisible": false,
+    "n": 100
+   },
+   "0.4": {
+    "costo_medio_bps": 21.40483274302078,
+    "fraccion_completas": 0.99,
+    "admisible": true,
+    "n": 100
+   },
+   "0.5": {
+    "costo_medio_bps": 20.885857735539222,
+    "fraccion_completas": 1.0,
+    "admisible": true,
+    "n": 100
+   }
+  }
+ },
+ "n_corridas": 1500,
+ "criterio": {
+  "fecha": "2026-11-11",
+  "alfa_idx": [
+   1,
+   3,
+   5,
+   7,
+   9
+  ],
+  "ventana_idx": 3,
+  "tercios": [
+   "bajo",
+   "medio",
+   "alto"
+  ],
+  "semillas": [
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110
+  ],
+  "impacto": {
+   "y": 0.5,
+   "tau_min": 120.0
+  },
+  "completar_al_cierre": true,
+  "modo_ejecutores": "muestreo",
+  "n_boot": 3000,
+  "semilla_boot": 0,
+  "nivel": 0.95,
+  "cumplimiento_min": 0.95,
+  "fraccion_completas_min": 0.95,
+  "regla": "SIGUE (vale la pena reentrenar) si la mejor α admisible del tercio bajo y la del alto son distintas y, en CADA uno de esos dos tercios, la α óptima del otro es peor que la propia: o no es admisible ahí, o cuesta más (diferencia pareada por orden y semilla con IC 95 % bootstrap cuyo límite inferior es > 0). Si no, SE DETIENE: una sola regla fija sirve para los dos tipos de día. El tercio medio se informa, pero no decide.",
+  "cambio_declarado": "11 nov, antes de la corrida completa y después de una prueba de 30 corridas: la versión inicial comparaba solo el slippage, y con α bajo la orden no se completa (MO-08 al 83 %), así que dejar saldo parecía barato. BF eligió exigir que la regla complete (requisito de cumplimiento del plan de análisis de la 3.2.3) en lugar del costo ajustado de +30 bps."
+ },
+ "mejor_alfa": {
+  "bajo": 0.5,
+  "medio": 0.5,
+  "alto": 0.5
+ }
+}
