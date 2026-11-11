@@ -56,7 +56,7 @@ Son los mismos 10 pedidos con las semillas 4 a 6, es decir, los mismos días que
 
 ## Qué significa para el informe
 
-1. **El problema de diseño quedó corregido.** El Maestro ahora ve volatilidad, profundidad y desbalance medidos en el mercado simulado, y se entrenó con la corrección del cierre. Esto responde la desviación 12.
+1. **El problema de diseño quedó corregido.** El Maestro ahora ve volatilidad, profundidad y desbalance medidos en el mercado simulado, y se entrenó con la corrección del cierre. Esto responde la desviación 13 (en `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md`; la 12 es la de los tamaños de orden de BF).
 2. **No cambia la conclusión.** El sistema es competitivo con TWAP y VWAP (cuesta un poco menos en promedio), pero la diferencia no es estadísticamente significativa en la liquidez media.
 3. **Por qué no mejora más:** el Maestro sigue eligiendo casi siempre la misma combinación. Eso apunta a que el beneficio viene sobre todo de los Ejecutores y del ritmo general, y no de reaccionar al mercado.
    - La prueba de control (`Colab_control_reglas_media_A/B`, pendiente) lo puede confirmar.
