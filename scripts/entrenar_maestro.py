@@ -64,6 +64,10 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
                     help="cada jornada parte en apertura, media jornada o cierre (como las meta-ordenes de evaluacion)")
     ap.add_argument("--ckpt-ejecutor", default=None,
                     help="checkpoint de un Ejecutor entrenado (PPOTrainer) para los tres tramos; sin esto, Ejecutores sin entrenar")
+    ap.add_argument("--completar-al-cierre", action="store_true",
+                    help="la ultima decision del dia asigna todo lo pendiente, tambien al ENTRENAR (Maestro v2)")
+    ap.add_argument("--sm-mercado", action="store_true",
+                    help="volatilidad, vol_promedio y OBI de S_M medidos en el mercado simulado (Maestro v2)")
     ap.add_argument("--out-dir", required=True)
     args = ap.parse_args(argv)
 
@@ -82,7 +86,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
             red.load_state_dict(ck.get("model_state_dict", ck.get("model", ck)))
     mt.guardar_ejecutores(redes, out)            # para evaluar en ABIDES con los mismos Ejecutores
     cfg = mt.ConfigJornada(q_total=args.q_total, ticker=args.ticker, lambda_penalty=args.lambda_penalty, impacto=impacto,
-                           executor_policy_fn=mt.politica_ejecutores(redes), inicio_aleatorio=args.inicio_aleatorio)
+                           executor_policy_fn=mt.politica_ejecutores(redes), inicio_aleatorio=args.inicio_aleatorio,
+                           completar_al_cierre=args.completar_al_cierre, sm_mercado=args.sm_mercado)
     semillas = [args.eval_seed_base + i for i in range(1, args.eval_semillas + 1)]
     resumen_path = out / "resumen_maestro.json"
     resumen = json.loads(resumen_path.read_text(encoding="utf-8")) if resumen_path.exists() else {}
@@ -107,7 +112,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Path:
     resumen["entrenado"] = {"agregado": _agregar(evs), "jornadas": evs, "episodios": tr.current_episode}
     resumen["entrenado_menos_sin_entrenar_R_M_bps"] = diferencia_pareada(evs, resumen["sin_entrenar"]["jornadas"])
     resumen["entrenado_menos_sin_entrenar_slippage_bps"] = diferencia_pareada(evs, resumen["sin_entrenar"]["jornadas"], "slippage_bps")
-    resumen["config"] = {"inicio_aleatorio": args.inicio_aleatorio, "ckpt_ejecutor": args.ckpt_ejecutor, "q_total": args.q_total, "ticker": args.ticker, "impacto": resumen_impacto(impacto),
+    resumen["config"] = {"completar_al_cierre": args.completar_al_cierre, "sm_mercado": args.sm_mercado,
+                         "inicio_aleatorio": args.inicio_aleatorio, "ckpt_ejecutor": args.ckpt_ejecutor, "q_total": args.q_total, "ticker": args.ticker, "impacto": resumen_impacto(impacto),
                          "lambda_penalty": args.lambda_penalty, "seed": args.seed, "lr": args.lr,
                          "eval_semillas": semillas, "segundos_esta_ejecucion": round(time.time() - t0, 1)}
     resumen_path.write_text(json.dumps(resumen, indent=1, ensure_ascii=False), encoding="utf-8")

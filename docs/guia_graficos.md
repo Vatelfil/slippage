@@ -103,6 +103,14 @@
 - **Cómo leerlo:** en el ejemplo (100 frente a 1.000 episodios, opción 0) los cuatro paneles de arriba muestran el aviso "sin monitoreo por episodio" porque esas corridas se hicieron antes de existir el registro; la entropía de la corrida de 1.000 episodios baja claramente.
 - **Script:** `scripts/monitorear_entrenamiento.py`; informe de alertas en `docs/monitoreo_entrenamiento.md`.
 
+### `data/colab_resultados/maestro_v2/analisis/` (Maestro v2, 5 de noviembre)
+- **`bosque_diferencias.png`:**
+  - Qué muestra: un punto con su intervalo por comparación (v2 contra el Maestro anterior, TWAP y VWAP).
+  - Cómo leerlo: si el intervalo cruza el 0, no hay diferencia significativa. Aquí cruzan los tres.
+- **`diferencias_por_escenario.png`:** lo mismo, con una sola liquidez (la media).
+- **`qq_diferencias.png`:** muestra si las diferencias siguen una curva normal. Los puntos cerca de la recta indican que sí, y entonces el t-test es válido.
+- **Informe:** `docs/maestro_v2_resultado_PS.md`.
+
 ## 6. Gráficos del informe de Título II
 
 Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de cifras ya publicadas en los documentos de cada tarea (no calculan nada nuevo).
@@ -187,5 +195,27 @@ Cuatro figuras de formato artículo para informes y presentaciones; la explicaci
 - **Avance con los bloques 1 a 3** (rama `feature/ps-resultados-30oct-d`; `tabla_bloques1a3/cajas.png`): 24 corridas por estrategia. La caja del sistema queda más baja y bastante más angosta que las de TWAP y VWAP: el sistema evita los días muy caros, pero también los muy baratos. La diferencia pareada sigue incluyendo el 0.
 - **Resultado final con las 30 corridas** (rama `feature/ps-resultados-30oct-e`; `data/colab_resultados/corridas_30/tabla_final/cajas.png`): la mediana del sistema es parecida a la de TWAP y VWAP, pero su caja es mucho más corta y su peor día es la mitad de malo. La media más baja viene sobre todo de evitar los días muy caros. Los puntos muy negativos son días en que el precio bajó y todos ganaron. Lectura completa en `docs/corridas_30_resultado_PS.md`.
 - **Resultado oficial, con la corrección del cierre** (rama `feature/ps-3-1-3-resultado-oficial`; `data/colab_resultados/corridas_30_completa/tabla/cajas.png`): casi igual al anterior, porque solo cambian las tres órdenes del cierre. Es el gráfico que va en el informe de la 3.1.3. Lectura en `docs/corridas_30_corregidas_resultado_PS.md`.
+
+### Gráficos de la comparación estadística 3.2.3 (rama `feature/ps-3-2-3-comparacion`; ensayo en `data/analysis/3_2_3_prueba_30/`)
+- **`qq_diferencias.png`**: compara la diferencia sistema − referencia de cada corrida con lo que se esperaría si fuera normal. Si los puntos siguen la recta, el t-test es válido. En el ensayo con las 30 corridas, los puntos siguen la recta salvo las dos puntas (Shapiro p = 0,42). Por eso Wilcoxon queda como test principal, porque no depende de las puntas.
+- **`bosque_diferencias.png`**: un punto por grupo (total, cada liquidez y sin MO-06) con su diferencia media y una barra con el IC 95 %. A la izquierda de la línea roja, el sistema cuesta menos. La barra se pinta verde si no toca el 0 (diferencia clara) y gris si lo toca. Al lado va el d de Cohen. En el ensayo, todas las barras son grises: el promedio está a favor del sistema, pero 30 corridas no alcanzan.
+- **`diferencias_por_escenario.png`**: una caja por liquidez con la diferencia de cada corrida (puntos). Bajo la línea roja, el sistema fue más barato. Sirve para ver si la ventaja cambia con la liquidez, que es lo que prueba el Kruskal-Wallis. En el ensayo hay un solo escenario (media); con las 90 aparecen los tres.
+- **Datos y script:** `scripts/comparacion_estadistica_3_2_3.py`. Plan y lectura en `docs/plan_analisis_3_2_3_PS.md`.
+
+### `control_reglas.png`: qué aporta cada nivel del sistema (rama `feature/ps-3-2-3-control-reglas-v2`; `data/analysis/3_2_3_control/`)
+- **Qué muestra:** tres barras horizontales, cada una con la diferencia media de costo (bps) y su IC 95 %:
+  - regla fija − sistema;
+  - sistema − regla uniforme (el aporte del calendario del Maestro);
+  - regla uniforme − TWAP (el aporte de los Ejecutores).
+  A la izquierda del 0, la primera estrategia cuesta menos.
+- **Cómo leerlo:**
+  - si la barra de «regla fija − sistema» está en 0 y es muy corta, el Maestro se comporta como el calendario fijo;
+  - las otras dos barras suman la diferencia del sistema con TWAP, así que muestran de dónde viene;
+  - una barra que no toca el 0 es una diferencia clara.
+- **Datos y script:** `scripts/control_reglas_3_2_3.py`. La declaración está en `docs/control_reglas_3_2_3_PS.md`.
+
+### `cajas.png` de la liquidez media de las 90 corridas (rama `feature/ps-3-2-3-control-reglas-v2`; `data/colab_resultados/corridas_90/media/tabla/`)
+- **Qué muestra:** el mismo tipo de gráfico que el de la 3.1.3, con las semillas 4 a 6.
+- **Cómo leerlo:** las tres cajas quedan casi a la misma altura. Con días nuevos, la ventaja que se veía en la 3.1.3 casi desaparece (`docs/corridas_90_media_resultado_PS.md`).
 
 🤖 Generado con [Claude Code](https://claude.com/claude-code)

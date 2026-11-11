@@ -113,6 +113,11 @@ def _parametros_impacto(orden: Dict, y: float, tau: float):
     return parametros_para(orden["ticker"], float(orden["volumen_dia_simulado"]), y=y, tau_min=tau)
 
 
+def semillas(n: int, inicial: int = 1) -> List[int]:
+    """Semillas de mercado de las corridas: `inicial`, `inicial + 1`, ... (`n` en total)."""
+    return list(range(int(inicial), int(inicial) + int(n)))
+
+
 def main(argv: Optional[Sequence[str]] = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--meta-ordenes", default=str(REPO_ROOT / "data/meta_ordenes/meta_ordenes_v1.json"))
@@ -121,6 +126,8 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     ap.add_argument("--calibrated-dir", default=str(REPO_ROOT / "data/calibration"))
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--seeds", type=int, default=2)
+    ap.add_argument("--semilla-inicial", type=int, default=1,
+                    help="primera semilla (3.2.1: 4 para usar las semillas 4, 5 y 6, distintas de las de la 3.1.3)")
     ap.add_argument("--ordenes", nargs="*", default=None, help="ids a correr (para repartir entre cuadernos)")
     ap.add_argument("--max-minutes", type=float, default=None)
     ap.add_argument("--impacto", action="store_true",
@@ -154,8 +161,10 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         firma.update({"escenario": args.escenario, "factor_liquidez": factor_liq, "factor_tamano": args.factor_tamano})
     if args.impacto:
         firma["impacto"] = {"y": args.impacto_y, "tau_min": args.impacto_tau}
+    if args.semilla_inicial != 1:
+        firma["semilla_inicial"] = args.semilla_inicial
     estado = load_resumable(out, firma)
-    seeds = list(range(1, args.seeds + 1))
+    seeds = semillas(args.seeds, args.semilla_inicial)
     print(f"{len(pendientes(estado, ordenes, seeds))} corridas pendientes", flush=True)
     perfil = None
     if Path(args.perfil_volumen).exists():

@@ -65,6 +65,13 @@ LAMBDA_PENALTY = 0.05             # Calibrado por escala con politica SIN entren
 LAMBDA_PENALTY_PLACEHOLDER = LAMBDA_PENALTY  # Mantiene compatibilidad hacia atras
 BETA_RISK_PLACEHOLDER = 0.0       # beta: aversion al riesgo temporal (usado por el Ejecutor)
 
+# S_M medido en el mercado simulado (opcion `sm_mercado`, PS con Claude Code, 4 nov 2026).
+# Indices de S_E (SE_schema.json): volumenes bid 8..12, volumenes ask 18..22, OBI_t 24, P_mid 26.
+# P_mid viene normalizado en +/-5 % del precio de entrada (ABIDES y Poisson): 1 unidad = 10 % = 1.000 bps.
+SE_VOLUMENES = list(range(8, 13)) + list(range(18, 23))
+SE_OBI, SE_PMID = 24, 26
+VOL_ESCALA_BPS = 50.0   # volatilidad dentro de la ventana: 50 bps de desviacion de P_mid = 1,0 en S_M
+
 
 class MaestroEjecutorEnv:
     """
@@ -94,7 +101,8 @@ class MaestroEjecutorEnv:
     def __init__(self, meta_orden_quantity: int, datos_historicos: Optional[pd.DataFrame] = None,
                  executor_env_factory: Optional[Callable] = None, executor_env_kwargs: Optional[dict] = None,
                  executor_policy_fn: Optional[Callable] = None, lambda_penalty: Optional[float] = None,
-                 executor_step_callback: Optional[Callable] = None, completar_al_cierre: bool = False):
+                 executor_step_callback: Optional[Callable] = None, completar_al_cierre: bool = False,
+                 sm_mercado: bool = False):
         """
         Args:
             meta_orden_quantity: Q_total, cantidad total de acciones a comprar (ej. 10_000).
@@ -122,6 +130,11 @@ class MaestroEjecutorEnv:
                 Sin esto, con alpha <= 0,5 y una orden que empieza a las 14:00 (4 decisiones), el
                 maximo alcanzable es 1 - 0,5**4 = 93,75 % (correccion de PS, 30 oct 2026; ver
                 docs/correccion_cierre_PS.md). Por defecto False para reproducir los resultados anteriores.
+            sm_mercado: si es True, volatilidad, vol_promedio y OBI_agregado de S_M se MIDEN en el mercado
+                simulado de la ventana anterior (lo que vio el Ejecutor), en vez de leerse de `datos_historicos`
+                (que en el entrenamiento y la evaluacion del Sprint 6 eran constantes) o valer 0; y n_slices se
+                mide sobre las decisiones que tiene ESTA orden (antes partia en 0 sobre 13 aunque la orden
+                empezara a las 14:00). Por defecto False para reproducir los resultados anteriores.
         """
         self.Q_total = meta_orden_quantity
         self.Q_executed = 0.0
@@ -146,6 +159,9 @@ class MaestroEjecutorEnv:
         self.lambda_penalty = lambda_penalty if lambda_penalty is not None else LAMBDA_PENALTY
         self.executor_step_callback = executor_step_callback
         self.completar_al_cierre = completar_al_cierre
+        self.sm_mercado = sm_mercado
+        self._mercado: Optional[tuple] = None    # (volatilidad, profundidad, OBI) de la ultima ventana
+        self._n_decisiones_orden = MAX_DECISIONES_MAESTRO
         self.canal = CanalComunicacionCTDE()
 
         # Se inicializan de verdad en reset(), no en __init__().
@@ -174,6 +190,9 @@ class MaestroEjecutorEnv:
         self.decision_count = 0
         self.executor_reports = []
         self.canal = CanalComunicacionCTDE()
+        self._mercado = None
+        minutos_restantes = 16 * 60 - (self.current_time.hour * 60 + self.current_time.minute)
+        self._n_decisiones_orden = max(1, -(-minutos_restantes // 30))
 
         # 3. P_referencia (arrival price): el Maestro no tiene su propio ABIDES
         # (ver docstring de modulo), asi que se fija con el primer reporte del
@@ -186,7 +205,7 @@ class MaestroEjecutorEnv:
 
         return s_m_initial
 
-    def step(self, action_maestro: tuple[int, int]):
+    def step(self, action_maestro: tuple[int, int], alpha: Optional[float] = None):
         """
         Ejecuta una decision del Maestro (30 minutos de tiempo simulado).
 
@@ -194,12 +213,15 @@ class MaestroEjecutorEnv:
             action_maestro: (alpha_idx, ventana_idx), salida de MultiDiscrete([10, 4])
                 - alpha_idx: indice en ALPHA_VALUES
                 - ventana_idx: indice en VENTANA_MIN_VALUES
+            alpha: opcional, fraccion de lo pendiente que reemplaza a ALPHA_VALUES[alpha_idx]. Solo la usan las
+                reglas de control de la 3.2.3 (por ejemplo, 1/decisiones restantes, que no esta en ALPHA_VALUES);
+                el Maestro entrenado nunca la pasa. Por defecto None: todo queda como antes.
 
         Returns:
             (s_m_next, r_m, done, info) - convencion Gymnasium.
         """
         # 1. Decodificar la accion del Maestro (fase B-C del ciclo, ver arquitectura_entorno_simulacion.md).
-        alpha_t = ALPHA_VALUES[action_maestro[0]]
+        alpha_t = ALPHA_VALUES[action_maestro[0]] if alpha is None else min(max(float(alpha), 0.0), 1.0)
         ventana_min = VENTANA_MIN_VALUES[action_maestro[1]]
 
         # 2. Calcular q_slice (cantidad, no fraccion) para este tramo.
@@ -319,6 +341,7 @@ class MaestroEjecutorEnv:
             **self._executor_env_kwargs,
         )
         s_e, info = env.reset()
+        observados = [np.asarray(s_e, dtype=np.float64)]
 
         # Unidad de cuenta: si el entorno entrega unidades_por_clp (ej. ABIDES en decimos = 10),
         # se convierten los precios a CLP para mantener coherencia con Poisson y la recompensa.
@@ -361,6 +384,7 @@ class MaestroEjecutorEnv:
             if self.executor_step_callback is not None:
                 self.executor_step_callback(tramo, s_e, a_e_idx, log_prob_step, float(reward), value_step, bool(done))
             s_e = s_e_next
+            observados.append(np.asarray(s_e, dtype=np.float64))
 
             if "q_ejecutado_step" in info:
                 q_paso = float(info["q_ejecutado_step"])
@@ -384,6 +408,7 @@ class MaestroEjecutorEnv:
                 razon_termino = "inventario_agotado"
 
         env.close()
+        self._mercado = self.resumen_mercado(observados)
 
         if q_ejecutado_acumulado > 0:
             p_promedio = monto_acumulado / q_ejecutado_acumulado
@@ -429,6 +454,8 @@ class MaestroEjecutorEnv:
         )
         s_m[1] = minutos_transcurridos / JORNADA_DURACION_MIN  # tau_t
         s_m[2] = self.decision_count / MAX_DECISIONES_MAESTRO  # n_slices
+        if self.sm_mercado:  # sobre las decisiones que tiene esta orden
+            s_m[2] = min(self.decision_count / self._n_decisiones_orden, 1.0)
 
         # volatilidad y vol_promedio: pre-calculados por el pipeline de Benjamin (tarea 1.2.2)
         # sobre self.df_yfinance; aqui solo se indexan por self.current_time.
@@ -441,6 +468,8 @@ class MaestroEjecutorEnv:
         # (ej. promedio del OBI_t de cada S_E en su ultimo step) -- es una
         # decision de diseno pendiente, no la tome por mi cuenta.
         s_m[5] = 0.0
+        if self.sm_mercado and self._mercado is not None:   # medido en la ultima ventana del mercado simulado
+            s_m[3], s_m[4], s_m[5] = self._mercado
 
         hour = self.current_time.hour
         if 9 <= hour < 11:
@@ -451,6 +480,19 @@ class MaestroEjecutorEnv:
             s_m[6] = 1.0  # cierre
 
         return s_m
+
+    @staticmethod
+    def resumen_mercado(observados) -> tuple:
+        """(volatilidad, profundidad, OBI) de una ventana, a partir de los S_E que vio el Ejecutor:
+        desviacion de P_mid en bps / VOL_ESCALA_BPS, volumen medio de los 10 niveles del libro (ya en 0..1)
+        y OBI_t medio. Todo recortado al rango de SM_schema.json."""
+        x = np.asarray([o for o in observados if np.asarray(o).shape == (27,)], dtype=np.float64)
+        if len(x) == 0:
+            return (0.0, 0.0, 0.0)
+        vol = float(np.std(x[:, SE_PMID]) * 1000.0 / VOL_ESCALA_BPS) if len(x) > 1 else 0.0
+        prof = float(np.mean(x[:, SE_VOLUMENES]))
+        obi = float(np.mean(x[:, SE_OBI]))
+        return (float(np.clip(vol, 0.0, 1.0)), float(np.clip(prof, 0.0, 1.0)), float(np.clip(obi, -1.0, 1.0)))
 
     def _lookup_yfinance_feature(self, columna: str) -> float:
         """Busca en self.df_yfinance (features S_M ya calculadas por Benjamin,

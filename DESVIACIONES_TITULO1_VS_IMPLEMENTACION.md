@@ -190,3 +190,25 @@ Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si part
 
 ### 12.4 Estado
 **Propuesta de BF.** La decide el equipo en la Sprint Review del 6 de noviembre (la 3.2.4 es de PS). Si se aprueba, se corre en la primera semana del Sprint 7 con `notebooks/Colab_tamanos_media_BF.ipynb`.
+
+---
+
+## 13. S_M del Maestro sin datos de mercado en el sistema del Sprint 6, y Maestro v2 [PS, 4 nov 2026]
+
+### 13.1 Descripción
+- En el entrenamiento y en la evaluación del sistema final, `volatilidad` y `vol_promedio` de S_M entraron con valores fijos (0,002 y 0,2) y `OBI_agregado` valió 0.
+- El Maestro decidió, en la práctica, con lo que falta por comprar, la hora, sus decisiones previas y el tramo.
+- Además se entrenó sin la corrección del cierre (desviación 11), y `n_slices` partía en 0 sobre 13 aunque la orden empezara tarde.
+- Los datos reales de la 1.2.2 existían, pero describen la Bolsa real y no el mercado simulado en que compra el sistema.
+
+### 13.2 Propuesta (Maestro v2)
+- Medir esas tres variables en el mercado simulado, con lo que vio el Ejecutor en la ventana anterior.
+- Entrenar con la corrección del cierre y contar `n_slices` por orden.
+- Opción `sm_mercado` (apagada por defecto). Detalle en `docs/maestro_v2_PS.md`.
+- Cambia la fuente de datos fijada en `SM_schema.json` (yfinance → mercado simulado).
+- **Estado (5 nov 2026):** entrenado y evaluado en ×1 (`docs/maestro_v2_resultado_PS.md`): v2 − TWAP = −4,21 bps [−23,71; 16,11], Wilcoxon p = 0,556; v2 − Maestro anterior = −0,85 bps, p = 0,855. Falta que MR lo acepte. El resultado oficial sigue siendo el del sistema del Sprint 6.
+
+## 14. `tasa_ordenes` del Ejecutor vale 0 en ABIDES [PS, 4 nov 2026]
+
+`src/envs/abides_bridge.py` deja `tasa_ordenes` en 0 porque ABIDES no la entrega directamente (en Poisson sí se calcula). En ABIDES, el Ejecutor ve 26 de sus 27 variables. Arreglarlo obliga a reentrenar el Ejecutor en ABIDES, así que se declara como límite.
+
