@@ -1,0 +1,72 @@
+{
+ "veredicto": "OK",
+ "corridas_leidas": 180,
+ "errores": [],
+ "umbral_cumplimiento": 0.95,
+ "bloques": [
+  {
+   "escenario": "baja",
+   "factor_tamano": 1.0,
+   "corridas_por_estrategia": {
+    "PPO_sistema": 30,
+    "TWAP": 30,
+    "VWAP": 30
+   },
+   "esperadas": 30,
+   "dias_pareados": 30,
+   "duplicados": 0,
+   "cumplimiento_minimo": {
+    "PPO_sistema": 0.9999656357388316,
+    "TWAP": 0.8712925170068028,
+    "VWAP": 0.8712925170068028
+   },
+   "bajo_umbral": [
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "TWAP",
+     "cumplimiento": 0.8713
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "VWAP",
+     "cumplimiento": 0.8713
+    }
+   ],
+   "ok": true
+  },
+  {
+   "escenario": "media",
+   "factor_tamano": 1.0,
+   "corridas_por_estrategia": {
+    "PPO_sistema": 30,
+    "TWAP": 30,
+    "VWAP": 30
+   },
+   "esperadas": 30,
+   "dias_pareados": 30,
+   "duplicados": 0,
+   "cumplimiento_minimo": {
+    "PPO_sistema": 0.9863492063492063,
+    "TWAP": 0.8712925170068028,
+    "VWAP": 0.8712925170068028
+   },
+   "bajo_umbral": [
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "TWAP",
+     "cumplimiento": 0.8713
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "VWAP",
+     "cumplimiento": 0.8713
+    }
+   ],
+   "ok": true
+  }
+ ]
+}
