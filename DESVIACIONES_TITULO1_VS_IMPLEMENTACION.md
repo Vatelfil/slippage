@@ -161,7 +161,7 @@ El Título I define la acción del Maestro como la fracción α ∈ [0,05; 0,50]
 
 ---
 
-## 12. Diseño de las 90 corridas: órdenes × semillas en vez de tamaños × semillas [PROPUESTA de BF, 2 nov 2026]
+## 12. Diseño de las 90 corridas: órdenes × semillas en vez de tamaños × semillas [BF: propuesta el 2 nov, aprobada el 11 nov 2026]
 
 ### 12.1 Descripción
 El Título I (§7.1) define las 90 corridas como **3 liquideces × 3 tamaños de orden × 10 semillas**. Lo que se implementó (`docs/LEEME_COLAB_90_CORRIDAS.md`) es **3 liquideces × 10 meta-órdenes × 3 semillas** (semillas 4, 5 y 6), con `factor_tamano` = 1,0 en todas.
@@ -189,7 +189,13 @@ Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si part
 - **Alternativa mínima:** no correr nada, declarar esta desviación y dejar la 3.2.4 solo por tramo y por liquidez.
 
 ### 12.4 Estado
-**Propuesta de BF.** La decide el equipo en la Sprint Review del 6 de noviembre (la 3.2.4 es de PS). Si se aprueba, se corre en la primera semana del Sprint 7 con `notebooks/Colab_tamanos_media_BF.ipynb`.
+~~**Propuesta de BF.** La decide el equipo en la Sprint Review del 6 de noviembre (la 3.2.4 es de PS). Si se aprueba, se corre en la primera semana del Sprint 7 con `notebooks/Colab_tamanos_media_BF.ipynb`.~~
+
+**Estado (11 nov 2026): aprobada, diseño en estrella.** El equipo dejó la decisión en BF, que eligió la opción recomendada.
+- **Quién corre:** BF corre el factor 0,5 (partes A y B). El 1,5 queda por asignar; se propone MR, que tiene la 3.2.4 en el documento de tareas del Sprint 7 (antes figuraba de PS).
+- **Mismo código que las 90:** el cuaderno usa `feature/ps-3-2-1-cuadernos`, la rama con que se corrieron la ×1 y la ×4, así que las corridas quedan pareadas por orden y semilla con la ×1.
+- **Nombre:** el eje de tamaño se mide con la profundidad del market maker ×1 (antes, «liquidez media»; ver la desviación 10).
+- **Cambio del plan que se declara:** se aprueba después de ver la ×1 y la ×4 de las 90. No usa sus resultados para elegir los factores, que son los propuestos el 2 de noviembre.
 
 ---
 
