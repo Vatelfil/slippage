@@ -1,0 +1,104 @@
+{
+ "comparaciones": [
+  {
+   "n": 30,
+   "dif_media": -2.6646912883423783,
+   "dif_mediana": 0.0,
+   "sd_dif": 23.83430273325206,
+   "ic95": [
+    -12.160168984803171,
+    2.9096414814262177
+   ],
+   "shapiro_p": 5.431071217754102e-11,
+   "normal": false,
+   "wilcoxon_p": 0.5001842570707944,
+   "t_p": 0.5450732765090118,
+   "d_cohen": -0.11180068148688803,
+   "r_rangos": 0.3333333333333333,
+   "gana_sistema": 1,
+   "dif_pct": -5.655826589079326,
+   "clave": "maestro_vs_regla_fija",
+   "a": "Regla_fija",
+   "b": "PPO_sistema",
+   "etiqueta": "Regla fija − sistema",
+   "pregunta": "¿El Maestro hace algo distinto de «α = 0,5 siempre»?",
+   "wilcoxon_p_holm": 1.0
+  },
+  {
+   "n": 30,
+   "dif_media": 12.00291054184688,
+   "dif_mediana": -5.0366340297748415,
+   "sd_dif": 66.51104100440473,
+   "ic95": [
+    -10.590665383706488,
+    34.53899019533518
+   ],
+   "shapiro_p": 0.6529044508934021,
+   "normal": true,
+   "wilcoxon_p": 0.5027610473334789,
+   "t_p": 0.33110962343138883,
+   "d_cohen": 0.18046493274781222,
+   "r_rangos": 0.14408602150537633,
+   "gana_sistema": 16,
+   "dif_pct": 34.18543714837429,
+   "clave": "aporte_calendario",
+   "a": "PPO_sistema",
+   "b": "Regla_uniforme",
+   "etiqueta": "Sistema − regla uniforme",
+   "pregunta": "Aporte del calendario del Maestro (mismos Ejecutores)",
+   "wilcoxon_p_holm": 1.0
+  },
+  {
+   "n": 30,
+   "dif_media": -15.367973633733685,
+   "dif_mediana": -14.183711377065876,
+   "sd_dif": 14.2604909786687,
+   "ic95": [
+    -20.35314613207779,
+    -10.322862702703778
+   ],
+   "shapiro_p": 0.7195157408714294,
+   "normal": true,
+   "wilcoxon_p": 2.348795533180237e-06,
+   "t_p": 2.081428912934504e-06,
+   "d_cohen": -1.0776609063966727,
+   "r_rangos": -0.8838709677419355,
+   "gana_sistema": 26,
+   "dif_pct": -30.44419800111708,
+   "clave": "aporte_ejecutores",
+   "a": "Regla_uniforme",
+   "b": "TWAP",
+   "etiqueta": "Regla uniforme − TWAP",
+   "pregunta": "Aporte de los Ejecutores (mismo calendario que TWAP)",
+   "wilcoxon_p_holm": 7.0463865995407104e-06
+  }
+ ],
+ "igual_al_sistema": {
+  "n": 30,
+  "identicas": 25
+ },
+ "descomposicion": {
+  "n": 30,
+  "sistema_menos_twap": -3.3650630918868023,
+  "calendario": 12.00291054184688,
+  "ejecutores": -15.367973633733685,
+  "cuadra": true
+ },
+ "por_movimiento": {
+  "sube": {
+   "n": 20,
+   "calendario": -24.494545405318625
+  },
+  "baja": {
+   "n": 10,
+   "calendario": 84.9978224361779
+  }
+ },
+ "estrategias": [
+  "PPO_sistema",
+  "Regla_fija",
+  "Regla_uniforme",
+  "TWAP",
+  "VWAP"
+ ]
+}

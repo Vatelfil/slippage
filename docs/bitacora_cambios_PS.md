@@ -511,3 +511,16 @@
   - MO-08, semilla 4, queda con un cumplimiento de 93,6 %.
 - **Cómo verificar:** el comando de la sección «Cómo reproducir» del informe.
 - **Gráficos:** `data/colab_resultados/maestro_v2/analisis/*.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-control-reglas-resultado`, 12 de noviembre: resultado del control de la 3.2.3
+- **Quién:** PS corrió `Colab_control_reglas_media_A/B` en Colab; el análisis lo hizo Claude Code.
+- **Qué:** los datos en `data/colab_resultados/control_reglas/media/` y el informe `docs/control_reglas_3_2_3_resultado_PS.md`.
+- **Por qué:** separar cuánto de la diferencia con TWAP viene del Maestro y cuánto de los Ejecutores.
+- **Resultado (profundidad ×1, n = 30 pares):**
+  - **Ejecutores** (regla uniforme − TWAP): −15,37 bps [−20,35; −10,32], Wilcoxon p (Holm) = 7,0·10⁻⁶, d = −1,08.
+  - **Calendario del Maestro** (sistema − regla uniforme): +12,00 bps [−10,59; 34,54], p (Holm) = 1,0.
+  - **Regla fija contra el sistema:** 25 de 30 corridas idénticas.
+  - Con el costo ajustado (penalización de 30 bps) da lo mismo.
+  - TWAP compra con órdenes a mercado; los Ejecutores, con órdenes límite.
+- **Cómo verificar:** el comando de la sección «Cómo reproducir» del informe.
+- **Gráficos:** `control_reglas.png` (ver `docs/guia_graficos.md`).
