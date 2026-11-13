@@ -39,7 +39,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -151,6 +151,15 @@ def tabla_maestra(df: pd.DataFrame, sistema: str) -> pd.DataFrame:
         piv = g.pivot_table(index=["orden", "seed"], columns="estrategia", values="costo", aggfunc="mean")
         filas.append({"escenario": esc, "factor_tamano": tam, **_fila_comparacion(piv, sistema)})
     return pd.DataFrame(filas)
+
+
+def base_global(df: pd.DataFrame) -> Tuple[pd.DataFrame, str]:
+    """Corridas para los agregados y las cajas globales. Si se leen varios tamaños y está el 1, solo el tamaño 1
+    (criterio 4 de la 3.2.2: el eje de tamaño va aparte); si no, todas, como en los cuadernos."""
+    es_1 = np.isclose(df["factor_tamano"], 1.0)
+    if df["factor_tamano"].nunique() > 1 and es_1.any():
+        return df[es_1], " (solo tamaño 1; los otros tamaños van en tabla_tamanos)"
+    return df, ""
 
 
 def agregados(df: pd.DataFrame) -> pd.DataFrame:
@@ -381,7 +390,8 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict[str, Path]:
     if df.empty:
         sys.exit("No hay corridas válidas en las entradas.")
     df["costo"] = costo(df, args.penalizacion_bps)
-    maestra, agg = tabla_maestra(df, args.sistema), agregados(df)
+    base, nota_base = base_global(df)
+    maestra, agg = tabla_maestra(df, args.sistema), agregados(base)
 
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -395,10 +405,10 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict[str, Path]:
     salidas["md"].write_text(
         f"# Tabla maestra 3.2.2\n\nCosto: {criterio}. Sistema: `{args.sistema}`. Diferencias pareadas por orden y semilla; "
         f"IC 95 % por bootstrap. Corridas leídas: {len(df)} de {len(rutas)} archivos.\n\n## Por escenario y tamaño\n\n"
-        + a_markdown(maestra) + "\n## Por estrategia\n\n" + a_markdown(agg), encoding="utf-8")
+        + a_markdown(maestra) + f"\n## Por estrategia{nota_base}\n\n" + a_markdown(agg), encoding="utf-8")
     salidas["tex"].write_text(a_latex(maestra), encoding="utf-8")
     salidas["png"] = out / "cajas.png"
-    grafico_cajas(df, salidas["png"], criterio)
+    grafico_cajas(base, salidas["png"], criterio + ("; solo tamaño 1" if nota_base else ""))
     salidas.update(informe(df, leer_errores(rutas), args.sistema, out, args.n_esperado, args.umbral_cumplimiento,
                            args.ajustado_bps, len(rutas)))
     print(maestra.to_string(index=False))

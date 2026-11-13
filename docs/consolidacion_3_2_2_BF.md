@@ -3,7 +3,7 @@
 **Responsable:** BF (3.2.2, Sprint 7). El borrador del script es de PS (29 oct); BF lo revisó y lo amplió como dueño.
 **Script:** `scripts/consolidar_resultados_3_2_2.py`. **Salidas:** `data/analysis/3_2_2/`. **Tests:** `tests/test_consolidar_resultados_3_2_2.py`.
 
-**Estado: hecha con dos de las tres profundidades (×4 y ×1).** Falta la ×0,25 (MR). Cuando llegue, la consolidación se vuelve a correr con el comando de la sección 7, sin cambiar nada.
+**Estado: hecha con dos de las tres profundidades (×4 y ×1) y con el tamaño 0,5 (13 nov).** Faltan la ×0,25 (MR) y el tamaño 1,5. Cuando lleguen, la consolidación se vuelve a correr con el comando de la sección 7, sin cambiar nada.
 
 ## 1. Qué pide la tarea y qué hay
 
@@ -12,7 +12,7 @@
 | Revisar y aprobar el borrador de PS | Revisado; ampliado en las secciones 3 a 5 |
 | Correrlo con las 90 | Con 60 de las 90 por estrategia (×4 y ×1). Falta la ×0,25 |
 | Tabla matriz por escenario en CSV y LaTeX: IS del sistema, TWAP y VWAP, diferencia %, ranking | `tabla_90.{csv,md,tex}` (crudo) y `tabla_90_ajustado.*` |
-| Media, mediana, peor y mejor | `agregados_por_escenario.csv` (y `agregados.csv`, global) |
+| Media, mediana, peor y mejor | `agregados_por_escenario.csv` (y `agregados.csv`, global de tamaño 1) |
 | Chequeo de calidad: corridas leídas, sin duplicados, cumplimiento informado | `calidad.{json,md}` |
 | Probado con las 30 del Sprint 6 | Sección 6 |
 
@@ -35,8 +35,9 @@ El script no recalcula nada: usa el `slippage_bps` que guarda cada evaluador, ca
 |---|---|---|---|---|---|
 | ×4 (`baja`) | 30 / 30 / 30 | 30 | 0 | 0 | MO-09 semilla 4: TWAP y VWAP 87,1 % |
 | ×1 (`media`) | 30 / 30 / 30 | 30 | 0 | 0 | MO-09 semilla 4: TWAP y VWAP 87,1 % |
+| ×1, tamaño 0,5 | 30 / 30 / 30 | 30 | 0 | 0 | Ninguna |
 
-El sistema completa siempre (mínimo 98,6 %, en ×1).
+Son 270 corridas. El sistema completa siempre (mínimo 98,6 %, en ×1 con tamaño 1).
 
 ## 5. Resultados
 
@@ -63,7 +64,18 @@ El sistema completa siempre (mínimo 98,6 %, en ×1).
 | ×1 | TWAP | 50,48 | 38,13 | 386,76 | −377,94 | 0,871 |
 | ×1 | VWAP | 51,30 | 38,84 | 386,76 | −377,94 | 0,871 |
 
-### 5.3 Por tramo y por activo (descriptivo; NO está en el plan de análisis)
+### 5.3 Eje de tamaño (`tabla_tamanos.*`, profundidad ×1)
+
+| Tamaño | n | Sistema | TWAP | VWAP | Sistema − TWAP | IC 95 % | Wilcoxon p | Ranking |
+|---|---|---|---|---|---|---|---|---|
+| 0,5 (BF) | 30 | 38,63 | 36,43 | 36,68 | +2,20 | [−20,84; 25,72] | 0,95 | TWAP < VWAP < Sistema |
+| 1 (PS) | 30 | 47,11 | 50,48 | 51,30 | −3,37 | [−26,15; 19,63] | 0,63 | Sistema < TWAP < VWAP |
+
+- **Con el tamaño 0,5, el sistema no le gana a los benchmarks.**
+- **Las tres estrategias cuestan menos con la orden más chica,** pero TWAP y VWAP bajan unos 14 bps y el sistema solo 8,5.
+- Revisión y detalle en `docs/tamanos_media_f05_resultado_BF.md`. Falta el 1,5.
+
+### 5.4 Por tramo y por activo (descriptivo; NO está en el plan de análisis)
 
 | Corte (×4 y ×1 juntas) | n | Sistema − TWAP | IC 95 % | Gana el sistema |
 |---|---|---|---|---|
@@ -103,9 +115,10 @@ python -m pytest tests/test_consolidar_resultados_3_2_2.py -q
 
 ## 8. Límites
 
-- Faltan la ×0,25 (30 corridas por estrategia) y los tamaños 0,5 y 1,5. Hasta entonces, la «global» es de 60 días, no de 90.
+- Faltan la ×0,25 (30 corridas por estrategia) y el tamaño 1,5. Hasta entonces, la «global» es de 60 días, no de 90, y el eje de tamaño tiene 2 puntos.
+- **Cambio del 13 nov:** con varios tamaños en las entradas, `agregados.csv`, «Por estrategia» de `tabla_maestra.md` y `cajas.png` usan solo el tamaño 1 (criterio 4). Antes mezclaban tamaños. Con un solo tamaño, como en los cuadernos, no cambia nada.
 - Las corridas bajo el 95 % son solo de los benchmarks (MO-09 semilla 4). Están en la tabla principal y la fila de robustez muestra que no cambian la conclusión.
-- Los cortes por tramo y activo son descriptivos y están confundidos entre sí (sección 5.3).
+- Los cortes por tramo y activo son descriptivos y están confundidos entre sí (sección 5.4).
 - La bitácora del proyecto (`docs/bitacora_cambios_PS.md`) es de PS. Este cambio se registra aquí y en el HANDOFF.
 
 ---

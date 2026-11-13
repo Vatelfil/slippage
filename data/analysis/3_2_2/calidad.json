@@ -1,6 +1,6 @@
 {
  "veredicto": "OK",
- "corridas_leidas": 180,
+ "corridas_leidas": 270,
  "errores": [],
  "umbral_cumplimiento": 0.95,
  "bloques": [
@@ -34,6 +34,25 @@
      "cumplimiento": 0.8713
     }
    ],
+   "ok": true
+  },
+  {
+   "escenario": "media",
+   "factor_tamano": 0.5,
+   "corridas_por_estrategia": {
+    "PPO_sistema": 30,
+    "TWAP": 30,
+    "VWAP": 30
+   },
+   "esperadas": 30,
+   "dias_pareados": 30,
+   "duplicados": 0,
+   "cumplimiento_minimo": {
+    "PPO_sistema": 0.9999312714776633,
+    "TWAP": 0.992517006802721,
+    "VWAP": 0.992517006802721
+   },
+   "bajo_umbral": [],
    "ok": true
   },
   {

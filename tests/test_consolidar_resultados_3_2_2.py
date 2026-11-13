@@ -108,6 +108,21 @@ def test_los_tamanos_van_aparte_y_no_entran_a_la_global(tmp_path):
     assert list(tt["escenario"]) == ["media"] * 3 and list(tt["factor_tamano"]) == [0.5, 1.0, 1.5]
 
 
+def test_agregados_y_cajas_globales_solo_con_tamano_1_si_hay_varios(tmp_path):
+    """Criterio 4: con varios tamaños, los agregados globales no mezclan el 0,5 con el 1. Un solo tamaño (cuadernos
+    de tamaños): se usan todas las corridas."""
+    m1, m05 = _json(tmp_path / "m1.json", "media", 1.0), _json(tmp_path / "m05.json", "media", 1.0, tam=0.5)
+    base, nota = cons.base_global(_df([m1, m05]))
+    assert set(base["factor_tamano"]) == {1.0} and len(base) == 12 and "solo tamaño 1" in nota
+    solo05, nota05 = cons.base_global(_df([m05]))
+    assert len(solo05) == 12 and nota05 == ""
+    out = tmp_path / "o"
+    cons.main(["--entradas", str(m1), str(m05), "--sistema", "PPO_sistema", "--n-esperado", "4", "--out-dir", str(out)])
+    agg = pd.read_csv(out / "agregados.csv", encoding="utf-8")
+    assert list(agg["n"]) == [4, 4, 4]
+    assert "## Por estrategia (solo tamaño 1" in (out / "tabla_maestra.md").read_text(encoding="utf-8")
+
+
 def test_por_tramo_cuenta_cuantas_gana_el_sistema(tmp_path):
     def costo(e, o, s):
         if e == "PPO_sistema":
@@ -143,3 +158,23 @@ def test_la_consolidacion_publicada_se_reproduce_desde_los_json():
     assert t.loc["baja", "dif_vs_TWAP_bps"] == pytest.approx(-10.53, abs=0.01)
     assert t.loc["media", "dif_vs_TWAP_bps"] == pytest.approx(-3.37, abs=0.01)
     assert json.loads((SALIDA / "calidad.json").read_text(encoding="utf-8"))["veredicto"] == "OK"
+
+
+def test_el_eje_de_tamano_publicado_se_reproduce_desde_los_json():
+    """Tamaño 0,5 (BF, desviación 12) con profundidad ×1: mismas órdenes y semillas que la ×1 de PS, cantidades a la mitad."""
+    rutas = sorted(p for base in (C90 / "media", ROOT / "data/colab_resultados/tamanos/media_f0.5") for parte in ("A", "B")
+                   for p in (base / parte).glob("*.json"))
+    df = _df(rutas)
+    q = {}
+    for r in rutas:
+        d = json.loads(r.read_text(encoding="utf-8"))
+        for c in d["corridas"].values():
+            q[(c["orden"], c["estrategia"], c["seed"], d["firma"]["factor_tamano"])] = c["Q_total"]
+    pares = {k[:3] for k in q}
+    assert len(pares) == 90 and all(abs(q[k + (0.5,)] / q[k + (1.0,)] - 0.5) < 1e-3 for k in pares)
+    t = cons.tabla_tamanos(df, "PPO_sistema").set_index("factor_tamano")
+    publicada = pd.read_csv(SALIDA / "tabla_tamanos.csv", encoding="utf-8").set_index("factor_tamano")
+    for col in ("n_pares", "dif_vs_TWAP_bps", "dif_vs_VWAP_bps", "IS_PPO_sistema"):
+        assert np.allclose(t[col].astype(float), publicada.loc[t.index, col].astype(float))
+    assert t.loc[0.5, "n_pares"] == 30 and t.loc[0.5, "dif_vs_TWAP_bps"] == pytest.approx(2.20, abs=0.01)
+    assert df.loc[df["factor_tamano"] == 0.5, "cumplimiento"].min() >= 0.95
