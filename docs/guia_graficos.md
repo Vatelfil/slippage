@@ -111,6 +111,16 @@
 - **`qq_diferencias.png`:** muestra si las diferencias siguen una curva normal. Los puntos cerca de la recta indican que sí, y entonces el t-test es válido.
 - **Informe:** `docs/maestro_v2_resultado_PS.md`.
 
+### `data/colab_resultados/control_reglas/media/analisis/control_reglas.png` (control de la 3.2.3, 12 de noviembre)
+- **Qué muestra:** tres barras. Cada una es la diferencia media de costo de una comparación, con su IC 95 %:
+  - regla fija − sistema;
+  - sistema − regla uniforme (aporte del calendario del Maestro);
+  - regla uniforme − TWAP (aporte de los Ejecutores).
+- **Cómo leerlo:**
+  - Si la línea negra cruza el 0, la diferencia no es significativa.
+  - Solo la de los Ejecutores queda entera bajo el 0: −15,4 bps, Wilcoxon p (Holm) = 7·10⁻⁶.
+- **Informe:** `docs/control_reglas_3_2_3_resultado_PS.md`.
+
 ## 6. Gráficos del informe de Título II
 
 Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de cifras ya publicadas en los documentos de cada tarea (no calculan nada nuevo).
