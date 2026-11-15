@@ -14,9 +14,9 @@
 
 | Cap. (Título I) | Título | Tarea en el Excel | Responsable | Archivo | Estado al 15 nov |
 |---|---|---|---|---|---|
-| 1 | Introducción | — | **Sin asignar** | — | ⚠️ Por definir (ver sección 3) |
-| 2 | Marco teórico y estado del arte | — | **Sin asignar** | — | ⚠️ Por definir. Se puede partir de la sección 4.1 del Título I |
-| 3 | Definición del problema y análisis del entorno | — | **Sin asignar** | — | ⚠️ Por definir. Se puede partir de las secciones 4.1 y 4.3 del Título I y de la 1.2.2 (datos) |
+| 1 | Introducción | — (sale del Título I) | **Equipo (PS, MR y BF)** | Adaptado del Título I: resumen, objetivos y alcances | ⏳ Adaptar en el Sprint 9 |
+| 2 | Marco teórico y estado del arte | — (sale del Título I) | **Equipo (PS, MR y BF)** | Adaptado del Título I: secciones 4.1 y 4.2.3 | ⏳ Adaptar en el Sprint 9 |
+| 3 | Definición del problema y análisis del entorno | — (sale del Título I) | **Equipo (PS, MR y BF)** | Adaptado del Título I: secciones 4.1.3 y 4.3, y tarea 1.2.2 (datos) | ⏳ Adaptar en el Sprint 9 |
 | 4 | Diseño de la solución | 4.1.1 «Cap. 5 Metodología» (MDP, espacios, recompensas, PPO, CTDE) | MR | (lo define MR) | ⏳ Sprint 8 |
 | 5 | Implementación del sistema | 4.1.1 «Cap. 5 Metodología» (simulador calibrado, pseudocódigo) | MR | (lo define MR) | ⏳ Sprint 8 |
 | 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | BF | (lo define BF) | ⏳ Sprint 8 |
@@ -49,9 +49,10 @@
 
 ## 3. Puntos que el grupo tiene que decidir antes de ensamblar
 
-1. **Capítulos 1, 2 y 3 sin responsable.**
-   - El Excel no los asigna a nadie: solo asigna el 5 (MR), el 6 (BF), el 7 (PS) y las Conclusiones (PS).
-   - Hay que repartirlos o acordar armarlos desde el Título I, que ya tiene ese contenido en las secciones 4.1, 4.2, 4.3 y 5.
+1. **Capítulos 1, 2 y 3: trabajo conjunto de los tres.**
+   - El Título I, escrito en conjunto, ya tiene ese contenido.
+   - En el Sprint 9 solo se adapta: pasar el texto a pasado y actualizar los datos (por ejemplo, los nombres de los escenarios).
+   - Falta acordar cómo se reparte esa adaptación.
 2. **Numeración:** usar la del Título I (9 capítulos, como aquí) o la del Excel.
 3. **Formato final:** quién pasa los Markdown al Word y con qué plantilla.
 4. **Nombres de los escenarios:** en todo el informe se usa «profundidad del market maker ×4 / ×1 / ×0,25» (C-6c, desviación 10).

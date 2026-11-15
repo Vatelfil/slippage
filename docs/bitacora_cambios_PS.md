@@ -567,5 +567,5 @@
 - **Por qué:** adelantar la parte de PS del Sprint 9 con los resultados finales.
 - **Pendiente:**
   - H6 y la sección 8.6.3 esperan el factor 1,5 y la 3.2.4 (MR);
-  - los capítulos 1 a 3 no tienen responsable en el Excel (lo decide el grupo).
+  - los capítulos 1 a 3 quedan como trabajo conjunto del equipo, adaptado del Título I.
 - **Gráficos:** ver `docs/guia_graficos.md`.
