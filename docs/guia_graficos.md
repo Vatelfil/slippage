@@ -131,6 +131,17 @@
 - **`qq_diferencias.png`:** si los puntos siguen la recta, las diferencias son aproximadamente normales (Shapiro p = 0,29 contra TWAP).
 - **Informe:** `docs/comparacion_estadistica_3_2_3_PS.md`.
 
+### `data/analysis/cap7/` (Capítulo 7, 15 de noviembre)
+- **`diferencia_por_tramo.png`:**
+  - Qué muestra: una caja por tramo de inicio de la orden (apertura, media jornada, cierre) con las diferencias sistema − TWAP de las 90 corridas; cada punto es una corrida.
+  - Cómo leerlo: bajo la raya roja, el sistema fue más barato. Solo el cierre queda claramente bajo el 0 (Wilcoxon p Holm = 0,009; Kruskal-Wallis entre tramos p = 0,011).
+  - Es exploratorio, y en el cierre se confunde con los días en que el precio sube.
+- **`costo_vs_tamano_parcial.png`:**
+  - Qué muestra: el costo medio de cada estrategia con los factores de tamaño 0,5 y 1, en profundidad ×1.
+  - Cómo leerlo: una línea más empinada significa que el costo sube más con el tamaño. El sistema sube +8,5 bps y TWAP +14,0, pero el cambio de la ventaja no es significativo (p = 0,080).
+  - Es parcial: falta el factor 1,5 (MR).
+- **Script:** `scripts/figuras_capitulo7_PS.py`. **Capítulo:** `docs/capitulo7_analisis_PS.md`.
+
 ## 6. Gráficos del informe de Título II
 
 Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de cifras ya publicadas en los documentos de cada tarea (no calculan nada nuevo).

@@ -539,3 +539,20 @@
   - exploratorio: el sistema es más estable (razón de desviaciones 0,77, Pitman-Morgan p = 4,8·10⁻⁹).
 - **Cómo verificar:** la sección 6 del informe; `python -m pytest tests --ignore=tests/test_benchmarks.py` da 509 pruebas aprobadas.
 - **Gráficos:** `data/analysis/3_2_3/*.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-capitulo7-analisis`, 15 de noviembre: Capítulo 7 «Análisis» (4.1.3)
+- **Quién:** PS, con apoyo de Claude Code.
+- **Qué:**
+  - el capítulo `docs/capitulo7_analisis_PS.md` (≈ 4.750 palabras);
+  - el script `scripts/figuras_capitulo7_PS.py` con su prueba, que calcula las cifras exploratorias (dirección del día, tramo y tamaño 0,5 contra 1);
+  - las salidas en `data/analysis/cap7/`.
+- **Por qué:** tarea 4.1.3 del Sprint 8, adelantada porque los datos de las 90 corridas, el control y el Maestro v2 ya están.
+- **Resultado:** el capítulo integra:
+  - la significancia (−3,34 bps, p = 0,386);
+  - la estabilidad (Pitman-Morgan p = 4,8·10⁻⁹);
+  - el control (Ejecutores −15,4 bps, p Holm = 7·10⁻⁶) y el Maestro v2;
+  - la sensibilidad por tramo (exploratoria: cierre −34,8 bps, p Holm = 0,009) y por tamaño (parcial);
+  - las limitaciones L1–L11;
+  - los costos de cada alternativa, como pidió la profesora.
+- **Pendiente:** la sección 7.6.3 espera el factor 1,5 y la 3.2.4 (MR).
+- **Gráficos:** `data/analysis/cap7/*.png` (ver `docs/guia_graficos.md`).
