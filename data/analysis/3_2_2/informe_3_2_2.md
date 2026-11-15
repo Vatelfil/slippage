@@ -1,10 +1,10 @@
 # Consolidación 3.2.2
 
-Sistema: `PPO_sistema`. Diferencias pareadas por día (escenario, orden y semilla); IC 95 % por bootstrap (3.000 remuestreos, semilla 0); diferencia % = 100 × media(sistema − referencia) / |media(referencia)|. Corridas leídas: 360 de 16 archivos.
+Sistema: `PPO_sistema`. Diferencias pareadas por día (escenario, orden y semilla); IC 95 % por bootstrap (3.000 remuestreos, semilla 0); diferencia % = 100 × media(sistema − referencia) / |media(referencia)|. Corridas leídas: 450 de 20 archivos.
 
 ## Chequeo de calidad
 
-**Veredicto: OK.** Corridas leídas: 360. Errores: 0.
+**Veredicto: OK.** Corridas leídas: 450. Errores: 0.
 
 | escenario | factor_tamano | corridas por estrategia | esperadas | días pareados | duplicados | bajo 95% | ok |
 |---|---|---|---|---|---|---|---|
@@ -12,6 +12,7 @@ Sistema: `PPO_sistema`. Diferencias pareadas por día (escenario, orden y semill
 | baja | 1 | PPO_sistema 30, TWAP 30, VWAP 30 | 30 | 30 | 0 | MO-09 s4 TWAP 0.871; MO-09 s4 VWAP 0.871 | sí |
 | media | 0.5 | PPO_sistema 30, TWAP 30, VWAP 30 | 30 | 30 | 0 | ninguna | sí |
 | media | 1 | PPO_sistema 30, TWAP 30, VWAP 30 | 30 | 30 | 0 | MO-09 s4 TWAP 0.871; MO-09 s4 VWAP 0.871 | sí |
+| media | 1.5 | PPO_sistema 30, TWAP 30, VWAP 30 | 30 | 30 | 0 | MO-06 s6 VWAP 0.945; MO-08 s4 PPO_sistema 0.829; MO-08 s6 PPO_sistema 0.939; MO-09 s4 PPO_sistema 0.784; MO-09 s4 TWAP 0.831; MO-09 s4 VWAP 0.831; MO-09 s5 PPO_sistema 0.933 | sí |
 
 ## Tamaño 1 por profundidad del market maker (slippage crudo contra el precio de llegada)
 
@@ -29,6 +30,7 @@ Sistema: `PPO_sistema`. Diferencias pareadas por día (escenario, orden y semill
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | media | ×1 | 0.50 | 30 | 38.63 | 36.43 | 36.68 | 107.99 | 2.20 | [-20.84; 25.72] | 0.95 | 0.86 | 6.04 | 1.95 | [-23.95; 28.71] | 0.95 | 0.89 | 5.32 | TWAP < VWAP < PPO_sistema |
 | media | ×1 | 1.00 | 30 | 47.11 | 50.48 | 51.30 | 114.81 | -3.37 | [-26.15; 19.63] | 0.63 | 0.79 | -6.67 | -4.19 | [-30.31; 22.11] | 0.61 | 0.77 | -8.16 | PPO_sistema < TWAP < VWAP |
+| media | ×1 | 1.50 | 30 | 51.75 | 59.63 | 60.75 | 127.75 | -7.88 | [-25.03; 9.47] | 0.37 | 0.41 | -13.22 | -8.99 | [-29.82; 11.44] | 0.35 | 0.42 | -14.81 | PPO_sistema < TWAP < VWAP |
 
 ## Tamaño 1 por profundidad del market maker (costo ajustado: slippage × cumplimiento + 30 × (1 − cumplimiento))
 
@@ -46,6 +48,7 @@ Sistema: `PPO_sistema`. Diferencias pareadas por día (escenario, orden y semill
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | media | ×1 | 0.50 | 30 | 38.63 | 36.43 | 36.68 | 107.99 | 2.20 | [-20.84; 25.71] | 0.95 | 0.86 | 6.04 | 1.96 | [-23.93; 28.70] | 0.95 | 0.89 | 5.33 | TWAP < VWAP < PPO_sistema |
 | media | ×1 | 1.00 | 30 | 47.18 | 50.48 | 51.04 | 114.71 | -3.30 | [-26.08; 19.69] | 0.63 | 0.79 | -6.53 | -3.86 | [-29.96; 22.18] | 0.61 | 0.78 | -7.56 | PPO_sistema < TWAP < VWAP |
+| media | ×1 | 1.50 | 30 | 52.60 | 59.27 | 60.03 | 125.29 | -6.66 | [-23.78; 10.99] | 0.38 | 0.48 | -11.24 | -7.42 | [-27.93; 12.88] | 0.36 | 0.50 | -12.36 | PPO_sistema < TWAP < VWAP |
 
 ## Por tramo de inicio (slippage crudo, tamaño 1)
 
@@ -97,3 +100,6 @@ Sistema: `PPO_sistema`. Diferencias pareadas por día (escenario, orden y semill
 | media | 1.00 | PPO_sistema | 30 | 47.11 | 38.04 | 285.58 | -311.76 | 1.00 | 0.99 |
 | media | 1.00 | TWAP | 30 | 50.48 | 38.13 | 386.76 | -377.94 | 1.00 | 0.87 |
 | media | 1.00 | VWAP | 30 | 51.30 | 38.84 | 386.76 | -377.94 | 0.99 | 0.87 |
+| media | 1.50 | PPO_sistema | 30 | 51.75 | 52.51 | 349.41 | -310.81 | 0.98 | 0.78 |
+| media | 1.50 | TWAP | 30 | 59.63 | 42.98 | 403.03 | -359.38 | 0.99 | 0.83 |
+| media | 1.50 | VWAP | 30 | 60.75 | 43.52 | 403.03 | -359.38 | 0.99 | 0.83 |

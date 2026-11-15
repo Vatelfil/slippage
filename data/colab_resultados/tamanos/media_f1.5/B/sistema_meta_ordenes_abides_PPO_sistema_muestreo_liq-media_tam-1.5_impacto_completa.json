@@ -1,0 +1,853 @@
+{
+ "firma": {
+  "tarea": "3.2.3-evaluador",
+  "entorno": "abides",
+  "snapshot": "2026-08-23",
+  "sistema": "PPO_sistema",
+  "modo": "muestreo",
+  "ckpt_maestro": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/checkpoint_last.pt",
+  "ckpt_ejecutores": {
+   "apertura": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/ejecutor_apertura.pt",
+   "media_jornada": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/ejecutor_media_jornada.pt",
+   "cierre": "/content/drive/MyDrive/slippage_colab/resultados/sistema_final/maestro/ejecutor_cierre.pt"
+  },
+  "seed_red": 1000,
+  "ordenes": [
+   "MO-06",
+   "MO-07",
+   "MO-08",
+   "MO-09",
+   "MO-10"
+  ],
+  "cantidades": {
+   "MO-06": 48150,
+   "MO-07": 48150,
+   "MO-08": 66150,
+   "MO-09": 66150,
+   "MO-10": 66150
+  },
+  "datos_sm": null,
+  "escenario": "media",
+  "factor_liquidez": 1.0,
+  "factor_tamano": 1.5,
+  "completar_al_cierre": true,
+  "impacto": {
+   "y": 0.5,
+   "tau_min": 120.0
+  },
+  "semilla_inicial": 4
+ },
+ "resultados": {},
+ "corridas": {
+  "MO-06|PPO_sistema|4": {
+   "orden": "MO-06",
+   "estrategia": "PPO_sistema",
+   "seed": 4,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 48150,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 17850.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 10998.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 3860.4
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 6176.639999999999
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 3705.984
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 2223.590400000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1334.1542400000008
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 800.4925439999993
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 240.14776319999947
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 960.5910527999949
+    }
+   ],
+   "R_M": -2095658.5592496232,
+   "Q_total": 48150.0,
+   "Q_executed": 48150.0,
+   "execution_rate": 1.0,
+   "P_referencia": 1769.7,
+   "P_promedio_ejecutado": 1813.2245039054478,
+   "IS_total": 2095704.8630473102,
+   "slippage_bps": 245.94283723482948,
+   "segundos": 186.5,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-07|PPO_sistema|4": {
+   "orden": "MO-07",
+   "estrategia": "PPO_sistema",
+   "seed": 4,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 48150,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 16515.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 6327.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 9239.2
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 6427.52
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 1928.2559999999999
+    },
+    {
+     "alpha_idx": 6,
+     "ventana_idx": 0,
+     "q_ejecutado": 512.558399999999
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 2880.1862399999986
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 864.0558720000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1382.4893952000014
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 2073.734092800005
+    }
+   ],
+   "R_M": 671395.3102783177,
+   "Q_total": 48150.0,
+   "Q_executed": 48150.0,
+   "execution_rate": 1.0,
+   "P_referencia": 1845.55,
+   "P_promedio_ejecutado": 1831.6072962552055,
+   "IS_total": -671341.1853118538,
+   "slippage_bps": -75.54768900758295,
+   "segundos": 164.9,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-08|PPO_sistema|4": {
+   "orden": "MO-08",
+   "estrategia": "PPO_sistema",
+   "seed": 4,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 22641.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 15484.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 11210.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 5506.0
+    }
+   ],
+   "R_M": -3461679.255328758,
+   "Q_total": 66150.0,
+   "Q_executed": 54841.0,
+   "execution_rate": 0.8290400604686319,
+   "P_referencia": 5942.55,
+   "P_promedio_ejecutado": 5944.131617895532,
+   "IS_total": 104624.02378943935,
+   "slippage_bps": 2.6615138207199984,
+   "segundos": 272.3,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-09|PPO_sistema|4": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sistema",
+   "seed": 4,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 12859.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 19886.4
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 12768.84
+    },
+    {
+     "alpha_idx": 8,
+     "ventana_idx": 1,
+     "q_ejecutado": 6348.759999999995
+    }
+   ],
+   "R_M": -5076343.856351391,
+   "Q_total": 66150.0,
+   "Q_executed": 51863.0,
+   "execution_rate": 0.7840211640211641,
+   "P_referencia": 5981.05,
+   "P_promedio_ejecutado": 5994.326889320319,
+   "IS_total": 878266.2285391178,
+   "slippage_bps": 22.198258366539726,
+   "segundos": 177.6,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-10|PPO_sistema|4": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sistema",
+   "seed": 4,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 23788.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 15226.8
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 9545.08
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 14480.119999999995
+    }
+   ],
+   "R_M": -4014190.168860963,
+   "Q_total": 66150.0,
+   "Q_executed": 63040.0,
+   "execution_rate": 0.9529856386999244,
+   "P_referencia": 5915.95,
+   "P_promedio_ejecutado": 5965.091473759706,
+   "IS_total": 3250708.4892045557,
+   "slippage_bps": 83.0660735126329,
+   "segundos": 239.2,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-06|PPO_sistema|5": {
+   "orden": "MO-06",
+   "estrategia": "PPO_sistema",
+   "seed": 5,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 48150,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 15336.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 11792.6
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 6953.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 2813.6800000000003
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 2250.9440000000004
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 3601.510399999999
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 1080.45312
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1729.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1037.1249920000002
+    },
+    {
+     "alpha_idx": 6,
+     "ventana_idx": 1,
+     "q_ejecutado": 1440.6874880000032
+    }
+   ],
+   "R_M": -567935.0612693857,
+   "Q_total": 48150.0,
+   "Q_executed": 48036.0,
+   "execution_rate": 0.9976323987538941,
+   "P_referencia": 1800.55,
+   "P_promedio_ejecutado": 1812.1549148717174,
+   "IS_total": 558776.6510731968,
+   "slippage_bps": 64.45205560366269,
+   "segundos": 164.9,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-07|PPO_sistema|5": {
+   "orden": "MO-07",
+   "estrategia": "PPO_sistema",
+   "seed": 5,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 48150,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 14713.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 6379.800000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 9786.88
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 6908.128000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 4144.876799999998
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 1243.4630399999996
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1990.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1193.540863999998
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 716.1245183999999
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 1074.1867776
+    }
+   ],
+   "R_M": -2275472.2557856888,
+   "Q_total": 48150.0,
+   "Q_executed": 48150.0,
+   "execution_rate": 1.0,
+   "P_referencia": 1773.35,
+   "P_promedio_ejecutado": 1820.609253477705,
+   "IS_total": 2275533.054951495,
+   "slippage_bps": 266.49704501483063,
+   "segundos": 176.3,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-08|PPO_sistema|5": {
+   "orden": "MO-08",
+   "estrategia": "PPO_sistema",
+   "seed": 5,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 23394.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 8178.4000000000015
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 12784.04
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 19855.559999999998
+    }
+   ],
+   "R_M": 6088320.203408992,
+   "Q_total": 66150.0,
+   "Q_executed": 64212.0,
+   "execution_rate": 0.970702947845805,
+   "P_referencia": 6053.65,
+   "P_promedio_ejecutado": 5950.119588855266,
+   "IS_total": -6848536.697224153,
+   "slippage_bps": -171.02146827902834,
+   "segundos": 210.2,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-09|PPO_sistema|5": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sistema",
+   "seed": 5,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 26460.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 7938.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 6350.400000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 20957.6
+    }
+   ],
+   "R_M": -3805291.538586716,
+   "Q_total": 66150.0,
+   "Q_executed": 61706.0,
+   "execution_rate": 0.9328193499622071,
+   "P_referencia": 6004.5,
+   "P_promedio_ejecutado": 6044.0310973638625,
+   "IS_total": 2614982.0906195045,
+   "slippage_bps": 65.83578543402865,
+   "segundos": 235.7,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-10|PPO_sistema|5": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sistema",
+   "seed": 5,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 26460.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 14334.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 9234.400000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 12848.599999999999
+    }
+   ],
+   "R_M": -3636691.5069839447,
+   "Q_total": 66150.0,
+   "Q_executed": 62877.0,
+   "execution_rate": 0.9505215419501134,
+   "P_referencia": 5891.65,
+   "P_promedio_ejecutado": 5933.792185248784,
+   "IS_total": 2787705.554207108,
+   "slippage_bps": 71.52866386968796,
+   "segundos": 237.2,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-06|PPO_sistema|6": {
+   "orden": "MO-06",
+   "estrategia": "PPO_sistema",
+   "seed": 6,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 48150,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 9158.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 7944.800000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 11311.88
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 7894.128000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 4736.476799999999
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 2841.8860799999998
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1705.131648000001
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 511.53949439999997
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 818.46319104
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1227.6947865600014
+    }
+   ],
+   "R_M": -1950954.8141473047,
+   "Q_total": 48150.0,
+   "Q_executed": 48150.0,
+   "execution_rate": 1.0,
+   "P_referencia": 1771.85,
+   "P_promedio_ejecutado": 1812.3671135985664,
+   "IS_total": 1950899.019770979,
+   "slippage_bps": 228.67123965666698,
+   "segundos": 158.7,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-07|PPO_sistema|6": {
+   "orden": "MO-07",
+   "estrategia": "PPO_sistema",
+   "seed": 6,
+   "ticker": "ECL",
+   "tramo_inicio": "media_jornada",
+   "cantidad": 48150,
+   "n_decisiones": 10,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 18010.0
+    },
+    {
+     "alpha_idx": 1,
+     "ventana_idx": 0,
+     "q_ejecutado": 170.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 5952.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 8561.2
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 6182.72
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 3709.632000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 2225.7792000000018
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 668.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1068.2675199999999
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 1602.4012799999982
+    }
+   ],
+   "R_M": 782715.8037066016,
+   "Q_total": 48150.0,
+   "Q_executed": 48150.0,
+   "execution_rate": 1.0,
+   "P_referencia": 1811.25,
+   "P_promedio_ejecutado": 1794.9937498528932,
+   "IS_total": -782738.4445831929,
+   "slippage_bps": -89.75155360721496,
+   "segundos": 195.6,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-08|PPO_sistema|6": {
+   "orden": "MO-08",
+   "estrategia": "PPO_sistema",
+   "seed": 6,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 22922.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 16188.2
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 5407.960000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 17599.840000000004
+    }
+   ],
+   "R_M": 10682066.005240036,
+   "Q_total": 66150.0,
+   "Q_executed": 62118.0,
+   "execution_rate": 0.939047619047619,
+   "P_referencia": 6150.0,
+   "P_promedio_ejecutado": 5958.849017205444,
+   "IS_total": -12644637.511859853,
+   "slippage_bps": -310.8146061700091,
+   "segundos": 277.1,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-09|PPO_sistema|6": {
+   "orden": "MO-09",
+   "estrategia": "PPO_sistema",
+   "seed": 6,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 20511.0
+    },
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 8540.800000000001
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 14135.279999999999
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 22962.92
+    }
+   ],
+   "R_M": -13260472.269930849,
+   "Q_total": 66150.0,
+   "Q_executed": 66150.0,
+   "execution_rate": 1.0,
+   "P_referencia": 5737.05,
+   "P_promedio_ejecutado": 5937.510858941241,
+   "IS_total": 13260485.818963092,
+   "slippage_bps": 349.4145230410071,
+   "segundos": 255.5,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  },
+  "MO-10|PPO_sistema|6": {
+   "orden": "MO-10",
+   "estrategia": "PPO_sistema",
+   "seed": 6,
+   "ticker": "FALABELLA",
+   "tramo_inicio": "cierre",
+   "cantidad": 66150,
+   "n_decisiones": 4,
+   "decisiones": [
+    {
+     "alpha_idx": 3,
+     "ventana_idx": 3,
+     "q_ejecutado": 11971.0
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 18578.600000000002
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 14240.159999999998
+    },
+    {
+     "alpha_idx": 7,
+     "ventana_idx": 3,
+     "q_ejecutado": 20396.239999999998
+    }
+   ],
+   "R_M": -2397384.7057701154,
+   "Q_total": 66150.0,
+   "Q_executed": 65186.0,
+   "execution_rate": 0.985427059712774,
+   "P_referencia": 5903.35,
+   "P_promedio_ejecutado": 5935.725757692921,
+   "IS_total": 2141656.3713867287,
+   "slippage_bps": 54.84302589702638,
+   "segundos": 195.4,
+   "escenario": "media",
+   "factor_tamano": 1.5
+  }
+ }
+}
