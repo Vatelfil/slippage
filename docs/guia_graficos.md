@@ -140,7 +140,16 @@
   - Qué muestra: el costo medio de cada estrategia con los factores de tamaño 0,5 y 1, en profundidad ×1.
   - Cómo leerlo: una línea más empinada significa que el costo sube más con el tamaño. El sistema sube +8,5 bps y TWAP +14,0, pero el cambio de la ventaja no es significativo (p = 0,080).
   - Es parcial: falta el factor 1,5 (MR).
-- **Script:** `scripts/figuras_capitulo7_PS.py`. **Capítulo:** `docs/capitulo7_analisis_PS.md`.
+- **Script:** `scripts/figuras_capitulo7_PS.py`. **Capítulo:** `docs/capitulo8_analisis_PS.md`.
+
+### `data/analysis/figuras_4_1_4/` (figuras estadísticas de PS para el informe, 4.1.4)
+- **`histograma_diferencias_90.png`:**
+  - Qué muestra: cuántas corridas tuvieron cada diferencia sistema − TWAP, con las líneas de la media (−3,3), la mediana (−11,2) y el 0.
+  - Cómo leerlo: si el centro de las barras está cerca del 0, no hay diferencia clara (Wilcoxon p = 0,386). Si la forma se parece a una campana, la normalidad no se rechaza (Shapiro p = 0,286).
+- **`costo_por_estrategia_varianzas.png`:**
+  - Qué muestra: el costo de cada corrida para el sistema, TWAP y VWAP.
+  - Cómo leerlo: la caja del sistema es más corta, o sea, su costo varía menos entre días (Pitman-Morgan p = 4,8·10⁻⁹ frente a TWAP).
+- **Script:** `scripts/figuras_estadisticas_4_1_4_PS.py`.
 
 ## 6. Gráficos del informe de Título II
 

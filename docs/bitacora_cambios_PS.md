@@ -543,7 +543,7 @@
 ### `feature/ps-capitulo7-analisis`, 15 de noviembre: Capítulo 7 «Análisis» (4.1.3)
 - **Quién:** PS, con apoyo de Claude Code.
 - **Qué:**
-  - el capítulo `docs/capitulo7_analisis_PS.md` (≈ 4.750 palabras);
+  - el capítulo `docs/capitulo8_analisis_PS.md` (≈ 4.750 palabras);
   - el script `scripts/figuras_capitulo7_PS.py` con su prueba, que calcula las cifras exploratorias (dirección del día, tramo y tamaño 0,5 contra 1);
   - las salidas en `data/analysis/cap7/`.
 - **Por qué:** tarea 4.1.3 del Sprint 8, adelantada porque los datos de las 90 corridas, el control y el Maestro v2 ya están.
@@ -556,3 +556,16 @@
   - los costos de cada alternativa, como pidió la profesora.
 - **Pendiente:** la sección 7.6.3 espera el factor 1,5 y la 3.2.4 (MR).
 - **Gráficos:** `data/analysis/cap7/*.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-sprint9-borradores`, 15 de noviembre: adelanto del Sprint 9 de PS
+- **Quién:** PS, con apoyo de Claude Code.
+- **Qué:**
+  - Capítulo 9 de Conclusiones: `docs/capitulo9_conclusiones_PS.md` (4.2.1, borrador avanzado).
+  - Figuras estadísticas de PS: `scripts/figuras_estadisticas_4_1_4_PS.py` (4.1.4), con salidas en `data/analysis/figuras_4_1_4/`.
+  - Guía de ensamblado del informe: `docs/informe_titulo2_ensamblado_borrador.md`. Solo trae el índice, los responsables y el estado; no contiene texto de MR ni de BF.
+  - El capítulo de análisis pasa a llamarse `docs/capitulo8_analisis_PS.md`, con numeración 8.x, para seguir la estructura de 9 capítulos del Título I. En el Excel sigue siendo la tarea «Cap. 7».
+- **Por qué:** adelantar la parte de PS del Sprint 9 con los resultados finales.
+- **Pendiente:**
+  - H6 y la sección 8.6.3 esperan el factor 1,5 y la 3.2.4 (MR);
+  - los capítulos 1 a 3 no tienen responsable en el Excel (lo decide el grupo).
+- **Gráficos:** ver `docs/guia_graficos.md`.

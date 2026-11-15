@@ -1,15 +1,12 @@
-# Capítulo 7. Análisis estadístico y discusión de resultados
+# Capítulo 8. Discusión y análisis crítico de los resultados
 
-**Tarea:** 4.1.3 (Sprint 8). **Autor:** PS, con apoyo de Claude Code. **Versión:** 15 de noviembre de 2026.
+**Tarea:** 4.1.3 (Sprint 8, «Capítulo 7 Análisis» en `plan-desarrollo-titulo-2.xlsx`). **Autor:** PS, con apoyo de Claude Code. **Versión:** 15 de noviembre de 2026.
 
-**Numeración:**
-- Se usa la del plan (`plan-desarrollo-titulo-2.xlsx`, «Capítulo 7 Análisis»).
-- En la estructura del Título I corresponde al capítulo «Discusión y análisis crítico».
-- Si el grupo decide otra numeración, basta con cambiar el prefijo «7.».
+**Numeración:** sigue la estructura del informe final del Título I (9 capítulos), donde el análisis es el Capítulo 8 y las Conclusiones el 9. El Excel lo llama «Capítulo 7» porque numera solo los capítulos asignados en el Título II.
 
 **Estado:**
 - Completo con las 90 corridas, el control y el Maestro v2.
-- **Pendiente:** la sección 7.6.3 (tamaño de orden). Espera el factor 1,5 y la tarea 3.2.4 (MR). Ahí se informa un resultado parcial con los factores 0,5 y 1.
+- **Pendiente:** la sección 8.6.3 (tamaño de orden). Espera el factor 1,5 y la tarea 3.2.4 (MR). Ahí se informa un resultado parcial con los factores 0,5 y 1.
 
 **Convención:**
 - Costo = implementation shortfall en puntos base (bps) contra el precio de llegada.
@@ -18,22 +15,22 @@
 
 ---
 
-## 7.1 Objetivo del capítulo
+## 8.1 Objetivo del capítulo
 
 El objetivo específico 4 del Título I pide evaluar el sistema contra TWAP y VWAP con métricas de reducción de costo. La etapa 6 pide determinar en qué medida el sistema reduce el slippage y qué limitaciones conserva. Este capítulo interpreta los resultados del capítulo de Resultados (BF, 4.1.2) con ese fin. Responde cuatro preguntas:
 
-1. ¿El sistema cuesta menos que TWAP y VWAP, y con qué certeza estadística? (7.3)
-2. ¿De qué depende la diferencia: del día, de la profundidad del mercado, del tramo o del tamaño de la orden? (7.4 y 7.6)
-3. ¿Qué aporta cada nivel de la arquitectura, el Maestro y los Ejecutores? (7.5)
-4. ¿Qué limitaciones tiene el resultado, qué implica en la práctica y cuánto cuesta cada alternativa? (7.7 y 7.8)
+1. ¿El sistema cuesta menos que TWAP y VWAP, y con qué certeza estadística? (8.3)
+2. ¿De qué depende la diferencia: del día, de la profundidad del mercado, del tramo o del tamaño de la orden? (8.4 y 8.6)
+3. ¿Qué aporta cada nivel de la arquitectura, el Maestro y los Ejecutores? (8.5)
+4. ¿Qué limitaciones tiene el resultado, qué implica en la práctica y cuánto cuesta cada alternativa? (8.7 y 8.8)
 
-## 7.2 Método estadístico
+## 8.2 Método estadístico
 
-### 7.2.1 Plan registrado antes de ver los datos
+### 8.2.1 Plan registrado antes de ver los datos
 
 El plan de análisis (`docs/plan_analisis_3_2_3_PS.md`) se escribió el 31 de octubre, antes de correr las 90 corridas. Fija la medida, la prueba principal, las pruebas secundarias y la robustez. Lo que se agregó después de ver datos se marca como **exploratorio** en este capítulo.
 
-### 7.2.2 Diseño
+### 8.2.2 Diseño
 
 - **Unidad de análisis:** una corrida, es decir, una meta-orden ejecutada en un día simulado.
 - **Factores:**
@@ -45,7 +42,7 @@ El plan de análisis (`docs/plan_analisis_3_2_3_PS.md`) se escribió el 31 de oc
 - **Días nuevos:** las semillas 4 a 6 no se usaron en el desarrollo. Las semillas 1 a 3 de la primera evaluación (3.1.3) sirvieron para detectar y corregir el problema del cierre (desviación 11).
 - **Nombre de los escenarios:** se planificaron como liquidez baja, media y alta. La confirmación C-6c (BF) no validó esa interpretación, así que se informan como profundidad del market maker (desviación 10).
 
-### 7.2.3 Pruebas
+### 8.2.3 Pruebas
 
 | Uso | Prueba | Por qué |
 |---|---|---|
@@ -69,9 +66,9 @@ El plan de análisis (`docs/plan_analisis_3_2_3_PS.md`) se escribió el 31 de oc
 
 **Herramienta:** `scripts/comparacion_estadistica_3_2_3.py`. Los resultados completos están en `docs/comparacion_estadistica_3_2_3_PS.md` y `data/analysis/3_2_3/`.
 
-## 7.3 Significancia estadística de la reducción de costo
+## 8.3 Significancia estadística de la reducción de costo
 
-### 7.3.1 Resultado principal: 90 corridas
+### 8.3.1 Resultado principal: 90 corridas
 
 | Referencia | n | Diferencia media (bps) | IC 95 % | Wilcoxon p | t p | Shapiro p | d de Cohen | r | Gana el sistema |
 |---|---|---|---|---|---|---|---|---|---|
@@ -92,7 +89,7 @@ El plan de análisis (`docs/plan_analisis_3_2_3_PS.md`) se escribió el 31 de oc
 - **Sí permite** descartar, con un 95 % de confianza, ventajas medias mayores que 15,7 bps y desventajas mayores que 9,7 bps.
 - En particular, la ventaja de −22 bps que sugería la primera evaluación queda fuera del intervalo.
 
-### 7.3.2 Resultado por profundidad del market maker
+### 8.3.2 Resultado por profundidad del market maker
 
 | Profundidad | n | Sistema − TWAP | IC 95 % | Wilcoxon p | p (Holm) | Sistema − VWAP | p (Holm) |
 |---|---|---|---|---|---|---|---|
@@ -104,7 +101,7 @@ El plan de análisis (`docs/plan_analisis_3_2_3_PS.md`) se escribió el 31 de oc
 - En ×0,25, Shapiro-Wilk rechaza la normalidad (p = 0,010 frente a TWAP), así que ahí solo vale Wilcoxon, que de todos modos es la prueba principal.
 - Con 30 corridas por escenario, el plan ya anticipaba que difícilmente saldría significativo (sección 5 del plan).
 
-### 7.3.3 Robustez
+### 8.3.3 Robustez
 
 | Variante (registrada en el plan) | n | Sistema − TWAP | IC 95 % | Wilcoxon p |
 |---|---|---|---|---|
@@ -116,16 +113,16 @@ El plan de análisis (`docs/plan_analisis_3_2_3_PS.md`) se escribió el 31 de oc
 - **Costo ajustado:** se aplica porque algunas corridas no completaron la orden. El sistema queda con 94,7 % en MO-08, semilla 4, en ×0,25. TWAP y VWAP quedan con 87,1 % en MO-09, semilla 4, en las tres profundidades.
 - Ninguna variante cambia la conclusión.
 
-### 7.3.4 Por qué la primera evaluación sugería una ventaja mayor
+### 8.3.4 Por qué la primera evaluación sugería una ventaja mayor
 
 En la 3.1.3 (profundidad ×1, semillas 1–3, n = 30), el sistema costó −22,15 bps frente a TWAP (IC [−50,01; 4,43], Wilcoxon p = 0,096). En las 90 corridas, la misma comparación en ×1 con las semillas 4–6 da −3,37 bps. **Esta diferencia es variabilidad entre días, no un cambio del sistema:**
 - La desviación estándar de las diferencias por corrida es de 78,7 bps en la 3.1.3 y de 67,5 bps en ×1 de las 90. Con 30 corridas, el error estándar de la media es de unos 12 a 14 bps, así que dos muestras de 30 pueden diferir en 20 bps por azar.
 - **Prueba de que vienen de la misma distribución:** Mann-Whitney U entre las 30 diferencias de la 3.1.3 y las 30 de ×1, p = 0,395 (exploratorio). No hay evidencia de que difieran.
 - **Lección metodológica:** haber evaluado en días nuevos evitó informar como resultado un efecto que era en parte favorable por azar.
 
-## 7.4 Comparación con TWAP y VWAP: de qué depende la diferencia
+## 8.4 Comparación con TWAP y VWAP: de qué depende la diferencia
 
-### 7.4.1 Dirección del precio durante el día
+### 8.4.1 Dirección del precio durante el día
 
 La ventaja del sistema depende sobre todo de cómo se mueve el precio ese día. Se usa el costo de TWAP como indicador del movimiento: un costo positivo significa que el precio subió mientras se compraba.
 
@@ -142,10 +139,10 @@ La ventaja del sistema depende sobre todo de cómo se mueve el precio ese día. 
 
 **Interpretación:**
 - La correlación se repite en cada profundidad: −0,77 en ×4, −0,78 en ×1 y −0,54 en ×0,25.
-- La causa es el calendario del Maestro (7.5.1): compra una parte grande de lo pendiente al comienzo de cada media hora, así que concentra la compra temprano. Comprar temprano conviene si el precio sube y perjudica si baja.
+- La causa es el calendario del Maestro (8.5.1): compra una parte grande de lo pendiente al comienzo de cada media hora, así que concentra la compra temprano. Comprar temprano conviene si el precio sube y perjudica si baja.
 - La ventaja media del sistema es, en buena parte, el balance entre días que suben y días que bajan en la muestra.
 
-### 7.4.2 Variabilidad del costo entre días
+### 8.4.2 Variabilidad del costo entre días
 
 | Grupo | Ref. | n | Desv. sistema | Desv. referencia | Razón | IC 95 % de la razón | Pitman-Morgan p |
 |---|---|---|---|---|---|---|---|
@@ -167,7 +164,7 @@ La ventaja del sistema depende sobre todo de cómo se mueve el precio ese día. 
 - Ya se había visto en la 3.1.3 (razón 0,65, p = 8·10⁻⁵, n = 30).
 - Para un operador, una menor dispersión reduce el riesgo de ejecución, aunque el costo medio sea parecido. El sistema evita los días muy caros y también aprovecha menos los muy baratos.
 
-### 7.4.3 Profundidad del market maker
+### 8.4.3 Profundidad del market maker
 
 - **Kruskal-Wallis** sobre las diferencias sistema − TWAP de las tres profundidades: H = 0,14, p = 0,930, épsilon² = −0,021.
   - Cómo se calcula: se ordenan las 90 diferencias juntas y se compara el rango medio de cada grupo con el esperado si todos vinieran de la misma distribución.
@@ -177,9 +174,9 @@ La ventaja del sistema depende sobre todo de cómo se mueve el precio ese día. 
 - La tendencia descriptiva (−10,5 en ×4, −3,4 en ×1, +3,9 en ×0,25) no es significativa.
 - Esto concuerda con el C-6c: en este simulador, `mm_pov` cambia poco el costo de TWAP con órdenes límite.
 
-## 7.5 Aporte de cada nivel de la arquitectura
+## 8.5 Aporte de cada nivel de la arquitectura
 
-### 7.5.1 El Maestro aprendió un calendario casi fijo
+### 8.5.1 El Maestro aprendió un calendario casi fijo
 
 | Profundidad | Decisiones | Acción más frecuente | Frecuencia |
 |---|---|---|---|
@@ -197,7 +194,7 @@ En la práctica, la política del Maestro equivale a «comprar la mitad de lo qu
    - El Maestro solo veía lo que falta, la hora y sus decisiones previas.
 3. **Las ventanas de 30 minutos son mercados independientes.** No hay una tendencia del día que el Maestro pueda aprender a anticipar.
 
-### 7.5.2 Control con reglas fijas: separación del aporte
+### 8.5.2 Control con reglas fijas: separación del aporte
 
 Para separar el aporte del Maestro y el de los Ejecutores, se reemplazó al Maestro por dos reglas, manteniendo los mismos Ejecutores, órdenes y semillas (profundidad ×1, n = 30 pares, `docs/control_reglas_3_2_3_resultado_PS.md`). Se registró antes de correrlo (`docs/control_reglas_3_2_3_PS.md`).
 
@@ -222,9 +219,9 @@ Para separar el aporte del Maestro y el de los Ejecutores, se reemplazó al Maes
 - En la reevaluación de 300 semillas en una ventana (`docs/reeval_300_imitacion_resultado_PS.md`), el Ejecutor elegido costó 5,68 bps, contra 4,65 de un TWAP **con órdenes límite**. Es decir, quedó 1,03 bps más caro (IC 95 % [0,11; 1,88]).
 - La lectura más probable es que el ahorro de 15 bps viene de no cruzar el spread, y que frente a un TWAP con órdenes límite la ventaja sería cercana a 0. Esta lectura no se probó con las 90, porque el TWAP con límite no se corrió en ellas.
 
-### 7.5.3 Maestro corregido (Maestro v2)
+### 8.5.3 Maestro corregido (Maestro v2)
 
-Para comprobar si las causas de 7.5.1 explicaban el resultado, se entrenó una versión corregida (`docs/maestro_v2_resultado_PS.md`):
+Para comprobar si las causas de 8.5.1 explicaban el resultado, se entrenó una versión corregida (`docs/maestro_v2_resultado_PS.md`):
 - su estado mide la volatilidad, la profundidad y el desbalance en el mercado simulado;
 - se entrena con la corrección del cierre;
 - n_slices se cuenta por orden.
@@ -242,21 +239,21 @@ Para comprobar si las causas de 7.5.1 explicaban el resultado, se entrenó una v
 - La corrección cambió la política, pero no el costo.
 - Incluso con información de mercado, el Maestro sigue eligiendo casi una regla fija. En este entorno, el calendario no tiene de dónde sacar ventaja, porque las ventanas son independientes (limitación L1).
 
-### 7.5.4 Síntesis
+### 8.5.4 Síntesis
 
 - La reducción de costo **viene de la capa de Ejecutores**: significativa y con un efecto grande frente a TWAP a mercado.
 - El Maestro, en su forma actual, **agrega variabilidad** que depende del día y compensa lo que ahorran los Ejecutores.
 - Por eso el sistema completo no supera a TWAP de forma significativa, aunque sí es más estable.
 
-## 7.6 Sensibilidad
+## 8.6 Sensibilidad
 
-### 7.6.1 Hiperparámetros del entrenamiento
+### 8.6.1 Hiperparámetros del entrenamiento
 
 - En el barrido de hiperparámetros (3.1.1 y 3.1.2, `docs/barrido_hiperparametros_resultado_PS.md`), unas 30 configuraciones quedaron entre −2,4 y −2,6 bps.
 - La mejor mejoró ≈ 0,2 bps sobre la configuración por defecto, dentro del error.
 - Se mantuvieron λ = 0,02 y la configuración por defecto. El resultado es poco sensible a los hiperparámetros probados.
 
-### 7.6.2 Tramo de inicio de la orden (exploratorio)
+### 8.6.2 Tramo de inicio de la orden (exploratorio)
 
 > Preliminar: la sensibilidad oficial por tramo es parte de la 3.2.4 (MR). Este análisis usa solo las 90 corridas y se reemplazará o confirmará con ella.
 
@@ -271,14 +268,14 @@ Para comprobar si las causas de 7.5.1 explicaban el resultado, se entrenó una v
 - **Confusión con la dirección del día:**
   - En las órdenes de cierre, el precio subió en el 81 % de los días, y TWAP costó en promedio 68,4 bps.
   - En la apertura subió en el 56 % de los días, con un costo medio de TWAP de 14,3 bps.
-  - Con este diseño no se puede separar el efecto del tramo del de la dirección del día (7.4.1). Comprar rápido en un tramo corto que sube favorece al calendario del Maestro.
+  - Con este diseño no se puede separar el efecto del tramo del de la dirección del día (8.4.1). Comprar rápido en un tramo corto que sube favorece al calendario del Maestro.
 - **Cómo se calculó:**
   - Wilcoxon de rangos con signo en cada tramo sobre las diferencias pareadas, con Holm para 3 pruebas;
   - IC por bootstrap de 10.000 remuestreos;
   - Kruskal-Wallis entre los tres grupos.
   - Script: `scripts/figuras_capitulo7_PS.py`. Datos: `data/analysis/cap7/cifras_capitulo7.json`. Figura: `diferencia_por_tramo.png`.
 
-### 7.6.3 Tamaño de la orden (parcial, pendiente del factor 1,5 y de la 3.2.4)
+### 8.6.3 Tamaño de la orden (parcial, pendiente del factor 1,5 y de la 3.2.4)
 
 > **[PENDIENTE]** Falta el factor 1,5 (MR) y el análisis oficial de la 3.2.4 (MR). Con eso se completa ∂IS/∂tamaño en tres puntos y se prueba si la pendiente del sistema difiere de la de TWAP.
 
@@ -296,13 +293,13 @@ Resultado parcial con los factores 0,5 y 1, en profundidad ×1, n = 30 pares (di
 - **Límite:** el Maestro se entrenó con un solo tamaño (factor 1), así que 0,5 queda fuera de lo que vio, y 1,5 será una extrapolación.
 - Figura: `data/analysis/cap7/costo_vs_tamano_parcial.png`.
 
-### 7.6.4 Supuestos que no se variaron
+### 8.6.4 Supuestos que no se variaron
 
 - **Impacto acumulado** (Y = 0,5, τ = 120 min): es un supuesto, no está calibrado.
 - **Volatilidad y spread:** no se variaron por separado; la profundidad los cambia solo de forma indirecta.
-- Se declaran como límites (7.7).
+- Se declaran como límites (8.7).
 
-## 7.7 Limitaciones y análisis crítico
+## 8.7 Limitaciones y análisis crítico
 
 | # | Limitación | Efecto sobre el resultado | Dónde se documenta |
 |---|---|---|---|
@@ -311,12 +308,12 @@ Resultado parcial con los factores 0,5 y 1, en profundidad ×1, n = 30 pares (di
 | L3 | El Maestro se entrenó en Poisson y se evalúa en ABIDES | Posible pérdida al cambiar de simulador | `sistema_final_resultado_PS.md` |
 | L4 | La misma red de Ejecutor (apertura) se usa en los tres tramos | Los Ejecutores de media jornada y cierre no están especializados | Desviación 8 |
 | L5 | `tasa_ordenes` vale 0 en ABIDES | El Ejecutor ve 26 de sus 27 variables | Desviación 14 |
-| L6 | **La referencia TWAP/VWAP compra a mercado; los Ejecutores usan límite** | La ventaja de los Ejecutores puede deberse sobre todo a no cruzar el spread | 7.5.2 |
+| L6 | **La referencia TWAP/VWAP compra a mercado; los Ejecutores usan límite** | La ventaja de los Ejecutores puede deberse sobre todo a no cruzar el spread | 8.5.2 |
 | L7 | Los escenarios son profundidad del market maker, no liquidez validada | No se puede afirmar nada sobre liquidez real | C-6c, desviación 10 |
 | L8 | Tres acciones, 10 órdenes y un día de calibración | Validez externa limitada | Meta-órdenes v2 |
 | L9 | Simulación sin operación real | Sin latencia, comisiones ni reacción de participantes reales | Título I |
 | L10 | 90 corridas (30 por escenario) | Potencia del 33 % al 76 % según el tamaño real del efecto; por escenario, baja | Plan 3.2.3, sección 5 |
-| L11 | Impacto, volatilidad y spread no variados | No se sabe cómo cambia el resultado con otros supuestos | 7.6.4 |
+| L11 | Impacto, volatilidad y spread no variados | No se sabe cómo cambia el resultado con otros supuestos | 8.6.4 |
 
 **Análisis crítico:**
 - La arquitectura jerárquica de dos niveles con PPO se implementó completa y funciona: ejecuta las órdenes al 99,8 % en promedio, y el resto se ajusta con el costo penalizado.
@@ -326,16 +323,16 @@ Resultado parcial con los factores 0,5 y 1, en profundidad ×1, n = 30 pares (di
   - la capa de planificación no tiene, en este entorno, información ni dinámica de la cual aprender.
 - La lección de diseño es que un planificador solo puede aprender lo que el entorno contiene. Si el día simulado no tiene continuidad entre ventanas, ninguna política de calendario puede anticipar el precio.
 
-## 7.8 Implicaciones prácticas y costo de las alternativas
+## 8.8 Implicaciones prácticas y costo de las alternativas
 
-### 7.8.1 Lo que el resultado permite y no permite afirmar
+### 8.8.1 Lo que el resultado permite y no permite afirmar
 
 - **Permite:** un sistema de dos niveles con PPO puede ejecutar meta-órdenes completas en un simulador calibrado del IPSA, con un costo medio similar al de TWAP y VWAP y una variabilidad significativamente menor.
 - **Permite:** la capa de Ejecutores, por sí sola, reduce el costo frente a una ejecución ingenua a mercado.
 - **No permite:** afirmar que el sistema completo reduzca el costo de forma consistente, ni que funcione igual en mercado real.
 - **Riesgo operativo del calendario aprendido:** comprar temprano es una apuesta implícita a que el precio sube. Un operador debería conocerlo antes de usarlo.
 
-### 7.8.2 Ventajas, desventajas y costos de las alternativas evaluadas
+### 8.8.2 Ventajas, desventajas y costos de las alternativas evaluadas
 
 Los costos computacionales corresponden a lo medido en Colab durante el proyecto.
 
@@ -348,7 +345,7 @@ Los costos computacionales corresponden a lo medido en Colab durante el proyecto
 
 **Implicación:** con la evidencia de este trabajo, la alternativa con mejor relación entre beneficio y costo es la **capa de Ejecutores con un calendario simple**. Agregar el Maestro aumenta la complejidad sin un beneficio medible en el costo medio.
 
-## 7.9 Trabajo futuro (detalle en el capítulo de Conclusiones)
+## 8.9 Trabajo futuro (detalle en el capítulo de Conclusiones)
 
 1. **Entrenar y evaluar el Maestro en un día continuo** (ABIDES de jornada completa), para que exista una tendencia que aprender.
 2. **Comparar contra un TWAP con órdenes límite** en las mismas 90 corridas, para separar el aporte de la política del de usar órdenes límite.
@@ -362,10 +359,10 @@ Los costos computacionales corresponden a lo medido en Colab durante el proyecto
 
 | Sección | Documento | Datos |
 |---|---|---|
-| 7.3, 7.4.3 | `docs/comparacion_estadistica_3_2_3_PS.md` | `data/analysis/3_2_3/`, `3_2_3_ajustado/` |
-| 7.3.4 | `docs/corridas_30_corregidas_resultado_PS.md` | `data/colab_resultados/corridas_30_completa/` |
-| 7.4.1, 7.6.2, 7.6.3 | Este capítulo (exploratorio) | `data/analysis/cap7/cifras_capitulo7.json` (`scripts/figuras_capitulo7_PS.py`) |
-| 7.4.2 | `docs/comparacion_estadistica_3_2_3_PS.md`, sección 4.1 | `corridas_90/*/tabla/corridas.csv` |
-| 7.5.2 | `docs/control_reglas_3_2_3_resultado_PS.md` | `data/colab_resultados/control_reglas/media/` |
-| 7.5.3 | `docs/maestro_v2_resultado_PS.md` | `data/colab_resultados/maestro_v2/` |
-| 7.6.1 | `docs/barrido_hiperparametros_resultado_PS.md` | — |
+| 8.3, 8.4.3 | `docs/comparacion_estadistica_3_2_3_PS.md` | `data/analysis/3_2_3/`, `3_2_3_ajustado/` |
+| 8.3.4 | `docs/corridas_30_corregidas_resultado_PS.md` | `data/colab_resultados/corridas_30_completa/` |
+| 8.4.1, 8.6.2, 8.6.3 | Este capítulo (exploratorio) | `data/analysis/cap7/cifras_capitulo7.json` (`scripts/figuras_capitulo7_PS.py`) |
+| 8.4.2 | `docs/comparacion_estadistica_3_2_3_PS.md`, sección 4.1 | `corridas_90/*/tabla/corridas.csv` |
+| 8.5.2 | `docs/control_reglas_3_2_3_resultado_PS.md` | `data/colab_resultados/control_reglas/media/` |
+| 8.5.3 | `docs/maestro_v2_resultado_PS.md` | `data/colab_resultados/maestro_v2/` |
+| 8.6.1 | `docs/barrido_hiperparametros_resultado_PS.md` | — |
