@@ -31,7 +31,7 @@
 |---|---|---|---|
 | **Costo medio (bps)** | 69,19 | 65,33 | 64,79 |
 | **Mediana (bps)** | 50,16 | 56,33 | 50,96 |
-| **Desviación estándar (bps)** | 130,84 | 143,58 | 144,32 |
+| **Desviación estándar (bps)** | 130,84 | 153,53 | 160,84 |
 
 | Comparación | n | Dif. media (bps) | IC 95 % bootstrap | Wilcoxon p | t-test p | Dif. % | Ranking |
 |---|---|---|---|---|---|---|---|

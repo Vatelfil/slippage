@@ -1,6 +1,6 @@
 {
  "veredicto": "OK",
- "corridas_leidas": 360,
+ "corridas_leidas": 450,
  "errores": [],
  "umbral_cumplimiento": 0.95,
  "bloques": [
@@ -121,6 +121,68 @@
      "seed": 4,
      "estrategia": "VWAP",
      "cumplimiento": 0.8713
+    }
+   ],
+   "ok": true
+  },
+  {
+   "escenario": "media",
+   "factor_tamano": 1.5,
+   "corridas_por_estrategia": {
+    "PPO_sistema": 30,
+    "TWAP": 30,
+    "VWAP": 30
+   },
+   "esperadas": 30,
+   "dias_pareados": 30,
+   "duplicados": 0,
+   "cumplimiento_minimo": {
+    "PPO_sistema": 0.7840211640211641,
+    "TWAP": 0.8308390022675737,
+    "VWAP": 0.8308390022675737
+   },
+   "bajo_umbral": [
+    {
+     "orden": "MO-06",
+     "seed": 6,
+     "estrategia": "VWAP",
+     "cumplimiento": 0.9446
+    },
+    {
+     "orden": "MO-08",
+     "seed": 4,
+     "estrategia": "PPO_sistema",
+     "cumplimiento": 0.829
+    },
+    {
+     "orden": "MO-08",
+     "seed": 6,
+     "estrategia": "PPO_sistema",
+     "cumplimiento": 0.939
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "PPO_sistema",
+     "cumplimiento": 0.784
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "TWAP",
+     "cumplimiento": 0.8308
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "VWAP",
+     "cumplimiento": 0.8308
+    },
+    {
+     "orden": "MO-09",
+     "seed": 5,
+     "estrategia": "PPO_sistema",
+     "cumplimiento": 0.9328
     }
    ],
    "ok": true
