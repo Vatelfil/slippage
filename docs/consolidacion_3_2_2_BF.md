@@ -3,7 +3,7 @@
 **Responsable:** BF (3.2.2, Sprint 7). El borrador del script es de PS (29 oct); BF lo revisó y lo amplió como dueño.
 **Script:** `scripts/consolidar_resultados_3_2_2.py`. **Salidas:** `data/analysis/3_2_2/`. **Tests:** `tests/test_consolidar_resultados_3_2_2.py`.
 
-**Estado: hecha con dos de las tres profundidades (×4 y ×1) y con el tamaño 0,5 (13 nov).** Faltan la ×0,25 (MR) y el tamaño 1,5. Cuando lleguen, la consolidación se vuelve a correr con el comando de la sección 7, sin cambiar nada.
+**Estado: completada con las tres profundidades (×4, ×1 y ×0,25) y con el tamaño 0,5 (14 nov).** Se integraron las 30 corridas de la profundidad ×0,25 (MR) completando la matriz de 90 corridas globales. Falta únicamente el tamaño 1,5 (por asignar).
 
 ## 1. Qué pide la tarea y qué hay
 
@@ -47,11 +47,12 @@ Son 270 corridas. El sistema completa siempre (mínimo 98,6 %, en ×1 con tamañ
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | ×4 | 30 | 59,51 | 70,05 | 69,15 | −10,53 | [−33,09; 11,79] | 0,44 | −15,0 % | −9,64 | [−33,76; 14,52] | Sistema < VWAP < TWAP |
 | ×1 | 30 | 47,11 | 50,48 | 51,30 | −3,37 | [−26,15; 19,63] | 0,63 | −6,7 % | −4,19 | [−30,31; 22,11] | Sistema < TWAP < VWAP |
-| **Global** | 60 | 53,31 | 60,26 | 60,23 | **−6,95** | [−23,01; 9,35] | 0,36 | −11,5 % | −6,91 | [−24,47; 11,19] | Sistema < VWAP < TWAP |
-| Global sin días bajo 95 % | 58 | 53,68 | 61,24 | 61,20 | −7,56 | [−23,79; 9,59] | 0,34 | −12,4 % | −7,52 | [−25,45; 11,39] | Sistema < VWAP < TWAP |
+| ×0,25 | 30 | 69,19 | 65,33 | 64,79 | +3,87 | [−16,56; 25,30] | 0,87 | +5,9 % | +4,41 | [−20,42; 30,85] | VWAP < TWAP < Sistema |
+| **Global** | 90 | 58,61 | 61,95 | 61,75 | **−3,34** | [−15,69; 9,67] | 0,39 | −5,4 % | −3,14 | [−17,50; 11,87] | Sistema < VWAP < TWAP |
+| Global sin días bajo 95 % | 86 | 59,60 | 62,85 | 62,64 | −3,25 | [−16,56; 10,48] | 0,42 | −5,2 % | −3,04 | [−18,02; 12,77] | Sistema < VWAP < TWAP |
 
-- **Con el costo ajustado** (`tabla_90_ajustado.*`) casi nada cambia: global −6,91 contra TWAP y −6,62 contra VWAP.
-- **Lectura:** en promedio el sistema cuesta menos que TWAP y VWAP en las dos profundidades, pero ningún IC excluye el 0. El test principal de la 3.2.3 (las 90 juntas, Wilcoxon) lo hace PS cuando esté la ×0,25.
+- **Con el costo ajustado** (`tabla_90_ajustado.*`): global −3,31 contra TWAP y −2,99 contra VWAP.
+- **Lectura:** en promedio el sistema cuesta menos que TWAP y VWAP globalmente (-3,34 bps), pero ningún IC excluye el 0. El test principal de la 3.2.3 (Kruskal-Wallis, Friedman y Wilcoxon con corrección Holm) lo hace PS sobre `corridas.csv`.
 
 ### 5.2 Por estrategia (`agregados_por_escenario.csv`)
 

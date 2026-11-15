@@ -1,9 +1,47 @@
 {
  "veredicto": "OK",
- "corridas_leidas": 270,
+ "corridas_leidas": 360,
  "errores": [],
  "umbral_cumplimiento": 0.95,
  "bloques": [
+  {
+   "escenario": "alta",
+   "factor_tamano": 1.0,
+   "corridas_por_estrategia": {
+    "PPO_sistema": 30,
+    "TWAP": 30,
+    "VWAP": 30
+   },
+   "esperadas": 30,
+   "dias_pareados": 30,
+   "duplicados": 0,
+   "cumplimiento_minimo": {
+    "PPO_sistema": 0.9471655328798186,
+    "TWAP": 0.8712925170068028,
+    "VWAP": 0.8712925170068028
+   },
+   "bajo_umbral": [
+    {
+     "orden": "MO-08",
+     "seed": 4,
+     "estrategia": "PPO_sistema",
+     "cumplimiento": 0.9472
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "TWAP",
+     "cumplimiento": 0.8713
+    },
+    {
+     "orden": "MO-09",
+     "seed": 4,
+     "estrategia": "VWAP",
+     "cumplimiento": 0.8713
+    }
+   ],
+   "ok": true
+  },
   {
    "escenario": "baja",
    "factor_tamano": 1.0,
