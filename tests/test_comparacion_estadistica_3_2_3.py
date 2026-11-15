@@ -72,6 +72,6 @@ def test_main_escribe_tabla_y_figuras(tmp_path):
     res = ce.main(["--entradas", str(csv), "--out-dir", str(tmp_path / "out"), "--out-md", str(tmp_path / "r.md")])
     assert (tmp_path / "out" / "comparacion_3_2_3.json").exists()
     texto = (tmp_path / "r.md").read_text(encoding="utf-8")
-    assert "Kruskal-Wallis" in texto and "Liquidez baja" in texto
+    assert "Kruskal-Wallis" in texto and "Profundidad ×4" in texto
     for ruta in res["figuras"].values():
         assert (tmp_path / "out").joinpath(ruta.split("\\")[-1].split("/")[-1]).exists()

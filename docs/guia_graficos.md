@@ -121,6 +121,16 @@
   - Solo la de los Ejecutores queda entera bajo el 0: −15,4 bps, Wilcoxon p (Holm) = 7·10⁻⁶.
 - **Informe:** `docs/control_reglas_3_2_3_resultado_PS.md`.
 
+### `data/analysis/3_2_3/` (3.2.3 final, 90 corridas, 15 de noviembre)
+- **`bosque_diferencias.png`:**
+  - Qué muestra: un punto (diferencia media sistema − referencia) con su IC 95 % para el total, cada profundidad del market maker y el total sin MO-06, contra TWAP y VWAP.
+  - Cómo leerlo: si la línea cruza la raya roja del 0, no hay diferencia significativa. Aquí cruzan todas, y quedan en gris.
+- **`diferencias_por_escenario.png`:**
+  - Qué muestra: una caja por profundidad (×4, ×1, ×0,25), y cada punto es una corrida.
+  - Cómo leerlo: si las cajas están a la misma altura, la ventaja no cambia con la profundidad (Kruskal-Wallis p = 0,93).
+- **`qq_diferencias.png`:** si los puntos siguen la recta, las diferencias son aproximadamente normales (Shapiro p = 0,29 contra TWAP).
+- **Informe:** `docs/comparacion_estadistica_3_2_3_PS.md`.
+
 ## 6. Gráficos del informe de Título II
 
 Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de cifras ya publicadas en los documentos de cada tarea (no calculan nada nuevo).
