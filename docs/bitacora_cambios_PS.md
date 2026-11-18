@@ -524,3 +524,18 @@
   - TWAP compra con órdenes a mercado; los Ejecutores, con órdenes límite.
 - **Cómo verificar:** el comando de la sección «Cómo reproducir» del informe.
 - **Gráficos:** `control_reglas.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-3-2-3-final`, 15 de noviembre: comparación estadística final (3.2.3)
+- **Quién:** PS, con apoyo de Claude Code. Usa las 90 corridas de BF (×4), PS (×1) y MR (×0,25).
+- **Qué:**
+  - el informe `docs/comparacion_estadistica_3_2_3_PS.md`;
+  - las salidas en `data/analysis/3_2_3/` y `3_2_3_ajustado/`;
+  - `scripts/comparacion_estadistica_3_2_3.py` rotula los escenarios como «profundidad ×4 / ×1 / ×0,25» (C-6c). Los cálculos no cambian; se ajustó 1 prueba.
+- **Por qué:** cierra la 3.2.3 según el plan registrado (`docs/plan_analisis_3_2_3_PS.md`).
+- **Resultado:**
+  - sistema − TWAP = −3,34 bps [−15,69; 9,67], Wilcoxon p = 0,386 (no significativo);
+  - sistema − VWAP = −3,14, p = 0,393;
+  - Kruskal-Wallis entre profundidades: p = 0,930;
+  - exploratorio: el sistema es más estable (razón de desviaciones 0,77, Pitman-Morgan p = 4,8·10⁻⁹).
+- **Cómo verificar:** la sección 6 del informe; `python -m pytest tests --ignore=tests/test_benchmarks.py` da 509 pruebas aprobadas.
+- **Gráficos:** `data/analysis/3_2_3/*.png` (ver `docs/guia_graficos.md`).

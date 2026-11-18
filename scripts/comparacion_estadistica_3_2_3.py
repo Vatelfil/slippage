@@ -40,6 +40,12 @@ from scripts.consolidar_resultados_3_2_2 import costo, ic_bootstrap, leer_corrid
 REFERENCIAS = ("TWAP", "VWAP")
 ALFA = 0.05
 ORDEN_ESCENARIOS = ("baja", "media", "alta")
+# Desde el C-6c (docs/c6c_confirmacion_v3_BF.md) los escenarios se informan por la profundidad del market maker.
+NOMBRE_ESCENARIO = {"baja": "profundidad ×4", "media": "profundidad ×1", "alta": "profundidad ×0,25"}
+
+
+def _nombre(e: str) -> str:
+    return NOMBRE_ESCENARIO.get(e, e)
 CLAVE = ["escenario", "factor_tamano", "orden", "seed"]
 
 
@@ -219,11 +225,11 @@ def informe(res: Dict, titulo: str, fuentes: str) -> str:
         L.append(_fila("**Total (principal)**", ref, r["total"]))
         for e, g in r["por_escenario"].items():
             if len(r["por_escenario"]) > 1:
-                L.append(_fila(f"Liquidez {e}", ref, g, g.get("wilcoxon_p_holm")))
+                L.append(_fila(f"{_nombre(e).capitalize()}", ref, g, g.get("wilcoxon_p_holm")))
         clave_sin = next(k for k in r if k.startswith("sin_"))
         L.append(_fila(f"Total {clave_sin.replace('_', ' ')}", ref, r[clave_sin]))
         L.append(_fila("Promedio por orden y semilla", ref, r["promedio_por_orden_y_semilla"]))
-    L += ["", "## Entre escenarios (¿la ventaja depende de la liquidez?)", ""]
+    L += ["", "## Entre escenarios (¿la ventaja depende de la profundidad del market maker?)", ""]
     hubo = False
     for ref, r in res["referencias"].items():
         ee = r["entre_escenarios"]
@@ -233,12 +239,12 @@ def informe(res: Dict, titulo: str, fuentes: str) -> str:
         L += [f"**{ref}.** Kruskal-Wallis H = {_f(ee['kruskal_H'])}, p = {_p(ee['kruskal_p'])}, épsilon² = {_f(ee['epsilon2'], 3)}. "
               f"Friedman (bloques orden × semilla: {ee['friedman_bloques']}): p = {_p(ee['friedman_p'])}.", "",
               "| Escenarios | U | p | p (Holm) | r |", "|---|---|---|---|---|"]
-        L += [f"| {m['a']} vs {m['b']} | {_f(m['U'], 1)} | {_p(m['p'])} | {_p(m['p_holm'])} | {_f(m['r'])} |"
+        L += [f"| {_nombre(m['a'])} vs {_nombre(m['b'])} | {_f(m['U'], 1)} | {_p(m['p'])} | {_p(m['p_holm'])} | {_f(m['r'])} |"
               for m in ee["mann_whitney"]]
         L.append("")
     if not hubo:
         L += ["Hay un solo escenario en los datos: Kruskal-Wallis, Mann-Whitney y Friedman se calculan cuando estén las "
-              "tres liquideces.", ""]
+              "tres profundidades.", ""]
     return "\n".join(L) + "\n"
 
 
@@ -271,7 +277,7 @@ def figuras(res: Dict, out: Path) -> Dict[str, Path]:
         r = res["referencias"][ref]
         filas.append((f"{ref} · total", r["total"]))
         if len(r["por_escenario"]) > 1:
-            filas += [(f"{ref} · liquidez {e}", g) for e, g in r["por_escenario"].items()]
+            filas += [(f"{ref} · {_nombre(e)}", g) for e, g in r["por_escenario"].items()]
         clave_sin = next(k for k in r if k.startswith("sin_"))
         filas.append((f"{ref} · {clave_sin.replace('_', ' ')}", r[clave_sin]))
     fig, ax = plt.subplots(figsize=(7.5, 0.45 * len(filas) + 1.2))
@@ -301,13 +307,13 @@ def figuras(res: Dict, out: Path) -> Dict[str, Path]:
         datos = [dd.loc[dd["escenario"] == e, "dif"].to_numpy() for e in esc]
         ax.boxplot(datos, widths=0.5, showfliers=False)
         ax.set_xticks(range(1, len(esc) + 1))
-        ax.set_xticklabels(esc)   # sin `labels=`/`tick_labels=`: cambia de nombre entre versiones de matplotlib
+        ax.set_xticklabels([_nombre(e) for e in esc])   # sin `labels=`/`tick_labels=`: cambia de nombre entre versiones de matplotlib
         for k, v in enumerate(datos, start=1):
             ax.scatter(np.full(len(v), k) + np.random.default_rng(k).uniform(-0.12, 0.12, len(v)), v, s=12,
                        color="#0B6E64", alpha=0.7)
         ax.axhline(0, color="#C0392B", lw=1, ls="--")
-        ax.set_title(f"Sistema − {ref} por liquidez", fontsize=10)
-        ax.set_xlabel("escenario de liquidez")
+        ax.set_title(f"Sistema − {ref} por profundidad del market maker", fontsize=10)
+        ax.set_xlabel("profundidad del market maker (mm_pov)")
         ax.grid(axis="y", alpha=0.3)
     axes[0][0].set_ylabel("diferencia por corrida (bps); bajo 0 = sistema más barato")
     fig.tight_layout()
