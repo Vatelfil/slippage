@@ -569,3 +569,10 @@
   - H6 y la sección 8.6.3 esperan el factor 1,5 y la 3.2.4 (MR);
   - los capítulos 1 a 3 quedan como trabajo conjunto del equipo, adaptado del Título I.
 - **Gráficos:** ver `docs/guia_graficos.md`.
+
+## 18 nov 2026: rama `feature/ps-sprint9-borradores-v3` (PS, con Claude Code)
+
+- **Qué:** en la guía del informe, los Capítulos 1 a 3 pasan a «✅ Hecho en conjunto (Título I)». Se quita la decisión pendiente sobre su reparto.
+- **Por qué:** esos capítulos ya los escribieron los tres en el Título I; el reparto por sprints parte en el Capítulo 4 (corrección de PS).
+- **Además:** la rama une `main` con la 3.2.3 (PR #58) y el tamaño 1,5 de MR (PR #59).
+- **Quién:** PS. No se tocó trabajo de MR ni de BF.
