@@ -539,3 +539,40 @@
   - exploratorio: el sistema es más estable (razón de desviaciones 0,77, Pitman-Morgan p = 4,8·10⁻⁹).
 - **Cómo verificar:** la sección 6 del informe; `python -m pytest tests --ignore=tests/test_benchmarks.py` da 509 pruebas aprobadas.
 - **Gráficos:** `data/analysis/3_2_3/*.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-capitulo7-analisis`, 15 de noviembre: Capítulo 7 «Análisis» (4.1.3)
+- **Quién:** PS, con apoyo de Claude Code.
+- **Qué:**
+  - el capítulo `docs/capitulo8_analisis_PS.md` (≈ 4.750 palabras);
+  - el script `scripts/figuras_capitulo7_PS.py` con su prueba, que calcula las cifras exploratorias (dirección del día, tramo y tamaño 0,5 contra 1);
+  - las salidas en `data/analysis/cap7/`.
+- **Por qué:** tarea 4.1.3 del Sprint 8, adelantada porque los datos de las 90 corridas, el control y el Maestro v2 ya están.
+- **Resultado:** el capítulo integra:
+  - la significancia (−3,34 bps, p = 0,386);
+  - la estabilidad (Pitman-Morgan p = 4,8·10⁻⁹);
+  - el control (Ejecutores −15,4 bps, p Holm = 7·10⁻⁶) y el Maestro v2;
+  - la sensibilidad por tramo (exploratoria: cierre −34,8 bps, p Holm = 0,009) y por tamaño (parcial);
+  - las limitaciones L1–L11;
+  - los costos de cada alternativa, como pidió la profesora.
+- **Pendiente:** la sección 7.6.3 espera el factor 1,5 y la 3.2.4 (MR).
+- **Gráficos:** `data/analysis/cap7/*.png` (ver `docs/guia_graficos.md`).
+
+### `feature/ps-sprint9-borradores`, 15 de noviembre: adelanto del Sprint 9 de PS
+- **Quién:** PS, con apoyo de Claude Code.
+- **Qué:**
+  - Capítulo 9 de Conclusiones: `docs/capitulo9_conclusiones_PS.md` (4.2.1, borrador avanzado).
+  - Figuras estadísticas de PS: `scripts/figuras_estadisticas_4_1_4_PS.py` (4.1.4), con salidas en `data/analysis/figuras_4_1_4/`.
+  - Guía de ensamblado del informe: `docs/informe_titulo2_ensamblado_borrador.md`. Solo trae el índice, los responsables y el estado; no contiene texto de MR ni de BF.
+  - El capítulo de análisis pasa a llamarse `docs/capitulo8_analisis_PS.md`, con numeración 8.x, para seguir la estructura de 9 capítulos del Título I. En el Excel sigue siendo la tarea «Cap. 7».
+- **Por qué:** adelantar la parte de PS del Sprint 9 con los resultados finales.
+- **Pendiente:**
+  - H6 y la sección 8.6.3 esperan el factor 1,5 y la 3.2.4 (MR);
+  - los capítulos 1 a 3 quedan como trabajo conjunto del equipo, adaptado del Título I.
+- **Gráficos:** ver `docs/guia_graficos.md`.
+
+## 18 nov 2026: rama `feature/ps-sprint9-borradores-v3` (PS, con Claude Code)
+
+- **Qué:** en la guía del informe, los Capítulos 1 a 3 pasan a «✅ Hecho en conjunto (Título I)». Se quita la decisión pendiente sobre su reparto.
+- **Por qué:** esos capítulos ya los escribieron los tres en el Título I; el reparto por sprints parte en el Capítulo 4 (corrección de PS).
+- **Además:** la rama une `main` con la 3.2.3 (PR #58) y el tamaño 1,5 de MR (PR #59).
+- **Quién:** PS. No se tocó trabajo de MR ni de BF.

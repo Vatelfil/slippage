@@ -131,6 +131,26 @@
 - **`qq_diferencias.png`:** si los puntos siguen la recta, las diferencias son aproximadamente normales (Shapiro p = 0,29 contra TWAP).
 - **Informe:** `docs/comparacion_estadistica_3_2_3_PS.md`.
 
+### `data/analysis/cap7/` (Capítulo 7, 15 de noviembre)
+- **`diferencia_por_tramo.png`:**
+  - Qué muestra: una caja por tramo de inicio de la orden (apertura, media jornada, cierre) con las diferencias sistema − TWAP de las 90 corridas; cada punto es una corrida.
+  - Cómo leerlo: bajo la raya roja, el sistema fue más barato. Solo el cierre queda claramente bajo el 0 (Wilcoxon p Holm = 0,009; Kruskal-Wallis entre tramos p = 0,011).
+  - Es exploratorio, y en el cierre se confunde con los días en que el precio sube.
+- **`costo_vs_tamano_parcial.png`:**
+  - Qué muestra: el costo medio de cada estrategia con los factores de tamaño 0,5 y 1, en profundidad ×1.
+  - Cómo leerlo: una línea más empinada significa que el costo sube más con el tamaño. El sistema sube +8,5 bps y TWAP +14,0, pero el cambio de la ventaja no es significativo (p = 0,080).
+  - Es parcial: falta el factor 1,5 (MR).
+- **Script:** `scripts/figuras_capitulo7_PS.py`. **Capítulo:** `docs/capitulo8_analisis_PS.md`.
+
+### `data/analysis/figuras_4_1_4/` (figuras estadísticas de PS para el informe, 4.1.4)
+- **`histograma_diferencias_90.png`:**
+  - Qué muestra: cuántas corridas tuvieron cada diferencia sistema − TWAP, con las líneas de la media (−3,3), la mediana (−11,2) y el 0.
+  - Cómo leerlo: si el centro de las barras está cerca del 0, no hay diferencia clara (Wilcoxon p = 0,386). Si la forma se parece a una campana, la normalidad no se rechaza (Shapiro p = 0,286).
+- **`costo_por_estrategia_varianzas.png`:**
+  - Qué muestra: el costo de cada corrida para el sistema, TWAP y VWAP.
+  - Cómo leerlo: la caja del sistema es más corta, o sea, su costo varía menos entre días (Pitman-Morgan p = 4,8·10⁻⁹ frente a TWAP).
+- **Script:** `scripts/figuras_estadisticas_4_1_4_PS.py`.
+
 ## 6. Gráficos del informe de Título II
 
 Se generan con `docs/informe_titulo2/generador/generar_figuras.py` a partir de cifras ya publicadas en los documentos de cada tarea (no calculan nada nuevo).
