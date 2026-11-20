@@ -196,7 +196,9 @@ Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si part
 - **Mismo código que las 90:** el cuaderno usa `feature/ps-3-2-1-cuadernos`, la rama con que se corrieron la ×1 y la ×4, así que las corridas quedan pareadas por orden y semilla con la ×1.
 - **Nombre:** el eje de tamaño se mide con la profundidad del market maker ×1 (antes, «liquidez media»; ver la desviación 10).
 - **Cambio del plan que se declara:** se aprueba después de ver la ×1 y la ×4 de las 90. No usa sus resultados para elegir los factores, que son los propuestos el 2 de noviembre.
-- **13 nov 2026: factor 0,5 corrido (BF).** 90 corridas, todas sobre el 95 %, mismas órdenes y semillas que la ×1. Sistema − TWAP: +2,20 bps [−20,84; 25,72] (con tamaño 1: −3,37). Detalle en `docs/tamanos_media_f05_resultado_BF.md`; tabla en `data/analysis/3_2_2/tabla_tamanos.*`. Falta el 1,5.
+- **13 nov 2026: factor 0,5 corrido (BF).** 90 corridas, todas sobre el 95 %, mismas órdenes y semillas que la ×1. Sistema − TWAP: +2,20 bps [−20,84; 25,72] (con tamaño 1: −3,37). Detalle en `docs/tamanos_media_f05_resultado_BF.md`; tabla en `data/analysis/3_2_2/tabla_tamanos.*`.
+- **15 nov 2026: factor 1,5 corrido (MR, PR #59).** 90 corridas con las mismas órdenes y semillas. Sistema − TWAP: −7,88 bps [−25,03; 9,47], p = 0,37. Siete corridas quedan bajo el 95 %, en órdenes de cierre; cuatro de ellas son del sistema (mínimo 78,4 %). Sin esos días, −5,06 [−23,50; 14,76] (n = 25; descriptivo, 20 nov). Detalle en `docs/tamanos_media_f15_resultado_MR.md`.
+- **Estado final (20 nov 2026): diseño en estrella completo.** Hay 3 tamaños con profundidad ×1 y 3 profundidades con tamaño 1. No hay interacción tamaño × profundidad. El contraste de tendencia por tamaño queda en la 3.2.4 (MR).
 
 ---
 

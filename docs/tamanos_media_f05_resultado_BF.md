@@ -5,7 +5,7 @@
 
 ## 1. Qué es
 
-Son las mismas 10 órdenes y semillas 4–6 que la ×1 de PS (`corridas_90/media`), con cada orden a la mitad (`--factor-tamano 0.5`): el 5 % del volumen del día, o el 2,5 % si parte en el cierre. Junto con la ×1 forman el eje de tamaño. Falta el 1,5 (por asignar; se propuso MR).
+Son las mismas 10 órdenes y semillas 4–6 que la ×1 de PS (`corridas_90/media`), con cada orden a la mitad (`--factor-tamano 0.5`): el 5 % del volumen del día, o el 2,5 % si parte en el cierre. Junto con la ×1 (PS) y el 1,5 (MR, 15 nov, `docs/tamanos_media_f15_resultado_MR.md`) forman el eje de tamaño.
 
 ## 2. Revisión de las corridas
 
@@ -56,7 +56,10 @@ Con un segundo tamaño en las entradas, `agregados.csv`, la sección «Por estra
 
 ## 5. Límites
 
-- **Es un eje de 2 puntos de 3:** falta el 1,5. Con dos tamaños no se puede hablar de tendencia.
+- **Actualización del 20 nov:** el eje tiene 3 puntos.
+  - Sistema − TWAP: +2,20 con 0,5; −3,37 con 1; −7,88 con 1,5.
+  - Sin los días bajo el 95 %, el 1,5 queda en −5,06 (`docs/consolidacion_3_2_2_BF.md`, sección 5.3).
+  - El contraste de tendencia es de la 3.2.4 (MR).
 - **El tamaño 0,5 queda fuera de lo que vio el Maestro** al entrenarse (desviación 12).
 - **30 días y una sola profundidad (×1):** no dice nada de la interacción entre tamaño y profundidad.
 - **Las pruebas de la sección 3.1 son descriptivas**, sin corrección por comparaciones múltiples.
