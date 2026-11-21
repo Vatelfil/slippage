@@ -4,7 +4,7 @@
 
 **Numeración:** es el Capítulo 9 de la estructura del informe final del Título I. El capítulo de análisis (tarea 4.1.3, «Capítulo 7» en el Excel) es el Capítulo 8 de esa estructura: `docs/capitulo8_analisis_PS.md`.
 
-**Pendiente:** en el hallazgo H6 (tamaño de orden) falta solo la prueba de tendencia de la tarea 3.2.4 (MR). Está marcado como **[PENDIENTE]**.
+**Estado:** completo. El hallazgo H6 (tamaño) incluye la prueba de tendencia de la 3.2.4 (MR), verificada por PS.
 
 **Convención:** cada afirmación estadística indica la prueba, el n y el valor p. El detalle de cómo se calculó está en el capítulo de análisis, que se cita por sección.
 
@@ -71,10 +71,11 @@ El Título I plantea verificar si el sistema reduce el costo de ejecución frent
 
 5. **H5. El sistema es más estable que TWAP y VWAP** (Pitman-Morgan p < 10⁻⁸). Evita los días muy caros y aprovecha menos los muy baratos. Es un resultado exploratorio, que también se observó en la primera evaluación (p = 8·10⁻⁵, n = 30).
 
-6. **H6. Con órdenes más grandes la ventaja relativa del sistema crece de forma significativa en el diseño pareado (3.2.4).**
-   - En profundidad ×1 (n = 30 por tamaño), sistema − TWAP fue +2,2 bps con el factor 0,5, −3,4 con 1 y −7,9 con 1,5 (ningún punto individual es significativo: Wilcoxon p = 0,95; 0,63 y 0,37).
-   - Sin embargo, el test pareado de Friedman sobre los 30 días bloqueados sí detecta una variación significativa entre tamaños (Q = 6,47, p = 0,0394 frente a TWAP; p = 0,0482 frente a VWAP), porque el costo de TWAP sube más rápido (+23,2 bps de 0,5 a 1,5) que el del sistema (+13,1 bps).
-   - Con 1,5, parte del ahorro proviene de días que no completaron: sin ellos queda en −5,1 bps (n = 25, p = 0,51), aunque el test de Friedman pareado mantiene significancia (Q = 6,08, p = 0,0478).
+6. **H6. Con órdenes más grandes, la ventaja del sistema tiende a crecer; la tendencia es significativa en el orden, no en la magnitud.**
+   - En profundidad ×1 (n = 30 días por tamaño), sistema − TWAP fue +2,2 bps con el factor 0,5, −3,4 con 1 y −7,9 con 1,5. Ningún punto es significativo por sí solo (Wilcoxon p = 0,95; 0,63 y 0,37).
+   - Dentro de cada día, la ventaja sigue el orden del tamaño: Friedman Q = 6,47, p = 0,039 (3.2.4, MR) y Page L = 379, p = 0,007 (PS).
+   - La magnitud del cambio de 0,5 a 1,5 (−10,1 bps) no es significativa (Wilcoxon p = 0,164).
+   - Es exploratorio. Con 1,5, parte del efecto viene de días que no completaron (sin ellos: −5,1 bps, n = 25; Friedman p = 0,048) y el Maestro opera fuera del tamaño de entrenamiento.
 
 7. **H7. Lección metodológica.**
    - La primera evaluación (semillas 1–3) sugería −22 bps (p = 0,096). Con días nuevos, la ventaja fue de −3 bps.

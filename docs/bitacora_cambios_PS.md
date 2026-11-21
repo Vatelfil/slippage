@@ -587,3 +587,13 @@
 - **Por qué:** BF avisó el 20 nov que la figura y la 8.6.3 tenían solo 0,5 y 1, y que con 1,5 el sistema baja a 78,4 % de cumplimiento.
 - **Qué no se hizo:** la prueba de tendencia por tamaño. Es la 3.2.4 de MR; queda marcada como [PENDIENTE].
 - **Quién:** PS. No se tocó trabajo de MR ni de BF.
+
+## 21 nov 2026: rama `feature/ps-cierre-cap8-cap9` (PS, con Claude Code)
+
+- **Qué se hizo en el PC:**
+  - Se verificó la 3.2.4 de MR: su Friedman da lo mismo (Q = 6,47, p = 0,039). Se agregó la prueba de Page, la de tendencia para niveles ordenados (L = 379, p = 0,007), y el Wilcoxon del cambio 0,5 → 1,5 (−10,08 bps, p = 0,164). Quedan en `scripts/figuras_capitulo7_PS.py` y `data/analysis/cap7/cifras_capitulo7.json`.
+  - Cap. 8: se quitaron las frases que aún decían «falta la 3.2.4»; la 8.6.2 (tramo) queda confirmada por la 3.2.4; la 8.6.3 tiene la tabla de pruebas de tendencia, cómo se calcularon y su lectura.
+  - Cap. 9: H6 reescrito: la tendencia es significativa en el orden, no en la magnitud, y es exploratoria.
+  - Guía: la 4.1.2 (Cap. 6) figura como de MR.
+- **Por qué:** MR completó la 3.2.4 y editó los capítulos 8 y 9, pero dejó frases contradictorias y un H6 que exageraba («crece de forma significativa»).
+- **Quién:** PS. No se cambió el trabajo de MR ni de BF (solo se cita).

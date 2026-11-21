@@ -22,6 +22,9 @@ def test_cifras_y_figuras(tmp_path):
     pp = r["tamano"]["por_punto"]
     assert pp["1.5"]["dif_twap"] == pytest.approx(-7.88, abs=0.01)
     assert pp["1.5"]["n_pares_ok"] == 25 and pp["1.5"]["dif_twap_ok"] == pytest.approx(-5.06, abs=0.01)
+    tt = r["tamano"]["tendencia"]
+    assert tt["friedman_p"] == pytest.approx(0.0394, abs=1e-3) and tt["page_p"] < 0.01
+    assert tt["cambio_05_15_wilcoxon_p"] == pytest.approx(0.164, abs=1e-3)
     assert pp["1.5"]["cumpl_min_sistema"] == pytest.approx(0.784, abs=1e-3)
 
 

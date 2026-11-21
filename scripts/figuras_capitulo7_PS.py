@@ -83,6 +83,17 @@ def main(argv=None):
     dd = ((q[(1.0, "PPO_sistema")] - q[(1.0, "TWAP")]) - (q[(0.5, "PPO_sistema")] - q[(0.5, "TWAP")])).to_numpy()
     res["tamano"]["cambio_ventaja"] = {"media": float(dd.mean()), "ic95": ic_boot(dd),
                                        "wilcoxon_p": float(stats.wilcoxon(dd).pvalue)}
+    # tendencia de la ventaja (confirma la 3.2.4 de MR): Friedman (omnibus) y Page (ordenada)
+    dv = np.column_stack([(q[(f, "PPO_sistema")] - q[(f, "TWAP")]).to_numpy() for f in [0.5, 1.0, 1.5]])
+    fr = stats.friedmanchisquare(dv[:, 0], dv[:, 1], dv[:, 2])
+    pg = stats.page_trend_test(dv[:, ::-1])  # hipotesis: la diferencia baja al crecer el tamano
+    dd15 = dv[:, 2] - dv[:, 0]
+    res["tamano"]["tendencia"] = {
+        "n_dias": int(len(dv)), "friedman_Q": float(fr.statistic), "friedman_p": float(fr.pvalue),
+        "page_L": float(pg.statistic), "page_p": float(pg.pvalue),
+        "dias_monotonos": int(((dv[:, 0] > dv[:, 1]) & (dv[:, 1] > dv[:, 2])).sum()),
+        "cambio_05_15": float(dd15.mean()), "cambio_05_15_ic95": ic_boot(dd15),
+        "cambio_05_15_wilcoxon_p": float(stats.wilcoxon(dd15).pvalue)}
     res["tamano"]["por_punto"] = {}
     for f in [0.5, 1.0, 1.5]:
         d = (q[(f, "PPO_sistema")] - q[(f, "TWAP")])

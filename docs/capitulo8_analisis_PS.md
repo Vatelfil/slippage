@@ -6,7 +6,7 @@
 
 **Estado:**
 - Completo con las 90 corridas, el control y el Maestro v2.
-- **Pendiente:** en la sección 8.6.3 (tamaño de orden) falta solo la prueba de tendencia de la tarea 3.2.4 (MR). Los tres tamaños (0,5, 1 y 1,5) ya están.
+- **Estado:** completo. La sección 8.6.3 (tamaño) incluye la prueba de tendencia de la 3.2.4 (MR) y la 8.6.2 (tramo) quedó confirmada por ella.
 
 **Convención:**
 - Costo = implementation shortfall en puntos base (bps) contra el precio de llegada.
@@ -255,7 +255,7 @@ Para comprobar si las causas de 8.5.1 explicaban el resultado, se entrenó una v
 
 ### 8.6.2 Tramo de inicio de la orden (exploratorio)
 
-> Preliminar: la sensibilidad oficial por tramo es parte de la 3.2.4 (MR). Este análisis usa solo las 90 corridas y se reemplazará o confirmará con ella.
+> **Confirmado por la 3.2.4 (MR, `docs/sensibilidad_3_2_4_MR.md`):** obtiene los mismos valores con las mismas 90 corridas (Kruskal-Wallis H = 8,98, p = 0,0112; cierre −34,78 bps, Wilcoxon p Holm = 0,0089). Sigue siendo exploratorio y con tramo y activo confundidos.
 
 | Tramo | n | Sistema − TWAP media | Mediana | IC 95 % | Wilcoxon p | p (Holm, 3 tramos) |
 |---|---|---|---|---|---|---|
@@ -277,7 +277,7 @@ Para comprobar si las causas de 8.5.1 explicaban el resultado, se entrenó una v
 
 ### 8.6.3 Tamaño de la orden (tres puntos y prueba de tendencia 3.2.4)
 
-> **Completado con la tarea 3.2.4 (`docs/sensibilidad_3_2_4_MR.md`):** El test pareado de **Friedman** sobre los 30 días bloqueados en los tres tamaños detecta una variación significativa de la ventaja `Sistema − TWAP` ($Q = 6{,}47$, **$p = 0{,}0394$**; frente a VWAP: $Q = 6{,}07$, **$p = 0{,}0482$**). En el análisis de robustez sin los 5 días bajo 95 % ($n = 25$), Friedman mantiene significancia ($Q = 6{,}08$, $p = 0{,}0478$), mientras que Spearman sin bloqueo por día no resulta significativo ($\rho = -0{,}049$, $p = 0{,}648$, $n = 90$).
+> **Prueba de tendencia: tarea 3.2.4 (MR, `docs/sensibilidad_3_2_4_MR.md`), verificada por PS.** Ver «Tendencia con el tamaño» más abajo.
 
 **Datos:** profundidad ×1, las mismas 10 meta-órdenes y semillas 4–6 en los tres tamaños (diseño en estrella, desviación 12). El factor 0,5 lo corrió BF, el 1 PS y el 1,5 MR. Cifras de la 3.2.2 (`data/analysis/3_2_2/tabla_tamanos.md`).
 
@@ -301,7 +301,23 @@ Para comprobar si las causas de 8.5.1 explicaban el resultado, se entrenó una v
 - El costo sube con el tamaño en las tres estrategias, como predice el impacto en raíz cuadrada. Entre 0,5 y 1,5, TWAP sube 23,2 bps y el sistema 13,1 bps.
 - Por eso la diferencia sistema − TWAP pasa de +2,2 a −3,4 y a −7,9 bps. **Ningún punto es significativo por sí solo** (p entre 0,37 y 0,95).
 - El cambio de la ventaja entre 0,5 y 1 tampoco es significativo: −5,57 bps [−11,77; 0,26], Wilcoxon n = 30, p = 0,080 (exploratorio).
-- Si la ventaja crece de verdad con el tamaño, lo dirá la prueba de tendencia de la 3.2.4.
+
+**Tendencia con el tamaño (3.2.4 de MR, verificada por PS):**
+
+| Prueba | Qué mide | n | Estadístico | p |
+|---|---|---|---|---|
+| Friedman (3.2.4, MR) | Si la diferencia sistema − TWAP cambia entre los 3 tamaños, comparando dentro de cada día | 30 días | Q = 6,47 | 0,039 |
+| Page (PS) | Si la diferencia baja de forma ordenada al crecer el tamaño (prueba de tendencia para niveles ordenados) | 30 días | L = 379 | 0,007 |
+| Wilcoxon (PS) | Cuánto cambia la diferencia de 0,5 a 1,5 | 30 días | −10,08 bps [−23,66; 3,11] | 0,164 |
+| Friedman sin días bajo 95 % (3.2.4, MR) | Robustez al cumplimiento | 25 días | Q = 6,08 | 0,048 |
+
+**Cómo se calculó:** para cada uno de los 30 días (10 órdenes × semillas 4–6) se toma sistema − TWAP en los tres tamaños. Friedman y Page ordenan esas tres diferencias dentro de cada día (rango 1 a 3) y prueban si los rangos medios difieren (Friedman) o siguen el orden 0,5 > 1 > 1,5 (Page, unilateral). Wilcoxon de rangos con signo sobre la diferencia 1,5 − 0,5 de cada día. Rangos medios: 2,37 (0,5), 1,90 (1) y 1,73 (1,5).
+
+**Lectura:**
+- **Hay una tendencia significativa en el orden:** dentro de un mismo día, la ventaja del sistema tiende a ser mayor con órdenes más grandes (Page p = 0,007; Friedman p = 0,039).
+- **El tamaño del cambio no es significativo:** de 0,5 a 1,5 la ventaja mejora 10,1 bps en promedio, pero el IC incluye el 0 (Wilcoxon p = 0,164). Solo 12 de 30 días mejoran en los dos pasos.
+- **Es exploratorio:** la 3.2.4 hace muchas pruebas sin corrección por multiplicidad, y no estaba en el análisis registrado como prueba principal.
+- **Interpretación prudente:** el sistema se degrada menos que TWAP cuando la orden crece, lo que es coherente con que sus Ejecutores usen órdenes límite y no crucen el spread. Pero con 1,5 parte del efecto viene de días que no completaron y el Maestro opera fuera del tamaño con que se entrenó.
 
 **Cumplimiento** (advertencia de BF, `data/analysis/capitulo7_BF/tabla_cumplimiento.md`):
 - Con el factor 1,5 el sistema no siempre completa la orden: mínimo 78,4 %, y 4 de 30 días bajo el 95 % (órdenes que parten tarde, MO-08 y MO-09). TWAP y VWAP bajan hasta 83,1 %.

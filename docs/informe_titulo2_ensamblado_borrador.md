@@ -21,10 +21,10 @@
 | 3 | Definición del problema y análisis del entorno | — (sale del Título I) | **Equipo (PS, MR y BF)** | Título I: secciones 4.1.3 y 4.3, y tarea 1.2.2 (datos) | ✅ Hecho en conjunto (Título I) |
 | 4 | Diseño de la solución | 4.1.1 «Cap. 5 Metodología» (MDP, espacios, recompensas, PPO, CTDE) | MR | `docs/capitulo5_metodologia_MR.md` (Parte I) | ✅ Sprint 8 (MR) |
 | 5 | Implementación del sistema | 4.1.1 «Cap. 5 Metodología» (simulador calibrado, pseudocódigo) | MR | `docs/capitulo5_metodologia_MR.md` (Parte II) | ✅ Sprint 8 (MR) |
-| 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | MR / BF | `docs/capitulo6_entrenamiento_experimentacion_MR.md` | ✅ Sprint 8 (MR) |
+| 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | MR (4.1.2 reasignada a MR) | `docs/capitulo6_entrenamiento_experimentacion_MR.md` | ✅ Sprint 8 (MR) |
 | 7 | Resultados y evaluación | 4.1.2 «Cap. 6 Resultados» (desempeño comparativo, por escenario, robustez) | BF | `docs/capitulo7_figuras_tablas_BF.md` y `data/analysis/capitulo7_BF/` | ⏳ Sprint 8 (figuras y tablas listas). Reparto propuesto por BF (20 nov): el 7 informa tablas y figuras; la interpretación estadística va en el 8 |
-| 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Completo (8.6.3 actualizado con 3.2.4 de MR) |
-| 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Completo (H6 actualizado con 3.2.4 de MR) |
+| 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Completo (8.6.3 con la 3.2.4 de MR verificada por PS: Friedman p = 0,039, Page p = 0,007) |
+| 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Completo (H6 con la tendencia significativa en el orden, no en la magnitud) |
 | — | Bibliografía | — | Equipo | — | ⏳ Juntar las referencias de cada capítulo |
 | — | Anexos: desviaciones del Título I | — | Equipo | `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` | ✅ Existe (desviaciones 1 a 14) |
 
