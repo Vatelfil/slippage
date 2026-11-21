@@ -19,12 +19,12 @@
 | 1 | Introducción | — (sale del Título I) | **Equipo (PS, MR y BF)** | Título I: resumen, objetivos y alcances | ✅ Hecho en conjunto (Título I) |
 | 2 | Marco teórico y estado del arte | — (sale del Título I) | **Equipo (PS, MR y BF)** | Título I: secciones 4.1 y 4.2.3 | ✅ Hecho en conjunto (Título I) |
 | 3 | Definición del problema y análisis del entorno | — (sale del Título I) | **Equipo (PS, MR y BF)** | Título I: secciones 4.1.3 y 4.3, y tarea 1.2.2 (datos) | ✅ Hecho en conjunto (Título I) |
-| 4 | Diseño de la solución | 4.1.1 «Cap. 5 Metodología» (MDP, espacios, recompensas, PPO, CTDE) | MR | (lo define MR) | ⏳ Sprint 8 |
-| 5 | Implementación del sistema | 4.1.1 «Cap. 5 Metodología» (simulador calibrado, pseudocódigo) | MR | (lo define MR) | ⏳ Sprint 8 |
-| 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | BF | (lo define BF) | ⏳ Sprint 8 |
+| 4 | Diseño de la solución | 4.1.1 «Cap. 5 Metodología» (MDP, espacios, recompensas, PPO, CTDE) | MR | `docs/capitulo5_metodologia_MR.md` (Parte I) | ✅ Sprint 8 (MR) |
+| 5 | Implementación del sistema | 4.1.1 «Cap. 5 Metodología» (simulador calibrado, pseudocódigo) | MR | `docs/capitulo5_metodologia_MR.md` (Parte II) | ✅ Sprint 8 (MR) |
+| 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | MR / BF | `docs/capitulo6_entrenamiento_experimentacion_MR.md` | ✅ Sprint 8 (MR) |
 | 7 | Resultados y evaluación | 4.1.2 «Cap. 6 Resultados» (desempeño comparativo, por escenario, robustez) | BF | `docs/capitulo7_figuras_tablas_BF.md` y `data/analysis/capitulo7_BF/` | ⏳ Sprint 8 (figuras y tablas listas). Reparto propuesto por BF (20 nov): el 7 informa tablas y figuras; la interpretación estadística va en el 8 |
-| 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Escrito. En 8.6.3 falta solo la prueba de tendencia (3.2.4 de MR) |
-| 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Borrador avanzado. En H6 falta solo la prueba de tendencia (3.2.4 de MR) |
+| 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Completo (8.6.3 actualizado con 3.2.4 de MR) |
+| 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Completo (H6 actualizado con 3.2.4 de MR) |
 | — | Bibliografía | — | Equipo | — | ⏳ Juntar las referencias de cada capítulo |
 | — | Anexos: desviaciones del Título I | — | Equipo | `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` | ✅ Existe (desviaciones 1 a 14) |
 
@@ -34,7 +34,7 @@
 
 | Figura o tabla | Capítulo | Aporta | Archivo | Estado |
 |---|---|---|---|---|
-| Curvas de aprendizaje (loss y reward) y KL del Maestro y del Ejecutor | 6 | MR | (lo genera MR desde `sistema_final/maestro/entrenamiento_maestro.csv` y `rimit/d3_opcion0_s1000/`) | ⏳ |
+| Curvas de aprendizaje (loss y reward) y KL del Maestro y del Ejecutor | 6 | MR | `data/analysis/cap6_MR/curvas_maestro.png` y `curvas_ejecutor.png` | ✅ |
 | Cajas de costo por escenario, IS comparativo | 7 | BF | `corridas_90/*/tabla/cajas.png` y las de la 3.2.2 | ⏳ (existen versiones de trabajo) |
 | Distribución de las diferencias sistema − TWAP (Wilcoxon, Shapiro) | 8 | PS | `data/analysis/figuras_4_1_4/histograma_diferencias_90.png` | ✅ |
 | Costo por estrategia con prueba de varianzas (Pitman-Morgan) | 8 | PS | `data/analysis/figuras_4_1_4/costo_por_estrategia_varianzas.png` | ✅ |
@@ -43,7 +43,7 @@
 | Q-Q de las diferencias | 8 | PS | `data/analysis/3_2_3/qq_diferencias.png` | ✅ |
 | Aporte de cada nivel (control de reglas) | 8 | PS | `data/colab_resultados/control_reglas/media/analisis/control_reglas.png` | ✅ |
 | Diferencia por tramo de inicio | 8 | PS | `data/analysis/cap7/diferencia_por_tramo.png` | ✅ (exploratoria) |
-| Costo frente al tamaño (0,5 / 1 / 1,5) | 8 | PS | `data/analysis/cap7/costo_vs_tamano.png` | ✅ (la prueba de tendencia la agrega la 3.2.4 de MR) |
+| Costo frente al tamaño (0,5 / 1 / 1,5) | 8 | PS / MR | `data/analysis/cap7/costo_vs_tamano.png` y `data/analysis/3_2_4/sensibilidad_tamano.png` | ✅ |
 
 **Criterios para todas las figuras** (profesora, 6 de noviembre):
 - título técnico, no una conclusión;
@@ -63,5 +63,5 @@
 - [ ] Los títulos de las secciones y las figuras son técnicos.
 - [ ] Cada alternativa probada tiene ventajas, desventajas y costos.
 - [ ] Las desviaciones del Título I están citadas donde corresponde.
-- [ ] Las secciones con [PENDIENTE] están completas (8.6.3 y H6, cuando llegue la 3.2.4).
+- [x] Las secciones con [PENDIENTE] están completas (8.6.3 y H6, con la 3.2.4 de MR).
 - [ ] La bibliografía está unificada.
