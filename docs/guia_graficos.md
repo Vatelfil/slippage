@@ -136,10 +136,10 @@
   - Qué muestra: una caja por tramo de inicio de la orden (apertura, media jornada, cierre) con las diferencias sistema − TWAP de las 90 corridas; cada punto es una corrida.
   - Cómo leerlo: bajo la raya roja, el sistema fue más barato. Solo el cierre queda claramente bajo el 0 (Wilcoxon p Holm = 0,009; Kruskal-Wallis entre tramos p = 0,011).
   - Es exploratorio, y en el cierre se confunde con los días en que el precio sube.
-- **`costo_vs_tamano_parcial.png`:**
-  - Qué muestra: el costo medio de cada estrategia con los factores de tamaño 0,5 y 1, en profundidad ×1.
-  - Cómo leerlo: una línea más empinada significa que el costo sube más con el tamaño. El sistema sube +8,5 bps y TWAP +14,0, pero el cambio de la ventaja no es significativo (p = 0,080).
-  - Es parcial: falta el factor 1,5 (MR).
+- **`costo_vs_tamano.png`** (reemplaza a `costo_vs_tamano_parcial.png`, 20 nov):
+  - **Qué muestra:** el costo medio de sistema, TWAP y VWAP con órdenes del 5 %, 10 % y 15 % del volumen del día (factores 0,5, 1 y 1,5), en profundidad ×1, con 30 días pareados por punto.
+  - **Cómo leerlo:** mientras más empinada la línea, más sube el costo al crecer la orden. Bajo cada punto va sistema − TWAP y su Wilcoxon p.
+  - **Qué dice:** TWAP y VWAP suben más rápido que el sistema, así que la ventaja del sistema crece (+2,2 → −3,4 → −7,9 bps), pero ningún punto es significativo. La prueba de tendencia es la 3.2.4 (MR).
 - **Script:** `scripts/figuras_capitulo7_PS.py`. **Capítulo:** `docs/capitulo8_analisis_PS.md`.
 
 ### `data/analysis/figuras_4_1_4/` (figuras estadísticas de PS para el informe, 4.1.4)

@@ -6,7 +6,7 @@
 
 **Estado:**
 - Completo con las 90 corridas, el control y el Maestro v2.
-- **Pendiente:** la sección 8.6.3 (tamaño de orden). Espera el factor 1,5 y la tarea 3.2.4 (MR). Ahí se informa un resultado parcial con los factores 0,5 y 1.
+- **Pendiente:** en la sección 8.6.3 (tamaño de orden) falta solo la prueba de tendencia de la tarea 3.2.4 (MR). Los tres tamaños (0,5, 1 y 1,5) ya están.
 
 **Convención:**
 - Costo = implementation shortfall en puntos base (bps) contra el precio de llegada.
@@ -275,23 +275,45 @@ Para comprobar si las causas de 8.5.1 explicaban el resultado, se entrenó una v
   - Kruskal-Wallis entre los tres grupos.
   - Script: `scripts/figuras_capitulo7_PS.py`. Datos: `data/analysis/cap7/cifras_capitulo7.json`. Figura: `diferencia_por_tramo.png`.
 
-### 8.6.3 Tamaño de la orden (parcial, pendiente del factor 1,5 y de la 3.2.4)
+### 8.6.3 Tamaño de la orden (tres puntos; falta la prueba de tendencia de la 3.2.4)
 
-> **[PENDIENTE]** Falta el factor 1,5 (MR) y el análisis oficial de la 3.2.4 (MR). Con eso se completa ∂IS/∂tamaño en tres puntos y se prueba si la pendiente del sistema difiere de la de TWAP.
+> **[PENDIENTE]** La prueba formal de si la ventaja cambia con el tamaño (tendencia en los tres puntos) es la tarea 3.2.4 (MR). Aquí se informan los tres puntos y su lectura; cuando llegue la 3.2.4 se agrega su prueba y su valor p.
 
-Resultado parcial con los factores 0,5 y 1, en profundidad ×1, n = 30 pares (diseño en estrella, desviación 12):
+**Datos:** profundidad ×1, las mismas 10 meta-órdenes y semillas 4–6 en los tres tamaños (diseño en estrella, desviación 12). El factor 0,5 lo corrió BF, el 1 PS y el 1,5 MR. Cifras de la 3.2.2 (`data/analysis/3_2_2/tabla_tamanos.md`).
 
-| Estrategia | Costo con 0,5 | Costo con 1 | Aumento al duplicar el tamaño | IC 95 % | Wilcoxon p |
-|---|---|---|---|---|---|
-| Sistema | 38,63 | 47,11 | +8,48 | [3,57; 12,96] | 7,3·10⁻⁴ |
-| TWAP | 36,43 | 50,48 | +14,04 | [10,69; 16,95] | 1,4·10⁻⁶ |
-| VWAP | 36,68 | 51,30 | +14,62 | [11,16; 17,59] | 1,0·10⁻⁶ |
+| Factor (volumen del día) | n | Sistema | TWAP | VWAP | Sistema − TWAP | IC 95 % | Wilcoxon p |
+|---|---|---|---|---|---|---|---|
+| 0,5 (5 %) | 30 | 38,63 | 36,43 | 36,68 | +2,20 | [−20,84; 25,72] | 0,95 |
+| 1 (10 %) | 30 | 47,11 | 50,48 | 51,30 | −3,37 | [−26,15; 19,63] | 0,63 |
+| 1,5 (15 %) | 30 | 51,75 | 59,63 | 60,75 | −7,88 | [−25,03; 9,47] | 0,37 |
 
-- El costo sube con el tamaño en las tres estrategias, como predice el impacto en raíz cuadrada.
-- El costo del sistema sube menos: +8,5 bps contra +14,0 de TWAP.
-- **Pero el cambio de la ventaja no es significativo:** (sistema − TWAP con 1) − (sistema − TWAP con 0,5) = −5,57 bps [−11,77; 0,26], Wilcoxon p = 0,080.
-- **Límite:** el Maestro se entrenó con un solo tamaño (factor 1), así que 0,5 queda fuera de lo que vio, y 1,5 será una extrapolación.
-- Figura: `data/analysis/cap7/costo_vs_tamano_parcial.png`.
+**Cómo se calculó:** en cada tamaño se toma la diferencia sistema − TWAP de cada uno de los 30 días pareados; Wilcoxon de rangos con signo bilateral sobre esas 30 diferencias; IC 95 % por bootstrap de la media.
+
+**Cuánto sube el costo al pasar de 0,5 a 1** (mismos 30 días; Wilcoxon sobre la diferencia de costo de cada día):
+
+| Estrategia | Aumento | IC 95 % | Wilcoxon p |
+|---|---|---|---|
+| Sistema | +8,48 | [3,57; 12,96] | 7,3·10⁻⁴ |
+| TWAP | +14,04 | [10,69; 16,95] | 1,4·10⁻⁶ |
+| VWAP | +14,62 | [11,16; 17,59] | 1,0·10⁻⁶ |
+
+**Lectura:**
+- El costo sube con el tamaño en las tres estrategias, como predice el impacto en raíz cuadrada. Entre 0,5 y 1,5, TWAP sube 23,2 bps y el sistema 13,1 bps.
+- Por eso la diferencia sistema − TWAP pasa de +2,2 a −3,4 y a −7,9 bps. **Ningún punto es significativo por sí solo** (p entre 0,37 y 0,95).
+- El cambio de la ventaja entre 0,5 y 1 tampoco es significativo: −5,57 bps [−11,77; 0,26], Wilcoxon n = 30, p = 0,080 (exploratorio).
+- Si la ventaja crece de verdad con el tamaño, lo dirá la prueba de tendencia de la 3.2.4.
+
+**Cumplimiento** (advertencia de BF, `data/analysis/capitulo7_BF/tabla_cumplimiento.md`):
+- Con el factor 1,5 el sistema no siempre completa la orden: mínimo 78,4 %, y 4 de 30 días bajo el 95 % (órdenes que parten tarde, MO-08 y MO-09). TWAP y VWAP bajan hasta 83,1 %.
+- Un día que no completa compra menos y por eso puede parecer más barato. **Prueba de robustez:** sin los 5 días en que alguna estrategia queda bajo el 95 %, sistema − TWAP con 1,5 = −5,06 bps (IC 95 % [−23,50; 14,76] según la 3.2.2; Wilcoxon n = 25, p = 0,51).
+- Con el castigo de 30 bps por volumen no ejecutado queda en −6,66 bps (p = 0,38).
+- La dirección se mantiene, pero más débil: parte de la ventaja en 1,5 viene de días que no completaron.
+
+**Límites:**
+- El Maestro se entrenó con un solo tamaño (factor 1): 0,5 y 1,5 quedan fuera de lo que vio, y 1,5 es una extrapolación.
+- El tamaño se midió solo en profundidad ×1: no se sabe si interactúa con la profundidad.
+
+Figura: `data/analysis/cap7/costo_vs_tamano.png` (costo medio de las tres estrategias en los tres tamaños, con sistema − TWAP y su valor p en cada punto).
 
 ### 8.6.4 Supuestos que no se variaron
 

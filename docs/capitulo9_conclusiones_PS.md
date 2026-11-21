@@ -4,7 +4,7 @@
 
 **Numeración:** es el Capítulo 9 de la estructura del informe final del Título I. El capítulo de análisis (tarea 4.1.3, «Capítulo 7» en el Excel) es el Capítulo 8 de esa estructura: `docs/capitulo8_analisis_PS.md`.
 
-**Pendiente:** el hallazgo H6 (tamaño de orden), que espera el factor 1,5 y la tarea 3.2.4 (MR). Está marcado como **[PENDIENTE]**.
+**Pendiente:** en el hallazgo H6 (tamaño de orden) falta solo la prueba de tendencia de la tarea 3.2.4 (MR). Está marcado como **[PENDIENTE]**.
 
 **Convención:** cada afirmación estadística indica la prueba, el n y el valor p. El detalle de cómo se calculó está en el capítulo de análisis, que se cita por sección.
 
@@ -71,9 +71,10 @@ El Título I plantea verificar si el sistema reduce el costo de ejecución frent
 
 5. **H5. El sistema es más estable que TWAP y VWAP** (Pitman-Morgan p < 10⁻⁸). Evita los días muy caros y aprovecha menos los muy baratos. Es un resultado exploratorio, que también se observó en la primera evaluación (p = 8·10⁻⁵, n = 30).
 
-6. **H6. Sensibilidad al tamaño de orden [PENDIENTE: factor 1,5 y 3.2.4 de MR].**
-   - Resultado parcial (factores 0,5 y 1, profundidad ×1, n = 30): al duplicar el tamaño, el costo del sistema sube 8,5 bps y el de TWAP 14,0 bps.
-   - El cambio de la ventaja no es significativo (Wilcoxon p = 0,080).
+6. **H6. Con órdenes más grandes el sistema tiende a ganar ventaja, sin significancia [PENDIENTE: prueba de tendencia de la 3.2.4 de MR].**
+   - En profundidad ×1 (n = 30 por tamaño), sistema − TWAP fue +2,2 bps con el factor 0,5, −3,4 con 1 y −7,9 con 1,5 (Wilcoxon p = 0,95; 0,63 y 0,37).
+   - El costo de TWAP sube más rápido con el tamaño (+23,2 bps de 0,5 a 1,5) que el del sistema (+13,1).
+   - Con 1,5, parte de la ventaja viene de días que no completaron: sin ellos queda en −5,1 bps (n = 25, p = 0,51).
 
 7. **H7. Lección metodológica.**
    - La primera evaluación (semillas 1–3) sugería −22 bps (p = 0,096). Con días nuevos, la ventaja fue de −3 bps.
