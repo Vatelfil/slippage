@@ -275,9 +275,9 @@ Para comprobar si las causas de 8.5.1 explicaban el resultado, se entrenó una v
   - Kruskal-Wallis entre los tres grupos.
   - Script: `scripts/figuras_capitulo7_PS.py`. Datos: `data/analysis/cap7/cifras_capitulo7.json`. Figura: `diferencia_por_tramo.png`.
 
-### 8.6.3 Tamaño de la orden (tres puntos; falta la prueba de tendencia de la 3.2.4)
+### 8.6.3 Tamaño de la orden (tres puntos y prueba de tendencia 3.2.4)
 
-> **[PENDIENTE]** La prueba formal de si la ventaja cambia con el tamaño (tendencia en los tres puntos) es la tarea 3.2.4 (MR). Aquí se informan los tres puntos y su lectura; cuando llegue la 3.2.4 se agrega su prueba y su valor p.
+> **Completado con la tarea 3.2.4 (`docs/sensibilidad_3_2_4_MR.md`):** El test pareado de **Friedman** sobre los 30 días bloqueados en los tres tamaños detecta una variación significativa de la ventaja `Sistema − TWAP` ($Q = 6{,}47$, **$p = 0{,}0394$**; frente a VWAP: $Q = 6{,}07$, **$p = 0{,}0482$**). En el análisis de robustez sin los 5 días bajo 95 % ($n = 25$), Friedman mantiene significancia ($Q = 6{,}08$, $p = 0{,}0478$), mientras que Spearman sin bloqueo por día no resulta significativo ($\rho = -0{,}049$, $p = 0{,}648$, $n = 90$).
 
 **Datos:** profundidad ×1, las mismas 10 meta-órdenes y semillas 4–6 en los tres tamaños (diseño en estrella, desviación 12). El factor 0,5 lo corrió BF, el 1 PS y el 1,5 MR. Cifras de la 3.2.2 (`data/analysis/3_2_2/tabla_tamanos.md`).
 

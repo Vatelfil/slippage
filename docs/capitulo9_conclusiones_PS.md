@@ -71,10 +71,10 @@ El Título I plantea verificar si el sistema reduce el costo de ejecución frent
 
 5. **H5. El sistema es más estable que TWAP y VWAP** (Pitman-Morgan p < 10⁻⁸). Evita los días muy caros y aprovecha menos los muy baratos. Es un resultado exploratorio, que también se observó en la primera evaluación (p = 8·10⁻⁵, n = 30).
 
-6. **H6. Con órdenes más grandes el sistema tiende a ganar ventaja, sin significancia [PENDIENTE: prueba de tendencia de la 3.2.4 de MR].**
-   - En profundidad ×1 (n = 30 por tamaño), sistema − TWAP fue +2,2 bps con el factor 0,5, −3,4 con 1 y −7,9 con 1,5 (Wilcoxon p = 0,95; 0,63 y 0,37).
-   - El costo de TWAP sube más rápido con el tamaño (+23,2 bps de 0,5 a 1,5) que el del sistema (+13,1).
-   - Con 1,5, parte de la ventaja viene de días que no completaron: sin ellos queda en −5,1 bps (n = 25, p = 0,51).
+6. **H6. Con órdenes más grandes la ventaja relativa del sistema crece de forma significativa en el diseño pareado (3.2.4).**
+   - En profundidad ×1 (n = 30 por tamaño), sistema − TWAP fue +2,2 bps con el factor 0,5, −3,4 con 1 y −7,9 con 1,5 (ningún punto individual es significativo: Wilcoxon p = 0,95; 0,63 y 0,37).
+   - Sin embargo, el test pareado de Friedman sobre los 30 días bloqueados sí detecta una variación significativa entre tamaños (Q = 6,47, p = 0,0394 frente a TWAP; p = 0,0482 frente a VWAP), porque el costo de TWAP sube más rápido (+23,2 bps de 0,5 a 1,5) que el del sistema (+13,1 bps).
+   - Con 1,5, parte del ahorro proviene de días que no completaron: sin ellos queda en −5,1 bps (n = 25, p = 0,51), aunque el test de Friedman pareado mantiene significancia (Q = 6,08, p = 0,0478).
 
 7. **H7. Lección metodológica.**
    - La primera evaluación (semillas 1–3) sugería −22 bps (p = 0,096). Con días nuevos, la ventaja fue de −3 bps.
