@@ -18,7 +18,11 @@ def test_cifras_y_figuras(tmp_path):
     assert r["tramo"]["grupos"]["cierre"]["wilcoxon_p_holm"] < 0.05
     assert r["tramo"]["kruskal_p"] == pytest.approx(0.0112, abs=1e-3)
     assert r["tamano"]["TWAP"]["pendiente_por_0_5"] == pytest.approx(14.04, abs=0.01)
-    assert (tmp_path / "diferencia_por_tramo.png").exists() and (tmp_path / "costo_vs_tamano_parcial.png").exists()
+    assert (tmp_path / "diferencia_por_tramo.png").exists() and (tmp_path / "costo_vs_tamano.png").exists()
+    pp = r["tamano"]["por_punto"]
+    assert pp["1.5"]["dif_twap"] == pytest.approx(-7.88, abs=0.01)
+    assert pp["1.5"]["n_pares_ok"] == 25 and pp["1.5"]["dif_twap_ok"] == pytest.approx(-5.06, abs=0.01)
+    assert pp["1.5"]["cumpl_min_sistema"] == pytest.approx(0.784, abs=1e-3)
 
 
 def test_figuras_4_1_4(tmp_path):

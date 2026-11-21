@@ -1,5 +1,5 @@
 """Figuras y cifras exploratorias del Capitulo 7 (PS, 15 nov 2026): diferencia sistema - TWAP por tramo de inicio
-y por direccion del dia en las 90 corridas, y costo frente al tamano (0,5 y 1) en profundidad x1.
+y por direccion del dia en las 90 corridas, y costo frente al tamano (0,5, 1 y 1,5) en profundidad x1.
 
 Uso: python scripts/figuras_capitulo7_PS.py --out-dir data/analysis/cap7
 """
@@ -65,19 +65,37 @@ def main(argv=None):
                     "grupos": {t: {"n": int(len(v)), "media": float(v.mean()), "mediana": float(np.median(v)),
                                    "ic95": ic_boot(v), "wilcoxon_p": pw[t], "wilcoxon_p_holm": holm[t]}
                                for t, v in grupos.items()}}
-    # tamano 0,5 vs 1 en x1
-    t1 = pd.read_csv(ROOT / "data/colab_resultados/corridas_90/media/tabla/corridas.csv").assign(f=1.0)
-    t05 = pd.read_csv(ROOT / "data/colab_resultados/tamanos/media_f0.5/tabla/corridas.csv").assign(f=0.5)
-    q = pd.concat([t1, t05]).pivot_table(index=["orden", "seed"], columns=["f", "estrategia"], values="costo")
+    # tamano 0,5 / 1 / 1,5 en x1 (descriptivo por punto; la prueba de tendencia es la 3.2.4 de MR)
+    base = ROOT / "data/colab_resultados"
+    partes = [pd.read_csv(base / "corridas_90/media/tabla/corridas.csv").assign(f=1.0),
+              pd.read_csv(base / "tamanos/media_f0.5/tabla/corridas.csv").assign(f=0.5),
+              pd.read_csv(base / "tamanos/media_f1.5/tabla/corridas.csv").assign(f=1.5)]
+    todas = pd.concat(partes)
+    q = todas.pivot_table(index=["orden", "seed"], columns=["f", "estrategia"], values="costo")
+    cu = todas.pivot_table(index=["orden", "seed"], columns=["f", "estrategia"], values="cumplimiento")
     res["tamano"] = {}
     for s in ["PPO_sistema", "TWAP", "VWAP"]:
         x = (q[(1.0, s)] - q[(0.5, s)]).to_numpy()
         res["tamano"][s] = {"is_05": float(q[(0.5, s)].mean()), "is_1": float(q[(1.0, s)].mean()),
+                            "is_15": float(q[(1.5, s)].mean()),
                             "pendiente_por_0_5": float(x.mean()), "ic95": ic_boot(x),
                             "wilcoxon_p": float(stats.wilcoxon(x).pvalue)}
     dd = ((q[(1.0, "PPO_sistema")] - q[(1.0, "TWAP")]) - (q[(0.5, "PPO_sistema")] - q[(0.5, "TWAP")])).to_numpy()
     res["tamano"]["cambio_ventaja"] = {"media": float(dd.mean()), "ic95": ic_boot(dd),
                                        "wilcoxon_p": float(stats.wilcoxon(dd).pvalue)}
+    res["tamano"]["por_punto"] = {}
+    for f in [0.5, 1.0, 1.5]:
+        d = (q[(f, "PPO_sistema")] - q[(f, "TWAP")])
+        # mismo criterio que BF (3.2.2): se quitan los dias en que alguna estrategia queda bajo 95 %
+        ok = (cu[(f, "PPO_sistema")] >= 0.95) & (cu[(f, "TWAP")] >= 0.95) & (cu[(f, "VWAP")] >= 0.95)
+        d_ok = d[ok].to_numpy()
+        res["tamano"]["por_punto"][str(f)] = {
+            "n": int(len(d)), "dif_twap": float(d.mean()), "ic95": ic_boot(d.to_numpy()),
+            "wilcoxon_p": float(stats.wilcoxon(d.to_numpy()).pvalue),
+            "cumpl_min_sistema": float(cu[(f, "PPO_sistema")].min()),
+            "n_sistema_bajo_95": int((cu[(f, "PPO_sistema")] < 0.95).sum()),
+            "n_pares_ok": int(ok.sum()), "dif_twap_ok": float(d_ok.mean()), "ic95_ok": ic_boot(d_ok),
+            "wilcoxon_p_ok": float(stats.wilcoxon(d_ok).pvalue)}
     (out / "cifras_capitulo7.json").write_text(json.dumps(res, indent=1, ensure_ascii=False), encoding="utf-8")
 
     # figura 1: diferencia por tramo
@@ -98,19 +116,26 @@ def main(argv=None):
     fig.savefig(out / "diferencia_por_tramo.png", dpi=130)
     plt.close(fig)
 
-    # figura 2: costo frente al tamano
-    fig, ax = plt.subplots(figsize=(6.0, 4.0))
+    # figura 2: costo frente al tamano (tres puntos)
+    fig, ax = plt.subplots(figsize=(6.4, 4.4))
+    xs = [0.5, 1.0, 1.5]
     for s, c in [("PPO_sistema", VERDE), ("TWAP", GRIS), ("VWAP", "#B07D2B")]:
-        ax.plot([0.5, 1.0], [res["tamano"][s]["is_05"], res["tamano"][s]["is_1"]], "o-", color=c,
-                label=f"{s}: +{res['tamano'][s]['pendiente_por_0_5']:.1f} bps (p = {res['tamano'][s]['wilcoxon_p']:.1e})")
-    ax.set_xticks([0.5, 1.0])
-    ax.set_xticklabels(["0,5 (5 % del día)", "1 (10 % del día)"])
+        ys = [res["tamano"][s]["is_05"], res["tamano"][s]["is_1"], res["tamano"][s]["is_15"]]
+        ax.plot(xs, ys, "o-", color=c, label=s)
+    pp = res["tamano"]["por_punto"]
+    etiquetas = []
+    for f, nom in [(0.5, "0,5 (5 % del día)"), (1.0, "1 (10 % del día)"), (1.5, "1,5 (15 % del día)")]:
+        r = pp[str(f)]
+        etiquetas.append(f"{nom}\nsist. − TWAP {r['dif_twap']:+.1f}\n(Wilcoxon p = {r['wilcoxon_p']:.2f})")
+    ax.set_xticks(xs)
+    ax.set_xticklabels(etiquetas, fontsize=7)
     ax.set_ylabel("costo medio (bps)")
-    ax.set_title("Costo medio frente al factor de tamaño, profundidad ×1 (n = 30 pares)", fontsize=9)
+    ax.set_title("Costo medio frente al factor de tamaño, profundidad ×1\n(n = 30 pares por punto; descriptivo, "
+                 "la prueba de tendencia es la 3.2.4)", fontsize=9)
     ax.legend(fontsize=7)
     ax.grid(alpha=0.3)
     fig.tight_layout()
-    fig.savefig(out / "costo_vs_tamano_parcial.png", dpi=130)
+    fig.savefig(out / "costo_vs_tamano.png", dpi=130)
     plt.close(fig)
     print(json.dumps(res, indent=1, ensure_ascii=False))
 

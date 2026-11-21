@@ -576,3 +576,14 @@
 - **Por qué:** esos capítulos ya los escribieron los tres en el Título I; el reparto por sprints parte en el Capítulo 4 (corrección de PS).
 - **Además:** la rama une `main` con la 3.2.3 (PR #58) y el tamaño 1,5 de MR (PR #59).
 - **Quién:** PS. No se tocó trabajo de MR ni de BF.
+
+## 20 nov 2026: rama `feature/ps-tamano-1-5-cap8` (PS, con Claude Code)
+
+- **Qué se hizo en el PC:**
+  - `scripts/figuras_capitulo7_PS.py` ahora lee los tres tamaños (0,5 de BF, 1 de PS y 1,5 de MR) y calcula por tamaño sistema − TWAP con Wilcoxon, el cumplimiento y la versión sin días bajo el 95 % (mismo criterio que BF: −5,06, n = 25).
+  - La figura `costo_vs_tamano_parcial.png` se reemplazó por `costo_vs_tamano.png` (tres puntos).
+  - Sección 8.6.3 y hallazgo H6 actualizados con los tres tamaños y la advertencia de cumplimiento de BF.
+  - Guía del informe: figura de tamaño lista; Cap. 7 de BF enlazado y anotado el reparto que propone BF: 7 (resultados) / 8 (interpretación).
+- **Por qué:** BF avisó el 20 nov que la figura y la 8.6.3 tenían solo 0,5 y 1, y que con 1,5 el sistema baja a 78,4 % de cumplimiento.
+- **Qué no se hizo:** la prueba de tendencia por tamaño. Es la 3.2.4 de MR; queda marcada como [PENDIENTE].
+- **Quién:** PS. No se tocó trabajo de MR ni de BF.

@@ -22,9 +22,9 @@
 | 4 | Diseño de la solución | 4.1.1 «Cap. 5 Metodología» (MDP, espacios, recompensas, PPO, CTDE) | MR | (lo define MR) | ⏳ Sprint 8 |
 | 5 | Implementación del sistema | 4.1.1 «Cap. 5 Metodología» (simulador calibrado, pseudocódigo) | MR | (lo define MR) | ⏳ Sprint 8 |
 | 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | BF | (lo define BF) | ⏳ Sprint 8 |
-| 7 | Resultados y evaluación | 4.1.2 «Cap. 6 Resultados» (desempeño comparativo, por escenario, robustez) | BF | (lo define BF) | ⏳ Sprint 8 |
-| 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Escrito. Falta 8.6.3 (tamaño; espera el 1,5 y la 3.2.4 de MR) |
-| 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Borrador avanzado. Falta H6 (tamaño; espera a MR) |
+| 7 | Resultados y evaluación | 4.1.2 «Cap. 6 Resultados» (desempeño comparativo, por escenario, robustez) | BF | `docs/capitulo7_figuras_tablas_BF.md` y `data/analysis/capitulo7_BF/` | ⏳ Sprint 8 (figuras y tablas listas). Reparto propuesto por BF (20 nov): el 7 informa tablas y figuras; la interpretación estadística va en el 8 |
+| 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Escrito. En 8.6.3 falta solo la prueba de tendencia (3.2.4 de MR) |
+| 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Borrador avanzado. En H6 falta solo la prueba de tendencia (3.2.4 de MR) |
 | — | Bibliografía | — | Equipo | — | ⏳ Juntar las referencias de cada capítulo |
 | — | Anexos: desviaciones del Título I | — | Equipo | `DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md` | ✅ Existe (desviaciones 1 a 14) |
 
@@ -43,7 +43,7 @@
 | Q-Q de las diferencias | 8 | PS | `data/analysis/3_2_3/qq_diferencias.png` | ✅ |
 | Aporte de cada nivel (control de reglas) | 8 | PS | `data/colab_resultados/control_reglas/media/analisis/control_reglas.png` | ✅ |
 | Diferencia por tramo de inicio | 8 | PS | `data/analysis/cap7/diferencia_por_tramo.png` | ✅ (exploratoria) |
-| Costo frente al tamaño | 8 | PS / MR | `data/analysis/cap7/costo_vs_tamano_parcial.png` | ⏳ Parcial; se reemplaza con la 3.2.4 de MR |
+| Costo frente al tamaño (0,5 / 1 / 1,5) | 8 | PS | `data/analysis/cap7/costo_vs_tamano.png` | ✅ (la prueba de tendencia la agrega la 3.2.4 de MR) |
 
 **Criterios para todas las figuras** (profesora, 6 de noviembre):
 - título técnico, no una conclusión;
