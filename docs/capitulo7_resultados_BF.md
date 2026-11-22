@@ -1,6 +1,6 @@
 # Capítulo 7. Resultados y evaluación
 
-**Tarea:** 4.1.2 (Sprint 8, «Cap. 6 Resultados» en `plan-desarrollo-titulo-2.xlsx`). **Autor:** BF, con apoyo de Claude Code. **Versión:** 22 de noviembre de 2026.
+**Tarea:** 4.1.2 (Sprint 8, «Cap. 6 Resultados» en `plan-desarrollo-titulo-2.xlsx`). **Autor:** BF, con apoyo de Claude Code. **Versión:** 22 de noviembre de 2026 (7.5 con la prueba de Page de PS, PR #68).
 
 **Numeración:** sigue la estructura del Título I (9 capítulos), como `docs/informe_titulo2_ensamblado_borrador.md`. El montaje experimental y el entrenamiento están en el Capítulo 6 (MR); la interpretación estadística, en el Capítulo 8 (PS).
 
@@ -121,10 +121,16 @@
 **Resultado:**
 - **Las tres estrategias cuestan más con la orden más grande.** De 0,5 a 1,5, el sistema sube 13,12 bps, TWAP 23,20 y VWAP 24,06.
 - **La diferencia sistema − TWAP** es de +2,20, −3,37 y −7,88 bps. Ninguna es significativa por sí sola (Wilcoxon pareado, n = 30: p = 0,95, 0,63 y 0,37).
-- **La 3.2.4 (MR) prueba si la diferencia cambia con el tamaño.**
-  - Friedman con 30 días como bloques: Q = 6,47, p = 0,039.
-  - El cambio de 0,5 a 1,5 (−10,08 bps, IC [−23,66; 3,11], Wilcoxon p = 0,164) no es significativo.
-  - La lectura de ambas pruebas está en el Capítulo 8, sección 8.6.3.
+- **Prueba de si la diferencia cambia con el tamaño** (3.2.4 de MR, verificada y ampliada por PS; n = 30 días como bloques):
+
+| Prueba | Qué mide | Estadístico | p |
+|---|---|---|---|
+| Friedman (MR) | Si la diferencia sistema − TWAP cambia entre los 3 tamaños | Q = 6,47 | 0,039 |
+| Page (PS) | Si la diferencia baja en orden al crecer el tamaño (0,5 > 1 > 1,5) | L = 379 | 0,007 |
+| Wilcoxon (MR) | Cuánto cambia la diferencia de 0,5 a 1,5 | −10,08 bps [−23,66; 3,11] | 0,164 |
+
+  - **La tendencia es significativa en el orden, pero no en la magnitud:** dentro de cada día, la ventaja del sistema tiende a crecer con el tamaño, pero el cambio de 0,5 a 1,5 no es significativo.
+  - Es exploratorio: no era la prueba principal del plan. La lectura está en el Capítulo 8, sección 8.6.3.
 - **Dos advertencias para estas cifras:**
   - el Maestro se entrenó con un solo tamaño (factor 1), así que 0,5 y 1,5 quedan fuera de lo que vio (desviación 12);
   - con 1,5, parte de la ventaja viene de días en que el sistema no completó la orden (sección 7.6).
@@ -174,7 +180,7 @@ Estos cortes no estaban en el plan de análisis. Se informan como descripción.
 2. **Costo:** en las 90 corridas con tamaño 1, el sistema cuesta en promedio 3,34 bps menos que TWAP (58,61 contra 61,95 bps, −5,4 %). La diferencia no es significativa (Wilcoxon pareado, n = 90, p = 0,39) y el sistema gana en 46 de 90 días.
 3. **Dispersión:** el costo del sistema varía menos que el de TWAP y VWAP en todas las profundidades. La diferencia es significativa (Pitman-Morgan, n = 90, p = 4,8·10⁻⁹; sección 8.4.2).
 4. **Profundidad:** la diferencia va de −10,53 bps (×4) a +3,87 (×0,25), sin significancia en ninguna profundidad ni entre ellas.
-5. **Tamaño:** todos cuestan más con órdenes más grandes, el sistema menos que TWAP y VWAP. La diferencia va de +2,20 (0,5) a −7,88 (1,5), sin significancia en ningún tamaño. Con 1,5, parte de la ventaja viene de días incompletos.
+5. **Tamaño:** todos cuestan más con órdenes más grandes, el sistema menos que TWAP y VWAP. La diferencia va de +2,20 (0,5) a −7,88 (1,5), sin significancia en ningún tamaño. La tendencia es significativa en el orden (Page, n = 30, p = 0,007), pero no en la magnitud (Wilcoxon de 0,5 a 1,5, p = 0,164). Con 1,5, parte de la ventaja viene de días incompletos.
 6. **Tramo:** la mayor diferencia está en las órdenes de cierre (−34,78 bps), confundida con el activo (FALABELLA).
 7. **Robustez:** con tamaño 1, las variantes de costo ajustado y sin días incompletos no cambian el resultado.
 
@@ -188,6 +194,7 @@ Estos cortes no estaban en el plan de análisis. Se informan como descripción.
 | Corridas individuales | `data/analysis/3_2_2/corridas.csv` (450 filas) |
 | Pitman-Morgan | Capítulo 8, sección 8.4.2 (3.2.3 de PS) |
 | Kruskal-Wallis por profundidad y por tramo; Friedman y Wilcoxon por tamaño | `docs/sensibilidad_3_2_4_MR.md` (3.2.4 de MR) |
+| Page por tamaño | Capítulo 8, sección 8.6.3 (PS) |
 
 **Cómo se reproduce:**
 
