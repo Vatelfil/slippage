@@ -605,3 +605,16 @@
   - Cap. 8, sección 8.5.1: se cita la prueba de reglas fijas por tercios de BF (α = 0,5 es la mejor regla admisible en los tres tipos de día), con su límite de borde del espacio de acciones.
 - **Por qué:** lo pidió BF el 22 nov al subir su Capítulo 7 (PR #67) y su prueba de tercios (PR #66).
 - **Quién:** PS. No se cambió el trabajo de MR ni de BF.
+
+## 22 nov 2026: rama `feature/ps-informe-final-borrador` (PS, con Claude Code)
+
+- **Qué se hizo en el PC:**
+  - Se armó el borrador completo del informe final en Word: `docs/informe_titulo2/Informe_Final_Titulo_II_borrador_2026-11-22.docx` (82 páginas, 40 tablas y 13 figuras).
+  - Formato y estructura del Word del Título I: portada, índices, nombre del tema, resumen, palabras clave, 9 capítulos, bibliografía y anexos.
+  - Capítulos 1 a 3: secciones del Título I (trabajo conjunto) reordenadas según la «Estructura informe final», más textos de enlace nuevos en `docs/informe_titulo2/final/textos/` (resumen, contexto, metodología, problema y datos usados, tomados del informe de avance de octubre).
+  - Capítulos 4 a 9 y Anexo A: se convierten desde los Markdown de MR, BF y PS sin cambiar su texto (solo se quita la cabecera de tarea, autor y versión).
+  - En el Capítulo 8 se insertan las figuras estadísticas de PS (4.1.4) en sus secciones.
+  - Generador: `docs/informe_titulo2/final/build_informe_final.py`.
+- **Por qué:** PS pidió unir el informe con la estructura del Título I para que el equipo lo revise antes de las diapositivas.
+- **Pendiente de revisión del equipo:** cada integrante revisa su capítulo; confirmar la profesora guía de la portada y la bibliografía agregada.
+- **Quién:** PS. No se cambió el texto de los capítulos de MR ni de BF.
