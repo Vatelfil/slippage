@@ -9,11 +9,16 @@ Salidas en --out-dir (por defecto data/analysis/capitulo7_BF/):
 - tabla_profundidad.{tex,md}: IS por estrategia, diferencias del sistema con IC 95 % y p de Wilcoxon (tabla_90.csv).
 - tabla_tamanos.{tex,md}: lo mismo para el eje de tamaño en ×1 (tabla_tamanos.csv).
 - tabla_cumplimiento.{tex,md}: cumplimiento mínimo y corridas con >= 95 % por bloque y estrategia (corridas.csv).
+- tabla_estrategias.{tex,md}: media, mediana, desviación, peor, mejor y cumplimiento mínimo por profundidad y
+  estrategia (corridas.csv, descriptivo).
+- cifras_capitulo7_BF.json: las cifras que cita el texto del capítulo (docs/capitulo7_resultados_BF.md).
 
 Uso: python scripts/figuras_tablas_capitulo7_BF.py [--entrada data/analysis/3_2_2] [--out-dir data/analysis/capitulo7_BF]
 """
 import argparse
+import json
 import re
+import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
@@ -21,6 +26,9 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from scripts.consolidar_resultados_3_2_2 import _pruebas, ic_bootstrap  # noqa: E402  (mismos métodos que la 3.2.2)
 SISTEMA = "PPO_sistema"
 ESTRATEGIAS = [(SISTEMA, "Sistema"), ("TWAP", "TWAP"), ("VWAP", "VWAP")]
 # Colores del equipo (los mismos de las figuras de PS): el color acompaña al nombre, nunca va solo.
@@ -168,19 +176,114 @@ def tex_cumplimiento(tc: pd.DataFrame) -> str:
         r"\hline", r"\end{tabular}", r"\end{table}", ""])
 
 
+def tabla_estrategias(corr: pd.DataFrame) -> pd.DataFrame:
+    """Distribución del costo por profundidad (tamaño 1) y estrategia, y las 90 juntas. Descriptivo."""
+    d = corr[np.isclose(corr["factor_tamano"], 1.0)]
+    bloques = [(k, u, l) for k, u, l in PROFUNDIDADES] + [(None, "Las 90", "Las 90")]
+    filas = []
+    for esc, md, tex in bloques:
+        g = d if esc is None else d[d["escenario"] == esc]
+        for e, nombre in ESTRATEGIAS:
+            c = g.loc[g["estrategia"] == e]
+            filas.append({"bloque_md": md, "bloque_tex": tex, "estrategia": nombre, "n": int(len(c)),
+                          "media": float(c["slippage_bps"].mean()), "mediana": float(c["slippage_bps"].median()),
+                          "desv": float(c["slippage_bps"].std(ddof=1)), "peor": float(c["slippage_bps"].max()),
+                          "mejor": float(c["slippage_bps"].min()), "cumpl_min": float(c["cumplimiento"].min())})
+    return pd.DataFrame(filas)
+
+
+def md_estrategias(te: pd.DataFrame) -> str:
+    cab = ["Profundidad", "Estrategia", "n", "Media", "Mediana", "Desv. est.", "Peor", "Mejor", "Cumplimiento mínimo"]
+    lineas = ["| " + " | ".join(cab) + " |", "|" + "---|" * len(cab)]
+    for _, r in te.iterrows():
+        celdas = [r["bloque_md"], r["estrategia"], str(r["n"])]
+        celdas += [coma(r[k]).replace("-", "−") for k in ("media", "mediana", "desv", "peor", "mejor")]
+        celdas.append(f"{coma(100 * r['cumpl_min'], 1)} %")
+        lineas.append("| " + " | ".join(celdas) + " |")
+    return "\n".join(lineas) + "\n"
+
+
+def tex_estrategias(te: pd.DataFrame) -> str:
+    cab = r"Profundidad & Estrategia & $n$ & Media & Mediana & Desv.\ est. & Peor & Mejor & Cumpl.\ mín. \\"
+    cuerpo, previo = [], None
+    for _, r in te.iterrows():
+        if previo is not None and r["bloque_tex"] != previo:
+            cuerpo.append(r"\hline")
+        bloque = r["bloque_tex"] if r["bloque_tex"] != previo else ""
+        previo = r["bloque_tex"]
+        celdas = [bloque, r["estrategia"], str(r["n"])]
+        celdas += [a_latex_num(coma(r[k])) for k in ("media", "mediana", "desv", "peor", "mejor")]
+        celdas.append(coma(100 * r["cumpl_min"], 1) + r"\,\%")
+        cuerpo.append(" & ".join(celdas) + r" \\")
+    return "\n".join([
+        "% Generado por scripts/figuras_tablas_capitulo7_BF.py desde data/analysis/3_2_2/corridas.csv. No editar a mano.",
+        r"\begin{table}[htbp]", r"\centering", r"\small",
+        r"\caption{Distribución del costo por corrida (slippage contra el precio de llegada, bps) por profundidad del "
+        r"market maker y estrategia, tamaño 1. Peor: costo máximo; mejor: costo mínimo (negativo = compró bajo el "
+        r"precio de llegada).}",
+        r"\label{tab:distribucion_costo}", r"\begin{tabular}{llrrrrrrr}", r"\hline", cab, r"\hline", *cuerpo,
+        r"\hline", r"\end{tabular}", r"\end{table}", ""])
+
+
+def _dif_pareada(corr: pd.DataFrame, filtro, ref: str = "TWAP", solo_completos: bool = False) -> Dict:
+    """Sistema − referencia por día (escenario, orden, semilla). Mismo bootstrap que la 3.2.2. Con solo_completos,
+    se quitan los días en que alguna estrategia ejecutó menos del 95 %."""
+    g = corr[filtro(corr)]
+    idx = ["escenario", "orden", "seed"]
+    costo = g.pivot_table(index=idx, columns="estrategia", values="slippage_bps")
+    if solo_completos:
+        cum = g.pivot_table(index=idx, columns="estrategia", values="cumplimiento")
+        costo = costo[(cum >= UMBRAL).all(axis=1)]
+    d = (costo[SISTEMA] - costo[ref]).to_numpy()
+    lo, hi = ic_bootstrap(d)
+    p_wil, _ = _pruebas(d)
+    return {"n": int(len(d)), "dif": float(d.mean()), "ic": [float(lo), float(hi)], "p_wilcoxon": float(p_wil),
+            "gana": int((d < 0).sum()), "pierde": int((d > 0).sum())}
+
+
+def cifras(corr: pd.DataFrame, tc: pd.DataFrame, ent: Path) -> Dict:
+    """Cifras que cita el texto. Las medias y los IC repiten los de la 3.2.2 (mismo bootstrap); lo nuevo son los
+    días ganados y la variante del tamaño 1,5 sin días bajo el 95 % (descriptiva)."""
+    def t1(df):
+        return np.isclose(df["factor_tamano"], 1.0)
+
+    out: Dict = {"fuente": "data/analysis/3_2_2/ (3.2.2, BF)", "corridas": int(len(corr)),
+                 "por_profundidad": {}, "tamano": {}}
+    for esc, uni, _ in PROFUNDIDADES:
+        out["por_profundidad"][uni] = {ref: _dif_pareada(corr, lambda df, e=esc: t1(df) & (df["escenario"] == e), ref)
+                                       for ref in ("TWAP", "VWAP")}
+    out["global"] = {ref: _dif_pareada(corr, t1, ref) for ref in ("TWAP", "VWAP")}
+    for tam in (0.5, 1.0, 1.5):
+        def f(df, t=tam):
+            return (df["escenario"] == "media") & np.isclose(df["factor_tamano"], t)
+        out["tamano"][coma(tam, 1)] = {"todos": _dif_pareada(corr, f),
+                                       "sin_dias_bajo_95": _dif_pareada(corr, f, solo_completos=True)}
+    out["cumplimiento"] = {"sistema_ok": int(tc["PPO_sistema_ok"].sum()), "sistema_n": int(tc["PPO_sistema_n"].sum()),
+                           "sistema_min": float(tc["PPO_sistema_min"].min()),
+                           "twap_ok": int(tc["TWAP_ok"].sum()), "vwap_ok": int(tc["VWAP_ok"].sum())}
+    for corte, archivo in (("tramo_inicio", "por_tramo.csv"), ("ticker", "por_activo.csv")):
+        t = pd.read_csv(ent / archivo, encoding="utf-8")
+        t = t[t["bloque"] == "global"]
+        out[corte] = {r[corte]: {"n": int(r["n_pares"]), "dif": float(r["dif_vs_TWAP_bps"]),
+                                 "ic": r["dif_vs_TWAP_ic"], "gana": r["gana_vs_TWAP"]} for _, r in t.iterrows()}
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Figura
 # ---------------------------------------------------------------------------
 
-def figura_cajas(corr: pd.DataFrame, ruta: Path) -> Dict[str, Dict[str, float]]:
-    """Cajas del costo por corrida: un panel por profundidad (tamaño 1), las tres estrategias, mismo eje y."""
+def figura_cajas(corr: pd.DataFrame, t90: pd.DataFrame, ruta: Path) -> Dict[str, Dict[str, float]]:
+    """Cajas del costo por corrida: un panel por profundidad (tamaño 1), las tres estrategias, mismo eje y. Cada panel
+    indica n, la diferencia sistema − TWAP y su p de Wilcoxon (criterio de figuras de la profesora, 6 nov)."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.ticker import FuncFormatter
 
     d = corr[np.isclose(corr["factor_tamano"], 1.0)]
-    fig, axes = plt.subplots(1, 3, figsize=(9.0, 4.2), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(9.0, 4.6), sharey=True)
+    comp = t90.set_index("bloque")
     medias: Dict[str, Dict[str, float]] = {}
     for ax, (esc, uni, _) in zip(axes, PROFUNDIDADES):
         datos = [d.loc[(d["escenario"] == esc) & (d["estrategia"] == e), "slippage_bps"].to_numpy()
@@ -201,7 +304,12 @@ def figura_cajas(corr: pd.DataFrame, ruta: Path) -> Dict[str, Dict[str, float]]:
         ax.axhline(0, color="#9A9994", lw=0.8, zorder=0)
         ax.set_xticks([1, 2, 3])
         ax.set_xticklabels([f"{n}\nmedia {coma(medias[esc][e], 2)}" for e, n in ESTRATEGIAS], fontsize=8.5)
-        ax.set_title(f"Profundidad del market maker {uni}", fontsize=10)
+        r = comp.loc[esc]
+        ax.set_title(f"Profundidad del market maker {uni}", fontsize=10, pad=30)
+        ax.text(0.5, 1.015, f"n = {int(r['n_pares'])} días; sistema − TWAP = "
+                            f"{coma(r['dif_vs_TWAP_bps'], signo=True).replace('-', '−')} bps\n"
+                            f"Wilcoxon pareado, p = {p_txt(r['p_wilcoxon_vs_TWAP'])}",
+                transform=ax.transAxes, ha="center", va="bottom", fontsize=8, color="#52514E", linespacing=1.3)
         ax.grid(axis="y", color="#E4E3DF", lw=0.6)
         ax.set_axisbelow(True)
         for lado in ("top", "right"):
@@ -258,7 +366,17 @@ def main(argv: Optional[Sequence[str]] = None) -> Dict[str, Path]:
     salidas["cumplimiento_tex"].write_text(tex_cumplimiento(tc), encoding="utf-8")
 
     salidas["cajas_png"] = out / "cajas_profundidad.png"
-    figura_cajas(corr, salidas["cajas_png"])
+    figura_cajas(corr, t90, salidas["cajas_png"])
+
+    te = tabla_estrategias(corr)
+    salidas["estrategias_md"] = out / "tabla_estrategias.md"
+    salidas["estrategias_md"].write_text(md_estrategias(te), encoding="utf-8")
+    salidas["estrategias_tex"] = out / "tabla_estrategias.tex"
+    salidas["estrategias_tex"].write_text(tex_estrategias(te), encoding="utf-8")
+
+    salidas["cifras_json"] = out / "cifras_capitulo7_BF.json"
+    salidas["cifras_json"].write_text(json.dumps(cifras(corr, tc, ent), ensure_ascii=False, indent=2) + "\n",
+                                      encoding="utf-8")
     for k, p in salidas.items():
         print(f"{k}: {p}")
     return salidas
