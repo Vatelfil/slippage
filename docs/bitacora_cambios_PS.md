@@ -597,3 +597,11 @@
   - Guía: la 4.1.2 (Cap. 6) figura como de MR.
 - **Por qué:** MR completó la 3.2.4 y editó los capítulos 8 y 9, pero dejó frases contradictorias y un H6 que exageraba («crece de forma significativa»).
 - **Quién:** PS. No se cambió el trabajo de MR ni de BF (solo se cita).
+
+## 22 nov 2026: rama `feature/ps-guia-cap7-bf` (PS, con Claude Code)
+
+- **Qué se hizo:**
+  - Guía del informe: el Capítulo 7 pasa a ✅ con `docs/capitulo7_resultados_BF.md`, y la fila de cajas apunta a `data/analysis/capitulo7_BF/cajas_profundidad.png` ✅.
+  - Cap. 8, sección 8.5.1: se cita la prueba de reglas fijas por tercios de BF (α = 0,5 es la mejor regla admisible en los tres tipos de día), con su límite de borde del espacio de acciones.
+- **Por qué:** lo pidió BF el 22 nov al subir su Capítulo 7 (PR #67) y su prueba de tercios (PR #66).
+- **Quién:** PS. No se cambió el trabajo de MR ni de BF.
