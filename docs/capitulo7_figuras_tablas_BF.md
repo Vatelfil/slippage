@@ -16,7 +16,13 @@ Son los dos pendientes de la sección 3.1 de `docs/review_sprint7_BF.md`: la fig
 | `cifras_capitulo7_BF.json` (22 nov) | Las cifras que cita el texto del capítulo: días ganados, variantes del tamaño 1,5 y cortes | `3_2_2/` (mismo bootstrap y Wilcoxon que la 3.2.2) |
 
 - **No hay cálculos estadísticos nuevos.** Las cifras se copian de las salidas de la 3.2.2 y solo cambia el formato: coma decimal, filas en el orden ×4 / ×1 / ×0,25 y `$\times$` y `$-$` en vez de caracteres Unicode. Un test verifica que coinciden.
-- **Lo único que se calcula aquí** son los conteos de la tabla de cumplimiento, a partir de `corridas.csv`.
+- **Lo que se calcula aquí, a partir de `corridas.csv`:**
+  - los conteos de cumplimiento;
+  - la distribución por estrategia (media, mediana, desviación, peor y mejor);
+  - los días ganados;
+  - la variante del tamaño 1,5 sin días bajo el 95 %.
+
+  Se usan el mismo bootstrap y el mismo Wilcoxon que la 3.2.2, importados de su script.
 
 ## 2. Cómo usarlo en el informe
 
@@ -54,12 +60,9 @@ python -m pytest tests/test_figuras_tablas_capitulo7_BF.py -q
 
 ## 4. Estado (22 nov)
 
-**El texto ya está escrito:** `docs/capitulo7_resultados_BF.md`. Lo que sigue es la lista original del 20 nov.
-
-
-1. **El texto.** Las cifras para escribirlo están en `docs/consolidacion_3_2_2_BF.md`, secciones 4 y 5.
-2. **Coordinar con PS** para no repetir en el 7 lo que interpreta el capítulo 8 (Wilcoxon con Holm, Pitman-Morgan, cortes por tramo).
-3. **La figura del costo según el tamaño con los tres puntos** es de PS o MR. Hoy está la parcial, `data/analysis/cap7/costo_vs_tamano_parcial.png`.
+1. **El texto:** hecho, en `docs/capitulo7_resultados_BF.md`.
+2. **Coordinar con PS:** hecho. El 7 informa y el 8 interpreta, y el 7 remite a las secciones 8.3, 8.4.2, 8.4.3, 8.6.2 y 8.6.3.
+3. **La figura del costo según el tamaño con los tres puntos:** hecha por PS en el PR #63 (`data/analysis/cap7/costo_vs_tamano.png`).
 
 ---
 
