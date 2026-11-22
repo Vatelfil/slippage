@@ -22,7 +22,7 @@
 | 4 | Diseño de la solución | 4.1.1 «Cap. 5 Metodología» (MDP, espacios, recompensas, PPO, CTDE) | MR | `docs/capitulo5_metodologia_MR.md` (Parte I) | ✅ Sprint 8 (MR) |
 | 5 | Implementación del sistema | 4.1.1 «Cap. 5 Metodología» (simulador calibrado, pseudocódigo) | MR | `docs/capitulo5_metodologia_MR.md` (Parte II) | ✅ Sprint 8 (MR) |
 | 6 | Entrenamiento y experimentación | 4.1.2 «Cap. 6 Resultados» (setup experimental, curvas de aprendizaje, convergencia) | MR (4.1.2 reasignada a MR) | `docs/capitulo6_entrenamiento_experimentacion_MR.md` | ✅ Sprint 8 (MR) |
-| 7 | Resultados y evaluación | 4.1.2 «Cap. 6 Resultados» (desempeño comparativo, por escenario, robustez) | BF | `docs/capitulo7_figuras_tablas_BF.md` y `data/analysis/capitulo7_BF/` | ⏳ Sprint 8 (figuras y tablas listas). Reparto propuesto por BF (20 nov): el 7 informa tablas y figuras; la interpretación estadística va en el 8 |
+| 7 | Resultados y evaluación | 4.1.2 «Cap. 6 Resultados» (desempeño comparativo, por escenario, robustez) | BF | `docs/capitulo7_resultados_BF.md` (tablas y figura en `data/analysis/capitulo7_BF/`) | ✅ Sprint 8 (BF, 22 nov). Reparto: el 7 informa los resultados; la interpretación estadística va en el 8 |
 | 8 | Discusión y análisis crítico | 4.1.3 «Cap. 7 Análisis» | **PS** | `docs/capitulo8_analisis_PS.md` | ✅ Completo (8.6.3 con la 3.2.4 de MR verificada por PS: Friedman p = 0,039, Page p = 0,007) |
 | 9 | Conclusiones y trabajo futuro | 4.2.1 | **PS** | `docs/capitulo9_conclusiones_PS.md` | ✅ Completo (H6 con la tendencia significativa en el orden, no en la magnitud) |
 | — | Bibliografía | — | Equipo | — | ⏳ Juntar las referencias de cada capítulo |
@@ -35,7 +35,7 @@
 | Figura o tabla | Capítulo | Aporta | Archivo | Estado |
 |---|---|---|---|---|
 | Curvas de aprendizaje (loss y reward) y KL del Maestro y del Ejecutor | 6 | MR | `data/analysis/cap6_MR/curvas_maestro.png` y `curvas_ejecutor.png` | ✅ |
-| Cajas de costo por escenario, IS comparativo | 7 | BF | `corridas_90/*/tabla/cajas.png` y las de la 3.2.2 | ⏳ (existen versiones de trabajo) |
+| Cajas de costo por profundidad, IS comparativo | 7 | BF | `data/analysis/capitulo7_BF/cajas_profundidad.png` | ✅ |
 | Distribución de las diferencias sistema − TWAP (Wilcoxon, Shapiro) | 8 | PS | `data/analysis/figuras_4_1_4/histograma_diferencias_90.png` | ✅ |
 | Costo por estrategia con prueba de varianzas (Pitman-Morgan) | 8 | PS | `data/analysis/figuras_4_1_4/costo_por_estrategia_varianzas.png` | ✅ |
 | Diferencia media con IC 95 % por grupo (bosque) | 8 | PS | `data/analysis/3_2_3/bosque_diferencias.png` | ✅ |

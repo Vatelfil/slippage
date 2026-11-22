@@ -194,6 +194,11 @@ En la práctica, la política del Maestro equivale a «comprar la mitad de lo qu
    - El Maestro solo veía lo que falta, la hora y sus decisiones previas.
 3. **Las ventanas de 30 minutos son mercados independientes.** No hay una tendencia del día que el Maestro pueda aprender a anticipar.
 
+**Prueba complementaria de BF** (`docs/reglas_fijas_tercios_resultado_BF.md`): en el simulador Poisson con que se entrenó el Maestro, se probaron reglas fijas α = 10 % a 50 % (ventana de 15 min) en días de actividad baja, media y alta (1.500 corridas pareadas).
+- Entre las reglas que completan la orden en al menos el 95 % de las corridas, **la más barata es α = 0,5 en los tres tipos de día** (24,5 / 23,9 / 20,9 bps). Las reglas más lentas parecen baratas solo porque no completan.
+- Por eso el α = 0,5 del Maestro es la mejor regla fija en su mercado de entrenamiento, no un error del entrenamiento. También explica por qué el control (sección 8.5.2) no encuentra aporte del calendario.
+- **Límite:** 0,5 es el máximo del espacio de acciones del Maestro. El óptimo está en el borde, así que no se sabe si comprar todavía más rápido sería mejor.
+
 ### 8.5.2 Control con reglas fijas: separación del aporte
 
 Para separar el aporte del Maestro y el de los Ejecutores, se reemplazó al Maestro por dos reglas, manteniendo los mismos Ejecutores, órdenes y semillas (profundidad ×1, n = 30 pares, `docs/control_reglas_3_2_3_resultado_PS.md`). Se registró antes de correrlo (`docs/control_reglas_3_2_3_PS.md`).
