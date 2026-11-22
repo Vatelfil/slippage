@@ -8,10 +8,12 @@ Son los dos pendientes de la sección 3.1 de `docs/review_sprint7_BF.md`: la fig
 
 | Archivo | Qué muestra | Fuente |
 |---|---|---|
-| `cajas_profundidad.png` | Costo por corrida en las 3 profundidades × 3 estrategias, con tamaño 1 y el mismo eje y | `3_2_2/corridas.csv` |
+| `cajas_profundidad.png` | Costo por corrida en las 3 profundidades × 3 estrategias, con tamaño 1 y el mismo eje y. Cada panel indica n, sistema − TWAP y su p de Wilcoxon (criterio de la profesora, 6 nov; agregado el 22 nov) | `3_2_2/corridas.csv` y `3_2_2/tabla_90.csv` |
 | `tabla_profundidad.{tex,md}` | IS por estrategia, sistema − TWAP y sistema − VWAP con IC 95 % y p de Wilcoxon, por profundidad, global y global sin días bajo el 95 % | `3_2_2/tabla_90.csv` |
 | `tabla_tamanos.{tex,md}` | Lo mismo para el eje de tamaño (0,5 / 1 / 1,5) con profundidad ×1 | `3_2_2/tabla_tamanos.csv` |
 | `tabla_cumplimiento.{tex,md}` | Cumplimiento mínimo y corridas que llegan al 95 %, por bloque y estrategia | `3_2_2/corridas.csv` |
+| `tabla_estrategias.{tex,md}` (22 nov) | Media, mediana, desviación, peor, mejor y cumplimiento mínimo por profundidad y estrategia | `3_2_2/corridas.csv` |
+| `cifras_capitulo7_BF.json` (22 nov) | Las cifras que cita el texto del capítulo: días ganados, variantes del tamaño 1,5 y cortes | `3_2_2/` (mismo bootstrap y Wilcoxon que la 3.2.2) |
 
 - **No hay cálculos estadísticos nuevos.** Las cifras se copian de las salidas de la 3.2.2 y solo cambia el formato: coma decimal, filas en el orden ×4 / ×1 / ×0,25 y `$\times$` y `$-$` en vez de caracteres Unicode. Un test verifica que coinciden.
 - **Lo único que se calcula aquí** son los conteos de la tabla de cumplimiento, a partir de `corridas.csv`.
@@ -23,6 +25,7 @@ Son los dos pendientes de la sección 3.1 de `docs/review_sprint7_BF.md`: la fig
 \input{data/analysis/capitulo7_BF/tabla_profundidad.tex}
 \input{data/analysis/capitulo7_BF/tabla_tamanos.tex}
 \input{data/analysis/capitulo7_BF/tabla_cumplimiento.tex}
+\input{data/analysis/capitulo7_BF/tabla_estrategias.tex}
 
 \begin{figure}[htbp]
   \centering
@@ -49,7 +52,10 @@ python -m pytest tests/test_figuras_tablas_capitulo7_BF.py -q
 - **Mismo eje en los tres paneles**, para comparar profundidades. Los valores extremos (de −378 a +523 bps) se muestran como círculos, sin cortar el eje.
 - **La leyenda va en el `\caption`** y no dentro de la figura, para que se ajuste al ancho de la página.
 
-## 4. Lo que falta para el capítulo 7
+## 4. Estado (22 nov)
+
+**El texto ya está escrito:** `docs/capitulo7_resultados_BF.md`. Lo que sigue es la lista original del 20 nov.
+
 
 1. **El texto.** Las cifras para escribirlo están en `docs/consolidacion_3_2_2_BF.md`, secciones 4 y 5.
 2. **Coordinar con PS** para no repetir en el 7 lo que interpreta el capítulo 8 (Wilcoxon con Holm, Pitman-Morgan, cortes por tramo).

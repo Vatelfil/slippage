@@ -55,3 +55,37 @@ def test_lo_publicado_coincide_con_lo_que_genera_el_script(tmp_path):
         if p.suffix in (".md", ".tex"):
             nuevo = (tmp_path / p.name).read_text(encoding="utf-8").replace("\r\n", "\n")
             assert nuevo == p.read_text(encoding="utf-8").replace("\r\n", "\n"), p.name
+
+
+def test_tabla_de_estrategias_coincide_con_los_agregados_de_la_3_2_2():
+    te = cap7.tabla_estrategias(pd.read_csv(ENTRADA / "corridas.csv", encoding="utf-8"))
+    agg = pd.read_csv(ENTRADA / "agregados_por_escenario.csv", encoding="utf-8")
+    agg = agg[agg["factor_tamano"] == 1.0]
+    nombres = {"PPO_sistema": "Sistema", "TWAP": "TWAP", "VWAP": "VWAP"}
+    etiquetas = {k: u for k, u, _ in cap7.PROFUNDIDADES}
+    for _, r in agg.iterrows():
+        f = te[(te["bloque_md"] == etiquetas[r["escenario"]]) & (te["estrategia"] == nombres[r["estrategia"]])].iloc[0]
+        for col in ("media", "mediana", "peor", "mejor"):
+            assert f[col] == pytest.approx(r[col])
+    glob = pd.read_csv(ENTRADA / "agregados.csv", encoding="utf-8").set_index("estrategia")
+    for e, nombre in cap7.ESTRATEGIAS:
+        f = te[(te["bloque_md"] == "Las 90") & (te["estrategia"] == nombre)].iloc[0]
+        assert f["n"] == 90 and f["media"] == pytest.approx(glob.loc[e, "media"])
+        assert f["mediana"] == pytest.approx(glob.loc[e, "mediana"])
+
+
+def test_cifras_del_texto_salen_del_json():
+    """Las cifras clave de docs/capitulo7_resultados_BF.md son las de cifras_capitulo7_BF.json."""
+    import json
+    c = json.loads((PUBLICADO / "cifras_capitulo7_BF.json").read_text(encoding="utf-8"))
+    texto = (ROOT / "docs/capitulo7_resultados_BF.md").read_text(encoding="utf-8")
+    g = c["global"]["TWAP"]
+    assert (g["n"], g["gana"]) == (90, 46) and "46 de 90" in texto
+    assert cap7.coma(g["dif"]).replace("-", "−") in texto                       # −3,34
+    t15 = c["tamano"]["1,5"]["sin_dias_bajo_95"]
+    assert t15["n"] == 25 and "−5,06" in texto and cap7.p_txt(t15["p_wilcoxon"]) == "0,51"
+    cu = c["cumplimiento"]
+    assert (cu["sistema_ok"], cu["sistema_n"], cu["twap_ok"], cu["vwap_ok"]) == (145, 150, 146, 145)
+    assert "145 de 150" in texto and "78,4 %" in texto
+    ganados = [c["por_profundidad"][u]["TWAP"]["gana"] for u in ("×4", "×1", "×0,25")]
+    assert ganados == [15, 16, 15] and "15, 16 y 15" in texto
