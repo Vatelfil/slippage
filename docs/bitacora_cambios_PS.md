@@ -618,3 +618,4 @@
 - **Por qué:** PS pidió unir el informe con la estructura del Título I para que el equipo lo revise antes de las diapositivas.
 - **Pendiente de revisión del equipo:** cada integrante revisa su capítulo; confirmar la profesora guía de la portada y la bibliografía agregada.
 - **Quién:** PS. No se cambió el texto de los capítulos de MR ni de BF.
+- **Arreglos del 22 nov (revisión de PS):** sin rutas de archivos en el Word (quedan en el Anexo C); filas de tablas que no se cortan entre páginas; pseudocódigo en recuadro; diagrama del Capítulo 4 con palabras simples; figura del perfil intradiario con ejes rotulados en español (`final/figura_perfil_mercado.py`); Anexo B con las tareas de cada sprint. No se cambió el texto de los capítulos.

@@ -144,6 +144,8 @@ class Informe:
         self.n_tabla = 0
         self.n_figura = 0
         self.figuras_puestas = set()
+        self.num_fig = {}
+        self.quitar = True
         self.estilo_normal = next(s for s in self.doc.styles if s.name == 'normal')
         self._estilo_leyenda()
         self.src_els = list(self.src.element.body.iterchildren())
@@ -288,6 +290,23 @@ class Informe:
             return None
         return None
 
+    def refs_figuras(self, txt):
+        pendientes = 0
+        for ruta in re.findall(r'`([^`]+\.png)`', txt):
+            f = self.resolver_png(ruta)
+            if f is None:
+                continue
+            if f in self.num_fig:
+                n = self.num_fig[f]
+            else:
+                pendientes += 1
+                n = self.n_figura + pendientes
+            txt = re.sub(r'([Ff]igura)\s+`' + re.escape(ruta) + '`', lambda m, n=n: f'{m.group(1)} {n}', txt)
+        return txt
+
+    def limpiar(self, txt):
+        return quitar_rutas(self.refs_figuras(txt)) if self.quitar else txt
+
     def figura(self, ruta, leyenda, ancho_cm=15.5):
         f = self.resolver_png(str(ruta)) if not isinstance(ruta, Path) else ruta
         if f is None or f in self.figuras_puestas:
@@ -298,6 +317,7 @@ class Informe:
         par.add_run().add_picture(str(f), width=Cm(ancho_cm))
         self.leyenda('Figura', leyenda)
         self.figuras_puestas.add(f)
+        self.num_fig[f] = self.n_figura
         return True
 
     # ---------- tablas ----------
@@ -309,6 +329,14 @@ class Informe:
             e.set(qn('w:val'), 'single'); e.set(qn('w:sz'), '4'); e.set(qn('w:space'), '0'); e.set(qn('w:color'), GRIS_BORDE)
             b.append(e)
         tblPr.append(b)
+
+    def _no_dividir(self, tr):
+        trPr = tr.find(qn('w:trPr'))
+        if trPr is None:
+            trPr = OxmlElement('w:trPr')
+            tr.insert(1 if tr.find(qn('w:tblPrEx')) is not None else 0, trPr)
+        if trPr.find(qn('w:cantSplit')) is None:
+            trPr.append(OxmlElement('w:cantSplit'))
 
     def _sombra(self, celda, color):
         tcPr = celda._tc.get_or_add_tcPr()
@@ -331,6 +359,8 @@ class Informe:
                 self.inline(par, txt.strip(), size=8.5, bold=(ri == 0))
                 if ri == 0:
                     self._sombra(c, VERDE_CLARO)
+        for fila in t.rows:
+            self._no_dividir(fila._tr)
         # fila de encabezado se repite en cada página
         trPr = t.rows[0]._tr.get_or_add_trPr()
         e = OxmlElement('w:tblHeader'); e.set(qn('w:val'), 'true'); trPr.append(e)
@@ -397,7 +427,10 @@ class Informe:
                 self.body.insert(len(self.body) - 1, nuevo)
             elif el.tag == qn('w:tbl'):
                 self.leyenda('Tabla', ley.pop(0) if ley else 'Tabla del Título I')
-                self.body.insert(len(self.body) - 1, copy.deepcopy(el))
+                nueva = copy.deepcopy(el)
+                for tr in nueva.findall(qn('w:tr')):
+                    self._no_dividir(tr)
+                self.body.insert(len(self.body) - 1, nueva)
                 self.p('')
 
     # ---------- Markdown ----------
@@ -422,8 +455,17 @@ class Informe:
             pendientes = restantes
 
         contador_lista = {}
+        saltando = None
         for bl in bloques:
             tipo = bl[0]
+            if saltando is not None:
+                if tipo == 'h' and bl[1] <= saltando:
+                    saltando = None
+                else:
+                    continue
+            if tipo == 'h' and self.quitar and re.search(r'Fuentes de las cifras|Figuras del Cap', bl[2]):
+                saltando = bl[1]
+                continue
             if tipo != 'li':
                 contador_lista = {}
             if tipo == 'h':
@@ -452,7 +494,9 @@ class Informe:
                     for ruta in pngs:
                         self.figura(ruta, leyendas_fig.get(ruta, ley))
                     continue
-                self.p(txt)
+                limpio = self.limpiar(txt)
+                if not vacio(limpio):
+                    self.p(limpio)
                 for ruta in pngs:
                     self.figura(ruta, leyendas_fig.get(ruta, titulo_actual))
                 continue
@@ -461,6 +505,11 @@ class Informe:
                 for k in list(contador_lista):
                     if k > niv:
                         del contador_lista[k]
+                limpio = self.limpiar(txt)
+                if vacio(limpio):
+                    for ruta in re.findall(r'`([^`]+\.png)`', txt):
+                        self.figura(ruta, leyendas_fig.get(ruta, titulo_actual))
+                    continue
                 contador_lista[niv] = contador_lista.get(niv, 0) + 1
                 marca = f'{contador_lista[niv]}.' if orden else ('•' if niv == 0 else '–')
                 par = self.doc.add_paragraph(style=self.estilo_normal)
@@ -469,18 +518,24 @@ class Informe:
                 pf.first_line_indent = Cm(-0.5)
                 pf.space_after = Pt(2)
                 self.run(par, marca + '\u00a0')
-                self.inline(par, txt)
+                self.inline(par, limpio)
                 pngs = re.findall(r'`([^`]+\.png)`', txt)
                 for ruta in pngs:
                     self.figura(ruta, leyendas_fig.get(ruta, titulo_actual))
                 continue
             if tipo == 'table':
                 _, enc, filas = bl
+                if self.quitar:
+                    enc = [quitar_rutas(c) for c in enc]
+                    filas = [[quitar_rutas(c) for c in f] for f in filas]
                 self.tabla(enc, filas, ley_tabla or titulo_actual)
                 ley_tabla = None
                 continue
             if tipo == 'quote':
-                par = self.p(bl[1], italic=False)
+                limpio = self.limpiar(bl[1])
+                if vacio(limpio):
+                    continue
+                par = self.p(limpio, italic=False)
                 par.paragraph_format.left_indent = Cm(0.8)
                 par.paragraph_format.right_indent = Cm(0.4)
                 self._borde_izq(par)
@@ -498,11 +553,19 @@ class Informe:
                     if png:
                         self.figura(png, 'Flujo de coordinación entre el Agente Maestro, el protocolo, el Ejecutor del tramo y el mercado simulado', 15.5)
                     continue
-                for linea in txt.split('\n'):
-                    par = self.doc.add_paragraph(style=self.estilo_normal)
+                caja = self.doc.add_table(rows=1, cols=1)
+                self._bordes(caja)
+                celda = caja.cell(0, 0)
+                self._sombra(celda, 'F2F2F2')
+                for k, linea in enumerate(txt.split('\n')):
+                    par = celda.paragraphs[0] if k == 0 else celda.add_paragraph()
+                    par.style = self.estilo_normal
                     par.paragraph_format.space_after = Pt(0)
-                    par.paragraph_format.left_indent = Cm(0.5)
-                    self.run(par, linea, code=True)
+                    par.paragraph_format.space_before = Pt(0)
+                    titulo = k == 0 and linea.strip().upper().startswith('ALGORITMO')
+                    r = self.run(par, linea, code=True, bold=titulo)
+                    r.font.size = Pt(8.5)
+                self._no_dividir(caja.rows[0]._tr)
                 self.p('')
         cerrar_seccion(0)
 
@@ -511,6 +574,40 @@ class Informe:
         bdr = OxmlElement('w:pBdr')
         l = OxmlElement('w:left'); l.set(qn('w:val'), 'single'); l.set(qn('w:sz'), '12'); l.set(qn('w:space'), '8'); l.set(qn('w:color'), '70AD47')
         bdr.append(l); pPr.append(bdr)
+
+
+EXT = r'(?:py|json|csv|md|ipynb|pt|png|tex|parquet|zip|xlsx|pdf|txt|yaml|yml)'
+RUTA = r'`[^`\n]*(?:/[^`\n]*|\.' + EXT + r')`'
+ETIQUETAS = r'(Script|Scripts|Datos|Figura|Figuras|Herramienta|Fuente|Fuentes|Informe|Detalle|Salidas|Salida|Tests|Cuaderno|Código|Archivo|Reporte|Ver)'
+
+
+def quitar_rutas(t):
+    """Quita del texto del Word las rutas de archivos del repositorio (la comisión no tiene acceso a ellas)."""
+    if not re.search(RUTA, t):
+        return t
+    partes = re.split(r'(?<=\.)\s+', t)
+    out = []
+    for o in partes:
+        if re.search(RUTA, o) and re.match(r'^\s*(\*\*)?' + ETIQUETAS + r'\b[^:]{0,40}:', o):
+            continue
+        if re.search(r'\b(están en|está en|se guardan en|se encuentran? en|disponibles? en|detalle en)\s*' + RUTA, o):
+            continue
+        out.append(o)
+    t = ' '.join(out)
+    t = re.sub(r'\s*\((?:\s*(?:' + RUTA + r'|y|o|,|;)\s*)+\)', '', t)
+    t = re.sub(r',\s*' + RUTA, '', t)
+    t = re.sub(RUTA + r'\s*,\s*', '', t)
+    t = re.sub(r'\s*' + RUTA, '', t)
+    t = re.sub(r'\(\s*\)', '', t)
+    t = re.sub(r'\(\s*[,;]\s*', '(', t)
+    t = re.sub(r'\s*[,;]\s*\)', ')', t)
+    t = re.sub(r'\s+([,.;:)])', r'\1', t)
+    t = re.sub(r' {2,}', ' ', t)
+    return t.strip()
+
+
+def vacio(t):
+    return not re.sub(r'[\s*.:;,()\-–•]', '', t)
 
 
 def parse_md(lineas):
@@ -623,6 +720,24 @@ def diagrama_mermaid(txt, carpeta):
             aristas.append((m.group(1), m.group(3), m.group(2)))
     if len(orden) < 2:
         return None
+    simple = [('Observa S_M ∈ R^7', 'Observa 7 variables: avance\nde la orden y tramo del día'),
+              ('Observa S_E ∈ R^27', 'Observa 27 variables\ndel libro de órdenes'),
+              ('q_slice = α_t · Q_pendiente', 'sub-orden = α × lo pendiente'),
+              ('Protocolo MaestroEjecutorEnv', 'Protocolo de coordinación'),
+              ('Agente Ejecutor del Tramo (PPO)', 'Ejecutor del tramo (PPO)'),
+              ('Mercado Simulado', 'Mercado simulado'), ('(Poisson / ABIDES rmsc04)', '(Poisson o ABIDES)'),
+              ('ASIGNAR (α_t, T_w)', 'Asigna fracción α y ventana'), ('Despacha según tramo', 'Envía al Ejecutor del tramo'),
+              ('Orden (tipo, vol, offset)', 'Orden (tipo, volumen, precio)'),
+              ('Estado LOB, fills, P_ejec', 'Estado del libro y ejecuciones'),
+              ('REPORTE (q_ejec, slippage, VWAP)', 'Reporte: cantidad comprada y costo'),
+              ('Transición S_{M,t+1} y R_M', 'Nuevo estado y recompensa')]
+
+    def limpio(t):
+        for a, b in simple:
+            t = t.replace(a, b)
+        return t
+    nodos = {k: limpio(v) for k, v in nodos.items()}
+    aristas = [(a, b, limpio(e)) for a, b, e in aristas]
     carpeta.mkdir(exist_ok=True)
     fig, ax = plt.subplots(figsize=(10.5, 4.6))
     ax.set_xlim(0, 4 * len(orden)); ax.set_ylim(0, 6); ax.axis('off')
@@ -639,6 +754,8 @@ def diagrama_mermaid(txt, carpeta):
         ax.annotate('', xy=(x2, y), xytext=(x1, y), arrowprops=dict(arrowstyle='-|>', color='#385723' if ida else '#7F7F7F', lw=1.4))
         ax.text((x1 + x2) / 2, y + (0.45 if ida else -0.45), et.replace('\\n', '\n'), ha='center', va='center', fontsize=9,
                 color='#385723' if ida else '#595959')
+    fig.text(0.5, 0.03, 'Flechas verdes (arriba): instrucciones que bajan de nivel.   Flechas grises (abajo): información que vuelve.',
+             ha='center', fontsize=9, color='#404040')
     out = carpeta / 'diagrama_mermaid_cap4.png'
     fig.tight_layout(); fig.savefig(out, dpi=170); plt.close(fig)
     return out
@@ -826,10 +943,15 @@ def construir(plantilla, salida, fecha):
     def pref_anexo(t):
         return re.sub(r'^(\d+)(\.\d+)*\.?\s', lambda m: 'A.' + m.group(0).rstrip('. ') + ' ', t)
     I.markdown(limpiar_md(leer(ROOT / 'DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md')), prefijo_titulos=pref_anexo)
-    I.h('ANEXO B: RESPONSABLES Y CONTRIBUCIONES', 1, salto=True)
+    I.h('ANEXO B: GESTIÓN DEL PROYECTO Y RESPONSABLES', 1, salto=True)
+    I.h('B.1 Sprints y tareas', 2)
+    I.markdown(leer(TEXTOS / 'anexo_gestion.md'), titulo_inicial='Tareas por sprint, responsable en el plan y capítulo donde se informan')
+    I.h('B.2 Responsables por capítulo', 2)
     I.markdown(leer(TEXTOS / 'anexo_b.md'), titulo_inicial='Responsables por capítulo')
     I.h('ANEXO C: REPOSITORIO Y REPRODUCIBILIDAD', 1, salto=True)
+    I.quitar = False
     I.markdown(leer(TEXTOS / 'anexo_c.md'), titulo_inicial='Ubicación de los componentes en el repositorio')
+    I.quitar = True
 
     # ---------------- pie de página con número y actualización de campos ----------------
     sec = d.sections[0]

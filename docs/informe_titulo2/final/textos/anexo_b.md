@@ -1,4 +1,4 @@
-Los capítulos 1 a 3 se elaboraron en conjunto en el Título I y se adaptaron para este informe. Desde el capítulo 4, cada capítulo tiene un responsable según el plan de desarrollo del Título II.
+Los capítulos 1 a 3 se elaboraron en conjunto en el Título I y se adaptaron para este informe. Desde el capítulo 4, cada capítulo tiene un responsable.
 
 | Capítulo | Contenido | Responsable | Tarea del plan |
 |---|---|---|---|
