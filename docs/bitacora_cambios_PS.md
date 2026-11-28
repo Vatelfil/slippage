@@ -619,3 +619,14 @@
 - **Pendiente de revisión del equipo:** cada integrante revisa su capítulo; confirmar la profesora guía de la portada y la bibliografía agregada.
 - **Quién:** PS. No se cambió el texto de los capítulos de MR ni de BF.
 - **Arreglos del 22 nov (revisión de PS):** sin rutas de archivos en el Word (quedan en el Anexo C); filas de tablas que no se cortan entre páginas; pseudocódigo en recuadro; diagrama del Capítulo 4 con palabras simples; figura del perfil intradiario con ejes rotulados en español (`final/figura_perfil_mercado.py`); Anexo B con las tareas de cada sprint. No se cambió el texto de los capítulos.
+
+## 28 nov 2026: rama `feature/ps-informe-final-revision` (PS, con Claude Code)
+
+- **Qué:** revisión completa del informe según las observaciones del equipo (pedido de PS: «arregla todo eso»). Nuevo Word: `docs/informe_titulo2/Informe_Final_Titulo_II_2026-11-28.docx` (85 páginas, 40 tablas, 11 figuras); se elimina el borrador del 22 nov.
+- **Capítulos 1 a 3 (equipo):** reescritos en pasado y en tercera persona, sin afirmaciones que contradicen los resultados; Cap. 3 con los datos reales y una tabla de fuentes evaluadas; nota sobre MSCI; 2.5 ampliada (RL jerárquico y CTDE).
+- **Capítulos 4 a 6 (MR):** títulos en formato oración, sin nombres de código; 57 min de entrenamiento del Ejecutor; unidades de R_M; pasos de 30 s; nuevas 5.4 (software), 5.5 (calibración) y 5.6 (validación del simulador, con su veredicto); 6.5 con la metodología estadística (antes 8.2); una sola explicación del efecto de la profundidad.
+- **Capítulo 7 (BF):** sin iniciales ni códigos; todas las cifras de resultados (se agregan robustez sin MO-06 y promedio, p con Holm, pruebas complementarias); sin «Fuentes de las cifras».
+- **Capítulos 8 y 9 (PS):** el 8 solo interpreta (remite al 7), sin 8.2 (pasó al 6.5) ni 8.9, en párrafos; el 9 cita los objetivos literales del Título I y marca el objetivo 1 como cumplido parcialmente (validación del simulador).
+- **Anexos:** A con la decisión final en cada título; D nuevo (plan de análisis); E nuevo (procedimiento de las pruebas).
+- **Generador y formato:** llaves en conjuntos, frases cortadas por quitar rutas, títulos sin negrita, leyendas sin repetir, bibliografía APA en una sola lista con sangría francesa.
+- **Pendiente de revisión:** MR (capítulos 4 a 6 y Anexo A) y BF (capítulo 7) deben revisar los cambios en sus capítulos; falta completar la referencia IIF (2026).

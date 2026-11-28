@@ -5,9 +5,9 @@ Los datos provienen de Yahoo Finance mediante la librería `yfinance`: velas OHL
 El pipeline tiene cuatro etapas, cada una con su script y sus pruebas automáticas:
 
 1. **Validación y descarga.** Se verifica que los 30 tickers respondan y se descargan las velas de 5 minutos, registrando un manifiesto con los parámetros de la descarga.
-2. **Limpieza (tarea 1.2.1).** Se filtra la sesión de 09:30 a 15:55 (hora de Santiago), se reindexa cada día a una grilla fija de 78 velas, se imputan las velas sin transacción (relleno hacia adelante y hacia atrás) marcándolas con `is_imputed`, y se fusiona la vela de las 16:00 (subasta de cierre) con la de las 15:55.
+2. **Limpieza.** Se filtra la sesión de 09:30 a 15:55 (hora de Santiago), se reindexa cada día a una grilla fija de 78 velas, se imputan las velas sin transacción (relleno hacia adelante y hacia atrás) marcándolas con `is_imputed`, y se fusiona la vela de las 16:00 (subasta de cierre) con la de las 15:55.
 3. **Normalización.** Se aplica MinMaxScaler por ticker. Las columnas sin normalizar (en pesos y número de acciones) se conservan, porque los cálculos en unidades reales (implementation shortfall, calibración de Poisson) deben usarlas.
-4. **Variables del Maestro (tarea 1.2.2).** Se calculan la volatilidad (desviación estándar móvil de 6 velas), el volumen promedio móvil y la sesión, que alimentan el vector de estado S_M.
+4. **Variables del Maestro.** Se calculan la volatilidad (desviación estándar móvil de 6 velas), el volumen promedio móvil y la sesión, que alimentan el vector de estado S_M.
 
 Como medida de calidad se define la **cobertura pre-relleno**: la fracción de velas teóricas en que hubo al menos una transacción real. Los tickers con cobertura de al menos 60 % se clasifican como *tier* A y el resto como *tier* B.
 
@@ -41,6 +41,6 @@ Tres observaciones se desprenden de la tabla:
 - **La volatilidad decrece de la apertura a la media jornada y se mantiene baja en el cierre**, sin el repunte de cierre que describe la literatura clásica.
 - **El volumen crece hacia el cierre** (de 396.765 a 698.419 acciones por vela), en lugar de mostrar el patrón alto–bajo–alto esperado.
 
-Este resultado fue confirmado de forma independiente por la calibración de Poisson, que usa otro *snapshot* y otra metodología (estimador de Roll y rango máximo–mínimo, con winsorización) y llega a la misma conclusión: en el conjunto de los 30 tickers, el rango máximo–mínimo solo es mayor en la media jornada que en la apertura y el cierre en 1 caso de 30. Una explicación plausible es el patrón de «L» frecuente en mercados de liquidez fina, aunque con datos de 5 minutos y sin Nivel 2 no puede descartarse que parte del efecto sea un artefacto del proxy usado.
+Este resultado fue confirmado de forma independiente por la calibración de Poisson, que usa otro *snapshot* y otra metodología (estimador de Roll, 1984, y rango máximo–mínimo, con winsorización) y llega a la misma conclusión: en el conjunto de los 30 tickers, el rango máximo–mínimo solo es mayor en la media jornada que en la apertura y el cierre en 1 caso de 30. Una explicación plausible es el patrón de «L» frecuente en mercados de liquidez fina, aunque con datos de 5 minutos y sin Nivel 2 no puede descartarse que parte del efecto sea un artefacto del proxy usado.
 
 Esta caracterización usa los cortes de la variable `sesion` del vector S_M (11:00 y 14:00), mientras que los Ejecutores definen la apertura hasta las 11:30. La diferencia está registrada como desviación 1 (Anexo A) y no altera la dirección de las conclusiones.

@@ -1,6 +1,6 @@
 # Capítulo 9. Conclusiones y trabajo futuro
 
-**Tarea:** 4.2.1 (Sprint 9). **Autor:** PS, con apoyo de Claude Code. **Versión:** borrador avanzado del 15 de noviembre de 2026.
+**Tarea:** 4.2.1 (Sprint 9). **Autor:** PS, con apoyo de Claude Code. **Versión:** 28 de noviembre de 2026 (objetivos con su redacción literal del Título I, sin códigos internos y con la validación del simulador informada con honestidad).
 
 **Numeración:** es el Capítulo 9 de la estructura del informe final del Título I. El capítulo de análisis (tarea 4.1.3, «Capítulo 7» en el Excel) es el Capítulo 8 de esa estructura: `docs/capitulo8_analisis_PS.md`.
 
@@ -29,13 +29,17 @@ El proyecto diseñó, implementó y evaluó un sistema de coordinación de agent
 
 ## 9.2 Cumplimiento de los objetivos
 
-| Objetivo del Título I | Estado | Evidencia |
+Los objetivos se citan con su redacción literal del Título I (Capítulo 1, sección 1.2).
+
+**Tabla.** Cumplimiento de los objetivos del Título I, con su estado y la evidencia en este informe.
+
+| Objetivo del Título I (redacción literal) | Estado | Evidencia |
 |---|---|---|
-| **General:** diseñar y desarrollar un sistema de coordinación de agentes con RL para mitigar el slippage en el IPSA | **Cumplido en diseño y desarrollo.** La mitigación se evaluó: el costo medio no bajó de forma significativa, pero sí la variabilidad, y la capa de Ejecutores sí reduce el costo | Sistema funcionando en ABIDES; capítulo 8 |
-| **1.** Construir un entorno de simulación del LOB de la Bolsa de Santiago | **Cumplido** | Poisson calibrado (2.1.3); RMSC04 calibrado (2.2.4) y validado (2.2.5) |
-| **2.** Diseñar la arquitectura jerárquica Maestro + Ejecutores con PPO | **Cumplido**, con una red de Ejecutor usada en los tres tramos (desviación 8) | Tareas 2.1.1, 2.1.2, 2.3.1 y 2.3.2 |
-| **3.** Definir una recompensa que minimice el implementation shortfall | **Cumplido**: R_M y R_E implementadas y calibradas (λ = 0,02; β = 0,0062) | Tareas 2.2.2, 2.2.3 y 3.1.1 |
-| **4.** Evaluar el sistema contra TWAP y VWAP con métricas de costo | **Cumplido**: 30 corridas (3.1.3) y 90 corridas (3.2.3), con pruebas no paramétricas pareadas | Capítulo 8, sección 8.3 |
+| **General:** «Diseñar y desarrollar un sistema de coordinación de agentes inteligentes basado en Aprendizaje por Refuerzo para mitigar el costo por Slippage en la ejecución de órdenes de gran volumen en el mercado IPSA.» | **Cumplido en diseño y desarrollo.** La mitigación se evaluó: el costo medio no bajó de forma significativa, pero sí la variabilidad, y la capa de Ejecutores sí reduce el costo | Sistema funcionando en ABIDES (capítulos 4 a 6); evaluación en los capítulos 7 y 8 |
+| **1.** «Modelar un entorno de simulación de alta fidelidad que replique la microestructura y la dinámica del libro de órdenes (LOB) de la bolsa de santiago, esto es para permitir el entrenamiento seguro de algoritmos de inteligencia artificial.» | **Cumplido parcialmente.** Se construyeron dos simuladores calibrados con datos del IPSA que aproximan la volatilidad, el volumen y el patrón intradiario, y permiten entrenar sin riesgo. No replican la distribución de retornos según el criterio literal de validación, y el spread simulado es mucho menor que el real | Capítulo 5, secciones 5.5 y 5.6 |
+| **2.** «Implementar una arquitectura jerárquica de agentes (maestro y ejecutores) utilizando el algoritmo Proximal policy optimization (PPO) en pytorch, esto es con el motivo de que se pueda separar la planificación estratégica de la ejecución táctica de órdenes.» | **Cumplido**, con una sola red de Ejecutor usada en los tres tramos (desviación 8) | Capítulos 4 y 5 |
+| **3.** «Desarrollar una función de recompensa (Reward function) optimizada para minimizar el ‘implementation shortfall’, permitiendo que los agentes aprendan a identificar ventanas de liquidez oportunas en el IPSA.» | **Cumplido en la recompensa**: R_M y R_E se implementaron y calibraron (λ = 0,02; β = 0,0062). La identificación de ventanas de liquidez no se logró: el Maestro aprendió un calendario casi fijo | Capítulo 4, sección 4.3; Capítulo 8, sección 8.4.1 |
+| **4.** «Evaluar y validar el desempeño del sistema mediante un análisis comparativo (benchmarking) contra estrategias tradicionales de ejecución (TWAP y VWAP), utilizando métricas de reducción de costos transaccionales y eficiencia de mercado.» | **Cumplido**: primera evaluación (30 corridas) y evaluación final (90 corridas y eje de tamaño), con pruebas no paramétricas pareadas | Capítulos 7 y 8 |
 
 ## 9.3 Respuesta a la pregunta del proyecto
 
@@ -73,7 +77,7 @@ El Título I plantea verificar si el sistema reduce el costo de ejecución frent
 
 6. **H6. Con órdenes más grandes, la ventaja del sistema tiende a crecer; la tendencia es significativa en el orden, no en la magnitud.**
    - En profundidad ×1 (n = 30 días por tamaño), sistema − TWAP fue +2,2 bps con el factor 0,5, −3,4 con 1 y −7,9 con 1,5. Ningún punto es significativo por sí solo (Wilcoxon p = 0,95; 0,63 y 0,37).
-   - Dentro de cada día, la ventaja sigue el orden del tamaño: Friedman Q = 6,47, p = 0,039 (3.2.4, MR) y Page L = 379, p = 0,007 (PS).
+   - Dentro de cada día, la ventaja sigue el orden del tamaño: Friedman Q = 6,47, p = 0,039, y Page L = 379, p = 0,007.
    - La magnitud del cambio de 0,5 a 1,5 (−10,1 bps) no es significativa (Wilcoxon p = 0,164).
    - Es exploratorio. Con 1,5, parte del efecto viene de días que no completaron (sin ellos: −5,1 bps, n = 25; Friedman p = 0,048) y el Maestro opera fuera del tamaño de entrenamiento.
 
@@ -90,16 +94,16 @@ El Título I plantea verificar si el sistema reduce el costo de ejecución frent
 
 **Para un uso práctico:**
 - El sistema completo no está listo para operar. Su calendario equivale a una apuesta implícita a que el precio sube.
-- La capa de Ejecutores, combinada con un calendario simple, es la alternativa con mejor relación entre beneficio y costo operacional (capítulo 8, sección 8.8.2).
+- La capa de Ejecutores, combinada con un calendario simple, es la alternativa con mejor relación entre beneficio y costo operacional (Capítulo 8, sección 8.7.2).
 - Su ventaja frente a TWAP a mercado debe compararse primero con un TWAP con órdenes límite.
 
 ## 9.6 Limitaciones
 
-El detalle está en el capítulo 8, tabla L1–L11. Las que más condicionan las conclusiones son:
+El detalle está en el Capítulo 8, sección 8.6 (limitaciones L1 a L12). Las que más condicionan las conclusiones son:
 
 1. Las ventanas de 30 minutos son mercados independientes, unidos solo por un impacto acumulado supuesto (Y = 0,5, τ = 120 min) y no calibrado.
 2. La referencia TWAP/VWAP compra a mercado, mientras los Ejecutores usan órdenes límite.
-3. Los escenarios corresponden a la profundidad del market maker y no a una liquidez validada con datos reales (C-6c).
+3. Los escenarios corresponden a la profundidad del market maker y no a una liquidez validada con datos reales (la prueba de confirmación de escenarios no la validó).
 4. El Maestro se entrena en Poisson y se evalúa en ABIDES.
 5. Se usaron tres acciones, 10 meta-órdenes y 90 días simulados, sin operación real.
 
@@ -109,7 +113,7 @@ El detalle está en el capítulo 8, tabla L1–L11. Las que más condicionan las
 2. **Simular jornadas continuas** en ABIDES, para que el calendario del Maestro tenga una dinámica de la cual aprender, y entrenar al Maestro en ese mismo entorno.
 3. **Escenarios de liquidez calibrados con días reales** del IPSA de baja y alta liquidez.
 4. **Calibrar el impacto acumulado** (Y y τ) y variar la volatilidad y el spread por separado.
-5. **Especializar los Ejecutores** de media jornada y cierre, y entregar `tasa_ordenes` en ABIDES.
+5. **Especializar los Ejecutores** de media jornada y cierre, y entregar la tasa de llegada de órdenes en ABIDES.
 6. **Ampliar el universo** a más acciones y días, para ganar potencia estadística: con 90 corridas, la probabilidad de detectar una ventaja de 12,5 bps era de ≈ 33 %.
 7. **Entrenar los dos niveles en conjunto**, en vez de fijar los Ejecutores mientras aprende el Maestro.
 

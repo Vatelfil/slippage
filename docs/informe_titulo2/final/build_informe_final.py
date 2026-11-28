@@ -41,7 +41,7 @@ SIMBOLOS = {
     r'\Delta': 'Δ', r'\Gamma': 'Γ', r'\Sigma': 'Σ', r'\Pi': 'Π', r'\Omega': 'Ω', r'\Lambda': 'Λ',
     r'\max': 'max', r'\min': 'min', r'\log': 'log', r'\ln': 'ln', r'\exp': 'exp', r'\top': 'ᵀ',
     r'\quad': '  ', r'\qquad': '    ', r'\;': ' ', r'\,': ' ', r'\:': ' ', r'\!': '', r'\ ': ' ',
-    r'\%': '%', r'\_': '_', r'\{': '{', r'\}': '}', r'\#': '#', r'\&': '&',
+    r'\%': '%', r'\_': '_', r'\{': '\x01', r'\}': '\x02', r'\#': '#', r'\&': '&',
     r'\bigl': '', r'\bigr': '', r'\Bigl': '', r'\Bigr': '', r'\left': '', r'\right': '', r'\big': '', r'\Big': '',
 }
 BB = {'R': 'ℝ', 'E': '𝔼', 'N': 'ℕ', 'Z': 'ℤ'}
@@ -126,7 +126,7 @@ def latex_segmentos(s, vert=None):
         i += 1
     if buf:
         out.append((buf, vert))
-    return [(re.sub(r' {2,}', '  ', t), v) for t, v in out if t]
+    return [(re.sub(r' {2,}', '  ', t).replace('\x01', '{').replace('\x02', '}'), v) for t, v in out if t]
 
 
 # ----------------------------------------------------------------------------------------------
@@ -166,6 +166,7 @@ class Informe:
         par = self.doc.add_paragraph(style=estilo or self.estilo_normal)
         if texto:
             self.inline(par, texto, **kw)
+            par.paragraph_format.space_after = Pt(6)
         if align is not None:
             par.alignment = align
         return par
@@ -174,6 +175,8 @@ class Informe:
         if salto:
             self.salto_pagina()
         par = self.doc.add_paragraph(style=f'Heading {nivel}')
+        texto = re.sub(r'\*+', '', texto)
+        texto = re.sub(r'`([^`]*)`', r'\1', texto)
         self.inline(par, texto)
         return par
 
@@ -455,6 +458,7 @@ class Informe:
             pendientes = restantes
 
         contador_lista = {}
+        usadas = {}
         saltando = None
         for bl in bloques:
             tipo = bl[0]
@@ -463,7 +467,7 @@ class Informe:
                     saltando = None
                 else:
                     continue
-            if tipo == 'h' and self.quitar and re.search(r'Fuentes de las cifras|Figuras del Cap', bl[2]):
+            if tipo == 'h' and self.quitar and re.search(r'Fuentes de las cifras|Figuras del Cap|Cómo se corre', bl[2]):
                 saltando = bl[1]
                 continue
             if tipo != 'li':
@@ -482,7 +486,7 @@ class Informe:
                 continue
             if tipo == 'p':
                 txt = bl[1]
-                m = re.match(r'^\*\*Tabla [\d.]+\.\*\*\s*(.*)$', txt)
+                m = re.match(r'^\*\*Tabla[\d. ]*\.?\*\*\s*(.*)$', txt)
                 if m:
                     ley_tabla = re.sub(r'\s*\(`(tab|fig):[^`]*`\)', '', m.group(1))
                     continue
@@ -528,7 +532,12 @@ class Informe:
                 if self.quitar:
                     enc = [quitar_rutas(c) for c in enc]
                     filas = [[quitar_rutas(c) for c in f] for f in filas]
-                self.tabla(enc, filas, ley_tabla or titulo_actual)
+                if ley_tabla:
+                    ley = ley_tabla
+                else:
+                    usadas[titulo_actual] = usadas.get(titulo_actual, 0) + 1
+                    ley = titulo_actual + (f' (parte {usadas[titulo_actual]})' if usadas[titulo_actual] > 1 else '')
+                self.tabla(enc, filas, ley)
                 ley_tabla = None
                 continue
             if tipo == 'quote':
@@ -581,23 +590,32 @@ RUTA = r'`[^`\n]*(?:/[^`\n]*|\.' + EXT + r')`'
 ETIQUETAS = r'(Script|Scripts|Datos|Figura|Figuras|Herramienta|Fuente|Fuentes|Informe|Detalle|Salidas|Salida|Tests|Cuaderno|Código|Archivo|Reporte|Ver)'
 
 
+def _es_ruta(c):
+    return bool(re.search(r'/|\.' + EXT + r'$', c.strip()))
+
+
 def quitar_rutas(t):
     """Quita del texto del Word las rutas de archivos del repositorio (la comisión no tiene acceso a ellas)."""
-    if not re.search(RUTA, t):
+    MARCA = '\x03'
+    t2 = re.sub(r'`([^`\n]+)`', lambda m: MARCA if _es_ruta(m.group(1)) else m.group(0), t)
+    if MARCA not in t2:
         return t
-    partes = re.split(r'(?<=\.)\s+', t)
+    partes = re.split(r'(?<=\.)\s+', t2)
     out = []
     for o in partes:
-        if re.search(RUTA, o) and re.match(r'^\s*(\*\*)?' + ETIQUETAS + r'\b[^:]{0,40}:', o):
+        if MARCA in o and re.match(r'^\s*(\*\*)?' + ETIQUETAS + r'\b[^:]{0,40}:', o):
             continue
-        if re.search(r'\b(están en|está en|se guardan en|se encuentran? en|disponibles? en|detalle en)\s*' + RUTA, o):
+        if re.search(r'\b(están en|está en|se guardan en|se encuentran? en|disponibles? en|detalle en)\s*' + MARCA, o):
             continue
         out.append(o)
     t = ' '.join(out)
-    t = re.sub(r'\s*\((?:\s*(?:' + RUTA + r'|y|o|,|;)\s*)+\)', '', t)
-    t = re.sub(r',\s*' + RUTA, '', t)
-    t = re.sub(RUTA + r'\s*,\s*', '', t)
-    t = re.sub(r'\s*' + RUTA, '', t)
+    t = re.sub(r'\s*\((?:\s*(?:' + MARCA + r'|y|o|,|;)\s*)+\)', '', t)
+    t = re.sub(r'\s+(y|o)\s+' + MARCA, '', t)
+    t = re.sub(r'\b(en|de|del)\s+' + MARCA + r'(?=\s+[a-záéíóúñ(])', lambda m: 'en el repositorio' if m.group(1) == 'en' else 'del repositorio', t)
+    t = re.sub(r',\s*' + MARCA, '', t)
+    t = re.sub(MARCA + r'\s*,\s*', '', t)
+    t = re.sub(r'\s*' + MARCA, '', t)
+    t = re.sub(r'\s+(en|de|del|desde|con)\s*(?=[),.;:])', '', t)   # preposiciones que quedan colgando
     t = re.sub(r'\(\s*\)', '', t)
     t = re.sub(r'\(\s*[,;]\s*', '(', t)
     t = re.sub(r'\s*[,;]\s*\)', ')', t)
@@ -838,60 +856,40 @@ def construir(plantilla, salida, fecha):
     I.h('RESUMEN', 1)
     I.markdown(leer(TEXTOS / 'resumen.md'))
     I.h('PALABRAS CLAVE', 1)
-    I.copiar(I.rango('PALABRAS CLAVE'))
+    I.markdown(leer(TEXTOS / 'palabras_clave.md'))
 
     # ---------------- CAPÍTULO 1 ----------------
     I.h('CAPÍTULO 1: INTRODUCCIÓN', 1, salto=True)
     I.h('1.1 Contexto y motivación', 2)
     I.markdown(leer(TEXTOS / 'cap1_contexto.md'))
     I.h('1.2 Objetivos', 2)
+    I.p('Los objetivos son los definidos en el Título I y se citan con su redacción original.')
     I.h('1.2.1 Objetivo general', 3)
     I.copiar(I.rango('5.1 OBJETIVO GENERAL'))
     I.h('1.2.2 Objetivos específicos', 3)
     I.copiar(I.rango('5.2 OBJETIVOS ESPEC'))
+    I.p('En el desarrollo, el primer objetivo se interpretó como **aproximar, mediante calibración**, la microestructura del libro de órdenes, porque sin datos de Nivel 2 no es posible replicarla (Capítulo 5, secciones 5.5 y 5.6).')
     I.h('1.3 Alcances', 2)
-    I.copiar(I.rango('6.1 ALCANCES'))
-    I.h('1.4 Limitaciones', 2)
-    I.copiar(I.rango('6.2 LIMITACIONES'))
-    I.p('Los cambios respecto de lo planificado en el Título I están registrados en el Anexo A (desviaciones).')
+    I.markdown(leer(TEXTOS / 'cap1_alcances.md'))
+    I.h('1.4 Limitaciones de diseño', 2)
+    I.markdown(leer(TEXTOS / 'cap1_limitaciones.md'))
+    I.p('Los cambios respecto de lo planificado en el Título I están registrados en el Anexo A.')
     I.h('1.5 Metodología de trabajo', 2)
     I.markdown(leer(TEXTOS / 'cap1_metodologia.md'))
     I.h('1.6 Estructura del informe', 2)
-    I.p('El informe sigue la estructura de nueve capítulos definida en el Título I:')
-    I.copiar(I.rango('ESTRUCTURA INFORME FINAL'), saltar=('El informe final del proyecto se organizará',))
+    I.markdown(leer(TEXTOS / 'cap1_estructura.md'))
 
     # ---------------- CAPÍTULO 2 ----------------
     I.h('CAPÍTULO 2: MARCO TEÓRICO Y ESTADO DEL ARTE', 1, salto=True)
-    I.h('2.1 El mercado accionario chileno y el índice IPSA', 2)
-    I.copiar(I.rango('4.1.1'))
-    I.h('2.2 El libro de órdenes (Limit Order Book, LOB)', 2)
-    I.copiar(I.rango('4.1.2'), leyendas_tablas=['Estructura simplificada de un libro de órdenes (LOB) para una acción del IPSA. Elaboración propia'])
-    I.h('2.3 El slippage y el implementation shortfall', 2)
-    I.copiar(I.rango('4.1.3'))
-    I.h('2.4 Estrategias tradicionales de ejecución y sus limitaciones', 2)
-    I.copiar(I.rango('4.1.4'), leyendas_tablas=['Comparación de las principales estrategias tradicionales de ejecución algorítmica. Elaboración propia basada en Almgren y Chriss (2001) y Kato (2016)'])
-    I.h('2.5 Aprendizaje por refuerzo multiagente aplicado a la ejecución', 2)
-    I.copiar(I.rango('4.2 Descripción', fin='4.2.1'))
-    I.h('2.6 Proximal Policy Optimization (PPO)', 2)
-    I.copiar(I.rango('4.2.3'), leyendas_tablas=['Parámetros del algoritmo PPO y su relevancia para el entrenamiento en el mercado IPSA. Elaboración propia'])
-    I.h('2.7 Simulación de mercados y datos sintéticos', 2)
-    I.copiar(I.rango('4.3.3'))
+    I.markdown(leer(TEXTOS / 'cap2.md'))
 
     # ---------------- CAPÍTULO 3 ----------------
     I.h('CAPÍTULO 3: DEFINICIÓN DEL PROBLEMA Y ANÁLISIS DEL ENTORNO', 1, salto=True)
     I.h('3.1 El problema de ejecución de meta-órdenes en el IPSA', 2)
     I.markdown(leer(TEXTOS / 'cap3_problema.md'))
-    I.h('3.2 Requerimientos de datos del sistema', 2)
-    I.copiar(I.rango('4.3 Datos de Entrenamiento', fin='4.3.1'))
-    I.copiar(I.rango('4.3.1'))
-    I.h('3.3 Fuentes de datos evaluadas', 2)
-    I.copiar(I.rango('4.3.2'))
+    I.markdown(leer(TEXTOS / 'cap3_fuentes.md'))
     I.markdown(leer(TEXTOS / 'cap3_datos.md'))
-    I.h('3.6 Plan de adquisición y uso de datos', 2)
-    I.copiar(I.rango('4.3.4'), leyendas_tablas=['Plan de adquisición y uso de datos por prioridad y agente (Título I). Elaboración propia'])
-    I.h('3.7 Criterios de validación del simulador', 2)
-    I.copiar(I.rango('4.3.5'))
-    I.p('Los resultados de esta validación y de la calibración de los simuladores están en los capítulos 5 y 6.')
+    I.markdown(leer(TEXTOS / 'cap3_validacion.md'))
 
     # ---------------- CAPÍTULOS 4 A 9 ----------------
     met = limpiar_md(leer(ROOT / 'docs/capitulo5_metodologia_MR.md'))
@@ -903,46 +901,39 @@ def construir(plantilla, salida, fecha):
     I.markdown(parte2)
 
     I.h('CAPÍTULO 6: ENTRENAMIENTO Y EXPERIMENTACIÓN', 1, salto=True)
-    cap6 = limpiar_md(leer(ROOT / 'docs/capitulo6_entrenamiento_experimentacion_MR.md'))
-    ley6 = dict(re.findall(r'^\d+\.\s+`([^`]+\.png)`:\s*(.+)$', cap6, flags=re.M))
-    I.markdown(cap6, leyendas_fig=ley6)
+    ley6 = {
+        'data/analysis/cap6_MR/curvas_ejecutor.png': 'Curvas de aprendizaje del Ejecutor elegido: recompensa media, pérdida del crítico, KL, entropía y composición de las acciones (1.000 episodios de PPO en ABIDES)',
+        'data/analysis/cap6_MR/curvas_maestro.png': 'Curvas de entrenamiento del Maestro del sistema final y del Maestro v2: recompensa, pérdida del crítico, entropía y KL (2.000 jornadas en Poisson)',
+    }
+    I.markdown(limpiar_md(leer(ROOT / 'docs/capitulo6_entrenamiento_experimentacion_MR.md')), leyendas_fig=ley6)
 
     I.h('CAPÍTULO 7: RESULTADOS Y EVALUACIÓN', 1, salto=True)
     I.markdown(limpiar_md(leer(ROOT / 'docs/capitulo7_resultados_BF.md')))
 
     I.h('CAPÍTULO 8: DISCUSIÓN Y ANÁLISIS CRÍTICO', 1, salto=True)
-    extra8 = {
-        '8.2.3': [('data/analysis/3_2_3/qq_diferencias.png', 'Gráfico Q-Q de las 90 diferencias sistema − TWAP frente a la distribución normal')],
-        '8.3.1': [('data/analysis/figuras_4_1_4/histograma_diferencias_90.png', 'Distribución de las 90 diferencias sistema − TWAP, con la prueba de Wilcoxon y la de Shapiro-Wilk'),
-                  ('data/analysis/3_2_3/bosque_diferencias.png', 'Diferencia media sistema − TWAP y sistema − VWAP con IC 95 % por grupo')],
-        '8.3.2': [('data/analysis/3_2_3/diferencias_por_escenario.png', 'Diferencias sistema − TWAP por profundidad del market maker (n = 30 por profundidad)')],
-        '8.4.2': [('data/analysis/figuras_4_1_4/costo_por_estrategia_varianzas.png', 'Costo por estrategia y prueba de varianzas pareadas de Pitman-Morgan (n = 90)')],
-        '8.5.2': [('data/colab_resultados/control_reglas/media/analisis/control_reglas.png', 'Aporte de cada nivel en el control con reglas fijas (profundidad ×1, n = 30)')],
-    }
-    ley8 = {'diferencia_por_tramo.png': 'Diferencia sistema − TWAP por tramo de inicio de la orden, 90 corridas (Kruskal-Wallis y Wilcoxon con Holm)'}
-    I.markdown(limpiar_md(leer(ROOT / 'docs/capitulo8_analisis_PS.md')), figuras_extra=extra8, leyendas_fig=ley8)
+    I.markdown(limpiar_md(leer(ROOT / 'docs/capitulo8_analisis_PS.md')))
 
     I.h('CAPÍTULO 9: CONCLUSIONES Y TRABAJO FUTURO', 1, salto=True)
     I.markdown(limpiar_md(leer(ROOT / 'docs/capitulo9_conclusiones_PS.md')))
 
-    # ---------------- BIBLIOGRAFÍA ----------------
+    # ---------------- BIBLIOGRAFÍA (APA, una sola lista alfabética) ----------------
     I.h('BIBLIOGRAFÍA', 1, salto=True)
-    vistos, biblio = set(), []
-    for el in I.rango('BIBLIOGRAF', fin='AVANCES'):
-        txt = I._txt(el)
-        if txt in vistos:
-            continue
-        vistos.add(txt); biblio.append(el)
-    I.copiar(biblio)
-    I.markdown(leer(TEXTOS / 'bibliografia_adicional.md'))
+    n0 = len(I.body)
+    I.markdown(leer(TEXTOS / 'bibliografia.md'))
+    for el in list(I.body)[n0 - 1:len(I.body) - 1]:
+        if el.tag == qn('w:p'):
+            from docx.text.paragraph import Paragraph
+            pf = Paragraph(el, I.doc).paragraph_format
+            pf.left_indent = Cm(1.0)
+            pf.first_line_indent = Cm(-1.0)
 
     # ---------------- ANEXOS ----------------
-    I.h('ANEXO A: DESVIACIONES RESPECTO DEL TÍTULO I', 1, salto=True)
-    I.p('Registro oficial de las diferencias entre lo especificado en el Título I y lo implementado, mantenido por el equipo durante el desarrollo (`DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md`).')
+    def pref(letra):
+        return lambda t: re.sub(r'^(\d+)(\.\d+)*\.?\s', lambda m: letra + '.' + m.group(0).rstrip('. ') + ' ', t)
 
-    def pref_anexo(t):
-        return re.sub(r'^(\d+)(\.\d+)*\.?\s', lambda m: 'A.' + m.group(0).rstrip('. ') + ' ', t)
-    I.markdown(limpiar_md(leer(ROOT / 'DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md')), prefijo_titulos=pref_anexo)
+    I.h('ANEXO A: DESVIACIONES RESPECTO DEL TÍTULO I', 1, salto=True)
+    I.p('Registro de las diferencias entre lo especificado en el Título I y lo implementado. Cada título indica la decisión final y su fecha.')
+    I.markdown(limpiar_md(leer(ROOT / 'DESVIACIONES_TITULO1_VS_IMPLEMENTACION.md')), prefijo_titulos=pref('A'))
     I.h('ANEXO B: GESTIÓN DEL PROYECTO Y RESPONSABLES', 1, salto=True)
     I.h('B.1 Sprints y tareas', 2)
     I.markdown(leer(TEXTOS / 'anexo_gestion.md'), titulo_inicial='Tareas por sprint, responsable en el plan y capítulo donde se informan')
@@ -952,6 +943,11 @@ def construir(plantilla, salida, fecha):
     I.quitar = False
     I.markdown(leer(TEXTOS / 'anexo_c.md'), titulo_inicial='Ubicación de los componentes en el repositorio')
     I.quitar = True
+    I.h('ANEXO D: PLAN DE ANÁLISIS REGISTRADO ANTES DE VER LOS DATOS', 1, salto=True)
+    I.markdown(leer(TEXTOS / 'anexo_d_intro.md'))
+    I.markdown(limpiar_md(leer(ROOT / 'docs/plan_analisis_3_2_3_PS.md')), prefijo_titulos=pref('D'), titulo_inicial='Plan de análisis')
+    I.h('ANEXO E: PROCEDIMIENTO DE CÁLCULO DE LAS PRUEBAS ESTADÍSTICAS', 1, salto=True)
+    I.markdown(leer(TEXTOS / 'anexo_e.md'))
 
     # ---------------- pie de página con número y actualización de campos ----------------
     sec = d.sections[0]

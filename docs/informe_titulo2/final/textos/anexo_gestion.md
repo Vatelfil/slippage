@@ -32,4 +32,4 @@ El proyecto se organizó en nueve sprints de aproximadamente dos semanas. Los sp
 | 9 | 4.2.1 Conclusiones y trabajo futuro | PS | Capítulo 9 |
 | 9 | 4.2.2 Defensa ante la comisión | Equipo | — |
 
-Durante el desarrollo, el equipo redistribuyó algunas tareas según la carga de trabajo. Por ejemplo, las corridas de la evaluación final se repartieron entre los tres integrantes (Anexo B). Cada entrega quedó registrada en el repositorio del proyecto.
+Durante el desarrollo, el equipo redistribuyó algunas tareas según la carga de trabajo. Por ejemplo, las corridas de la evaluación final se repartieron entre los tres integrantes (sección B.2). Cada entrega quedó registrada en el repositorio del proyecto.
