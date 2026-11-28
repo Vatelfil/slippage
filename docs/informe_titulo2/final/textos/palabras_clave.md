@@ -1,0 +1,11 @@
+- Aprendizaje por refuerzo.
+- Sistemas multiagente.
+- PPO.
+- Slippage.
+- Implementation shortfall.
+- IPSA.
+- Bolsa de Santiago.
+- Microestructura de mercado.
+- Libro de órdenes.
+- Ejecución algorítmica.
+- Simulación de mercados.

@@ -1,12 +1,12 @@
 # Registro Oficial de Desviaciones: Título I vs. Implementación
 
 **Documento elaborado por:** Mauricio Reynoso (MR), con aportes de Benjamín Farías (BF) y Paolo Sepúlveda (PS).  
-**Última actualización:** Sprint 5 (Octubre 2026).  
+**Última actualización:** 28 de noviembre de 2026 (títulos con la decisión final de cada desviación; revisión de PS con apoyo de Claude Code, pendiente de revisión por MR).  
 **Propósito:** Registrar de manera explícita, auditable y fundamentada cualquier discrepancia entre las especificaciones iniciales del Título I y la implementación real del código en el repositorio `slippage`.
 
 ---
 
-## 1. Discrepancia en el Corte de Tramos Intradía: 11:00 ($S_M$) frente a 11:30 (Ejecutores) [P9 / D5]
+## 1. Corte de tramos intradía: 11:00 en el estado del Maestro frente a 11:30 en los Ejecutores [decisión final: se mantienen ambos cortes y se documentan]
 
 ### 1.1 Descripción de la Discrepancia
 Existe una diferencia en la delimitación horaria entre el tramo de "Apertura" y "Media jornada":
@@ -32,7 +32,7 @@ En la media hora comprendida entre las **11:00 y las 11:30**, el Agente Maestro 
 
 ---
 
-## 2. Cabeza de Política del Ejecutor: Categórica Discreta vs. Híbrida [2.1.2]
+## 2. Cabeza de política del Ejecutor: categórica discreta en lugar de híbrida [decisión final: adoptada]
 
 ### 2.1 Descripción
 El documento del Título I mencionaba conceptualmente una cabeza de política híbrida: discreta para el tipo de orden y continua (e.g. Gaussiana) para la fracción de volumen o precio.
@@ -48,7 +48,7 @@ $$\text{Acciones} = 3 \text{ (tipo de orden)} \times 10 \text{ (niveles de volum
 
 ---
 
-## 3. Calibración de la Penalización $\lambda$ del Maestro [2.2.2 / P10]
+## 3. Calibración de la penalización $\lambda$ del Maestro [decisión final: $\lambda = 0{,}02$]
 
 ### 3.1 Descripción
 La función de recompensa terminal del Maestro sigue la formulación de Implementation Shortfall (IS):
@@ -62,7 +62,7 @@ Conforme a la ficha P10, una vez completado el primer entrenamiento real del Mae
 
 ---
 
-## 4. Función de Recompensa del Ejecutor $R_E$ y Aversión al Riesgo $\beta$ [2.2.3 / D3]
+## 4. Recompensa del Ejecutor $R_E$ y aversión al riesgo $\beta$ [decisión final: $\beta = 0{,}0061796$]
 
 ### 4.1 Descripción
 La recompensa por paso del Ejecutor en el Título I se define como:
@@ -77,7 +77,7 @@ Se fijó $\beta = 0{,}1 \times \beta^*$ como valor provisional operativo seguro 
 
 ---
 
-## 5. Unidad de Cuenta en ABIDES frente al Protocolo CTDE [2.3.1 / Decisión de Unidades]
+## 5. Unidad de cuenta en ABIDES frente al protocolo de coordinación [decisión final: conversión automática de décimos de peso a CLP, 21 oct 2026]
 
 ### 5.1 Descripción
 El simulador ABIDES calibrado para el mercado chileno (tarea 2.2.4) opera internamente en **décimos de CLP** (`unidad_cuenta = "decimos"`, donde 1 CLP = 10 unidades de simulación) para aproximar el tick size mínimo, mientras que el Título I, el simulador Poisson y las recompensas del Maestro ($IS_{\text{total}}$ y $R_M$) están formuladas en **CLP**.
@@ -89,7 +89,7 @@ Se acordó no alterar los esquemas JSON ni crear una nueva abstracción redundan
 
 ---
 
-## 6. Factor de descuento del Ejecutor: γ_E = 1 en vez de 0,95 [PROPUESTA de PS para MR, 29 oct 2026]
+## 6. Factor de descuento del Ejecutor: γ_E = 1 en vez de 0,95 [decisión final: adoptado en el sistema final, oct 2026]
 
 ### 6.1 Descripción
 El Título I fija γ_E = 0,95. Con ese valor, un costo al final de una ventana de 30 pasos se ve desde el inicio multiplicado por 0,95²⁹ ≈ 0,23, y la red aprende a esperar (97 % a 99 % de los pasos en Poisson; `docs/diagnostico_recompensa_PS.md`).
@@ -99,7 +99,7 @@ El Título I fija γ_E = 0,95. Con ese valor, un costo al final de una ventana d
 
 ---
 
-## 7. Impacto acumulado entre ventanas del Maestro [PROPUESTA de PS para MR, 29 oct 2026]
+## 7. Impacto acumulado entre ventanas del Maestro [decisión final: adoptado en la evaluación, oct 2026]
 
 ### 7.1 Descripción
 `MaestroEjecutorEnv` crea un mercado nuevo e independiente para cada ventana, y en ABIDES todas las ventanas de un tramo empiezan a la misma hora simulada. Lo comprado en una ventana no afecta el precio de las siguientes, así que el Maestro no tiene un dilema de coordinación (el Título I lo presenta como el que reparte la orden para no mover el precio).
@@ -109,7 +109,7 @@ Arrastrar el impacto con la ley de la raíz cuadrada y decaimiento exponencial (
 
 ---
 
-## 8. Un mismo Ejecutor entrenado para los tres tramos en la evaluación del Sprint 6 [PS, 29 oct 2026]
+## 8. Un mismo Ejecutor entrenado para los tres tramos [decisión final: adoptado en el sistema final, 29 oct 2026]
 
 ### 8.1 Descripción
 El Título I prevé un Ejecutor por tramo (apertura, media jornada y cierre). Todos los Ejecutores entrenados hasta ahora son de apertura, porque entrenar en ABIDES los tramos posteriores es mucho más lento: cada episodio simula desde las 09:30.
@@ -119,13 +119,13 @@ En el sistema final del Sprint 6 (`notebooks/Colab_sistema_final.ipynb`) la mism
 
 ---
 
-## 9. Arranque por imitación del Ejecutor (método de entrenamiento, no cambia la arquitectura) [PS, 29 oct 2026]
+## 9. Arranque por imitación del Ejecutor (método de entrenamiento, no cambia la arquitectura) [decisión final: adoptado, 29 oct 2026]
 
 El Ejecutor PPO puede partir copiando a TWAP con órdenes límite (`--imitar twap_limit_medio`) y después se ajusta con PPO. Se mantienen la red, el espacio de acción y la recompensa del Título I; solo cambia el punto de partida de los pesos. Se declara en la metodología porque, si esa red resulta elegida, su desempeño depende de esa inicialización.
 
 ---
 
-## 10. Escenarios de liquidez definidos por el costo medido (v3) [PROPUESTA de PS para BF, 30 oct 2026]
+## 10. Escenarios de profundidad del market maker [decisión final: se informan como profundidad ×4, ×1 y ×0,25, porque la prueba de confirmación no validó la interpretación como liquidez, 5 nov 2026]
 
 El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDES se usa el tamaño de las cotizaciones del market maker (`mm_pov`) para generarlos. En el C-6b, subir `mm_pov` **encareció** la compra a mercado (`docs/c6_liquidez_resultado_PS.md`, sección 4). La v3 asigna los nombres según ese costo: baja = ×4, alta = ×0,25. El orden se eligió mirando el resultado, así que se declara y se confirma con las semillas de las 90 corridas del Sprint 7. ~~**Estado: pendiente de que BF la acepte.**~~
 
@@ -155,13 +155,13 @@ El Título I pide evaluar en escenarios de liquidez baja, media y alta. En ABIDE
 
 ---
 
-## 11. Barrido final en la última decisión del Maestro [PS, 31 oct 2026]
+## 11. Barrido final en la última decisión del Maestro [decisión final: adoptado, 31 oct 2026]
 
 El Título I define la acción del Maestro como la fracción α ∈ [0,05; 0,50] de lo que falta. Con esa acción, una orden que empieza a las 14:00 (4 decisiones) no puede pasar del 93,75 %. Se agrega la opción `completar_al_cierre`: en la última decisión del día, α = 1. Las demás decisiones siguen la acción del Título I. Se usa en la versión corregida de las 30 corridas (`docs/correccion_cierre_PS.md`). **Estado:** aplicada por PS; el Maestro (de MR) no se modifica.
 
 ---
 
-## 12. Diseño de las 90 corridas: órdenes × semillas en vez de tamaños × semillas [BF: propuesta el 2 nov, aprobada el 11 nov 2026]
+## 12. Diseño de las 90 corridas: órdenes × semillas y eje de tamaño en estrella [decisión final: aprobado, 11 nov 2026]
 
 ### 12.1 Descripción
 El Título I (§7.1) define las 90 corridas como **3 liquideces × 3 tamaños de orden × 10 semillas**. Lo que se implementó (`docs/LEEME_COLAB_90_CORRIDAS.md`) es **3 liquideces × 10 meta-órdenes × 3 semillas** (semillas 4, 5 y 6), con `factor_tamano` = 1,0 en todas.
@@ -202,7 +202,7 @@ Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si part
 
 ---
 
-## 13. S_M del Maestro sin datos de mercado en el sistema del Sprint 6, y Maestro v2 [PS, 4 nov 2026]
+## 13. Estado del Maestro sin datos de mercado en el sistema final, y Maestro v2 [decisión final: se declara; el Maestro v2 es exploratorio y no reemplaza el resultado oficial, 4 nov 2026]
 
 ### 13.1 Descripción
 - En el entrenamiento y en la evaluación del sistema final, `volatilidad` y `vol_promedio` de S_M entraron con valores fijos (0,002 y 0,2) y `OBI_agregado` valió 0.
@@ -217,7 +217,7 @@ Como la v2 fija cada orden en el 10 % del volumen del día simulado (5 % si part
 - Cambia la fuente de datos fijada en `SM_schema.json` (yfinance → mercado simulado).
 - **Estado (5 nov 2026):** entrenado y evaluado en ×1 (`docs/maestro_v2_resultado_PS.md`): v2 − TWAP = −4,21 bps [−23,71; 16,11], Wilcoxon p = 0,556; v2 − Maestro anterior = −0,85 bps, p = 0,855. Falta que MR lo acepte. El resultado oficial sigue siendo el del sistema del Sprint 6.
 
-## 14. `tasa_ordenes` del Ejecutor vale 0 en ABIDES [PS, 4 nov 2026]
+## 14. Tasa de llegada de órdenes del Ejecutor igual a 0 en ABIDES [decisión final: se declara como limitación, 4 nov 2026]
 
 `src/envs/abides_bridge.py` deja `tasa_ordenes` en 0 porque ABIDES no la entrega directamente (en Poisson sí se calcula). En ABIDES, el Ejecutor ve 26 de sus 27 variables. Arreglarlo obliga a reentrenar el Ejecutor en ABIDES, así que se declara como límite.
 

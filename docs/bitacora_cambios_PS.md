@@ -605,3 +605,28 @@
   - Cap. 8, sección 8.5.1: se cita la prueba de reglas fijas por tercios de BF (α = 0,5 es la mejor regla admisible en los tres tipos de día), con su límite de borde del espacio de acciones.
 - **Por qué:** lo pidió BF el 22 nov al subir su Capítulo 7 (PR #67) y su prueba de tercios (PR #66).
 - **Quién:** PS. No se cambió el trabajo de MR ni de BF.
+
+## 22 nov 2026: rama `feature/ps-informe-final-borrador` (PS, con Claude Code)
+
+- **Qué se hizo en el PC:**
+  - Se armó el borrador completo del informe final en Word: `docs/informe_titulo2/Informe_Final_Titulo_II_borrador_2026-11-22.docx` (82 páginas, 40 tablas y 13 figuras).
+  - Formato y estructura del Word del Título I: portada, índices, nombre del tema, resumen, palabras clave, 9 capítulos, bibliografía y anexos.
+  - Capítulos 1 a 3: secciones del Título I (trabajo conjunto) reordenadas según la «Estructura informe final», más textos de enlace nuevos en `docs/informe_titulo2/final/textos/` (resumen, contexto, metodología, problema y datos usados, tomados del informe de avance de octubre).
+  - Capítulos 4 a 9 y Anexo A: se convierten desde los Markdown de MR, BF y PS sin cambiar su texto (solo se quita la cabecera de tarea, autor y versión).
+  - En el Capítulo 8 se insertan las figuras estadísticas de PS (4.1.4) en sus secciones.
+  - Generador: `docs/informe_titulo2/final/build_informe_final.py`.
+- **Por qué:** PS pidió unir el informe con la estructura del Título I para que el equipo lo revise antes de las diapositivas.
+- **Pendiente de revisión del equipo:** cada integrante revisa su capítulo; confirmar la profesora guía de la portada y la bibliografía agregada.
+- **Quién:** PS. No se cambió el texto de los capítulos de MR ni de BF.
+- **Arreglos del 22 nov (revisión de PS):** sin rutas de archivos en el Word (quedan en el Anexo C); filas de tablas que no se cortan entre páginas; pseudocódigo en recuadro; diagrama del Capítulo 4 con palabras simples; figura del perfil intradiario con ejes rotulados en español (`final/figura_perfil_mercado.py`); Anexo B con las tareas de cada sprint. No se cambió el texto de los capítulos.
+
+## 28 nov 2026: rama `feature/ps-informe-final-revision` (PS, con Claude Code)
+
+- **Qué:** revisión completa del informe según las observaciones del equipo (pedido de PS: «arregla todo eso»). Nuevo Word: `docs/informe_titulo2/Informe_Final_Titulo_II_2026-11-28.docx` (85 páginas, 40 tablas, 11 figuras); se elimina el borrador del 22 nov.
+- **Capítulos 1 a 3 (equipo):** reescritos en pasado y en tercera persona, sin afirmaciones que contradicen los resultados; Cap. 3 con los datos reales y una tabla de fuentes evaluadas; nota sobre MSCI; 2.5 ampliada (RL jerárquico y CTDE).
+- **Capítulos 4 a 6 (MR):** títulos en formato oración, sin nombres de código; 57 min de entrenamiento del Ejecutor; unidades de R_M; pasos de 30 s; nuevas 5.4 (software), 5.5 (calibración) y 5.6 (validación del simulador, con su veredicto); 6.5 con la metodología estadística (antes 8.2); una sola explicación del efecto de la profundidad.
+- **Capítulo 7 (BF):** sin iniciales ni códigos; todas las cifras de resultados (se agregan robustez sin MO-06 y promedio, p con Holm, pruebas complementarias); sin «Fuentes de las cifras».
+- **Capítulos 8 y 9 (PS):** el 8 solo interpreta (remite al 7), sin 8.2 (pasó al 6.5) ni 8.9, en párrafos; el 9 cita los objetivos literales del Título I y marca el objetivo 1 como cumplido parcialmente (validación del simulador).
+- **Anexos:** A con la decisión final en cada título; D nuevo (plan de análisis); E nuevo (procedimiento de las pruebas).
+- **Generador y formato:** llaves en conjuntos, frases cortadas por quitar rutas, títulos sin negrita, leyendas sin repetir, bibliografía APA en una sola lista con sangría francesa.
+- **Pendiente de revisión:** MR (capítulos 4 a 6 y Anexo A) y BF (capítulo 7) deben revisar los cambios en sus capítulos; falta completar la referencia IIF (2026).

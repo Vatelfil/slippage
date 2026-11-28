@@ -1,0 +1,8 @@
+El resultado del proyecto es un prototipo experimental basado en simulación. No es un sistema de ejecución en tiempo real, no se conecta a mercados reales y no gestiona capital. Su propósito fue evaluar la viabilidad técnica del aprendizaje por refuerzo para ejecutar órdenes de gran volumen en el IPSA, en condiciones controladas. El proyecto abarcó:
+
+1. **Un entorno de simulación del mercado accionario chileno.** Se construyeron dos simuladores del libro de órdenes, uno de Poisson y uno basado en ABIDES, calibrados con datos intradiarios del IPSA, que reproducen de forma aproximada la volatilidad, el volumen y el patrón intradiario de tres acciones (Capítulo 5).
+2. **El modelamiento de la ejecución como un problema de aprendizaje por refuerzo.** La ejecución se formuló como un proceso de decisión secuencial, con estados que incluyen el inventario restante, el tiempo disponible y las condiciones del mercado, y con recompensas basadas en el costo de ejecución (Capítulo 4).
+3. **Una arquitectura multiagente jerárquica.** Un Agente Maestro planifica la fragmentación de la meta-orden durante la jornada y tres Agentes Ejecutores, uno por tramo horario, ejecutan cada fragmento en el libro de órdenes (Capítulo 4).
+4. **El algoritmo PPO.** Ambos niveles aprenden con *Proximal Policy Optimization*, implementado en PyTorch (capítulos 4 y 5).
+5. **Una función de recompensa orientada a la eficiencia de ejecución,** basada en el *implementation shortfall* (Capítulo 4).
+6. **El entrenamiento y la evaluación en simuladores calibrados.** Los agentes se entrenaron en los simuladores calibrados con datos del IPSA, no directamente con datos históricos, y se evaluaron frente a TWAP y VWAP con pruebas estadísticas pareadas (capítulos 6 a 8).

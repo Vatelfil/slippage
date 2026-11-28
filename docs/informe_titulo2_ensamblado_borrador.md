@@ -6,6 +6,8 @@
 - **No contiene texto de los capítulos de MR ni de BF:** esos los escribe cada uno.
 - El Word del informe no se toca hasta que el grupo decida armarlo.
 
+**Informe ensamblado (revisión del 28 nov 2026):** `docs/informe_titulo2/Informe_Final_Titulo_II_2026-11-28.docx`, generado con `docs/informe_titulo2/final/build_informe_final.py` (formato y capítulos 1 a 3 del Word del Título I; capítulos 4 a 9 y Anexo A desde los Markdown de cada responsable). Si un capítulo cambia, se corrige su Markdown y se vuelve a generar el Word.
+
 **Estructura:** la del Título I, sección «Estructura informe final» (9 capítulos). El Excel (`plan-desarrollo-titulo-2.xlsx`) asigna los capítulos con otra numeración; aquí se muestra a qué corresponde cada uno.
 
 ---
